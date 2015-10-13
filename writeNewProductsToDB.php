@@ -1,50 +1,74 @@
+#!/usr/bin/php -q
 <?php
 
 $setting = json_decode(file_get_contents('setting.json'), true);
 require_once '../public_html/app/Mage.php';
 require_once 'functions.php';
-Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
+/* if use admin, then websiteId will get 0 */
+Mage::app();
 
-$filePath = $setting['storeJsonDir'] . $setting['storeJsonFile'];
-$command = 'scp -P 22222 ll5p@192.168.4.15:/home/ll5p/html/community/cron/' . $filePath . ' ' . $setting['storeJsonDir'];
-echo $command . PHP_EOL . PHP_EOL;
-exec($command);
+$host = $setting['hostName'];
+$param = array(
+    'pageSize' => $setting['clonedParam']['pageSize'],
+    'filterParams' => array(
+        'updated_at' => array(
+            'from' => $setting['clonedParam']['updated_at']
+        )
+    )
+);
+$productInfoJson = CallAPI('POST', $setting['restUrl'][$host] . 'getProductInfosToSync', array(), $param);
+file_put_contents('log.txt', json_encode($param) . PHP_EOL, FILE_APPEND);
+$productInfoArray = json_decode(json_encode($productInfoJson), true);
 
-$productInfoArray = json_decode(getJsonFile($setting), true);
-$product = Mage::getModel('catalog/product');
+if (!(isset($productInfoArray['status']) && $productInfoArray['status'] == 'success')) {
+    echo json_encode(array(
+        'param' => $param
+    ));
+    file_put_contents('log.txt', 'Get Json File Error', FILE_APPEND);
+    return;
+}
 
 try{
+    $count = 0;
+    foreach ($productInfoArray['data'] as $key => $productInfo) {
+        $product = Mage::getModel('catalog/product');
+        file_put_contents('log.txt', "************* " . $productInfo['direct']['sku'] . ' ' . $productInfo['dontCare']['updated_at'] . " *************" . PHP_EOL, FILE_APPEND);
+        $readyToImportProductInfo = parseBackClassifiedProductAttributes($productInfo);
 
+        foreach ($readyToImportProductInfo as $attrKey => $attrValue) {
+//            file_put_contents('log.txt', $attrKey . ': ' . $attrValue . PHP_EOL, FILE_APPEND);
+            $product->setData($attrKey, $attrValue);
+        }
 
-//    foreach ($productInfoArray as $key => $productInfo) {
-//        if ($key < 1) {
-//            echo json_encode($productInfo) . PHP_EOL . PHP_EOL;
-//            foreach ($productInfo['direct'] as $directAttrKey => $directAttrValue) {
-//                echo $directAttrKey . $directAttrValue . PHP_EOL;
-//                $product->setData($directAttrKey, $directAttrValue);
-//            }
-//
-//            $product->setCreatedAt(strtotime('now')) //product creation time
-//            ->setAttributeSetId(9) //ID of a attribute set named 'default'
-//            ->setUpdatedAt(strtotime('now')); //product update time
-//
-//        }
-//    }
+        $websiteId = Mage::app()->getWebsite()->getWebsiteId();
+        $product->setWebsiteIds(array($websiteId))
+            ->setCreatedAt(strtotime('now')) //product creation time
+            ->setUpdatedAt(strtotime('now')); //product update time
 
-    $product->setSku("ABC123");
-    $product->setName("Type 7 Widget");
-    $product->setDescription("This widget will give you years of trouble-free widgeting.");
-    $product->setShortDescription("High-end widget.");
-    $product->setPrice(70.50);
-    $product->setTypeId('simple');
-    $product->setAttributeSetId(9); // need to look this up
-    $product->setWeight(1.0);
-    $product->setTaxClassId(2); // taxable goods
-    $product->setVisibility(4); // catalog, search
-    $product->setStatus(1); // enabled
+        $product->save();
+        $setting['clonedParam']['updated_at'] = $productInfo['dontCare']['updated_at'];
+        $count++;
+    }
 
-    $product->save();
+//    $product->setSku("ABC123");
+//    $product->setName("Type 7 Widget");
+//    $product->setDescription("This widget will give you years of trouble-free widgeting.");
+//    $product->setShortDescription("High-end widget.");
+//    $product->setPrice(70.50);
+//    $product->setTypeId('simple');
+//    $product->setAttributeSetId(9); // need to look this up
+//    $product->setWeight(1.0);
+//    $product->setTaxClassId(2); // taxable goods
+//    $product->setVisibility(4); // catalog, search
+//    $product->setStatus(1); // enabled
 
-}catch(Exception $e){
+    if ($count == count($productInfoArray['data']) && count($productInfoArray['data']) > 0) {
+        file_put_contents('setting.json', json_encode($setting));
+        echo json_encode(array(
+            'message' => 'success'
+        ));
+    }
+
+} catch (Exception $e) {
     var_dump($e->getMessage());
 }
