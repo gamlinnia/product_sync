@@ -12,20 +12,9 @@ require_once 'CORS.php';
 /*常用 function*/
 require_once ('tools.php');
 
-if (session_id() == '') {
-    session_start();
-}
-
-
 require_once '../../public_html/app/Mage.php';
 require_once '../functions.php';
 Mage::app();
-
-$app->get('/api/test', function () {
-    echo json_encode(array(
-        'message' => 'success'
-    ));
-});
 
 $app->post('/api/getProductInfosToSync', function () {
     global $input;
@@ -38,7 +27,7 @@ $app->post('/api/getProductInfosToSync', function () {
         }
     }
 
-    $pageSize = $input['pageSize'];
+    $pageSize = (int)$input['pageSize'];
     $filterParams = $input['filterParams'];
     /*    array(
             'updated_at' => array(
