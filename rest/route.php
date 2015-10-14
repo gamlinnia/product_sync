@@ -6,13 +6,14 @@ $app = new \Slim\Slim();
 
 $app -> contentType('application/json');
 $input = json_decode($app->request->getBody(), true);
+$config = json_decode(file_get_contents('../config.json'), true);
 
 /*CORS*/
 require_once 'CORS.php';
 /*常用 function*/
 require_once ('tools.php');
 
-require_once '../../public_html/app/Mage.php';
+require_once '../' . $config['magentoDir'] . DS . 'app/Mage.php';
 require_once '../functions.php';
 Mage::app();
 
