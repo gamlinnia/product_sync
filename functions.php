@@ -346,3 +346,15 @@ function CallAPI($method, $url, $header = null, $data = false) {
 
     return json_decode($result, true);
 }
+
+function getImagesUrlOfProduct ($productObject) {
+    $id = $productObject->getId();
+    $product=Mage::getModel('catalog/product')->load($id);
+
+    $response = array();
+    foreach ($product->getMediaGalleryImages() as $image) {
+        $response[] = $image->getUrl();
+//        echo $image->getUrl();
+    }
+    return $response;
+}
