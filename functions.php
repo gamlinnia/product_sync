@@ -1,7 +1,5 @@
 <?php
 
-defined('DS') or define('DS', '/');
-
 function attributeSetNameAndId ($nameOrId, $value) {
     /*$nameOrId = 'attributeSetName' or 'attributeSetId'*/
     $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection') ->load();

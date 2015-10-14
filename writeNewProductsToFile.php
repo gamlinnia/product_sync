@@ -4,8 +4,8 @@ date_default_timezone_set('Asia/Taipei');
 file_put_contents('log.txt', 'run at : ' . strtotime('now') . PHP_EOL, FILE_APPEND);
 $config = json_decode(file_get_contents('config.json'), true);
 $setting = json_decode(file_get_contents('setting.json'), true);
+require_once $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
-require_once $config['magentoDir'] . DS . 'app/Mage.php';
 Mage::app();
 
 /* 判斷dest server是否已add to product, 並更改setting.json的頁數 */

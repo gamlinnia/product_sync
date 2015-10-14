@@ -13,8 +13,8 @@ require_once 'CORS.php';
 /*常用 function*/
 require_once ('tools.php');
 
+require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once '../functions.php';
-require_once '../' . $config['magentoDir'] . DS . 'app/Mage.php';
 Mage::app();
 
 $app->post('/api/getProductInfosToSync', function () {
