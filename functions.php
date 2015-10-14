@@ -1,6 +1,6 @@
 <?php
 
-define('DS', '/');
+defined('DS') or define('DS', '/');
 
 function attributeSetNameAndId ($nameOrId, $value) {
     /*$nameOrId = 'attributeSetName' or 'attributeSetId'*/
