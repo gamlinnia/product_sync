@@ -43,6 +43,9 @@ $app->post('/api/getProductInfosToSync', function () {
     foreach ($productInfoList['productsInfo'] as $key => $productInfo) {
         file_put_contents('log.txt', 'dealed SKU: ' . $productInfo['sku'] . PHP_EOL, FILE_APPEND);
         $classifiedProductList[] = classifyProductAttributes($productInfo);
+        echo $productInfo['entity_id'];
+        $imagesArray = getImagesUrlOfProduct($productInfo['entity_id']);
+        var_dump($imagesArray);
     }
 
     /* 將needToBeParsed的attr從id轉換成string value */
@@ -52,7 +55,8 @@ $app->post('/api/getProductInfosToSync', function () {
     }
     echo json_encode(array(
         'status' => 'success',
-        'data' => $parsedClassfiedProductList
+        'data' => $parsedClassfiedProductList,
+        'imgs' => array()
     ));
 });
 
