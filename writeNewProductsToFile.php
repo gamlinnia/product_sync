@@ -2,6 +2,9 @@
 <?php
 date_default_timezone_set('Asia/Taipei');
 file_put_contents('log.txt', 'run at : ' . strtotime('now') . PHP_EOL, FILE_APPEND);
+$config = json_decode(file_get_contents('config.json'), true);
+var_dump($config);
+die();
 
 $setting = json_decode(file_get_contents('setting.json'), true);
 require_once '../public_html/app/Mage.php';
