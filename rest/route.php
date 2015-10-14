@@ -45,7 +45,10 @@ $app->post('/api/getProductInfosToSync', function () {
         file_put_contents('log.txt', 'dealed SKU: ' . $productInfo['sku'] . PHP_EOL, FILE_APPEND);
         $classifiedProductList[] = classifyProductAttributes($productInfo);
         $imagesArray = getImagesUrlOfProduct($productInfo['entity_id']);
-        $imgResponse[$productInfo['sku']] = $imagesArray;
+        $imgResponse[] = array(
+            'sku' => $productInfo['sku'],
+            'images' => $imagesArray
+        );
     }
 
     /* 將needToBeParsed的attr從id轉換成string value */
