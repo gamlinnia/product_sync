@@ -49,6 +49,7 @@ try{
         $product->save();
         $setting['clonedParam']['updated_at'] = $productInfo['dontCare']['updated_at'];
         $count++;
+        sleep(rand(2, 4));
     }
 
 //    $product->setSku("ABC123");
