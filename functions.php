@@ -125,7 +125,9 @@ function classifyProductAttributes ($productInfo) {
             "entity_type_id",
             "has_options",
             "upc_number",
-            "required_options"
+            "required_options",
+            "width",
+            "height"
         ),
         'dontCare' => array(
             "created_at",
