@@ -138,7 +138,8 @@ function classifyProductAttributes ($productInfo) {
             "thumbnail",
             "url_path",
             "stock_item",
-            "entity_id"
+            "entity_id",
+            "is_returnable"
         )
     );
 
