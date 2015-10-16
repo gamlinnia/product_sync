@@ -217,6 +217,36 @@ function getProductInfoFromMagento ($filterParam, $pageSize) {
     return $response;
 }
 
+function getNextProductInfoFromMagento ($filterParam, $pageSize) {
+    $response = array(
+        'productsInfo' => array()
+    );
+
+    $productCollection = Mage::getModel('catalog/product')->getCollection();
+    foreach ($filterParam as $filterAttr => $filterAttrParam) {
+        $productCollection->addAttributeToFilter($filterAttr, $filterAttrParam);
+    }
+    $response['count'] = count($productCollection);
+    $response['pageSize'] = $pageSize;
+
+    $productCollection = Mage::getModel('catalog/product')
+        ->getCollection()
+        ->addAttributeToSelect('*');
+    foreach ($filterParam as $filterAttr => $filterAttrParam) {
+        $productCollection->addAttributeToFilter($filterAttr, $filterAttrParam);
+    }
+    $productCollection->setOrder('updated_at', 'ASC')->setPageSize($pageSize+1);
+
+    $count = 0;
+    foreach ($productCollection as $product) {
+        if ($count > 0) {
+            $response['productsInfo'][] = $product->debug();
+        }
+        $count++;
+    }
+    return $response;
+}
+
 function preg_in_array ($needle, $haystack) {
     foreach ($haystack as $value) {
         $subject = $needle;

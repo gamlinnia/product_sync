@@ -36,7 +36,7 @@ $app->post('/api/getProductInfosToSync', function () {
             )) */
 
     /* if file has been cloned. */
-    $productInfoList = getProductInfoFromMagento($filterParams, $pageSize);
+    $productInfoList = getNextProductInfoFromMagento($filterParams, $pageSize);
 
     /* 分類成3類 */
     $classifiedProductList = array();
