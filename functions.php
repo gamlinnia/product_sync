@@ -261,7 +261,7 @@ function parseBackClassifiedProductAttributes ($parsedClassifiedProductInfo) {
         switch ($attrKey) {
             case 'attribute_set_id' :
                 $attrIdName = attributeSetNameAndId('attributeSetName', $attrValue);
-                $parsedProductInfo[$attrKey] = $attrIdName['name'];
+                $parsedProductInfo[$attrKey] = $attrIdName['id'];
                 break;
             default :
                 $parsedProductInfo[$attrKey] = getAttributeValueIdFromOptions('attributeName', $attrKey, $attrValue);;
