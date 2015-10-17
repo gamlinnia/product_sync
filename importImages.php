@@ -28,4 +28,5 @@ $mediaArray = array(
     'image'
 );
 
-$product->addImageToMediaGallery($filePath, null, true);
+var_dump($product->debug());
+$product->addImageToMediaGallery($filePath, 'image', true);
