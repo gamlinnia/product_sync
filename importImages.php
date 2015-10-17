@@ -1,3 +1,4 @@
+#!/usr/bin/php -q
 <?php
 
 if (!file_exists('config.json')) {
@@ -32,3 +33,4 @@ $mediaArray = array(
 );
 
 $product->addImageToMediaGallery($filePath, 'image', true, false);
+$product->save();
