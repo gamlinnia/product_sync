@@ -18,6 +18,7 @@ if (!file_exists($importDir)) {
 }
 
 $url = 'http://www.bikez.com/pictures/um/2007/dsf-200.jpg';
+$pathInfo = pathinfo($url);     // get array of dirname, basename, extension, filename
 $fileName = getFileNameFromUrl($url);
 if (!$fileName) {
     die('Can not get file name from url');
@@ -32,5 +33,8 @@ $mediaArray = array(
     'image'
 );
 
+/* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
 $product->addImageToMediaGallery($filePath, 'image', true, false);
+$attributes = $product->getTypeInstance(true)->getSetAttributes($product);
+$attributes['media_gallery']->getBackend()->updateImage($product, $filePath, $data=array('postion'=>1,'label'=>'images'));
 $product->save();
