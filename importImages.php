@@ -8,7 +8,7 @@ require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
 Mage::app();
 
-$product=Mage::getModel('catalog/product')->load(3);
+$product=Mage::getModel('catalog/product')->load(1);
 
 // Remove unset images, add image to gallery if exists
 $importDir = Mage::getBaseDir('media') . DS . 'import/';
@@ -25,7 +25,7 @@ $filePath = $importDir . $fileName;
 $mediaArray = array(
     'thumbnail',
     'small_image',
-    'image',
+    'image'
 );
 
-$product->addImageToMediaGallery($filePath, $mediaArray, false);
+$product->addImageToMediaGallery($filePath, null, true);
