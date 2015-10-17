@@ -20,6 +20,12 @@ if (!$fileName) {
 }
 $tmpFile = file_get_contents($url, $fileName);
 file_put_contents($importDir . $fileName, $tmpFile);
-    file_put_contents('http://www.bikez.com/pictures/um/2007/dsf-200.jpg');
+$filePath = $importDir . $fileName;
 
-//            $product->addImageToMediaGallery($filePath, $imageType, false);
+$mediaArray = array(
+    'thumbnail',
+    'small_image',
+    'image',
+);
+
+$product->addImageToMediaGallery($filePath, $mediaArray, false);
