@@ -390,3 +390,11 @@ function getImagesUrlOfProduct ($productId) {
     }
     return $response;
 }
+
+function getFileNameFromUrl ($url) {
+    preg_match('/[\/]([a-z0-9\-_]+\.[a-z]{3,4})$/i', $url, $match);
+    if (is_array($match) && count($match) > 1) {
+        return $match[1];
+    }
+    return null;
+}

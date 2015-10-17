@@ -12,6 +12,14 @@ $product=Mage::getModel('catalog/product')->load(3);
 
 // Remove unset images, add image to gallery if exists
 $importDir = Mage::getBaseDir('media') . DS . 'import/';
-die($importDir);
+
+$url = 'http://www.bikez.com/pictures/um/2007/dsf-200.jpg';
+$fileName = getFileNameFromUrl($url);
+if (!$fileName) {
+    die('Can not get file name from url');
+}
+$tmpFile = file_get_contents($url, $fileName);
+file_put_contents($importDir . $fileName, $tmpFile);
+    file_put_contents('http://www.bikez.com/pictures/um/2007/dsf-200.jpg');
 
 //            $product->addImageToMediaGallery($filePath, $imageType, false);
