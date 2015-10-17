@@ -12,6 +12,9 @@ $product=Mage::getModel('catalog/product')->load(1);
 
 // Remove unset images, add image to gallery if exists
 $importDir = Mage::getBaseDir('media') . DS . 'import/';
+if (!file_exists($importDir)) {
+    mkdir($importDir);
+}
 
 $url = 'http://www.bikez.com/pictures/um/2007/dsf-200.jpg';
 $fileName = getFileNameFromUrl($url);
