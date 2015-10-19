@@ -29,30 +29,41 @@ $downloadables = array(
     'firmware' => 'firmware/firmware'
 );
 
-foreach ($downloadables as $download) {
-
-}
-
-$user_manuals=Mage::getModel('usermanuals/usermanuals')->getCollection()->addFieldToFilter('product_id',$_product->getId());
-if(count($user_manuals)>0) {
-    foreach($user_manuals as $user_manual) {
-        echo(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA));
-        echo($user_manual->getFile());
+foreach ($downloadables as $downloadType => $relativeModel) {
+    $objectArray = Mage::getModel($relativeModel)->getCollection()->addFieldToFilter('product_id',$_product->getId());
+    if(count($objectArray)>0) {
+        $response[$downloadType] = array();
+        foreach($objectArray as $object) {
+            $response[$downloadType][] = array(
+                'base' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
+                'file' => $object->getFile()
+            );
+        }
     }
 }
 
-$drivers=Mage::getModel('drivers/drivers')->getCollection()->addFieldToFilter('product_id',$_product->getId());
-if(count($drivers)>0) {
-    foreach($drivers as $driver) {
-        echo(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA));
-        echo($driver->getFile());
-    }
-}
+var_dump($response);
 
-$firmwares=Mage::getModel('firmware/firmware')->getCollection()->addFieldToFilter('product_id',$_product->getId());
-if(count($firmwares)>0) {
-    foreach($firmwares as $firmware) {
-        echo(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA));
-        echo($firmware->getFile());
-    }
-}
+//$user_manuals=Mage::getModel('usermanuals/usermanuals')->getCollection()->addFieldToFilter('product_id',$_product->getId());
+//if(count($user_manuals)>0) {
+//    foreach($user_manuals as $user_manual) {
+//        echo(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA));
+//        echo($user_manual->getFile());
+//    }
+//}
+//
+//$drivers=Mage::getModel('drivers/drivers')->getCollection()->addFieldToFilter('product_id',$_product->getId());
+//if(count($drivers)>0) {
+//    foreach($drivers as $driver) {
+//        echo(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA));
+//        echo($driver->getFile());
+//    }
+//}
+//
+//$firmwares=Mage::getModel('firmware/firmware')->getCollection()->addFieldToFilter('product_id',$_product->getId());
+//if(count($firmwares)>0) {
+//    foreach($firmwares as $firmware) {
+//        echo(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA));
+//        echo($firmware->getFile());
+//    }
+//}
