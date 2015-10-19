@@ -393,32 +393,32 @@ function getImagesUrlOfProduct ($productId) {
     );
 
     $response = array();
-    $response[] = getImageResponse($mediaType, $product);
+    foreach ($product->getMediaGalleryImages() as $image) {
+        $response[] = getImageResponse($mediaType, $image);
+    }
 
     return $response;
 }
 
-function getImageResponse ($mediaTypesContent, $productObject) {
-    foreach ($productObject->getMediaGalleryImages() as $image) {
-        $imageMediaType = null;
-        $imageUrl = $image->getUrl();
-        foreach ($mediaTypesContent as $mediaTypeContent => $mediaTypeContentUrl) {
-            if ($imageUrl == $mediaTypeContentUrl) {
-                if (!$imageMediaType) {
-                    $imageMediaType = array($mediaTypeContent);
-                } else {
-                    $imageMediaType[] = $mediaTypeContent;
-                }
+function getImageResponse ($mediaTypesContent, $imageObject) {
+    $imageMediaType = null;
+    $imageUrl = $imageObject->getUrl();
+    foreach ($mediaTypesContent as $mediaTypeContent => $mediaTypeContentUrl) {
+        if ($imageUrl == $mediaTypeContentUrl) {
+            if (!$imageMediaType) {
+                $imageMediaType = array($mediaTypeContent);
+            } else {
+                $imageMediaType[] = $mediaTypeContent;
             }
         }
-
-        $response = array(
-            'url' => $imageUrl,
-            'mediaType' => $imageMediaType
-        );
-
-        return $response;
     }
+
+    $response = array(
+        'url' => $imageUrl,
+        'mediaType' => $imageMediaType
+    );
+
+    return $response;
 }
 
 function getFileNameFromUrl ($url) {
