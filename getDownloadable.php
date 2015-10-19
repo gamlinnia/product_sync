@@ -30,7 +30,7 @@ $downloadables = array(
 );
 
 foreach ($downloadables as $downloadType => $relativeModel) {
-    $objectArray = Mage::getModel($relativeModel)->getCollection()->addFieldToFilter('product_id',$_product->getId());
+    $objectArray = Mage::getModel($relativeModel)->getCollection()->addFieldToFilter('product_id',$product->getId());
     if(count($objectArray)>0) {
         $response[$downloadType] = array();
         foreach($objectArray as $object) {
