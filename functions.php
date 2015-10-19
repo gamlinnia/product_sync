@@ -381,14 +381,44 @@ function CallAPI($method, $url, $header = null, $data = false) {
 }
 
 function getImagesUrlOfProduct ($productId) {
-    $product=Mage::getModel('catalog/product')->load($productId);
+    $product = Mage::getModel('catalog/product')->load($productId);
+
+    $mediaType = array(
+        'image' => Mage::getModel('catalog/product_media_config')
+            ->getMediaUrl( $product->getImage() ),
+        'small_image' => Mage::getModel('catalog/product_media_config')
+            ->getMediaUrl( $product->getSmallImage() ),
+        'thumbnail' => Mage::getModel('catalog/product_media_config')
+            ->getMediaUrl( $product->getThumbnail() )
+    );
 
     $response = array();
-    foreach ($product->getMediaGalleryImages() as $image) {
-        $response[] = $image->getUrl();
-//        echo $image->getUrl();
-    }
+    $response[] = getImageResponse($mediaType, $product);
+
     return $response;
+}
+
+function getImageResponse ($mediaTypesContent, $productObject) {
+    foreach ($productObject->getMediaGalleryImages() as $image) {
+        $imageMediaType = null;
+        $imageUrl = $image->getUrl();
+        foreach ($mediaTypesContent as $mediaTypeContent => $mediaTypeContentUrl) {
+            if ($imageUrl == $mediaTypeContentUrl) {
+                if (!$imageMediaType) {
+                    $imageMediaType = array($mediaTypeContent);
+                } else {
+                    $imageMediaType[] = $mediaTypeContent;
+                }
+            }
+        }
+
+        $response = array(
+            'url' => $imageUrl,
+            'mediaType' => $imageMediaType
+        );
+
+        return $response;
+    }
 }
 
 function getFileNameFromUrl ($url) {
