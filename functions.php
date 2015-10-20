@@ -515,9 +515,9 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
 
 function getAttributeSetCollection () {
 
-    $entity_type = Mage::getModel('catalog/product')->getResource()->getTypeId();
-    $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection') ->load();
-    $attributeSetCollection->setEntityTypeFilter($entity_type);
+    $entityType = Mage::getModel('catalog/product')->getResource()->getTypeId();
+    $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection')
+        ->setEntityTypeFilter($entityType);
 
     $response = array();
     foreach ($attributeSetCollection as $id => $attributeSet) {
