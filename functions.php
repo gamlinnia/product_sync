@@ -490,6 +490,9 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
             $imageObject['url'] = str_replace($imageObject['host'], $config['internalHost'], $imageObject['url']);
         }
         $data = file_get_contents($imageObject['url'], false, $context);
+        if (!$data) {
+            return false;
+        }
         $filePath = $importDir . $imageObject['basename'];
         file_put_contents($filePath, $data);
 

@@ -73,7 +73,7 @@ try{
         $response = array(
             'message' => 'success'
         );
-        if (!isset($config['debug']) || !$config['debug']) {
+        if (isset($config['debug']) && $config['debug']) {
             file_put_contents('setting.json', json_encode($setting));
             $response['debug'] = true;
         }
@@ -86,9 +86,9 @@ try{
         $imagesInfoArray = $imageObject['images'];
         $localImages = getImagesUrlOfProduct($sku, 'sku');
         $imagesToBeUpload = compareImageWithRemote($localImages, $imagesInfoArray);
-        if (isset($config['debug']) && $config['debug']) {
+//        if (isset($config['debug']) && $config['debug']) {
             var_dump($imagesToBeUpload);
-        }
+//        }
         $uploadStatus = uploadImages($imagesToBeUpload, $sku, 'sku', $config);
         if (!$uploadStatus) {
             echo json_encode(array('message' => 'something wrong'));
