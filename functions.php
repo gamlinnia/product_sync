@@ -437,7 +437,7 @@ function getProductObject ($valueToFilter, $filterType='entity_id') {
     switch ($filterType) {
         case 'sku' :
             $product = Mage::getModel('catalog/product');
-            $productObject = $product->load($product->getIdBySku('11-147-107'));
+            $productObject = $product->load($product->getIdBySku($valueToFilter));
             break;
         default :
             /* filter by entity id */
