@@ -486,14 +486,13 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
         $data = file_get_contents($imageObject['url'], false, $context);
         $filePath = $importDir . $imageObject['basename'];
         file_put_contents($filePath, $data);
-        chmod($filePath, 0777);
 
         /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
-        $product->addImageToMediaGallery($filePath, null, true, false);
-        $attributes = $product->getTypeInstance(true)->getSetAttributes($product);
-        $attributes['media_gallery']->getBackend()->updateImage($product, $filePath, array(
-            'postion' => $key+1
-        ));
+        $product->addImageToMediaGallery($filePath, $imageObject['mediaType'], true, false);
+//        $attributes = $product->getTypeInstance(true)->getSetAttributes($product);
+//        $attributes['media_gallery']->getBackend()->updateImage($product, $filePath, array(
+//            'postion' => $key+1
+//        ));
         $product->save();
     }
     return true;
