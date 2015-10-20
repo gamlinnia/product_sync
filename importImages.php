@@ -9,7 +9,8 @@ require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
 Mage::app();
 
-$product=Mage::getModel('catalog/product')->load(3);
+//$product = Mage::getModel('catalog/product')->getCollection()->addFieldToFilter('sku','12-132-132');
+$product = Mage::getModel('catalog/product')->load(3);
 
 // Remove unset images, add image to gallery if exists
 $importDir = Mage::getBaseDir('media') . DS . 'import/';
@@ -23,7 +24,7 @@ $fileName = getFileNameFromUrl($url);
 if (!$fileName) {
     die('Can not get file name from url');
 }
-$tmpFile = file_get_contents($url, $fileName);
+$tmpFile = file_get_contents($url);
 file_put_contents($importDir . $fileName, $tmpFile);
 $filePath = $importDir . $fileName;
 
