@@ -65,4 +65,5 @@ foreach ($urlArray as $key => $url) {
         'types' => array(),
         'exclude' => 0,
     );
+    $media->create($sku, $newImage);
 }
