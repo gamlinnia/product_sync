@@ -499,11 +499,11 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
         $websiteId = Mage::app()->getWebsite()->getWebsiteId();
         $product->setWebsiteIds(array($websiteId));
 
-        unlink(Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product' . DS . substr($imageObject['basename'], 0, 1) . DS . substr($imageObject['basename'], 1, 1) . $imageObject['basename']);
-        echo 'delete file in ' . Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product' . DS . substr($imageObject['basename'], 0, 1) . DS . substr($imageObject['basename'], 1, 1) . $imageObject['basename'];
+        unlink(Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product' . DS . substr($imageObject['basename'], 0, 1) . DS . substr($imageObject['basename'], 1, 1) . DS . $imageObject['basename']);
+        echo 'delete file in ' . Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product' . DS . substr($imageObject['basename'], 0, 1) . DS . substr($imageObject['basename'], 1, 1) . DS . $imageObject['basename'] . PHP_EOL;
 
         /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
-        $product->addImageToMediaGallery($filePath, $imageObject['mediaType'], false, false);
+        $product->addImageToMediaGallery($filePath, $imageObject['mediaType'], true, false);
 //        $attributes = $product->getTypeInstance(true)->getSetAttributes($product);
 //        $attributes['media_gallery']->getBackend()->updateImage($product, $filePath, array(
 //            'postion' => $key+1
