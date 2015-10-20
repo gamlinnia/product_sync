@@ -486,6 +486,7 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
         $data = file_get_contents($imageObject['url'], false, $context);
         $filePath = $importDir . $imageObject['basename'];
         file_put_contents($filePath, $data);
+        chmod($filePath, 0777);
 
         /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
         $product->addImageToMediaGallery($filePath, null, true, false);
