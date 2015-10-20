@@ -384,11 +384,11 @@ function getImagesUrlOfProduct ($valueToFilter, $type='entity_id') {
     $product = getProductObject($valueToFilter, $type);
     $mediaType = array(
         'image' => Mage::getModel('catalog/product_media_config')
-            ->getMediaUrl( $product->getImage() ),
+                ->getMediaUrl( $product->getImage() ),
         'small_image' => Mage::getModel('catalog/product_media_config')
-            ->getMediaUrl( $product->getSmallImage() ),
+                ->getMediaUrl( $product->getSmallImage() ),
         'thumbnail' => Mage::getModel('catalog/product_media_config')
-            ->getMediaUrl( $product->getThumbnail() )
+                ->getMediaUrl( $product->getThumbnail() )
     );
 
     $response = array();
@@ -447,7 +447,19 @@ function getProductObject ($valueToFilter, $filterType='entity_id') {
     return $productObject;
 }
 
-function compareImageWithRemote () {
-
-    return '';
+function compareImageWithRemote ($localImages, $remoteImages) {
+    $response = array();
+    foreach ($remoteImages as $remote) {
+        $match = false;
+        foreach ($localImages as $local) {
+            if ($remote['basename'] == $local['basename']) {
+                $match = true;
+                break;
+            }
+        }
+        if (!$match) {
+            $response[] = $remote;
+        }
+    }
+    return $response;
 }

@@ -83,18 +83,12 @@ try{
 
     /* deal with image uploading */
     if (isset($config['debug']) && $config['debug']) {
-        $count = 0;
         foreach ($productInfoArray['imgs'] as $imageObject) {
             $sku = $imageObject['sku'];
             $imagesInfoArray = $imageObject['images'];
-            echo 'sku:' . $sku;
             $localImages = getImagesUrlOfProduct($sku, 'sku');
             $imagesToBeUpload = compareImageWithRemote($localImages, $imagesInfoArray);
-            if ($count < 1) {
-                var_dump($localImages);
-//                var_dump($imagesInfoArray);
-            }
-            $count++;
+            var_dump($imagesToBeUpload);
         }
     }
 
