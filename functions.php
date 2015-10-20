@@ -524,5 +524,5 @@ function getAttributeSetCollection () {
             'name' => $name
         );
     }
-    return $response;
+    return $attributeSetCollection;
 }
