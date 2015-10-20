@@ -519,14 +519,14 @@ function getAttributeSetCollection () {
     $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection') ->load();
     $attributeSetCollection->setEntityTypeFilter($entity_type);
 
-//    $response = array();
-//    foreach ($attributeSetCollection as $id => $attributeSet) {
-//        $entityTypeId = $attributeSet->getEntityTypeId();
-//        $name = $attributeSet->getAttributeSetName();
-//        $response[] = array(
-//            'id' => $entityTypeId,
-//            'name' => $name
-//        );
-//    }
-    return $attributeSetCollection;
+    $response = array();
+    foreach ($attributeSetCollection as $id => $attributeSet) {
+        $entityTypeId = $attributeSet->getEntityTypeId();
+        $name = $attributeSet->getAttributeSetName();
+        $response[] = array(
+            'id' => $entityTypeId,
+            'name' => $name
+        );
+    }
+    return $response;
 }
