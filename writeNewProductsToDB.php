@@ -87,6 +87,7 @@ try{
         $localImages = getImagesUrlOfProduct($sku, 'sku');
         $imagesToBeUpload = compareImageWithRemote($localImages, $imagesInfoArray);
 //        if (isset($config['debug']) && $config['debug']) {
+            echo 'sku: ' . $sku . PHP_EOL;
             var_dump($imagesToBeUpload);
 //        }
         $uploadStatus = uploadImages($imagesToBeUpload, $sku, 'sku', $config);
