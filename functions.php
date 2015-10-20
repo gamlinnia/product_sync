@@ -384,11 +384,11 @@ function getImagesUrlOfProduct ($valueToFilter, $type='entity_id') {
     $product = getProductObject($valueToFilter, $type);
     $mediaType = array(
         'image' => Mage::getModel('catalog/product_media_config')
-                ->getMediaUrl( $product->getImage() ),
+            ->getMediaUrl( $product->getImage() ),
         'small_image' => Mage::getModel('catalog/product_media_config')
-                ->getMediaUrl( $product->getSmallImage() ),
+            ->getMediaUrl( $product->getSmallImage() ),
         'thumbnail' => Mage::getModel('catalog/product_media_config')
-                ->getMediaUrl( $product->getThumbnail() )
+            ->getMediaUrl( $product->getThumbnail() )
     );
 
     $response = array();
@@ -511,6 +511,72 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
     }
     $product->save();
     return true;
+}
+
+function uploadImagesWithPositionAndLable ($imageObjectList, $valueToFilter, $filterType='entity_id', $config) {
+    $product = getProductObject($valueToFilter, $filterType);
+    $sku = $product->getSku();
+    $media = Mage::getModel('catalog/product_attribute_media_api');
+
+    $importDir = Mage::getBaseDir('media') . DS . 'import/';
+    if (!file_exists($importDir)) {
+        mkdir($importDir);
+    }
+
+    $username = 'rosewill';
+    $password = 'rosewillPIM';
+    $context = stream_context_create(array(
+        'http' => array(
+            'header'  => "Authorization: Basic " . base64_encode("$username:$password")
+        )
+    ));
+
+    foreach ($imageObjectList as $key => $imageObject) {
+        if (isset($config['internalHost'])) {
+            $imageObject['url'] = str_replace($imageObject['host'], $config['internalHost'], $imageObject['url']);
+        }
+        $url = $imageObject['url'];
+
+        // get array of dirname, basename, extension, filename
+        $pathInfo = pathinfo($url);
+        switch($pathInfo['extension']){
+            case 'png':
+                $mimeType = 'image/png';
+                break;
+            case 'jpg':
+                $mimeType = 'image/jpeg';
+                break;
+            case 'gif':
+                $mimeType = 'image/gif';
+                break;
+        }
+        $fileName = $imageObject['basename'];
+        $tmpFile = file_get_contents($url);
+        file_put_contents($importDir . $fileName, $tmpFile);
+        $filePath = $importDir . $fileName;
+
+        $newImage = array(
+            'file' => array(
+                'content' => base64_encode($filePath),
+                'mime' => $mimeType,
+                'name' => basename($filePath),
+            ),
+            'label' => getFileNameWithoutExtension($imageObject['basename']), // change this.
+            'position' => $key + 1,
+            'types' => $imageObject['mediaType'],
+            'exclude' => 0,
+        );
+        $media->create($sku, $newImage);
+    }
+    return true;
+}
+
+function getFileNameWithoutExtension ($fileNameWithExtension) {
+    preg_match('/[0-9\-]+/', $fileNameWithExtension, $match);
+    if (!$match) {
+        return $fileNameWithExtension;
+    }
+    return $match[0];
 }
 
 function getAttributeSetCollection () {
