@@ -382,7 +382,7 @@ function CallAPI($method, $url, $header = null, $data = false) {
 
 function getImagesUrlOfProduct ($valueToFilter, $type='entity_id') {
     $product = getProductObject($valueToFilter, $type);
-
+    var_dump($product);
     $mediaType = array(
         'image' => Mage::getModel('catalog/product_media_config')
             ->getMediaUrl( $product->getImage() ),

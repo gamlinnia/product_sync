@@ -87,10 +87,11 @@ try{
         foreach ($productInfoArray['imgs'] as $imageObject) {
             $sku = $imageObject['sku'];
             $imagesInfoArray = $imageObject['images'];
+            echo 'sku:' . $sku;
             $localImages = getImagesUrlOfProduct($sku, 'sku');
             if ($count < 1) {
                 var_dump($localImages);
-                var_dump($imagesInfoArray);
+//                var_dump($imagesInfoArray);
             }
             $count++;
         }
