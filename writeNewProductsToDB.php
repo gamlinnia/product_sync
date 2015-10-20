@@ -54,6 +54,8 @@ try{
             $count++;
             sleep(rand(2, 4));
         }
+    } else {
+        var_dump($productInfoArray);
     }
 
 //    $product->setSku("ABC123");
