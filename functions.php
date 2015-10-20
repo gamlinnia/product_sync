@@ -508,8 +508,8 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
 //        $attributes['media_gallery']->getBackend()->updateImage($product, $filePath, array(
 //            'postion' => $key+1
 //        ));
-        $product->save();
     }
+    $product->save();
     return true;
 }
 
