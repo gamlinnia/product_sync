@@ -417,6 +417,7 @@ function getImageResponse ($mediaTypesContent, $imageObject) {
 
     $response = array(
         'id' => $imageId,
+        'position' => $imageObject->getPosition(),
         'url' => $imageUrl,
         'basename' => $pathInfo['basename'],
         'host' => $parseUrl['host'],
@@ -562,7 +563,7 @@ function uploadImagesWithPositionAndLable ($imageObjectList, $valueToFilter, $fi
                 'name' => basename($filePath),
             ),
             'label' => getFileNameWithoutExtension($imageObject['basename']), // change this.
-            'position' => $key + 1,
+            'position' => $imageObject['position'],
             'types' => $imageObject['mediaType'],
             'exclude' => 0,
         );
