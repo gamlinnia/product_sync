@@ -88,7 +88,10 @@ try{
             $localImages = getImagesUrlOfProduct($sku, 'sku');
             $imagesToBeUpload = compareImageWithRemote($localImages, $imagesInfoArray);
             var_dump($imagesToBeUpload);
-            uploadImages($imagesToBeUpload, $sku, 'sku', $config);
+            $uploadStatus = uploadImages($imagesToBeUpload, $sku, 'sku', $config);
+            if (!$uploadStatus) {
+                echo json_encode(array('message' => 'something wrong'));
+            }
         }
     }
 
