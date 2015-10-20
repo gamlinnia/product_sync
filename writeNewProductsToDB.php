@@ -74,9 +74,9 @@ try{
             'message' => 'success'
         );
         if (isset($config['debug']) && $config['debug']) {
-            file_put_contents('setting.json', json_encode($setting));
             $response['debug'] = true;
         }
+        file_put_contents('setting.json', json_encode($setting));
         echo json_encode($response);
     }
 
