@@ -496,6 +496,9 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
         $filePath = $importDir . $imageObject['basename'];
         file_put_contents($filePath, $data);
 
+        $websiteId = Mage::app()->getWebsite()->getWebsiteId();
+        $product->setWebsiteIds(array($websiteId));
+
         /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
         $product->addImageToMediaGallery($filePath, $imageObject['mediaType'], false, false);
 //        $attributes = $product->getTypeInstance(true)->getSetAttributes($product);
