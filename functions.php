@@ -380,8 +380,8 @@ function CallAPI($method, $url, $header = null, $data = false) {
     return json_decode($result, true);
 }
 
-function getImagesUrlOfProduct ($productId) {
-    $product = Mage::getModel('catalog/product')->load($productId);
+function getImagesUrlOfProduct ($valueToFilter, $type='entity_id') {
+    $product = getProductObject($valueToFilter, $type);
 
     $mediaType = array(
         'image' => Mage::getModel('catalog/product_media_config')
@@ -403,6 +403,8 @@ function getImagesUrlOfProduct ($productId) {
 function getImageResponse ($mediaTypesContent, $imageObject) {
     $imageMediaType = null;
     $imageUrl = $imageObject->getUrl();
+    $pathInfo = pathinfo($imageUrl);
+    $parseUrl = parse_url($imageUrl);
     foreach ($mediaTypesContent as $mediaTypeContent => $mediaTypeContentUrl) {
         if ($imageUrl == $mediaTypeContentUrl) {
             if (!$imageMediaType) {
@@ -415,6 +417,8 @@ function getImageResponse ($mediaTypesContent, $imageObject) {
 
     $response = array(
         'url' => $imageUrl,
+        'basename' => $pathInfo['basename'],
+        'host' => $parseUrl['host'],
         'mediaType' => $imageMediaType
     );
 
@@ -427,4 +431,17 @@ function getFileNameFromUrl ($url) {
         return $match[1];
     }
     return null;
+}
+
+function getProductObject ($valueToFilter, $filterType='entity_id') {
+    switch ($filterType) {
+        case 'sku' :
+            $product = Mage::getModel('catalog/product');
+            $productObject = $product->load($product->getIdBySku('11-147-107'));
+            break;
+        default :
+            /* filter by entity id */
+            $productObject = Mage::getModel('catalog/product')->load($valueToFilter);
+    }
+    return $productObject;
 }

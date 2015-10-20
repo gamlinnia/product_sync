@@ -35,7 +35,7 @@ $mediaArray = array(
 );
 
 /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
-$product->addImageToMediaGallery($filePath, 'image', true, false);
+$product->addImageToMediaGallery($filePath, null, true, false);
 $attributes = $product->getTypeInstance(true)->getSetAttributes($product);
 $attributes['media_gallery']->getBackend()->updateImage($product, $filePath, $data=array('postion'=>1,'label'=>'images'));
 $product->save();
