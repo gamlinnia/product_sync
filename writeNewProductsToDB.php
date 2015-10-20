@@ -30,26 +30,29 @@ if (!(isset($productInfoArray['status']) && $productInfoArray['status'] == 'succ
 }
 
 try{
-    $count = 0;
-    foreach ($productInfoArray['data'] as $key => $productInfo) {
-        $product = Mage::getModel('catalog/product');
-        file_put_contents('log.txt', "************* " . $productInfo['direct']['sku'] . ' ' . $productInfo['dontCare']['updated_at'] . " *************" . PHP_EOL, FILE_APPEND);
-        $readyToImportProductInfo = parseBackClassifiedProductAttributes($productInfo);
+    /* debug == false，才執行product sync  */
+    if (!isset($config['debug']) || !$config['debug']) {
+        $count = 0;
+        foreach ($productInfoArray['data'] as $key => $productInfo) {
+            $product = Mage::getModel('catalog/product');
+            file_put_contents('log.txt', "************* " . $productInfo['direct']['sku'] . ' ' . $productInfo['dontCare']['updated_at'] . " *************" . PHP_EOL, FILE_APPEND);
+            $readyToImportProductInfo = parseBackClassifiedProductAttributes($productInfo);
 
-        foreach ($readyToImportProductInfo as $attrKey => $attrValue) {
+            foreach ($readyToImportProductInfo as $attrKey => $attrValue) {
 //            file_put_contents('log.txt', $attrKey . ': ' . $attrValue . PHP_EOL, FILE_APPEND);
-            $product->setData($attrKey, $attrValue);
+                $product->setData($attrKey, $attrValue);
+            }
+
+            $websiteId = Mage::app()->getWebsite()->getWebsiteId();
+            $product->setWebsiteIds(array($websiteId))
+                ->setCreatedAt(strtotime('now')) //product creation time
+                ->setUpdatedAt(strtotime('now')); //product update time
+
+            $product->save();
+            $setting['clonedParam']['updated_at'] = $productInfo['dontCare']['updated_at'];
+            $count++;
+            sleep(rand(2, 4));
         }
-
-        $websiteId = Mage::app()->getWebsite()->getWebsiteId();
-        $product->setWebsiteIds(array($websiteId))
-            ->setCreatedAt(strtotime('now')) //product creation time
-            ->setUpdatedAt(strtotime('now')); //product update time
-
-        $product->save();
-        $setting['clonedParam']['updated_at'] = $productInfo['dontCare']['updated_at'];
-        $count++;
-        sleep(rand(2, 4));
     }
 
 //    $product->setSku("ABC123");
@@ -65,10 +68,29 @@ try{
 //    $product->setStatus(1); // enabled
 
     if ($count == count($productInfoArray['data']) && count($productInfoArray['data']) > 0) {
-        file_put_contents('setting.json', json_encode($setting));
-        echo json_encode(array(
+        $response = array(
             'message' => 'success'
-        ));
+        );
+        if (!isset($config['debug']) || !$config['debug']) {
+            file_put_contents('setting.json', json_encode($setting));
+            $response['debug'] = true;
+        }
+        echo json_encode($response);
+    }
+
+    /* deal with image uploading */
+    if (isset($config['debug']) || $config['debug']) {
+        $count = 0;
+        foreach ($productInfoArray['imgs'] as $imageObject) {
+            $sku = $imageObject['sku'];
+            $imagesInfoArray = $imageObject['images'];
+            $localImages = getImagesUrlOfProduct($sku, 'sku');
+            if ($count < 1) {
+                var_dump($localImages);
+                var_dump($imagesInfoArray);
+            }
+            $count++;
+        }
     }
 
 } catch (Exception $e) {
