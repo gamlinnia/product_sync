@@ -81,17 +81,17 @@ try{
     }
 
     /* deal with image uploading */
-    if (isset($config['debug']) && $config['debug']) {
-        foreach ($productInfoArray['imgs'] as $imageObject) {
-            $sku = $imageObject['sku'];
-            $imagesInfoArray = $imageObject['images'];
-            $localImages = getImagesUrlOfProduct($sku, 'sku');
-            $imagesToBeUpload = compareImageWithRemote($localImages, $imagesInfoArray);
+    foreach ($productInfoArray['imgs'] as $imageObject) {
+        $sku = $imageObject['sku'];
+        $imagesInfoArray = $imageObject['images'];
+        $localImages = getImagesUrlOfProduct($sku, 'sku');
+        $imagesToBeUpload = compareImageWithRemote($localImages, $imagesInfoArray);
+        if (isset($config['debug']) && $config['debug']) {
             var_dump($imagesToBeUpload);
-            $uploadStatus = uploadImages($imagesToBeUpload, $sku, 'sku', $config);
-            if (!$uploadStatus) {
-                echo json_encode(array('message' => 'something wrong'));
-            }
+        }
+        $uploadStatus = uploadImages($imagesToBeUpload, $sku, 'sku', $config);
+        if (!$uploadStatus) {
+            echo json_encode(array('message' => 'something wrong'));
         }
     }
 
