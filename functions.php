@@ -463,3 +463,43 @@ function compareImageWithRemote ($localImages, $remoteImages) {
     }
     return $response;
 }
+
+function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id', $config) {
+    $product = getProductObject($valueToFilter, $filterType);
+
+    $importDir = Mage::getBaseDir('media') . DS . 'import/';
+    if (!file_exists($importDir)) {
+        mkdir($importDir);
+    }
+
+    foreach ($imageObjectList as $imageObject) {
+        if (isset($config['internalHost'])) {
+            $imageObject['url'] = str_replace($imageObject['host'], $config['internalHost'], $imageObject['url']);
+        }
+        var_dump($imageObject);
+        die();
+    }
+
+    $url = 'http://www.bikez.com/pictures/um/2007/dsf-200.jpg';
+    $pathInfo = pathinfo($url);     // get array of dirname, basename, extension, filename
+    $fileName = getFileNameFromUrl($url);
+    if (!$fileName) {
+        die('Can not get file name from url');
+    }
+    $tmpFile = file_get_contents($url);
+    file_put_contents($importDir . $fileName, $tmpFile);
+    $filePath = $importDir . $fileName;
+
+    $mediaArray = array(
+        'thumbnail',
+        'small_image',
+        'image'
+    );
+
+    /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
+    $product->addImageToMediaGallery($filePath, null, true, false);
+    $attributes = $product->getTypeInstance(true)->getSetAttributes($product);
+    $attributes['media_gallery']->getBackend()->updateImage($product, $filePath, $data=array('postion'=>1,'label'=>'images'));
+    $product->save();
+    return true;
+}

@@ -32,29 +32,28 @@ if (!(isset($productInfoArray['status']) && $productInfoArray['status'] == 'succ
 
 try{
     /* debug == false，才執行product sync  */
-    if (!isset($config['debug']) || !$config['debug']) {
-        $count = 0;
-        foreach ($productInfoArray['data'] as $key => $productInfo) {
-            $product = Mage::getModel('catalog/product');
-            file_put_contents('log.txt', "************* " . $productInfo['direct']['sku'] . ' ' . $productInfo['dontCare']['updated_at'] . " *************" . PHP_EOL, FILE_APPEND);
-            $readyToImportProductInfo = parseBackClassifiedProductAttributes($productInfo);
+    $count = 0;
+    foreach ($productInfoArray['data'] as $key => $productInfo) {
+        $product = Mage::getModel('catalog/product');
+        file_put_contents('log.txt', "************* " . $productInfo['direct']['sku'] . ' ' . $productInfo['dontCare']['updated_at'] . " *************" . PHP_EOL, FILE_APPEND);
+        $readyToImportProductInfo = parseBackClassifiedProductAttributes($productInfo);
 
-            foreach ($readyToImportProductInfo as $attrKey => $attrValue) {
+        foreach ($readyToImportProductInfo as $attrKey => $attrValue) {
 //            file_put_contents('log.txt', $attrKey . ': ' . $attrValue . PHP_EOL, FILE_APPEND);
-                $product->setData($attrKey, $attrValue);
-            }
-
-            $websiteId = Mage::app()->getWebsite()->getWebsiteId();
-            $product->setWebsiteIds(array($websiteId))
-                ->setCreatedAt(strtotime('now')) //product creation time
-                ->setUpdatedAt(strtotime('now')); //product update time
-
-            $product->save();
-            $setting['clonedParam']['updated_at'] = $productInfo['dontCare']['updated_at'];
-            $count++;
-            sleep(rand(2, 4));
+            $product->setData($attrKey, $attrValue);
         }
-    } else {
+
+        $websiteId = Mage::app()->getWebsite()->getWebsiteId();
+        $product->setWebsiteIds(array($websiteId))
+            ->setCreatedAt(strtotime('now')) //product creation time
+            ->setUpdatedAt(strtotime('now')); //product update time
+
+        $product->save();
+        $setting['clonedParam']['updated_at'] = $productInfo['dontCare']['updated_at'];
+        $count++;
+        sleep(rand(2, 4));
+    }
+    if (isset($config['debug']) && $config['debug']) {
         var_dump($productInfoArray);
     }
 
@@ -89,6 +88,7 @@ try{
             $localImages = getImagesUrlOfProduct($sku, 'sku');
             $imagesToBeUpload = compareImageWithRemote($localImages, $imagesInfoArray);
             var_dump($imagesToBeUpload);
+            uploadImages($imagesToBeUpload, $sku, 'sku', $config);
         }
     }
 
