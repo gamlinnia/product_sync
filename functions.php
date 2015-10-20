@@ -512,3 +512,17 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
     }
     return true;
 }
+
+function getAttributeSetCollection () {
+    $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection') ->load();
+    $response = array();
+    foreach ($attributeSetCollection as $id => $attributeSet) {
+        $entityTypeId = $attributeSet->getEntityTypeId();
+        $name = $attributeSet->getAttributeSetName();
+        $response[] = array(
+            'id' => $entityTypeId,
+            'name' => $name
+        );
+    }
+    return $response;
+}
