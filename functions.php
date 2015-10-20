@@ -452,7 +452,13 @@ function compareImageWithRemote ($localImages, $remoteImages) {
     foreach ($remoteImages as $remote) {
         $match = false;
         foreach ($localImages as $local) {
-            if ($remote['basename'] == $local['basename']) {
+            if ($local['basename'] == 'cs.jpg') {
+                $match = true;
+                break;
+            }
+            preg_match('/[0-9\-]{13}/', $remote['basename'], $remoteMatch);
+            preg_match('/[0-9\-]{13}/', $local['basename'], $localMatch);
+            if ($remoteMatch[0] == $localMatch[0]) {
                 $match = true;
                 break;
             }
