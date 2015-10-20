@@ -402,6 +402,7 @@ function getImagesUrlOfProduct ($valueToFilter, $type='entity_id') {
 function getImageResponse ($mediaTypesContent, $imageObject) {
     $imageMediaType = null;
     $imageUrl = $imageObject->getUrl();
+    $imageId = $imageObject->getId();
     $pathInfo = pathinfo($imageUrl);
     $parseUrl = parse_url($imageUrl);
     foreach ($mediaTypesContent as $mediaTypeContent => $mediaTypeContentUrl) {
@@ -415,6 +416,7 @@ function getImageResponse ($mediaTypesContent, $imageObject) {
     }
 
     $response = array(
+        'id' => $imageId,
         'url' => $imageUrl,
         'basename' => $pathInfo['basename'],
         'host' => $parseUrl['host'],
@@ -443,4 +445,9 @@ function getProductObject ($valueToFilter, $filterType='entity_id') {
             $productObject = Mage::getModel('catalog/product')->load($valueToFilter);
     }
     return $productObject;
+}
+
+function compareImageWithRemote () {
+
+    return '';
 }
