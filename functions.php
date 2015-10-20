@@ -472,22 +472,23 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
         mkdir($importDir);
     }
 
+    $username = 'rosewill';
+    $password = 'rosewillPIM';
+    $context = stream_context_create(array(
+        'http' => array(
+            'header'  => "Authorization: Basic " . base64_encode("$username:$password")
+        )
+    ));
     foreach ($imageObjectList as $imageObject) {
         if (isset($config['internalHost'])) {
             $imageObject['url'] = str_replace($imageObject['host'], $config['internalHost'], $imageObject['url']);
         }
+        $data = file_get_contents($imageObject['url'], false, $context);
+        file_put_contents($importDir . $imageObject['basename'], $data);
         var_dump($imageObject);
         die();
     }
 
-    $url = 'http://www.bikez.com/pictures/um/2007/dsf-200.jpg';
-    $pathInfo = pathinfo($url);     // get array of dirname, basename, extension, filename
-    $fileName = getFileNameFromUrl($url);
-    if (!$fileName) {
-        die('Can not get file name from url');
-    }
-    $tmpFile = file_get_contents($url);
-    file_put_contents($importDir . $fileName, $tmpFile);
     $filePath = $importDir . $fileName;
 
     $mediaArray = array(
