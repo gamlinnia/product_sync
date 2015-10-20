@@ -497,7 +497,7 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
         file_put_contents($filePath, $data);
 
         /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
-        $product->addImageToMediaGallery($filePath, $imageObject['mediaType'], true, false);
+        $product->addImageToMediaGallery($filePath, $imageObject['mediaType'], false, false);
 //        $attributes = $product->getTypeInstance(true)->getSetAttributes($product);
 //        $attributes['media_gallery']->getBackend()->updateImage($product, $filePath, array(
 //            'postion' => $key+1
