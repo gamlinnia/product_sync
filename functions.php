@@ -479,28 +479,21 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
             'header'  => "Authorization: Basic " . base64_encode("$username:$password")
         )
     ));
-    foreach ($imageObjectList as $imageObject) {
+    foreach ($imageObjectList as $key => $imageObject) {
         if (isset($config['internalHost'])) {
             $imageObject['url'] = str_replace($imageObject['host'], $config['internalHost'], $imageObject['url']);
         }
         $data = file_get_contents($imageObject['url'], false, $context);
-        file_put_contents($importDir . $imageObject['basename'], $data);
-        var_dump($imageObject);
-        die();
+        $filePath = $importDir . $imageObject['basename'];
+        file_put_contents($filePath, $data);
+
+        /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
+        $product->addImageToMediaGallery($filePath, null, true, false);
+        $attributes = $product->getTypeInstance(true)->getSetAttributes($product);
+        $attributes['media_gallery']->getBackend()->updateImage($product, $filePath, array(
+            'postion' => $key+1
+        ));
+        $product->save();
     }
-
-    $filePath = $importDir . $fileName;
-
-    $mediaArray = array(
-        'thumbnail',
-        'small_image',
-        'image'
-    );
-
-    /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
-    $product->addImageToMediaGallery($filePath, null, true, false);
-    $attributes = $product->getTypeInstance(true)->getSetAttributes($product);
-    $attributes['media_gallery']->getBackend()->updateImage($product, $filePath, $data=array('postion'=>1,'label'=>'images'));
-    $product->save();
     return true;
 }
