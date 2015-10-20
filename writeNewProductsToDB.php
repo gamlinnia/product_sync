@@ -23,7 +23,8 @@ $productInfoArray = json_decode(json_encode($productInfoJson), true);
 
 if (!(isset($productInfoArray['status']) && $productInfoArray['status'] == 'success')) {
     echo json_encode(array(
-        'param' => $param
+        'param' => $param,
+        'url' => $setting['restUrl'][$host] . 'getProductInfosToSync'
     ));
     file_put_contents('log.txt', 'Get Json File Error', FILE_APPEND);
     return;
