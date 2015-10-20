@@ -79,7 +79,7 @@ try{
     }
 
     /* deal with image uploading */
-    if (isset($config['debug']) || $config['debug']) {
+    if (isset($config['debug']) && $config['debug']) {
         $count = 0;
         foreach ($productInfoArray['imgs'] as $imageObject) {
             $sku = $imageObject['sku'];
