@@ -30,10 +30,6 @@ $app->post('/api/getProductInfosToSync', function () {
 
     $pageSize = (int)$input['pageSize'];
     $filterParams = $input['filterParams'];
-    /*    array(
-            'updated_at' => array(
-                'from'  => $hostInfo['updated_at']
-            )) */
 
     /* if file has been cloned. */
     $productInfoList = getNextProductInfoFromMagento($filterParams, $pageSize);
@@ -41,13 +37,17 @@ $app->post('/api/getProductInfosToSync', function () {
     /* 分類成3類 */
     $classifiedProductList = array();
     $imgResponse = array();
+    $downloadableResponse = array();
     foreach ($productInfoList['productsInfo'] as $key => $productInfo) {
-        file_put_contents('log.txt', 'dealed SKU: ' . $productInfo['sku'] . PHP_EOL, FILE_APPEND);
         $classifiedProductList[] = classifyProductAttributes($productInfo);
         $imagesArray = getImagesUrlOfProduct($productInfo['entity_id']);
         $imgResponse[] = array(
             'sku' => $productInfo['sku'],
             'images' => $imagesArray
+        );
+        $downloadableResponse[] = array(
+            'sku' => $productInfo['sku'],
+            'files' => getDownloadableUrls($productInfo['sku'], 'sku')
         );
     }
 
@@ -59,7 +59,8 @@ $app->post('/api/getProductInfosToSync', function () {
     echo json_encode(array(
         'status' => 'success',
         'data' => $parsedClassfiedProductList,
-        'imgs' => $imgResponse
+        'imgs' => $imgResponse,
+        'downloadables' => $downloadableResponse
     ));
 });
 

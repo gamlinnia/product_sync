@@ -14,7 +14,7 @@ $productId = $product->getId();
 
 //$path = Mage::getBaseDir('media') . DS . 'Download_Files' . DS . 'user_manual' . DS;
 //$filename=implode('_',explode(' ',$filename));
-//$file_path='Download_Files/user_manual/'.$filename;
+$file_path = 'Download_Files' . DS . 'user_manual' . DS . $filename;
 
 Mage::getModel('usermanuals/usermanuals')
     ->setFile('test/test/test/test.pdf')
