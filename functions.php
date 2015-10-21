@@ -645,7 +645,7 @@ function uploadDownloadFiles ($downloadableObjectList, $valueToFilter, $filterTy
         )
     ));
     foreach ($downloadableObjectList as $downloadableObject) {
-        $url = $downloadableObject['base'] . $downloadableObject['dir'] . $downloadableObject['basename'];
+        $url = $downloadableObject['baseUrl'] . $downloadableObject['dir'] . $downloadableObject['basename'];
         if (isset($config['internalHost'])) {
             $url = str_replace($downloadableObject['host'], $config['internalHost'], $url);
         }
