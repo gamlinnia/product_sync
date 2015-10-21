@@ -98,6 +98,8 @@ try{
         }
     }
 
+    echo 'Last Product updated_at is ' . $productInfoArray['data'][count($productInfoArray['data'])-1]['dontCare']['updated_at'] . PHP_EOL;
+
 } catch (Exception $e) {
     var_dump($e->getMessage());
 }
