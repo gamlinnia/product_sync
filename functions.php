@@ -514,7 +514,7 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
     return true;
 }
 
-function uploadImagesWithPositionAndLable ($imageObjectList, $valueToFilter, $filterType='entity_id', $config) {
+function uploadImagesWithPositionAndLabel ($imageObjectList, $valueToFilter, $filterType='entity_id', $config) {
     $product = getProductObject($valueToFilter, $filterType);
     $sku = $product->getSku();
     $media = Mage::getModel('catalog/product_attribute_media_api');

@@ -90,7 +90,7 @@ try{
             echo 'sku: ' . $sku . PHP_EOL;
             var_dump($imagesToBeUpload);
 //        }
-        $uploadStatus = uploadImages($imagesToBeUpload, $sku, 'sku', $config);
+        $uploadStatus = uploadImagesWithPositionAndLabel($imagesToBeUpload, $sku, 'sku', $config);
         if (!$uploadStatus) {
             echo json_encode(array('message' => 'something wrong'));
         }
