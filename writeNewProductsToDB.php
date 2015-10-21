@@ -99,7 +99,7 @@ try{
             }
             $count = count($downloadableInfoArray);
             echo "$count remote downloadable files $sku" . PHP_EOL;
-            foreach ($localDownloadables as $each) {
+            foreach ($downloadableInfoArray as $each) {
                 echo $each['basename'] . PHP_EOL;
             }
             $count = count($downloadableInfoArray);
