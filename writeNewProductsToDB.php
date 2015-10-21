@@ -64,9 +64,9 @@ try{
         if (isset($config['debug']) && $config['debug']) {
             $response['debug'] = true;
         }
-        if (!isset($config['debug']) || !$config['debug']) {
-            file_put_contents('setting.json', json_encode($setting));
-        }
+//        if (!isset($config['debug']) || !$config['debug']) {
+        file_put_contents('setting.json', json_encode($setting));
+//        }
         echo json_encode($response) . PHP_EOL;
     }
 
