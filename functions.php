@@ -453,7 +453,7 @@ function compareImageWithRemote ($localImages, $remoteImages) {
     foreach ($remoteImages as $remote) {
         $match = false;
         foreach ($localImages as $local) {
-            if ($local['basename'] == 'cs.jpg') {
+            if (strtolower(substr($local['basename'], 0, 2)) == 'cs' && count($remoteImages) == 1) {
                 $match = true;
                 break;
             }
