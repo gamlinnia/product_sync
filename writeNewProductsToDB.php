@@ -94,8 +94,14 @@ try{
         if (isset($config['debug']) && $config['debug']) {
             $count = count($localDownloadables);
             echo "$count local downloadable files $sku" . PHP_EOL;
+            foreach ($localDownloadables as $each) {
+                echo $each['basename'] . PHP_EOL;
+            }
             $count = count($downloadableInfoArray);
             echo "$count remote downloadable files $sku" . PHP_EOL;
+            foreach ($localDownloadables as $each) {
+                echo $each['basename'] . PHP_EOL;
+            }
             $count = count($downloadableInfoArray);
             echo "$count to be uploaded downloadable files $sku" . PHP_EOL;
             var_dump($downloadableToBeUpload);
