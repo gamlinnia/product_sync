@@ -603,8 +603,8 @@ function getDownloadableUrls ($valueToFilter, $filterType='entity_id') {
 
     $downloadables = array(
         'user_manual' => 'usermanuals/usermanuals',
-        'driver' => 'drivers/drivers',
-        'firmware' => 'firmware/firmware'
+        'Drivers' => 'drivers/drivers',
+        'Firmware' => 'firmware/firmware'
     );
 
     $response = array();
@@ -613,13 +613,14 @@ function getDownloadableUrls ($valueToFilter, $filterType='entity_id') {
         if(count($objectArray) > 0) {
             foreach($objectArray as $object) {
                 $url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $object->getFile();
-                $pathInfo = pathinfo($url);
                 $parseUrl = parse_url($url);
+                preg_match('/(.+[\/]{1})([^\/]+)/', $object->getFile(), $match);
+
                 $response[] = array(
                     'type' => $downloadType,
-                    'base' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
-                    'file' => $object->getFile(),
-                    'basename' => $pathInfo['basename'],
+                    'baseUrl' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
+                    'dir' => $match[1],
+                    'basename' => $match[2],
                     'host' => $parseUrl['host']
                 );
             }
@@ -629,7 +630,10 @@ function getDownloadableUrls ($valueToFilter, $filterType='entity_id') {
     return $response;
 }
 
-function uploadDownloadFiles ($downloadableObjectList, $valueToFilter, $filterType='entity_id', $config) {
+function uploadDownloadFiles ($downloadableObject, $valueToFilter, $filterType='entity_id', $config) {
+    $product = getProductObject($downloadableObject['sku'], 'sku');
+    $productId = $product->getId();
+
     $username = 'rosewill';
     $password = 'rosewillPIM';
     $context = stream_context_create(array(
@@ -637,21 +641,21 @@ function uploadDownloadFiles ($downloadableObjectList, $valueToFilter, $filterTy
             'header'  => "Authorization: Basic " . base64_encode("$username:$password")
         )
     ));
-    foreach ($downloadableObjectList as $downloadableObject) {
-        $product = getProductObject($downloadableObject['sku'], 'sku');
-        $productId = $product->getId();
-
+    foreach ($downloadableObject['files'] as $downloadableInfo) {
+        $url = $downloadableInfo['base'] . $downloadableInfo['file'];
+        $tmpFile = file_get_contents($url, false, $context);    // get file with base auth
+        $filePath = 'download' . DS . $downloadableInfo['type'] . DS . $downloadableInfo['basename'];
+        file_put_contents($filePath, $tmpFile);
     }
 
 
 
 //$path = Mage::getBaseDir('media') . DS . 'Download_Files' . DS . 'user_manual' . DS;
 //$filename=implode('_',explode(' ',$filename));
-    $file_path = 'download' . DS . 'user_manual' . DS . $filename;
 
     Mage::getModel('usermanuals/usermanuals')
         ->setFile('test/test/test/test.pdf')
-        ->setProductId($productId)
+        ->setProductId($file_path)
         ->setId(null)
         ->save();
 
