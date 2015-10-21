@@ -613,9 +613,14 @@ function getDownloadableUrls ($valueToFilter, $filterType='entity_id') {
         if(count($objectArray) > 0) {
             $response[$downloadType] = array();
             foreach($objectArray as $object) {
+                $url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $object->getFile();
+                $pathInfo = pathinfo($url);
+                $parseUrl = parse_url($url);
                 $response[$downloadType][] = array(
                     'base' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
-                    'file' => $object->getFile()
+                    'file' => $object->getFile(),
+                    'basename' => $pathInfo['basename'],
+                    'host' => $parseUrl['host']
                 );
             }
         }
