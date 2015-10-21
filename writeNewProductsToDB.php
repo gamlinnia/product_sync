@@ -102,7 +102,7 @@ try{
             foreach ($downloadableInfoArray as $each) {
                 echo $each['basename'] . PHP_EOL;
             }
-            $count = count($downloadableInfoArray);
+            $count = count($downloadableToBeUpload);
             echo "$count to be uploaded downloadable files $sku" . PHP_EOL;
             var_dump($downloadableToBeUpload);
         }
