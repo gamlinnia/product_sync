@@ -106,6 +106,10 @@ try{
             echo "$count to be uploaded downloadable files $sku" . PHP_EOL;
             var_dump($downloadableToBeUpload);
         }
+        $uploadDownloadableStatus = uploadDownloadFiles($downloadableToBeUpload, $sku, 'sku', $config);
+        if (!$uploadDownloadableStatus) {
+            echo json_encode(array('message' => 'something wrong'));
+        }
     }
 
     echo 'Last Product updated_at is ' . $productInfoArray['data'][count($productInfoArray['data'])-1]['dontCare']['updated_at'] . PHP_EOL;
