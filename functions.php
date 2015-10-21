@@ -597,3 +597,34 @@ function getAttributeSetCollection () {
     }
     return $response;
 }
+
+function getDownloadableUrls ($valueToFilter, $filterType='entity_id') {
+    $product = getProductObject($valueToFilter, $filterType);
+
+    $response = array(
+        'user_manual' => null,
+        'driver' => null,
+        'firmware' => null
+    );
+
+    $downloadables = array(
+        'user_manual' => 'usermanuals/usermanuals',
+        'driver' => 'drivers/drivers',
+        'firmware' => 'firmware/firmware'
+    );
+
+    foreach ($downloadables as $downloadType => $relativeModel) {
+        $objectArray = Mage::getModel($relativeModel)->getCollection()->addFieldToFilter('product_id',$product->getId());
+        if(count($objectArray)>0) {
+            $response[$downloadType] = array();
+            foreach($objectArray as $object) {
+                $response[$downloadType][] = array(
+                    'base' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
+                    'file' => $object->getFile()
+                );
+            }
+        }
+    }
+
+    return $response;
+}

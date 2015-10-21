@@ -11,12 +11,6 @@ Mage::app();
 
 $product=Mage::getModel('catalog/product')->load(1222);
 
-$downloadables = array(
-    'user_manual' => null,
-    'driver' => null,
-    'firmware' => null
-);
-
 $response = array(
     'user_manual' => null,
     'driver' => null,
