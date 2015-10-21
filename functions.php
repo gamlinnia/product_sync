@@ -650,8 +650,8 @@ function uploadDownloadFiles ($downloadableObjectList, $valueToFilter, $filterTy
             $url = str_replace($downloadableObject['host'], $config['internalHost'], $url);
         }
         $tmpFile = file_get_contents($url, false, $context);    // get file with base auth
-        $filePath = Mage::getBaseDir('media') . DS . $downloadableObject['dir'] . $downloadableObject['basename'];
-        file_put_contents($filePath, $tmpFile);
+        $filePath = $downloadableObject['dir'] . $downloadableObject['basename'];
+        file_put_contents(Mage::getBaseDir('media') . DS . $filePath, $tmpFile);
         Mage::getModel($downloadableObject['model'])
             ->setFile($filePath)
             ->setProductId($productId)
