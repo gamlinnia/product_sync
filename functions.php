@@ -562,7 +562,7 @@ function uploadImagesWithPositionAndLabel ($imageObjectList, $valueToFilter, $fi
             'file' => array(
                 'content' => base64_encode($filePath),
                 'mime' => $mimeType,
-                'name' => getFileNameWithoutExtension($imageObject['basename'])
+                'name' => getFileNameWithoutExtension($imageObject['basename'])         // 不要給extension
             ),
             'label' => getFileNameWithoutExtension($imageObject['basename']),
             'position' => $imageObject['position'],

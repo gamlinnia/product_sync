@@ -48,7 +48,7 @@ $app->post('/api/getProductInfosToSync', function () {
         );
 
         $downloadableResponse = getDownloadableUrls($productInfo['sku'], 'sku');
-        if (count($downloadableResponse > 0)) {
+        if (count($downloadableResponse) > 0) {
             $downloadableResponse[] = array(
                 'sku' => $productInfo['sku'],
                 'files' => $downloadableResponse
