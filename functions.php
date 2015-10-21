@@ -552,7 +552,7 @@ function uploadImagesWithPositionAndLabel ($imageObjectList, $valueToFilter, $fi
                 break;
         }
         $fileName = $imageObject['basename'];
-        $tmpFile = file_get_contents($url);
+        $tmpFile = file_get_contents($url, false, $context);    // get file with base auth
         file_put_contents($importDir . $fileName, $tmpFile);
         $filePath = $importDir . $fileName;
 
@@ -627,4 +627,32 @@ function getDownloadableUrls ($valueToFilter, $filterType='entity_id') {
     }
 
     return $response;
+}
+
+function uploadDownloadFiles ($downloadableObjectList, $valueToFilter, $filterType='entity_id', $config) {
+    $username = 'rosewill';
+    $password = 'rosewillPIM';
+    $context = stream_context_create(array(
+        'http' => array(
+            'header'  => "Authorization: Basic " . base64_encode("$username:$password")
+        )
+    ));
+    foreach ($downloadableObjectList as $downloadableObject) {
+        $product = getProductObject($downloadableObject['sku'], 'sku');
+        $productId = $product->getId();
+
+    }
+
+
+
+//$path = Mage::getBaseDir('media') . DS . 'Download_Files' . DS . 'user_manual' . DS;
+//$filename=implode('_',explode(' ',$filename));
+    $file_path = 'download' . DS . 'user_manual' . DS . $filename;
+
+    Mage::getModel('usermanuals/usermanuals')
+        ->setFile('test/test/test/test.pdf')
+        ->setProductId($productId)
+        ->setId(null)
+        ->save();
+
 }
