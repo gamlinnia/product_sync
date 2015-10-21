@@ -550,6 +550,8 @@ function uploadImagesWithPositionAndLabel ($imageObjectList, $valueToFilter, $fi
             case 'gif':
                 $mimeType = 'image/gif';
                 break;
+            default :
+                return false;
         }
         $fileName = $imageObject['basename'];
         $tmpFile = file_get_contents($url, false, $context);    // get file with base auth
@@ -560,9 +562,9 @@ function uploadImagesWithPositionAndLabel ($imageObjectList, $valueToFilter, $fi
             'file' => array(
                 'content' => base64_encode($filePath),
                 'mime' => $mimeType,
-                'name' => getFileNameWithoutExtension($imageObject['basename']) . '.' . $pathInfo['extension'],
+                'name' => getFileNameWithoutExtension($imageObject['basename'])
             ),
-            'label' => getFileNameWithoutExtension($imageObject['basename']), // change this.
+            'label' => getFileNameWithoutExtension($imageObject['basename']),
             'position' => $imageObject['position'],
             'types' => $imageObject['mediaType'],
             'exclude' => 0,
