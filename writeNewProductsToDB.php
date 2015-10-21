@@ -57,27 +57,17 @@ try{
         var_dump($productInfoArray);
     }
 
-//    $product->setSku("ABC123");
-//    $product->setName("Type 7 Widget");
-//    $product->setDescription("This widget will give you years of trouble-free widgeting.");
-//    $product->setShortDescription("High-end widget.");
-//    $product->setPrice(70.50);
-//    $product->setTypeId('simple');
-//    $product->setAttributeSetId(9); // need to look this up
-//    $product->setWeight(1.0);
-//    $product->setTaxClassId(2); // taxable goods
-//    $product->setVisibility(4); // catalog, search
-//    $product->setStatus(1); // enabled
-
     if ($count == count($productInfoArray['data']) && count($productInfoArray['data']) > 0) {
         $response = array(
-            'message' => 'success'
+            'message' => 'Product info sync success'
         );
         if (isset($config['debug']) && $config['debug']) {
             $response['debug'] = true;
         }
-        file_put_contents('setting.json', json_encode($setting));
-        echo json_encode($response);
+        if (!isset($config['debug']) || !$config['debug']) {
+            file_put_contents('setting.json', json_encode($setting));
+        }
+        echo json_encode($response) . PHP_EOL;
     }
 
     /* deal with image uploading */
@@ -87,12 +77,24 @@ try{
         $localImages = getImagesUrlOfProduct($sku, 'sku');
         $imagesToBeUpload = compareImageWithRemote($localImages, $imagesInfoArray);
 //        if (isset($config['debug']) && $config['debug']) {
-            echo 'sku: ' . $sku . PHP_EOL;
-            var_dump($imagesToBeUpload);
+        echo 'sku: ' . $sku . PHP_EOL;
+        var_dump($imagesToBeUpload);
 //        }
         $uploadStatus = uploadImagesWithPositionAndLabel($imagesToBeUpload, $sku, 'sku', $config);
         if (!$uploadStatus) {
             echo json_encode(array('message' => 'something wrong'));
+        }
+    }
+
+    foreach ($productInfoArray['downloadables'] as $downloadableObject) {
+        $sku = $downloadableObject['sku'];
+        $downloadableInfoArray = $downloadableObject['files'];
+        $localDownloadables = getDownloadableUrls($sku, 'sku');
+        if (isset($config['debug']) && $config['debug']) {
+            echo "********************  local downloadable files $sku  ********************" . PHP_EOL;
+            var_dump($localDownloadables);
+            echo "********************  remote downloadable files $sku  ********************" . PHP_EOL;
+            var_dump($downloadableInfoArray);
         }
     }
 
