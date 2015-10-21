@@ -47,11 +47,11 @@ $app->post('/api/getProductInfosToSync', function () {
             'images' => $imagesArray
         );
 
-        $downloadableResponse = getDownloadableUrls($productInfo['sku'], 'sku');
+        $downloadableInfo = getDownloadableUrls($productInfo['sku'], 'sku');
         if (count($downloadableResponse) > 0) {
             $downloadableResponse[] = array(
                 'sku' => $productInfo['sku'],
-                'files' => $downloadableResponse
+                'files' => $downloadableInfo
             );
         }
     }
