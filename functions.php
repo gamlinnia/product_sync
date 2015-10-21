@@ -621,7 +621,8 @@ function getDownloadableUrls ($valueToFilter, $filterType='entity_id') {
                     'baseUrl' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
                     'dir' => $match[1],
                     'basename' => $match[2],
-                    'host' => $parseUrl['host']
+                    'host' => $parseUrl['host'],
+                    'model' => $relativeModel
                 );
             }
         }
@@ -630,8 +631,8 @@ function getDownloadableUrls ($valueToFilter, $filterType='entity_id') {
     return $response;
 }
 
-function uploadDownloadFiles ($downloadableObject, $valueToFilter, $filterType='entity_id', $config) {
-    $product = getProductObject($downloadableObject['sku'], 'sku');
+function uploadDownloadFiles ($downloadableObjectList, $valueToFilter, $filterType='entity_id', $config) {
+    $product = getProductObject($valueToFilter, $filterType);
     $productId = $product->getId();
 
     $username = 'rosewill';
@@ -641,22 +642,20 @@ function uploadDownloadFiles ($downloadableObject, $valueToFilter, $filterType='
             'header'  => "Authorization: Basic " . base64_encode("$username:$password")
         )
     ));
-    foreach ($downloadableObject['files'] as $downloadableInfo) {
-        $url = $downloadableInfo['base'] . $downloadableInfo['file'];
+    foreach ($downloadableObjectList as $downloadableObject) {
+        $url = $downloadableObject['base'] . $downloadableObject['dir'] . $downloadableObject['basename'];
+        if (isset($config['internalHost'])) {
+            $url = str_replace($downloadableObject['host'], $config['internalHost'], $url);
+        }
         $tmpFile = file_get_contents($url, false, $context);    // get file with base auth
-        $filePath = 'download' . DS . $downloadableInfo['type'] . DS . $downloadableInfo['basename'];
+        $filePath = Mage::getBaseDir('media') . DS . $downloadableObject['dir'] . $downloadableObject['basename'];
         file_put_contents($filePath, $tmpFile);
+        Mage::getModel($downloadableObject['model'])
+            ->setFile($filePath)
+            ->setProductId($productId)
+            ->setId(null)
+            ->save();
+        echo "$filterType: $valueToFilter uploaded $filePath" . PHP_EOL;
     }
-
-
-
-//$path = Mage::getBaseDir('media') . DS . 'Download_Files' . DS . 'user_manual' . DS;
-//$filename=implode('_',explode(' ',$filename));
-
-    Mage::getModel('usermanuals/usermanuals')
-        ->setFile('test/test/test/test.pdf')
-        ->setProductId($file_path)
-        ->setId(null)
-        ->save();
-
+    return true;
 }
