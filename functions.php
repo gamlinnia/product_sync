@@ -661,3 +661,24 @@ function uploadDownloadFiles ($downloadableObjectList, $valueToFilter, $filterTy
     }
     return true;
 }
+
+function compareDownloadableWithRemote ($localDownloadable, $remoteDownloadable) {
+    if (count($localDownloadable) < 1) {
+        return $remoteDownloadable;
+    }
+
+    $response = array();
+    foreach ($remoteDownloadable as $remote) {
+        $match = false;
+        foreach ($localDownloadable as $local) {
+            if ($remote['basename'] == $local['basename']) {
+                $match = true;
+                break;
+            }
+        }
+        if (!$match) {
+            $response[] = $remote;
+        }
+    }
+    return $response;
+}

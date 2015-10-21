@@ -90,11 +90,15 @@ try{
         $sku = $downloadableObject['sku'];
         $downloadableInfoArray = $downloadableObject['files'];
         $localDownloadables = getDownloadableUrls($sku, 'sku');
+        $downloadableToBeUpload = compareDownloadableWithRemote($localDownloadables, $downloadableInfoArray);
         if (isset($config['debug']) && $config['debug']) {
-            echo "********************  local downloadable files $sku  ********************" . PHP_EOL;
-            var_dump($localDownloadables);
-            echo "********************  remote downloadable files $sku  ********************" . PHP_EOL;
-            var_dump($downloadableInfoArray);
+            $count = count($localDownloadables);
+            echo "$count local downloadable files $sku" . PHP_EOL;
+            $count = count($downloadableInfoArray);
+            echo "$count remote downloadable files $sku" . PHP_EOL;
+            $count = count($downloadableInfoArray);
+            echo "$count to be uploaded downloadable files $sku" . PHP_EOL;
+            var_dump($downloadableToBeUpload);
         }
     }
 
