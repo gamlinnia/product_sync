@@ -40,15 +40,20 @@ $app->post('/api/getProductInfosToSync', function () {
     $downloadableResponse = array();
     foreach ($productInfoList['productsInfo'] as $key => $productInfo) {
         $classifiedProductList[] = classifyProductAttributes($productInfo);
+
         $imagesArray = getImagesUrlOfProduct($productInfo['entity_id']);
         $imgResponse[] = array(
             'sku' => $productInfo['sku'],
             'images' => $imagesArray
         );
-        $downloadableResponse[] = array(
-            'sku' => $productInfo['sku'],
-            'files' => getDownloadableUrls($productInfo['sku'], 'sku')
-        );
+
+        $downloadableResponse = getDownloadableUrls($productInfo['sku'], 'sku');
+        if (count($downloadableResponse > 0)) {
+            $downloadableResponse[] = array(
+                'sku' => $productInfo['sku'],
+                'files' => $downloadableResponse
+            );
+        }
     }
 
     /* 將needToBeParsed的attr從id轉換成string value */
