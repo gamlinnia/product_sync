@@ -38,6 +38,7 @@ $app->post('/api/getProductInfosToSync', function () {
     $classifiedProductList = array();
     $imgResponse = array();
     $downloadableResponse = array();
+    $videoGalleryList = array();
     foreach ($productInfoList['productsInfo'] as $key => $productInfo) {
         $classifiedProductList[] = classifyProductAttributes($productInfo);
 
@@ -54,6 +55,8 @@ $app->post('/api/getProductInfosToSync', function () {
                 'files' => $downloadableInfo
             );
         }
+
+        $videoGalleryList[] = getVideoGalleryInfo($productInfo['sku'], 'sku');
     }
 
     /* 將needToBeParsed的attr從id轉換成string value */
@@ -66,7 +69,7 @@ $app->post('/api/getProductInfosToSync', function () {
         'data' => $parsedClassfiedProductList,
         'imgs' => $imgResponse,
         'downloadables' => $downloadableResponse,
-        'videoGalleryCollection' => getVideoGalleryColletcion()
+        'videoGalleryList' => $videoGalleryList
     ));
 });
 
