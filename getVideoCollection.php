@@ -25,3 +25,4 @@ foreach ($videoGalleryCollection as $videoGallery) {
     var_dump($videoGallery);
     die();
 }
+
