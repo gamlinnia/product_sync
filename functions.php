@@ -384,11 +384,11 @@ function getImagesUrlOfProduct ($valueToFilter, $type='entity_id') {
     $product = getProductObject($valueToFilter, $type);
     $mediaType = array(
         'image' => Mage::getModel('catalog/product_media_config')
-            ->getMediaUrl( $product->getImage() ),
+                ->getMediaUrl( $product->getImage() ),
         'small_image' => Mage::getModel('catalog/product_media_config')
-            ->getMediaUrl( $product->getSmallImage() ),
+                ->getMediaUrl( $product->getSmallImage() ),
         'thumbnail' => Mage::getModel('catalog/product_media_config')
-            ->getMediaUrl( $product->getThumbnail() )
+                ->getMediaUrl( $product->getThumbnail() )
     );
 
     $response = array();
@@ -569,6 +569,10 @@ function uploadImagesWithPositionAndLabel ($imageObjectList, $valueToFilter, $fi
             'types' => $imageObject['mediaType'],
             'exclude' => 0,
         );
+
+        unlink(Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product' . DS . substr($imageObject['basename'], 0, 1) . DS . substr($imageObject['basename'], 1, 1) . DS . getFileNameWithoutExtension($imageObject['basename']) . '.' . $pathInfo['extension']);
+        echo 'delete file in ' . Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product' . DS . substr($imageObject['basename'], 0, 1) . DS . substr($imageObject['basename'], 1, 1) . DS . $imageObject['basename'] . PHP_EOL;
+
         $media->create($sku, $newImage);
     }
     return true;
