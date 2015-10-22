@@ -712,16 +712,12 @@ function getVideoGalleryInfo($valueToFilter, $filterType='entity_id'){
     $product = getProductObject($valueToFilter, $filterType);
     $sku = $product->getSku();
     $videoGalleryCollection = getVideoGalleryColletcion();
-    $tmpArray = array(
-        'sku' => $sku,
-        'galleryInfo' => array()
-    );
+    $tmpArray = array();
 
     foreach($videoGalleryCollection as $videoGallery){
         $skuArray = $videoGallery['sku'];
         if (in_array($sku, $skuArray)){
-            unset($videoGallery['sku']);
-            $tmpArray['galleryInfo'][] = $videoGallery;
+            $tmpArray[] = $videoGallery;
         }
     }
     return $tmpArray;
