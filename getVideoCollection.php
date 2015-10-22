@@ -20,9 +20,13 @@ Mage::app();
 
 
 $videoGalleryCollection = Mage::getModel("videogallery/videogallery")->getCollection();
+$response = array();
 
 foreach ($videoGalleryCollection as $videoGallery) {
-    var_dump($videoGallery);
+    //var_dump($videoGallery);
+    //die();
+    $response[] = $videoGallery->debug();
+    var_dump($response);
     die();
 }
 
