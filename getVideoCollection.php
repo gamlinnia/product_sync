@@ -9,11 +9,19 @@ require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
 Mage::app();
 
-$productvideos_collection=Mage::getModel('productvideos/productvideos')->getCollection();
+//$productvideos_collection=Mage::getModel('productvideos/productvideos')->getCollection();
+//
+//$response = array();
+//foreach ($productvideos_collection as $productvideo) {
+//    $response[] = $productvideo->debug();
+//}
+//
+//var_dump($response);
 
-$response = array();
-foreach ($productvideos_collection as $productvideo) {
-    $response[] = $productvideo->debug();
+
+$videoGalleryCollection = Mage::getModel("videogallery/videogallery")->getCollection();
+
+foreach ($videoGalleryCollection as $videoGallery) {
+    var_dump($videoGallery);
+    die();
 }
-
-var_dump($response);
