@@ -26,6 +26,6 @@ foreach ($videoGalleryCollection as $videoGallery) {
     }
     $response[] = $tmpArray;
 }
-var_dump($response);
+//var_dump($response);
 
 

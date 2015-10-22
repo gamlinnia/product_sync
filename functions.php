@@ -686,3 +686,24 @@ function compareDownloadableWithRemote ($localDownloadable, $remoteDownloadable)
     }
     return $response;
 }
+
+function getVideoGalleryColletcion () {
+    $videoGalleryCollection = Mage::getModel("videogallery/videogallery")->getCollection();
+    $productvideos_collection=Mage::getModel('productvideos/productvideos')->getCollection();
+    $response = array();
+
+    foreach ($videoGalleryCollection as $videoGallery) {
+        $tmpArray = $videoGallery->debug();
+        $tmpArray["sku"] = array();
+        foreach ($productvideos_collection as $productvideo) {
+            if($tmpArray["videogallery_id"] == $productvideo->getData("videogallery_id")){
+                $product_id = $productvideo->getData("product_id");
+                $product = Mage::getModel('catalog/product')->load($product_id);
+                $sku = $product->getSku();
+                $tmpArray["sku"][] = $sku;
+            }
+        }
+        $response[] = $tmpArray;
+    }
+    return $response;
+}

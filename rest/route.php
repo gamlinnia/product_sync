@@ -65,7 +65,8 @@ $app->post('/api/getProductInfosToSync', function () {
         'status' => 'success',
         'data' => $parsedClassfiedProductList,
         'imgs' => $imgResponse,
-        'downloadables' => $downloadableResponse
+        'downloadables' => $downloadableResponse,
+        'videoGalleryCollection' => getVideoGalleryColletcion()
     ));
 });
 
