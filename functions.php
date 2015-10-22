@@ -717,6 +717,7 @@ function getVideoGalleryInfo($valueToFilter, $filterType='entity_id'){
     foreach($videoGalleryCollection as $videoGallery){
         $skuArray = $videoGallery['sku'];
         if (in_array($sku, $skuArray)){
+            unset($videoGallery['sku']);
             $tmpArray[] = $videoGallery;
         }
     }
