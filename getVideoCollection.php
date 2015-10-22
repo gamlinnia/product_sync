@@ -15,14 +15,13 @@ $response = array();
 
 foreach ($videoGalleryCollection as $videoGallery) {
     $tmpArray = $videoGallery->debug();
-
+    $tmpArray["product_id"] = array();
     foreach ($productvideos_collection as $productvideo) {
         if($tmpArray["videogallery_id"] == $productvideo->getData("videogallery_id")){
-            $tmpArray["product_id"] = $productvideo->getData("product_id");
+            $tmpArray["product_id"][] = $productvideo->getData("product_id");
         }
     }
     $response[] = $tmpArray;
-
 }
 var_dump($response);
 
