@@ -22,12 +22,14 @@ $data = array(
 $videoname = 'test video';
 
 $url = 'http://www.bikez.com/pictures/um/2007/dsf-200.jpg';
+$pathInfo = pathinfo($url);     // get array of dirname, basename, extension, filename
+$fileName = getFileNameFromUrl($url);
+
 if(isset($data['videogallery_url']) && $data['videogallery_url'] != '') {
     if(!file_exists(Mage::getBaseDir('media').'/videogallery/'))mkdir(Mage::getBaseDir('media').'/videogallery/',0777);
     //$img_file = $videourl;
-    $img_file = $url;
-    $img_file=file_get_contents($img_file);
-    $file_loc=Mage::getBaseDir('media').DS."videogallery".DS.'videogallery_'.$videoimage.'.jpg';
+    $img_file=file_get_contents($url);
+    $file_loc=Mage::getBaseDir('media').DS."videogallery".DS.'videogallery_'.$fileName.'.jpg';
 
     $file_handler=fopen($file_loc,'w');
 
