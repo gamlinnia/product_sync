@@ -25,7 +25,7 @@ file_put_contents($importDir . $fileName, $tmpFile);
 $filePath = $importDir . $fileName;
 
 $data = array(
-    'videogallery_id' => '101',
+    'videogallery_id' => '102',
     'videogallery_category' =>  'Product Video',
     'videogallery_url' =>  'https://www.youtube.com/watch?v=OUI6iM8iPOs',
     'name' =>  'test video',
@@ -34,10 +34,11 @@ $data = array(
     'created' =>  '2015-10-23'
 );
 
-$videoimage = $filePath;
+$videoimage = $fileName;
 $videoname = 'test video';
 $model = Mage::getModel('videogallery/videogallery');
 
+$model -> addImageToVideoGallery($filePath);
 //$model->setData($data);
 $model->setData($data)->setImage($videoimage)->setName($videoname)->setVideogalleryUrl($data['videogallery_url'])->setVideogalleryCategory($data['videogallery_category']);
 $model -> save();
