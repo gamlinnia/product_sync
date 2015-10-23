@@ -26,7 +26,9 @@ $videoname = $data['name'];
 $tmpFile = file_get_contents($imageUrl);
 file_put_contents(Mage::getBaseDir('media').DS."videogallery".DS.'videogallery_'.$videoimage.'.jpg', $tmpFile);
 
-$gallery_id = Mage::getModel('videogallery/videogallery')->load('https://www.youtube.com/watch?v=dV1sdhB3RE8', 'videogallery_url') -> getVideogalletyId() ;
+$modelGallery = Mage::getModel('videogallery/videogallery')->load('https://www.youtube.com/watch?v=dV1sdhB3RE8', 'videogallery_url');
+var_dump($modelGallery);
+$gallery_id = $modelGallery->getVideogalletyId();
 die($gallery_id);
 $model = Mage::getModel('videogallery/videogallery');
 if ($gallery_id) {
