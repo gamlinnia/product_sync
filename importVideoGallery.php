@@ -23,7 +23,7 @@ $videoname = 'test video';
 
 $url = 'http://www.bikez.com/pictures/um/2007/dsf-200.jpg';
 $pathInfo = pathinfo($url);     // get array of dirname, basename, extension, filename
-$fileName = getFileNameFromUrl($url);
+$fileName = getFileNameWithoutExtension(getFileNameFromUrl($url));
 
 if(isset($data['videogallery_url']) && $data['videogallery_url'] != '') {
     if(!file_exists(Mage::getBaseDir('media').'/videogallery/'))mkdir(Mage::getBaseDir('media').'/videogallery/',0777);
