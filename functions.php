@@ -747,11 +747,11 @@ function importVideoToGallery($videoObjectList, $valueToFilter, $filterType='ent
             $model -> save();
         }
 
-        $productvideos_collection=Mage::getModel('productvideos/productvideos')->getCollection();
-        foreach($productvideos_collection as $productvideos) {
-            $productvideos->setProductId($productId);
-            $productvideos->setVideogalleryId($gallery_id);
-        }
+        //create new productvideos, information not full
+        $productVideos=Mage::getModel('product   videos/productvideos');
+        $productVideos->setDate($productId);
+        $productVideos->setDate($gallery_id);
+        $productVideos->save();
     }
 }
 
