@@ -22,5 +22,5 @@ $data = array(
 $videoimage = 'ideogallery_OUI6iM8iPOs.jpg';
 $videoname = 'test video';
 $model = Mage::getModel('videogallery/videogallery');
-$model->setData($data);
-//$model->setImage($videoimage)->setName($videoname)->setVideogalleryUrl($data['videogallery_url'])->setVideogalleryCategory($data['videogallery_category']);
+//$model->setData($data);
+$model->setData($data)->setImage($videoimage)->setName($videoname)->setVideogalleryUrl($data['videogallery_url'])->setVideogalleryCategory($data['videogallery_category']);
