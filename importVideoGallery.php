@@ -23,7 +23,7 @@ $videoname = 'test video';
 
 $url = 'http://www.bikez.com/pictures/um/2007/dsf-200.jpg';
 $pathInfo = pathinfo($url);     // get array of dirname, basename, extension, filename
-$fileName = getFileNameWithoutExtension(getFileNameFromUrl($url));
+$fileName = getFileNameWithoutExtension($pathInfo['basename']);
 
 if(isset($data['videogallery_url']) && $data['videogallery_url'] != '') {
     if(!file_exists(Mage::getBaseDir('media').'/videogallery/'))mkdir(Mage::getBaseDir('media').'/videogallery/',0777);
@@ -38,7 +38,7 @@ if(isset($data['videogallery_url']) && $data['videogallery_url'] != '') {
     }
     fclose($file_handler);
 
-    $newfilename ='videogallery_'.$videoimage.'.jpg';
+    $newfilename ='videogallery_'.$fileName.'.jpg';
     // Upload the image
     $videoimage = $newfilename;
 
