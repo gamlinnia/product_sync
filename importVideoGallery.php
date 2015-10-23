@@ -10,7 +10,6 @@ require_once 'functions.php';
 Mage::app();
 
 $data = array(
-    'videogallery_id' => '102',
     'videogallery_category' =>  'Product Video',
     'videogallery_url' =>  'https://www.youtube.com/watch?v=OUI6iM8iPOs',
     'name' =>  'test video',
@@ -27,8 +26,6 @@ $videoname = $data['name'];
 $tmpFile = file_get_contents($imageUrl);
 file_put_contents(Mage::getBaseDir('media').DS."videogallery".DS.'videogallery_'.$videoimage.'.jpg', $tmpFile);
 
-$model = Mage::getModel('videogallery/videogallery');
-//$model->setData($data);
-$model->setData($data);
-//$model->setData($data)->setImage($videoimage)->setName($videoname)->setVideogalleryUrl($data['videogallery_url'])->setVideogalleryCategory($data['videogallery_category']);
+$model = Mage::getModel('videogallery/videogallery')->getVideogalleryIdByVideogalleryUrl('https://www.youtube.com/watch?v=OUI6iM8iPOs');
+$model -> setData($data);
 $model -> save();
