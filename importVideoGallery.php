@@ -27,7 +27,7 @@ $videoname = $data['test video'];
 if(isset($data['videogallery_url']) && $data['videogallery_url'] != '') {
     if(!file_exists(Mage::getBaseDir('media').'/videogallery/'))mkdir(Mage::getBaseDir('media').'/videogallery/',0777);
     //$img_file = $videourl;
-    $img_file=file_get_contents($url);
+    $img_file=file_get_contents($imageUrl);
     $file_loc=Mage::getBaseDir('media').DS."videogallery".DS.'videogallery_'.$videoimage.'.jpg';
 
     $file_handler=fopen($file_loc,'w');
