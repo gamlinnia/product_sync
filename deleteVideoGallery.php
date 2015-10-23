@@ -7,7 +7,7 @@ require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
 Mage::app();
 
-$videoGalleryId = '100';
+$videoGalleryId = '102';
 
 $model = Mage::getModel('videogallery/videogallery')->load($videoGalleryId, 'videogallery_id');
 $image = $model->getImage();
