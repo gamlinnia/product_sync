@@ -22,7 +22,7 @@ $data = array(
 parse_str( parse_url( $data['videogallery_url'], PHP_URL_QUERY ) );
 $imageUrl = 'http://img.youtube.com/vi/'.$v.'/0.jpg';
 $videoimage = $v;
-$videoname = $data['test video'];
+$videoname = $data['name'];
 
 if(isset($data['videogallery_url']) && $data['videogallery_url'] != '') {
     if(!file_exists(Mage::getBaseDir('media').'/videogallery/'))mkdir(Mage::getBaseDir('media').'/videogallery/',0777);
@@ -45,5 +45,6 @@ if(isset($data['videogallery_url']) && $data['videogallery_url'] != '') {
 
 $model = Mage::getModel('videogallery/videogallery');
 //$model->setData($data);
-$model->setData($data)->setImage($videoimage)->setName($videoname)->setVideogalleryUrl($data['videogallery_url'])->setVideogalleryCategory($data['videogallery_category']);
+$model->setData($data);
+//$model->setData($data)->setImage($videoimage)->setName($videoname)->setVideogalleryUrl($data['videogallery_url'])->setVideogalleryCategory($data['videogallery_category']);
 $model -> save();
