@@ -24,24 +24,8 @@ $imageUrl = 'http://img.youtube.com/vi/'.$v.'/0.jpg';
 $videoimage = $v;
 $videoname = $data['name'];
 
-if(isset($data['videogallery_url']) && $data['videogallery_url'] != '') {
-    if(!file_exists(Mage::getBaseDir('media').'/videogallery/'))mkdir(Mage::getBaseDir('media').'/videogallery/',0777);
-    //$img_file = $videourl;
-    $img_file=file_get_contents($imageUrl);
-    $file_loc=Mage::getBaseDir('media').DS."videogallery".DS.'videogallery_'.$videoimage.'.jpg';
-
-    $file_handler=fopen($file_loc,'w');
-
-    if(fwrite($file_handler,$img_file)==false){
-        echo 'error';
-    }
-    fclose($file_handler);
-
-    $newfilename ='videogallery_'.$videoimage.'.jpg';
-    // Upload the image
-    $videoimage = $newfilename;
-
-}
+$tmpFile = file_get_contents($imageUrl);
+file_put_contents(Mage::getBaseDir('media').DS."videogallery".DS.'videogallery_'.$videoimage.'.jpg', $tmpFile);
 
 $model = Mage::getModel('videogallery/videogallery');
 //$model->setData($data);
