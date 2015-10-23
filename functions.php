@@ -579,7 +579,7 @@ function uploadImagesWithPositionAndLabel ($imageObjectList, $valueToFilter, $fi
 }
 
 function getFileNameWithoutExtension ($fileNameWithExtension) {
-    preg_match('/[0-9\-]+/', $fileNameWithExtension, $match);
+    preg_match('/[a-z0-9\-]+/', $fileNameWithExtension, $match);
     if (!$match) {
         return $fileNameWithExtension;
     }
