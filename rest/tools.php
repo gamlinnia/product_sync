@@ -173,7 +173,11 @@ function parseCsvIntoArray ($inputFileName) {
     return $dataArray;
 }
 
-function parseXlsxIntoArray ($inputFileName) {
+/*
+ * $excelSheet start from 0
+ * $titleRow start from row 1
+ * */
+function parseXlsxIntoArray ($inputFileName, $excelSheet, $titleRow) {
     date_default_timezone_set('Asia/Taipei');
     try {
         $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
@@ -185,7 +189,7 @@ function parseXlsxIntoArray ($inputFileName) {
 
     /*Get worksheet dimensions*/
     $sheetCount = $objPHPExcel->getSheetCount();
-    $sheet = $objPHPExcel->getSheet(0);
+    $sheet = $objPHPExcel->getSheet($excelSheet);
     $highestRow = $sheet->getHighestRow();
     $highestColumn = $sheet->getHighestColumn();
     $highestColumnNumber = excel_col_to_num($highestColumn);
@@ -193,8 +197,8 @@ function parseXlsxIntoArray ($inputFileName) {
     /*Loop through each row of the worksheet in turn*/
     $dataArray = array();
     $rowTitle = array();
-    for ($row = 1; $row <= $highestRow; $row++){
-        if ($row == 1) {
+    for ($row = $titleRow; $row <= $highestRow; $row++){
+        if ($row == $titleRow) {
             /*Read a row of data into an array*/
             $rowTitle = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
                 NULL,

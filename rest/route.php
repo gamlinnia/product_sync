@@ -79,4 +79,10 @@ $app->post('/api/getProductInfosToSync', function () {
     ));
 });
 
+$app->get('/api/getAttributePropertyMappingTable', function () {
+    $filePath = '../rel/property_attribute_mapping_table.xlsx';
+    $excelDataArray = parseXlsxIntoArray($filePath, 0, 3);
+    echo json_encode($excelDataArray);
+});
+
 $app->run();
