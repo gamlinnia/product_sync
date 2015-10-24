@@ -89,6 +89,8 @@ $app->get('/api/getAttributeSetAndSubcategoryMappingTable', function () {
     $filePath = '../rel/property_attribute_mapping_table.xlsx';
     $excelDataArray = parseXlsxIntoArray($filePath, 1, 1);
     foreach ($excelDataArray as $row) {
+        var_dump($row);
+        die();
         $row['Sub Category'] = explode('\n', $row['Sub Category']);
     }
     echo json_encode($excelDataArray);
