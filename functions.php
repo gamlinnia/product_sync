@@ -755,3 +755,40 @@ function importVideoToGallery($videoObjectList, $valueToFilter, $filterType='ent
     }
 }
 
+function getAttributeSetAndSubcategoryMappingTable ($filePath) {
+    $excelDataArray = parseXlsxIntoArray($filePath, 1, 1);
+    foreach ($excelDataArray as $index => $row) {
+        $excelDataArray[$index]['Sub Category'] = explode(PHP_EOL, $row['Sub Category']);
+    }
+    return $excelDataArray;
+}
+
+/*
+ * $inputType => 'attributeSet' or 'subCategory'
+ * response of subCategory will be an array
+ * */
+function getMappedAttributeSetOrSubcategory ($filePath, $inputValue, $inputType) {
+    $attributeSetAndSubcategoryMappingTable = getAttributeSetAndSubcategoryMappingTable($filePath);
+    foreach ($attributeSetAndSubcategoryMappingTable as $eachMapping) {
+        switch ($inputType) {
+            case 'attributeSet' :
+                $response = array();
+                if (strtolower($eachMapping['Attribute Set Name']) == strtolower($inputValue)) {
+                    $response[] = $eachMapping['Sub Category'];
+                }
+                return $response;
+                break;
+            case 'subCategory' :
+                $response = array();
+                $eachMapping['Sub Category'] = array_map('strtolower', $eachMapping['Sub Category']);
+                if (in_array($inputValue, $eachMapping['Sub Category'])) {
+                    $response = $eachMapping['Attribute Set Name'];
+                }
+                return $response;
+                break;
+            default :
+                return null;
+        }
+    }
+
+}
