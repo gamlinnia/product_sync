@@ -64,9 +64,7 @@ try{
         if (isset($config['debug']) && $config['debug']) {
             $response['debug'] = true;
         }
-//        if (!isset($config['debug']) || !$config['debug']) {
         file_put_contents('setting.json', json_encode($setting));
-//        }
         echo json_encode($response) . PHP_EOL;
     }
 
@@ -84,6 +82,7 @@ try{
         if (!$uploadStatus) {
             echo json_encode(array('message' => 'something wrong'));
         }
+        sleep(rand(2, 4));
     }
 
     foreach ($productInfoArray['downloadables'] as $downloadableObject) {
