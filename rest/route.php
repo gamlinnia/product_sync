@@ -85,4 +85,10 @@ $app->get('/api/getAttributePropertyMappingTable', function () {
     echo json_encode($excelDataArray);
 });
 
+$app->get('/api/getAttributeSetAndSubcategoryMappingTable', function () {
+    $filePath = '../rel/property_attribute_mapping_table.xlsx';
+    $excelDataArray = parseXlsxIntoArray($filePath, 1, 1);
+    echo json_encode($excelDataArray);
+});
+
 $app->run();
