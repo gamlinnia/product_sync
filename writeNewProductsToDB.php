@@ -114,7 +114,7 @@ try{
 
     /* deal with video galley info*/
     foreach($productInfoArray['videoGalleryList'] as $videoObject){
-        $sku = $videoGallery['sku'];
+        $sku = $videoObject['sku'];
         $videoObjectList = $videoObject['galleryInfo'];
         $importVideoGalletyStatus = importVideoToGalleryAndLinkToProduct($videoObjectList, $sku, 'sku', $config);
         if (!$importVideoGalletyStatus) {
