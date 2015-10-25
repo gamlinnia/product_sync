@@ -778,8 +778,8 @@ function getMappedAttributeSetOrSubcategory ($filePath, $inputValue, $inputType)
                 }
                 break;
             case 'subCategory' :
-                $eachMapping['Sub Category'] = array_map('strtolower', $eachMapping['Sub Category']);
                 echo $inputValue . '=>' . json_encode($eachMapping['Sub Category']) . PHP_EOL;
+                $eachMapping['Sub Category'] = array_map('strtolower', $eachMapping['Sub Category']);
                 if (in_array($inputValue, $eachMapping['Sub Category'])) {
                     $attrSetArray[] = $eachMapping['Attribute Set Name'];
                 }
