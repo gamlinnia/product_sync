@@ -11,7 +11,7 @@ Mage::app();
 
 $videoGalleryCollection = Mage::getModel("videogallery/videogallery")->getCollection();
 $productvideos_collection=Mage::getModel('productvideos/productvideos')->getCollection();
-var_dump($productvideos_collection.getData());
+var_dump($productvideos_collection->getData());
 die();
 $response = array();
 
