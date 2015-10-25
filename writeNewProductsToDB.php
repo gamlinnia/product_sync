@@ -85,6 +85,7 @@ try{
         sleep(rand(2, 4));
     }
 
+    /* deal with downloadable files */
     foreach ($productInfoArray['downloadables'] as $downloadableObject) {
         $sku = $downloadableObject['sku'];
         $downloadableInfoArray = $downloadableObject['files'];
@@ -107,6 +108,16 @@ try{
         }
         $uploadDownloadableStatus = uploadDownloadFiles($downloadableToBeUpload, $sku, 'sku', $config);
         if (!$uploadDownloadableStatus) {
+            echo json_encode(array('message' => 'something wrong'));
+        }
+    }
+
+    /* deal with video gallery */
+    foreach($productInfoArray['videoGalleryList'] as $videoObject){
+        $sku = $videoGallery['sku'];
+        $videoObjectList = $videoObject['galleryInfo'];
+        $importVideoGalletyStatus = importVideoToGalleryAndLinkToProduct($videoObjectList, $sku, 'sku', $config);
+        if (!$importVideoGalletyStatus) {
             echo json_encode(array('message' => 'something wrong'));
         }
     }

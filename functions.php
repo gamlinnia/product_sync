@@ -725,7 +725,7 @@ function getVideoGalleryInfo($valueToFilter, $filterType='entity_id'){
     return $tmpArray;
 }
 
-function importVideoToGallery($videoObjectList, $valueToFilter, $filterType='entity_id', $config){
+function importVideoToGalleryAndLinkToProduct($videoObjectList, $valueToFilter, $filterType='entity_id', $config){
     $product = getProductObject($valueToFilter, $filterType);
     $productId = $product->getId();
     foreach($videoObjectList as $video){
@@ -753,6 +753,7 @@ function importVideoToGallery($videoObjectList, $valueToFilter, $filterType='ent
         $productVideos->setVideogalleryId($gallery_id);
         $productVideos->save();
     }
+    return true;
 }
 
 function getAttributeSetAndSubcategoryMappingTable ($filePath) {
