@@ -12,7 +12,7 @@ Mage::app();
 $videoGalleryCollection = Mage::getModel("videogallery/videogallery")->getCollection();
 $productvideos_collection=Mage::getModel('productvideos/productvideos')->getCollection();
 var_dump($productvideos_collection);
-$response = array();
+$response = array()
 
 foreach ($videoGalleryCollection as $videoGallery) {
     $tmpArray = $videoGallery->debug();
@@ -28,5 +28,3 @@ foreach ($videoGalleryCollection as $videoGallery) {
     $response[] = $tmpArray;
 }
 //var_dump($response);
-
-
