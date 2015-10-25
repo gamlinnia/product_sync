@@ -748,9 +748,9 @@ function importVideoToGallery($videoObjectList, $valueToFilter, $filterType='ent
         }
 
         //create new productvideos, information not full
-        $productVideos=Mage::getModel('product   videos/productvideos');
-        $productVideos->setDate($productId);
-        $productVideos->setDate($gallery_id);
+        $productVideos=Mage::getModel('productvideos/productvideos');
+        $productVideos->setProductId($productId);
+        $productVideos->setVideogalleryId($gallery_id);
         $productVideos->save();
     }
 }
