@@ -90,7 +90,8 @@ $app->get('/api/getAttributeSetAndSubcategoryMappingTable', function () {
 });
 
 $app->get('/api/getMappedAttributeSetOrSubcategory', function () {
-    getMappedAttributeSetOrSubcategory('../rel/property_attribute_mapping_table.xlsx', 'b04_app-enabled-products', 'attributeSet')
+    $response = getMappedAttributeSetOrSubcategory('../rel/property_attribute_mapping_table.xlsx', 'b04_app-enabled-products', 'attributeSet');
+    echo json_encode($response);
 });
 
 $app->run();
