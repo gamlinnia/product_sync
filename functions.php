@@ -769,23 +769,29 @@ function getAttributeSetAndSubcategoryMappingTable ($filePath) {
  * */
 function getMappedAttributeSetOrSubcategory ($filePath, $inputValue, $inputType) {
     $attributeSetAndSubcategoryMappingTable = getAttributeSetAndSubcategoryMappingTable($filePath);
-    $response = array();
+    $attrSetArray = array();
     foreach ($attributeSetAndSubcategoryMappingTable as $eachMapping) {
         switch ($inputType) {
             case 'attributeSet' :
                 if (strtolower($eachMapping['Attribute Set Name']) == strtolower($inputValue)) {
-                    $response[] = $eachMapping['Sub Category'];
+                    return $eachMapping;
                 }
                 break;
             case 'subCategory' :
                 $eachMapping['Sub Category'] = array_map('strtolower', $eachMapping['Sub Category']);
                 if (in_array($inputValue, $eachMapping['Sub Category'])) {
-                    $response = $eachMapping['Attribute Set Name'];
+                    $attrSetArray = $eachMapping['Attribute Set Name'];
                 }
                 break;
             default :
                 return null;
         }
     }
-    return $response;
+    /*
+     * return response for case subCategory
+     * */
+    return array(
+        'Sub Category' => $inputValue,
+        'Attribute Set Name' => $attrSetArray
+    );
 }
