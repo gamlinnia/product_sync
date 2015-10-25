@@ -112,7 +112,7 @@ try{
         }
     }
 
-    /* deal with video gallery */
+    /* deal with video galley info*/
     foreach($productInfoArray['videoGalleryList'] as $videoObject){
         $sku = $videoGallery['sku'];
         $videoObjectList = $videoObject['galleryInfo'];
