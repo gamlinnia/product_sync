@@ -746,8 +746,7 @@ function importVideoToGalleryAndLinkToProduct($videoObjectList, $valueToFilter, 
             $model -> setData($video);
             $model -> save();
         }
-
-        //create new productvideos, information not full
+        //create new productvideos
         $productVideos=Mage::getModel('productvideos/productvideos');
         $productVideos->setProductId($productId);
         $productVideos->setVideogalleryId($gallery_id);
