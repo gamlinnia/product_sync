@@ -11,8 +11,20 @@ Mage::app();
 
 $videoGalleryCollection = Mage::getModel("videogallery/videogallery")->getCollection();
 $productvideos_collection=Mage::getModel('productvideos/productvideos')->getCollection();
-var_dump($productvideos_collection->getData());
-die();
+//$productvideos_collection->getData()
+/*array(1) {
+    [0]=>
+  array(4) {
+        ["id"]=>
+    string(2) "13"
+    ["product_id"]=>
+    string(3) "149"
+    ["videogallery_id"]=>
+    string(1) "3"
+    ["position"]=>
+    string(1) "0"
+  }
+}*/
 $response = array();
 
 foreach ($videoGalleryCollection as $videoGallery) {
