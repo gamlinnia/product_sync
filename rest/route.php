@@ -89,8 +89,7 @@ $app->get('/api/getAttributeSetAndSubcategoryMappingTable', function () {
     echo json_encode(getAttributeSetAndSubcategoryMappingTable('../rel/property_attribute_mapping_table.xlsx'));
 });
 
-$app->get('/api/getMappedAttributeSetOrSubcategory', function () {
-    global $app;
+$app->get('/api/getMappedAttributeSetOrSubcategory', function () use ($app) {
     $params = $app->request()->params();
     if (!isset($params['inputValue']) || !isset($params['inputType'])) {
         echo json_encode(array(
