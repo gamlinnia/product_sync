@@ -888,3 +888,37 @@ function getCountNumberOfProducts () {
     return count($productCollection);
 }
 
+function getProductInfoFromMagentoForExport ($pageSize, $pageNumber = 1, $noOutputAttr) {
+    $productCollection = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('*')
+        ->setOrder('entity_id', 'ASC')->setPageSize($pageSize)->setCurPage($pageNumber);
+
+    $response = array();
+    foreach ($productCollection as $product) {
+        $tempArray = array();
+        foreach ($product->debug() as $attr => $attrValue) {
+            if (!in_array($attr, $noOutputAttr)) {
+                $tempArray[$attr] = $attrValue;
+            }
+        }
+
+        $withDownloadableFile = false;
+        $user_manuals=Mage::getModel('usermanuals/usermanuals')->getCollection()->addFieldToFilter('product_id',$product['entity_id']);
+        if ( count($user_manuals) > 0 ) {
+            $withDownloadableFile = true;
+        }
+        $drivers=Mage::getModel('drivers/drivers')->getCollection()->addFieldToFilter('product_id',$product['entity_id']);
+        if ( count($drivers) > 0 ) {
+            $withDownloadableFile = true;
+        }
+        $firmwares=Mage::getModel('firmware/firmware')->getCollection()->addFieldToFilter('product_id',$product['entity_id']);
+        if ( count($firmwares) > 0 ) {
+            $withDownloadableFile = true;
+        }
+        if ($withDownloadableFile) {
+            $tempArray['attachment'] = 'yes';
+        }
+
+        $response[] = $tempArray;
+    }
+    return $response;
+}
