@@ -1,6 +1,8 @@
 #!/usr/bin/php -q
 <?php
 
+ini_set('memory_limit', '1024M');
+
 if (!file_exists('config.json')) {
     echo 'config.json is not exist.';
 }
@@ -33,22 +35,3 @@ echo 'total counts: ' . count($response);
 
 require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
 exportArrayToXlsx($response, array("filename"=>"rwProductList.xls", "title"=>"Product List"));
-
-$product = Mage::getModel('catalog/product')->load(15);
-$cats = $product->getCategoryIds();
-foreach ($cats as $category_id) {
-    $_cat = Mage::getModel('catalog/category')->load($category_id) ;
-    echo $_cat->getName() . ' id:' . $category_id . PHP_EOL;
-}
-
-$category = Mage::getModel('catalog/category')->load(2);
-echo $category->getName() . PHP_EOL;
-var_dump($category->getData());
-
-
-$categoryCollection = $product->getCategoryCollection()
-    ->addAttributeToSelect('name');
-foreach ($categoryCollection as $each) {
-    echo $each->getName();
-    var_dump($each->getData());
-}
