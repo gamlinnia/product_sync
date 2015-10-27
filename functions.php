@@ -797,3 +797,89 @@ function getMappedAttributeSetOrSubcategory ($filePath, $inputValue, $inputType)
         'Attribute Set Name' => $attrSetArray
     );
 }
+
+function exportArrayToXlsx ($exportArray, $exportParam) {
+
+    PHPExcel_Cell::setValueBinder( new PHPExcel_Cell_AdvancedValueBinder() );
+
+    $objPHPExcel = new PHPExcel();
+
+    // Set properties
+    $objPHPExcel->getProperties()->setCreator($exportParam['title'])
+        ->setLastModifiedBy($exportParam['title'])
+        ->setTitle($exportParam['title'])
+        ->setSubject($exportParam['title'])
+        ->setDescription($exportParam['title'])
+        ->setKeywords($exportParam['title'])
+        ->setCategory($exportParam['title']);
+
+    // Set active sheet
+    $objPHPExcel->setActiveSheetIndex(0);
+    $objPHPExcel->getActiveSheet()->setTitle($exportParam['title']);
+
+    // Set cell value
+    //rows are 1-based whereas columns are 0-based, so “A1″ becomes (0,1).
+    //$objPHPExcel->setCellValueByColumnAndRow($column, $row, $value);
+    //$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, 1, "This is A1");
+    for($row = 0; $row < count($exportArray); $row++){
+        ksort($exportArray[$row]);  // sort by key
+        foreach ($exportArray[$row] AS $key => $value){
+            // Find key index from first row
+            $key_index = -1;
+            if (array_key_exists($key, $exportArray[0])){
+                $key_index = array_search($key, array_keys($exportArray[0]));
+            }
+
+            // Set key(column name)
+            if($row==0){
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($key_index, 1, $key);
+            }
+
+            //   var_dump($key);
+
+            if($key_index != -1){
+
+                switch ($key) {
+
+                    case 'createDate' :
+                    case 'mtime' :
+                        if($value!=null && $value> 25569){
+                            $value=(($value/86400)+25569); //  change  database  timestamp to date for excel .
+                        }
+
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($key_index, $row+2, $value);
+                    $objPHPExcel->getActiveSheet()->getStyleByColumnAndRow($key_index, $row+2)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD);
+                    //  var_dump($key.$value);
+                    break;
+
+                    default:
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($key_index, $row+2, $value);
+                    //    var_dump($key.$value);
+
+                }
+                // Set Value (each row)
+
+
+            }else{
+                // Can not find $key in $row
+            }
+
+        }
+    }
+
+    // Browser download
+    if (strcmp("php://output", $exportParam['filename'])==0){
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="FixedAssets.xls"');
+        header('Cache-Control: max-age=0');
+    }
+
+    // Write to file
+    // If you want to output e.g. a PDF file, simply do:
+    //$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'PDF');
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+    $objWriter->save($exportParam['filename']); // Excel2007 : '.xlsx'   Excel5 : '.xls'
+
+    echo json_encode(array('message' => 'success'));
+}
+
