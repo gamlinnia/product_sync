@@ -922,3 +922,19 @@ function getProductInfoFromMagentoForExport ($pageSize, $pageNumber = 1, $noOutp
     }
     return $response;
 }
+
+function parseProductAttributesForExport ($magentoProductInfo) {
+    $response = array();
+    foreach ($magentoProductInfo as $attrKey => $attrValue) {
+        switch ($attrKey) {
+            case 'attribute_set_id' :
+                $attrIdName = attributeSetNameAndId('attributeSetId', $attrValue);
+                $response[$attrKey] = $attrIdName['name'];
+                break;
+            default :
+                $response[$attrKey] = getAttributeValueFromOptionsForExport('attributeName', $attrKey, $attrValue);;
+        }
+    }
+    return $response;
+}
+
