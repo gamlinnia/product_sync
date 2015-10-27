@@ -17,7 +17,6 @@ $forTimes = floor($count / $pageSize) + 1;
 echo 'need to do ' . $forTimes . ' times' . PHP_EOL;
 $response = array();
 for ($i = 0; $i < $forTimes; $i++) {
-    if ($i > 2) {break;}
     echo 'this is the ' . ($i+1) . ' times' . PHP_EOL;
     $result = getProductInfoFromMagentoForExport($pageSize, $i+1, array(
         'description', 'ne_description', 'pspec_pan_tilt_zoom', 'ne_highlight',
