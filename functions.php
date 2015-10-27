@@ -998,5 +998,5 @@ function getProductCategoryNames ($valueToFilter, $filterType='entity_id') {
     foreach ($categoryCollection as $each) {
         $categoryNamesArray[] = $each->getName();
     }
-    return implode(',', $categoryNamesArray);
+    return implode(PHP_EOL, $categoryNamesArray);
 }
