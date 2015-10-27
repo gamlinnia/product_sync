@@ -938,3 +938,56 @@ function parseProductAttributesForExport ($magentoProductInfo) {
     return $response;
 }
 
+function getAttributeValueFromOptionsForExport ($nameOrId, $attrCodeOrId, $valueToBeMapped) {
+    /*$nameOrId = 'attributeName' or 'attributeId'*/
+    file_put_contents('log.txt', $attrCodeOrId . ': ' . $valueToBeMapped . PHP_EOL, FILE_APPEND);
+    $optionsArray = getAttributeOptions($nameOrId, $attrCodeOrId);
+    if ($optionsArray && isset($optionsArray['frontend_input']) ) {
+        switch ($optionsArray['frontend_input']) {
+            case 'select' :
+            case 'boolean' :
+                foreach ($optionsArray['options'] as $optionObject) {
+                    if ((int)$optionObject['value'] == (int)$valueToBeMapped) {
+                        return $optionObject['label'];
+                    }
+                }
+                break;
+            case 'multiselect' :
+                /*multiselect : a02030_headsets_connector,
+                "a02030_headsets_connector": "147,148,149,150"*/
+                file_put_contents('log.txt', $attrCodeOrId . ': ' . $valueToBeMapped . PHP_EOL, FILE_APPEND);
+                $valueToBeMappedArray = explode(',', $valueToBeMapped);
+                $valueToBeMappedArray = explode(',', $valueToBeMapped);
+                file_put_contents('log.txt', 'count($valueToBeMappedArray)' . ': ' . count($valueToBeMappedArray) . PHP_EOL, FILE_APPEND);
+                if (count($valueToBeMappedArray) < 2) {
+                    foreach ($optionsArray['options'] as $optionObject) {
+                        if ((int)$optionObject['value'] == (int)$valueToBeMapped) {
+                            return $optionObject['label'];
+                        }
+                    }
+                } else {
+                    $mappedArray = array();
+                    foreach ($optionsArray['options'] as $optionObject) {
+                        if (in_array((int)$optionObject['value'], $valueToBeMappedArray)) {
+                            file_put_contents('log.txt', 'mapped value' . ': ' . $optionObject['label'] . PHP_EOL, FILE_APPEND);
+                            $mappedArray[] = $optionObject['label'];
+                        }
+                    }
+                    return join(',', $mappedArray);
+                }
+                break;
+            case 'text' :
+            case 'textarea' :
+            case 'price' :
+            case 'date' :
+            case 'weight' :
+            case 'media_image' :
+                return $valueToBeMapped;
+                break;
+            default :
+                return "******** " . $optionsArray['frontend_input'] . " ********";
+        }
+    }
+    return $valueToBeMapped;
+}
+
