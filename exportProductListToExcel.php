@@ -33,7 +33,8 @@ for ($i = 0; $i < $forTimes; $i++) {
 }
 echo 'total counts: ' . count($response);
 
-exportArrayToXlsx($response, array("filename"=>"../public_html/media/download/excel/rwProductList.xls", "title"=>"Product List"));
+require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
+exportArrayToXlsx($response, array("filename"=>"rwProductList.xls", "title"=>"Product List"));
 
 
 $product = Mage::getModel('catalog/product')->load(15);
