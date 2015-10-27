@@ -883,6 +883,9 @@ function exportArrayToXlsx ($exportArray, $exportParam) {
     echo json_encode(array('message' => 'success'));
 }
 
+/*
+ * use for export whole items
+ * */
 function getCountNumberOfProducts () {
     $productCollection = Mage::getModel('catalog/product')->getCollection();
     return count($productCollection);
