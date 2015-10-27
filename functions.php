@@ -991,3 +991,12 @@ function getAttributeValueFromOptionsForExport ($nameOrId, $attrCodeOrId, $value
     return $valueToBeMapped;
 }
 
+function getProductCategoryNames ($valueToFilter, $filterType='entity_id') {
+    $product = getProductObject($valueToFilter, $filterType);
+    $categoryCollection = $product->getCategoryCollection()->addAttributeToSelect('name');
+    $categoryNamesArray = array();
+    foreach ($categoryCollection as $each) {
+        $categoryNamesArray[] = $each->getName();
+    }
+    return implode(',', $categoryNamesArray);
+}
