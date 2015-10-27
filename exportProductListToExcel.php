@@ -14,7 +14,7 @@ $pageNumber = 1;
 $count = getCountNumberOfProducts();
 
 $forTimes = floor($count / $pageSize) + 1;
-echo 'need to do ' . $forTimes . ' times';
+echo 'need to do ' . $forTimes . ' times' . PHP_EOL;
 $response = array();
 for ($i = 0; $i < $forTimes; $i++) {
     if ($i > 2) {break;}
@@ -28,14 +28,12 @@ for ($i = 0; $i < $forTimes; $i++) {
     foreach ($result as $product) {
         $parsedProductInfo = parseProductAttributesForExport($product);
         $response[] = $parsedProductInfo;
-        die(json_encode($response));
     }
 }
 echo 'total counts: ' . count($response);
 
 require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
 exportArrayToXlsx($response, array("filename"=>"rwProductList.xls", "title"=>"Product List"));
-
 
 $product = Mage::getModel('catalog/product')->load(15);
 $cats = $product->getCategoryIds();
@@ -44,7 +42,6 @@ foreach ($cats as $category_id) {
     echo $_cat->getName() . ' id:' . $category_id . PHP_EOL;
 }
 
-
 $category = Mage::getModel('catalog/category')->load(2);
 echo $category->getName() . PHP_EOL;
 var_dump($category->getData());
@@ -52,12 +49,7 @@ var_dump($category->getData());
 
 $categoryCollection = $product->getCategoryCollection()
     ->addAttributeToSelect('name');
-$count = 0;
 foreach ($categoryCollection as $each) {
     echo $each->getName();
     var_dump($each->getData());
-    $count++;
-    if ($count == 3) {
-        die();
-    }
 }
