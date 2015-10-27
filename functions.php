@@ -901,6 +901,8 @@ function getProductInfoFromMagentoForExport ($pageSize, $pageNumber = 1, $noOutp
             }
         }
 
+        $tempArray['category'] = getProductCategoryNames($product->getId());
+
         $withDownloadableFile = false;
         $user_manuals=Mage::getModel('usermanuals/usermanuals')->getCollection()->addFieldToFilter('product_id',$product['entity_id']);
         if ( count($user_manuals) > 0 ) {
