@@ -139,7 +139,8 @@ function classifyProductAttributes ($productInfo) {
             "url_path",
             "stock_item",
             "entity_id",
-            "is_returnable"
+            "is_returnable",
+            'category'
         )
     );
 
@@ -240,7 +241,9 @@ function getNextProductInfoFromMagento ($filterParam, $pageSize) {
     $count = 0;
     foreach ($productCollection as $product) {
         if ($count > 0) {
-            $response['productsInfo'][] = $product->debug();
+            $productDataArray = $product->debug();
+            $productDataArray['category'] = getProductCategoryNames($product->getId());
+            $response['productsInfo'][] = $productDataArray;
         }
         $count++;
     }
