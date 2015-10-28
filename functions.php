@@ -847,10 +847,10 @@ function exportArrayToXlsx ($exportArray, $exportParam) {
                             $value=(($value/86400)+25569); //  change  database  timestamp to date for excel .
                         }
 
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($key_index, $row+2, $value);
-                    $objPHPExcel->getActiveSheet()->getStyleByColumnAndRow($key_index, $row+2)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD);
-                    //  var_dump($key.$value);
-                    break;
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($key_index, $row+2, $value);
+                        $objPHPExcel->getActiveSheet()->getStyleByColumnAndRow($key_index, $row+2)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD);
+                        //  var_dump($key.$value);
+                        break;
 
                     default:
                         $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($key_index, $row+2, $value);
@@ -1004,4 +1004,14 @@ function getProductCategoryNames ($valueToFilter, $filterType='entity_id') {
         $categoryNamesArray[] = $each->getName();
     }
     return implode(PHP_EOL, $categoryNamesArray);
+}
+
+function changeToInStockAndSetQty ($valueToFilter, $filterType='entity_id') {
+    $product = getProductObject($valueToFilter, $filterType);
+
+    $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
+    $stockItem->setData('manage_stock', 1);
+    $stockItem->setData('is_in_stock', 1);
+    $stockItem->setData('qty', 100);
+    $stockItem->save();
 }
