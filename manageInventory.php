@@ -17,14 +17,14 @@ foreach ($productCollection as $product) {
     echo "processing id: $product_id" . PHP_EOL;
     echo json_encode($stockItem->getData(), JSON_PRETTY_PRINT);
 
-    $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
     if (!$stockItem->getData('manage_stock')) {
-        $stockItem->setData(array(
-            "product_id"=> $product_id,
-            "stock_id"=> "1"
-        ));
+        echo 'not managed by stock' . PHP_EOL;
+        $stockItem->setData('product_id', $product_id);
+        $stockItem->setData('stock_id', 1);
         $stockItem->save();
+
         $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
+        echo json_encode($stockItem->getData(), JSON_PRETTY_PRINT);
         $stockItem->setData(array(
             'is_in_stock' => 1,
             "qty"=> 100,
