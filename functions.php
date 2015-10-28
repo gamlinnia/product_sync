@@ -1057,7 +1057,10 @@ function getProductCategorysInfo ($valueToFilter, $filterType='entity_id') {
     $categoryCollection = $product->getCategoryCollection()->addAttributeToSelect('name');
     $categoryNamesArray = array();
     foreach ($categoryCollection as $each) {
-        $categoryNamesArray[] = $each->getName();
+        $categoryNamesArray[] = array(
+            'name' => $each->getName(),
+            'level' => $each->getLevel()
+        );
     }
     return $categoryNamesArray;
 }
@@ -1090,16 +1093,17 @@ function getAllCategorysInfo () {
         $response[] = array(
             'entity_id' => $category['entity_id'],
             'name' => $category['name'],
-            'path' => $category['path']
+            'path' => $category['path'],
+            'level' => $category['level']
         );
     }
     return $response;
 }
 
-function getSingleCategoryInfo ($valueToFilter, $filterType) {
+function getSingleCategoryInfo ($valueToFilter, $filterType, $level) {
     $allCategoryInfo = getAllCategorysInfo();
     foreach ($allCategoryInfo as $categoryInfo) {
-        if ((string)$categoryInfo[$filterType] == (string)$valueToFilter) {
+        if ((string)$categoryInfo[$filterType] == (string)$valueToFilter && (string)$categoryInfo['level'] == (string)$level) {
             return $categoryInfo;
         }
     }
