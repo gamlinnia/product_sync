@@ -12,7 +12,9 @@ Mage::app();
 $productCollection = Mage::getModel('catalog/product')->getCollection();
 
 foreach ($productCollection as $product) {
+
     $product_id = $product->getId();
+    if ($product_id < 1510) {continue;}
     $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
     echo "processing id: $product_id" . PHP_EOL;
     echo json_encode($stockItem->getData(), JSON_PRETTY_PRINT);
@@ -25,11 +27,9 @@ foreach ($productCollection as $product) {
 
         $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
         echo json_encode($stockItem->getData(), JSON_PRETTY_PRINT);
-        $stockItem->setData(array(
-            'is_in_stock' => 1,
-            "qty"=> 100,
-            "manage_stock"=> 1,
-        ));
+        $stockItem->setData('manage_stock', 1);
+        $stockItem->setData('is_in_stock', 1);
+        $stockItem->setData('qty', 100);
         $stockItem->save();
     } else {
         $stockItem->setData('manage_stock', 1);
