@@ -242,7 +242,7 @@ function getNextProductInfoFromMagento ($filterParam, $pageSize) {
     foreach ($productCollection as $product) {
         if ($count > 0) {
             $productDataArray = $product->debug();
-            $productDataArray['category'] = getProductCategoryNames($product->getId());
+            $productDataArray['category'] = getProductCategorysInfo($product->getId());
             $response['productsInfo'][] = $productDataArray;
         }
         $count++;
@@ -1050,6 +1050,16 @@ function getProductCategoryNames ($valueToFilter, $filterType='entity_id') {
         $categoryNamesArray[] = $each->getName();
     }
     return implode(PHP_EOL, $categoryNamesArray);
+}
+
+function getProductCategorysInfo ($valueToFilter, $filterType='entity_id') {
+    $product = getProductObject($valueToFilter, $filterType);
+    $categoryCollection = $product->getCategoryCollection()->addAttributeToSelect('name');
+    $categoryNamesArray = array();
+    foreach ($categoryCollection as $each) {
+        $categoryNamesArray[] = $each->getName();
+    }
+    return $categoryNamesArray;
 }
 
 function changeToInStockAndSetQty ($valueToFilter, $filterType='entity_id') {
