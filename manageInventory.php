@@ -12,15 +12,29 @@ Mage::app();
 $productCollection = Mage::getModel('catalog/product')->getCollection();
 
 foreach ($productCollection as $product) {
-    $id = $product->getId();
+    $product_id = $product->getId();
     $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
-    echo "processing id: $id" . PHP_EOL;
+    echo "processing id: $product_id" . PHP_EOL;
     echo json_encode($stockItem->getData(), JSON_PRETTY_PRINT);
-    $stockItem->setData('manage_stock', 1);
-    $stockItem->save();
 
     $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
-    $stockItem->setData('is_in_stock', 1);
-    $stockItem->setData('qty', 100);
-    $stockItem->save();
+    if (!$stockItem->getData('manage_stock')) {
+        $stockItem->setData(array(
+            "product_id"=> $product_id,
+            "stock_id"=> "1"
+        ));
+        $stockItem->save();
+        $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
+        $stockItem->setData(array(
+            'is_in_stock' => 1,
+            "qty"=> 100,
+            "manage_stock"=> 1,
+        ));
+        $stockItem->save();
+    } else {
+        $stockItem->setData('manage_stock', 1);
+        $stockItem->setData('is_in_stock', 1);
+        $stockItem->setData('qty', 100);
+        $stockItem->save();
+    }
 }
