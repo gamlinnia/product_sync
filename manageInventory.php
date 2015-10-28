@@ -13,8 +13,9 @@ $productCollection = Mage::getModel('catalog/product')->getCollection();
 
 foreach ($productCollection as $product) {
     $id = $product->getId();
-    echo "processing id: $id" . PHP_EOL;
     $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
+    echo "processing id: $id" . PHP_EOL;
+    echo json_encode($stockItem->getData(), JSON_PRETTY_PRINT);
     $stockItem->setData('manage_stock', 1);
     $stockItem->setData('is_in_stock', 1);
     $stockItem->setData('qty', 100);
