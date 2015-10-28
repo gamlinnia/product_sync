@@ -17,7 +17,6 @@ $param = array(
         )
     )
 );
-$productInfoJson = CallAPI('POST', $setting['restUrl'][$host] . 'getProductInfosToSync', array(), $param);
-file_put_contents('log.txt', json_encode($param) . PHP_EOL, FILE_APPEND);
-$productInfoArray = json_decode(json_encode($productInfoJson), true);
+$videoGalleryListJson = CallAPI('GET', $setting['restUrl'][$host] . 'getAllVideoGalleryInfos', array(), $param);
+$videoGalleryList = json_decode($videoGalleryListJson, true);
 
