@@ -759,13 +759,20 @@ function compareVideoGalleryList ($localList, $remoteList) {
     $needToImportList = array();
     foreach ($remoteList as $remoteEach) {
         $flag = false;
+        $missingSku = false;
         foreach ($localList as $localEach) {
             if ($remoteEach['videogallery_url'] == $localEach['videogallery_url']) {
                 $flag = true;
+                if (count($remoteEach['sku']) > count($localEach['sku'])) {
+                    $missingSku = true;
+                }
             }
         }
         if (!$flag) {
-            $needToImportList[] = $remoteEach;
+            $needToImportList['gallery'][] = $remoteEach;
+        }
+        if ($missingSku) {
+            $needToImportList['sku'][] = $remoteEach;
         }
     }
     return $needToImportList;
