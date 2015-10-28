@@ -107,7 +107,7 @@ $app->get('/api/getAllVideoGalleryInfos', function () {
         'status' => 'success',
         'count' => count($response),
         'dataCollection' => $response
-    ), JSON_PRETTY_PRINT);
+    ));
 });
 
 $app->run();
