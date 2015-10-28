@@ -1103,8 +1103,12 @@ function getAllCategorysInfo () {
 function getSingleCategoryInfo ($valueToFilter, $filterType, $level) {
     $allCategoryInfo = getAllCategorysInfo();
     foreach ($allCategoryInfo as $categoryInfo) {
-        if ((string)$categoryInfo[$filterType] == (string)$valueToFilter && (string)$categoryInfo['level'] == (string)$level) {
-            return $categoryInfo;
+        if ((string)$categoryInfo[$filterType] == (string)$valueToFilter) {
+            echo 'category name mapped' . PHP_EOL;
+            if ((string)$categoryInfo['level'] == (string)$level) {
+                echo 'category level mapped' . PHP_EOL;
+                return $categoryInfo;
+            }
         }
     }
     return null;
