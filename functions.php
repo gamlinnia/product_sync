@@ -1110,16 +1110,16 @@ function getSingleCategoryInfo ($valueToFilter, $filterType, $level) {
     return null;
 }
 
-function setProductCategoryIds ($valueToFilter, $filterType='entity_id', $categoryNameArray) {
+function setProductCategoryIds ($valueToFilter, $filterType='entity_id', $categoryArray) {
     echo "set category for $filterType : $valueToFilter" . PHP_EOL;
     $product = getProductObject($valueToFilter, $filterType);
     $product_id = $product->getId();
     $categoryIds = array();
-    foreach ($categoryNameArray as $categoryName) {
-        $categoryInfo = getSingleCategoryInfo($categoryName, 'name');
+    foreach ($categoryArray as $category) {
+        $categoryInfo = getSingleCategoryInfo($category['name'], 'name', $category['level']);
         if ($categoryInfo) {
             $categoryIds[] = $categoryInfo['entity_id'];
-            echo "$categoryName map to id: " . $categoryInfo['entity_id']. PHP_EOL;
+            echo $category['name'] . " map to id: " . $categoryInfo['entity_id']. PHP_EOL;
         }
     }
     $product->setCategoryIds($categoryIds);
