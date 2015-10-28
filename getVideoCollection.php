@@ -40,4 +40,6 @@ foreach ($videoGalleryCollection as $videoGallery) {
     }
     $response[] = $tmpArray;
 }
-echo json_encode($response, JSON_PRETTY_PRINT);
+echo json_encode($response, JSON_PRETTY_PRINT) . PHP_EOL;
+$count = count($response);
+echo "count: $count" . PHP_EOL;
