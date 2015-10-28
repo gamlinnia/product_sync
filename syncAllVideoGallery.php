@@ -24,13 +24,16 @@ $needToImportList = compareVideoGalleryList($localVideoGalleryList, $videoGaller
 
 if (isset($needToImportList['gallery']) && count($needToImportList['gallery']) > 0) {
     foreach ($needToImportList['gallery'] as $eachVideoGallery) {
-
+        importVideoToGalleryAndLinkToProduct($eachVideoGallery);
     }
 }
 
 if (isset($needToImportList['sku']) && count($needToImportList['sku']) > 0) {
     foreach ($needToImportList['sku'] as $eachMissingSkuVideoGallery) {
-
+        $videogallery_url = $eachMissingSkuVideoGallery['videogallery_id'];
+        $modelGallery = Mage::getModel('videogallery/videogallery')->load($videogallery_url, 'videogallery_url');
+        $gallery_id = $modelGallery->getVideogalleryId();
+        linkVideoGalleryToProduct ($gallery_id, $valueToFilter, $filterType='entity_id');
     }
 }
 

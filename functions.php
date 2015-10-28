@@ -726,9 +726,6 @@ function getVideoGalleryInfo($valueToFilter, $filterType='entity_id'){
 }
 
 function importVideoToVideoGallery ($videoGalleryObject) {
-    $skuArray = $videoGalleryObject['sku'];
-    $videogallery_url = $videoGalleryObject['videogallery_url'];
-
     unset($videoGalleryObject['videogallery_id']);
     unset($videoGalleryObject['created']);
     unset($videoGalleryObject['sku']);
@@ -744,34 +741,36 @@ function importVideoToVideoGallery ($videoGalleryObject) {
     $model = Mage::getModel('videogallery/videogallery');
     $model -> setData($videoGalleryObject);
     $model -> save();
+    return true;
 }
 
-function importVideoToGalleryAndLinkToProduct($videoObjectList, $valueToFilter, $filterType='entity_id', $config){
+function linkVideoGalleryToProduct ($gallery_id, $valueToFilter, $filterType='entity_id') {
     $product = getProductObject($valueToFilter, $filterType);
     $productId = $product->getId();
-    foreach($videoObjectList as $video){
-        $modelGallery = Mage::getModel('videogallery/videogallery')->load($video['videogallery_url'], 'videogallery_url');
-        //var_dump($modelGallery);
-        $gallery_id = $modelGallery->getVideogalleryId();
-        if (!$gallery_id) {
-            $queryString = parse_url( $video['videogallery_url'], PHP_URL_QUERY );
-            preg_match('/[=]([^&]+)/', $queryString, $match);
-            $v = $match[1];
-            $imageUrl = 'http://img.youtube.com/vi/'.$v.'/0.jpg';
-            $videoImage = $v;
+    if (!$productId) {
+        return false;
+    }
+    $productVideos=Mage::getModel('productvideos/productvideos');
+    $productVideos->setProductId($productId);
+    $productVideos->setVideogalleryId($gallery_id);
+    $productVideos->save();
+    return true;
+}
 
-            $tmpFile = file_get_contents($imageUrl);
-            file_put_contents(Mage::getBaseDir('media').DS."videogallery".DS.'videogallery_'.$videoImage.'.jpg', $tmpFile);
+function importVideoToGalleryAndLinkToProduct ($videoGalleryObject) {
+    $skuArray = $videoGalleryObject['sku'];
+    $videogallery_url = $videoGalleryObject['videogallery_url'];
 
-            $model = Mage::getModel('videogallery/videogallery');
-            $model -> setData($video);
-            $model -> save();
-        }
-        //create new productvideos
-        $productVideos=Mage::getModel('productvideos/productvideos');
-        $productVideos->setProductId($productId);
-        $productVideos->setVideogalleryId($gallery_id);
-        $productVideos->save();
+    $modelGallery = Mage::getModel('videogallery/videogallery')->load($videogallery_url, 'videogallery_url');
+    $gallery_id = $modelGallery->getVideogalleryId();
+    if (!$gallery_id) {
+        importVideoToVideoGallery($videoGalleryObject);
+    }
+
+    $modelGallery = Mage::getModel('videogallery/videogallery')->load($videogallery_url, 'videogallery_url');
+    $gallery_id = $modelGallery->getVideogalleryId();
+    foreach ($skuArray as $sku) {
+        linkVideoGalleryToProduct($gallery_id, $sku, 'sku');
     }
     return true;
 }
