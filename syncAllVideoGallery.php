@@ -22,4 +22,15 @@ $videoGalleryList = $remoteResponse['dataCollection'];
 $localVideoGalleryList = getVideoGalleryColletcion();
 $needToImportList = compareVideoGalleryList($localVideoGalleryList, $videoGalleryList);
 
-var_dump($needToImportList);
+if (isset($needToImportList['gallery']) && count($needToImportList['gallery']) > 0) {
+    foreach ($needToImportList['gallery'] as $eachVideoGallery) {
+
+    }
+}
+
+if (isset($needToImportList['sku']) && count($needToImportList['sku']) > 0) {
+    foreach ($needToImportList['sku'] as $eachMissingSkuVideoGallery) {
+
+    }
+}
+

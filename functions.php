@@ -725,6 +725,27 @@ function getVideoGalleryInfo($valueToFilter, $filterType='entity_id'){
     return $tmpArray;
 }
 
+function importVideoToVideoGallery ($videoGalleryObject) {
+    $skuArray = $videoGalleryObject['sku'];
+    $videogallery_url = $videoGalleryObject['videogallery_url'];
+
+    unset($videoGalleryObject['videogallery_id']);
+    unset($videoGalleryObject['created']);
+    unset($videoGalleryObject['sku']);
+    $queryString = parse_url( $videoGalleryObject['videogallery_url'], PHP_URL_QUERY );
+    preg_match('/[=]([^&]+)/', $queryString, $match);
+    $v = $match[1];
+    $imageUrl = 'http://img.youtube.com/vi/'.$v.'/0.jpg';
+    $videoImage = $v;
+
+    $tmpFile = file_get_contents($imageUrl);
+    file_put_contents(Mage::getBaseDir('media').DS."videogallery".DS.'videogallery_'.$videoImage.'.jpg', $tmpFile);
+
+    $model = Mage::getModel('videogallery/videogallery');
+    $model -> setData($videoGalleryObject);
+    $model -> save();
+}
+
 function importVideoToGalleryAndLinkToProduct($videoObjectList, $valueToFilter, $filterType='entity_id', $config){
     $product = getProductObject($valueToFilter, $filterType);
     $productId = $product->getId();

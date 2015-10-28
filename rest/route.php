@@ -55,14 +55,6 @@ $app->post('/api/getProductInfosToSync', function () {
                 'files' => $downloadableInfo
             );
         }
-
-        $videoGalleryInfo = getVideoGalleryInfo($productInfo['sku'], 'sku');
-        if (count($videoGalleryInfo) > 0) {
-            $videoGalleryList[] = array(
-                'sku' => $productInfo['sku'],
-                'galleryInfo' => $videoGalleryInfo
-            );
-        }
     }
 
     /* 將needToBeParsed的attr從id轉換成string value */
@@ -74,8 +66,7 @@ $app->post('/api/getProductInfosToSync', function () {
         'status' => 'success',
         'data' => $parsedClassfiedProductList,
         'imgs' => $imgResponse,
-        'downloadables' => $downloadableResponse,
-        'videoGalleryList' => $videoGalleryList
+        'downloadables' => $downloadableResponse
     ));
 });
 

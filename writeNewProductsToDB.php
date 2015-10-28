@@ -114,16 +114,6 @@ try{
         }
     }
 
-    /* deal with video galley info*/
-    foreach($productInfoArray['videoGalleryList'] as $videoObject){
-        $sku = $videoObject['sku'];
-        $videoObjectList = $videoObject['galleryInfo'];
-        $importVideoGalletyStatus = importVideoToGalleryAndLinkToProduct($videoObjectList, $sku, 'sku', $config);
-        if (!$importVideoGalletyStatus) {
-            echo json_encode(array('message' => 'something wrong'));
-        }
-    }
-
     echo 'Last Product updated_at is ' . $productInfoArray['data'][count($productInfoArray['data'])-1]['dontCare']['updated_at'] . PHP_EOL;
 
 } catch (Exception $e) {
