@@ -40,4 +40,4 @@ foreach ($videoGalleryCollection as $videoGallery) {
     }
     $response[] = $tmpArray;
 }
-//var_dump($response);
+echo json_encode($response, JSON_PRETTY_PRINT);
