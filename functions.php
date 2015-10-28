@@ -1024,4 +1024,5 @@ function changeToInStockAndSetQty ($valueToFilter, $filterType='entity_id') {
     $stockItem->setData('is_in_stock', 1);
     $stockItem->setData('qty', 100);
     $stockItem->save();
+    return true;
 }

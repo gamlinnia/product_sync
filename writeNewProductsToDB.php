@@ -47,8 +47,10 @@ try{
         $product->setWebsiteIds(array($websiteId))
             ->setCreatedAt(strtotime('now')) //product creation time
             ->setUpdatedAt(strtotime('now')); //product update time
-
         $product->save();
+
+        changeToInStockAndSetQty($productInfo['direct']['sku'], 'sku');
+
         $setting['clonedParam']['updated_at'] = $productInfo['dontCare']['updated_at'];
         $count++;
         sleep(rand(2, 4));
