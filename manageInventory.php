@@ -17,6 +17,9 @@ foreach ($productCollection as $product) {
     echo "processing id: $id" . PHP_EOL;
     echo json_encode($stockItem->getData(), JSON_PRETTY_PRINT);
     $stockItem->setData('manage_stock', 1);
+    $stockItem->save();
+
+    $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
     $stockItem->setData('is_in_stock', 1);
     $stockItem->setData('qty', 100);
     $stockItem->save();
