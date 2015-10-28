@@ -755,6 +755,22 @@ function importVideoToGalleryAndLinkToProduct($videoObjectList, $valueToFilter, 
     return true;
 }
 
+function compareVideoGalleryList ($localList, $remoteList) {
+    $needToImportList = array();
+    foreach ($remoteList as $remoteEach) {
+        $flag = false;
+        foreach ($localList as $localEach) {
+            if ($remoteEach['videogallery_url'] == $localEach['videogallery_url']) {
+                $flag = true;
+            }
+        }
+        if (!$flag) {
+            $needToImportList[] = $remoteEach;
+        }
+    }
+    return $needToImportList;
+}
+
 function getAttributeSetAndSubcategoryMappingTable ($filePath) {
     $excelDataArray = parseXlsxIntoArray($filePath, 1, 1);
     foreach ($excelDataArray as $index => $row) {

@@ -17,6 +17,9 @@ $param = array(
         )
     )
 );
-$videoGalleryListJson = CallAPI('GET', $setting['restUrl'][$host] . 'getAllVideoGalleryInfos', array(), $param);
-$videoGalleryList = json_decode($videoGalleryListJson, true);
+$remoteResponse = CallAPI('GET', $setting['restUrl'][$host] . 'getAllVideoGalleryInfos', array(), $param);
+$videoGalleryList = $remoteResponse['dataCollection'];
+$localVideoGalleryList = getVideoGalleryColletcion();
+$needToImportList = compareVideoGalleryList($localVideoGalleryList, $videoGalleryList);
 
+var_dump($needToImportList);
