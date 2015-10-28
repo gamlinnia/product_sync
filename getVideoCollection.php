@@ -35,7 +35,9 @@ foreach ($videoGalleryCollection as $videoGallery) {
             $product_id = $productvideo->getData("product_id");
             $product = Mage::getModel('catalog/product')->load($product_id);
             $sku = $product->getSku();
-            $tmpArray["sku"][] = $sku;
+            if ($sku) {
+                $tmpArray["sku"][] = $sku;
+            }
         }
     }
     $response[] = $tmpArray;
