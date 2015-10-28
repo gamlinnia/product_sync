@@ -36,8 +36,10 @@ if (isset($needToImportList['sku']) && count($needToImportList['sku']) > 0) {
         $modelGallery = Mage::getModel('videogallery/videogallery')->load($videogallery_url, 'videogallery_url');
         $gallery_id = $modelGallery->getVideogalleryId();
         foreach ($skuArray as $sku) {
-            echo "link $videogallery_url with $sku" . PHP_EOL;
-            linkVideoGalleryToProduct($gallery_id, $sku, 'sku');
+            if ($sku) {
+                echo "link $videogallery_url with $sku" . PHP_EOL;
+                linkVideoGalleryToProduct($gallery_id, $sku, 'sku');
+            }
         }
     }
 }
