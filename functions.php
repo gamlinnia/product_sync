@@ -1082,3 +1082,42 @@ function changeToInStockAndSetQty ($valueToFilter, $filterType='entity_id') {
     $stockItem->save();
     return true;
 }
+
+function getAllCategorysInfo () {
+    $categoryCollection = Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('name');
+    $response = array();
+    foreach ($categoryCollection as $category) {
+        $response[] = array(
+            'entity_id' => $category['entity_id'],
+            'name' => $category['name'],
+            'path' => $category['path']
+        );
+    }
+    return $response;
+}
+
+function getSingleCategoryInfo ($valueToFilter, $filterType) {
+    $allCategoryInfo = getAllCategorysInfo();
+    foreach ($allCategoryInfo as $categoryInfo) {
+        if ((string)$categoryInfo[$filterType] == (string)$valueToFilter) {
+            return $categoryInfo;
+        }
+    }
+    return null;
+}
+
+function setProductCategoryIds ($valueToFilter, $filterType='entity_id', $categoryNameArray) {
+    echo "set category for $filterType : $valueToFilter" . PHP_EOL;
+    $product = getProductObject($valueToFilter, $filterType);
+    $product_id = $product->getId();
+    $categoryIds = array();
+    foreach ($categoryNameArray as $categoryName) {
+        $categoryInfo = getSingleCategoryInfo($categoryName, 'name');
+        if ($categoryInfo) {
+            $categoryIds[] = $categoryInfo['entity_id'];
+            echo "$categoryName map to id: " . $categoryInfo['entity_id']. PHP_EOL;
+        }
+    }
+    $product->setCategoryIds($categoryIds);
+    $product->save();
+}

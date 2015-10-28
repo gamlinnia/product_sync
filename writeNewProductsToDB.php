@@ -50,6 +50,7 @@ try{
         $product->save();
 
         changeToInStockAndSetQty($productInfo['direct']['sku'], 'sku');
+        setProductCategoryIds($productInfo['direct']['sku'], 'sku', $productInfo['dontCare']['category']);
 
         $setting['clonedParam']['updated_at'] = $productInfo['dontCare']['updated_at'];
         $count++;
