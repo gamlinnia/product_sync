@@ -101,4 +101,8 @@ $app->get('/api/getMappedAttributeSetOrSubcategory', function () use ($app) {
     echo json_encode($response);
 });
 
+$app->get('/api/getAllVideoGalleryInfos', function () {
+
+});
+
 $app->run();
