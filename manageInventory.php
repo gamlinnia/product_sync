@@ -32,9 +32,11 @@ foreach ($productCollection as $product) {
         $stockItem->save();
         sleep(rand(1, 3));
     } else {
-        $stockItem->setData('manage_stock', 1);
-        $stockItem->setData('is_in_stock', 1);
-        $stockItem->setData('qty', 100);
-        $stockItem->save();
+        if ((string)$stockItem->getData('qty') != '100') {
+            $stockItem->setData('manage_stock', 1);
+            $stockItem->setData('is_in_stock', 1);
+            $stockItem->setData('qty', 100);
+            $stockItem->save();
+        }
     }
 }
