@@ -43,6 +43,7 @@ try{
         foreach ($readyToImportProductInfo as $attrKey => $attrValue) {
                 $productObject->setData($attrKey, $attrValue);
         }
+        $productObject->setUrlKey(false);
 
         $websiteId = Mage::app()->getWebsite()->getWebsiteId();
         $productObject->setWebsiteIds(array($websiteId))
