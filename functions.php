@@ -1127,5 +1127,6 @@ function setProductCategoryIds ($valueToFilter, $filterType='entity_id', $catego
         }
     }
     $product->setCategoryIds($categoryIds);
+    $product->setUrlKey(false);
     $product->save();
 }
