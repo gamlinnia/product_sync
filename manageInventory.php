@@ -14,7 +14,6 @@ $productCollection = Mage::getModel('catalog/product')->getCollection();
 foreach ($productCollection as $product) {
 
     $product_id = $product->getId();
-    if ($product_id < 1510) {continue;}
     $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
     echo "processing id: $product_id" . PHP_EOL;
     echo json_encode($stockItem->getData(), JSON_PRETTY_PRINT);
