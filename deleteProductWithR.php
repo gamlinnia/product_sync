@@ -11,6 +11,7 @@ Mage::app('default')->setCurrentStore( Mage_Core_Model_App :: ADMIN_STORE_ID );
 
 $productCollection = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('name');
 
+$count = 0;
 foreach ($productCollection as $eachProduct) {
     $sku = $eachProduct->getSku();
     preg_match('/(.+)[R]$/i', $sku, $match);
@@ -24,6 +25,8 @@ foreach ($productCollection as $eachProduct) {
             $productToBeDelete = getProductObject($sku, 'sku');
             var_dump($productToBeDelete->getData());
             $productToBeDelete->delete();
+            $count++;
+            echo "Deleted $count products end with R";
         }
     }
 }
