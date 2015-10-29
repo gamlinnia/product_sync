@@ -18,7 +18,6 @@ $param = array(
     )
 );
 $productInfoJson = CallAPI('POST', $setting['restUrl'][$host] . 'getProductInfosToSync', array(), $param);
-file_put_contents('log.txt', json_encode($param) . PHP_EOL, FILE_APPEND);
 $productInfoArray = json_decode(json_encode($productInfoJson), true);
 
 if (!(isset($productInfoArray['status']) && $productInfoArray['status'] == 'success')) {
@@ -34,20 +33,22 @@ try{
     /* debug == false，才執行product sync  */
     $count = 0;
     foreach ($productInfoArray['data'] as $key => $productInfo) {
-        $product = Mage::getModel('catalog/product');
-        file_put_contents('log.txt', "************* " . $productInfo['direct']['sku'] . ' ' . $productInfo['dontCare']['updated_at'] . " *************" . PHP_EOL, FILE_APPEND);
+        $productObject = getProductObject($productInfo['direct']['sku'], 'sku');
+        $productExists = true;
+        if (!$productObject->getId()) {
+            $productExists = false;
+        }
         $readyToImportProductInfo = parseBackClassifiedProductAttributes($productInfo);
 
         foreach ($readyToImportProductInfo as $attrKey => $attrValue) {
-//            file_put_contents('log.txt', $attrKey . ': ' . $attrValue . PHP_EOL, FILE_APPEND);
-            $product->setData($attrKey, $attrValue);
+                $productObject->setData($attrKey, $attrValue);
         }
 
         $websiteId = Mage::app()->getWebsite()->getWebsiteId();
-        $product->setWebsiteIds(array($websiteId))
+        $productObject->setWebsiteIds(array($websiteId))
             ->setCreatedAt(strtotime('now')) //product creation time
             ->setUpdatedAt(strtotime('now')); //product update time
-        $product->save();
+        $productObject->save();
 
         changeToInStockAndSetQty($productInfo['direct']['sku'], 'sku');
         setProductCategoryIds($productInfo['direct']['sku'], 'sku', $productInfo['dontCare']['category']);
