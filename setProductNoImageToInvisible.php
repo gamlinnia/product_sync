@@ -9,7 +9,7 @@ require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
 Mage::app();
 
-$productCollection = Mage::getModel('catalog/product')->getCollection()->addAttributeToselect('visibility');
+$productCollection = Mage::getModel('catalog/product')->getCollection()->addAttributeToselect('visibility')->addAttributeToselect('name');
 
 $valueIdOfInvisible = getAttributeValueIdFromOptions('attributeName', 'visibility', 'Not Visible Individually');
 
@@ -19,12 +19,20 @@ foreach($productCollection as $product) {
         if (count($mediaGalleryImages) < 1) {
             echo '***************************' . $product->getSku() . 'has no image ***************************' . PHP_EOL;
         }
+        $noImageList = array();
         foreach ($mediaGalleryImages as $image) {
             $pathinfo = pathinfo($image['url']);
             preg_match('/cs/', $pathinfo['basename'], $match);
             if ($match) {
                 echo $pathinfo['basename'] . ' ' . $product->getSku() . PHP_EOL;
+                $noImageList[] = array(
+                    'sku' => $product->getSku(),
+                    'name' => $product->getName(),
+                    'cs_name' => $pathinfo['basename']
+                );
             }
         }
     }
 }
+
+exportArrayToXlsx($noImageList, array("filename"=>"noImageProductList.xls", "title"=>"No Image Product List"));
