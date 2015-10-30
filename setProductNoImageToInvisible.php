@@ -35,4 +35,5 @@ foreach($productCollection as $product) {
     }
 }
 
+require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
 exportArrayToXlsx($noImageList, array("filename"=>"noImageProductList.xls", "title"=>"No Image Product List"));
