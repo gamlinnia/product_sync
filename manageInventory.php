@@ -15,6 +15,7 @@ foreach ($productCollection as $product) {
     $productWebisteIds = $product->getWebsiteIds();
     if (!$productWebisteIds) {
         $product->setWebsiteIds(getWebisteIds());
+        $product->save();
     }
 
     $product_id = $product->getId();
