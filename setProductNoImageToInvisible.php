@@ -18,7 +18,10 @@ foreach($productCollection as $product) {
     if (count($mediaGalleryImages) < 2) {
         foreach ($mediaGalleryImages as $image) {
             $pathinfo = pathinfo($image['url']);
-            echo $pathinfo['basename'];
+            preg_match('/cs/', $pathinfo['basename'], $match);
+            if ($match) {
+                echo $pathinfo['basename'] . PHP_EOL;
+            }
         }
     }
 }
