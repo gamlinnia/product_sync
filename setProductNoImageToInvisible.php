@@ -34,6 +34,7 @@ foreach($productCollection as $product) {
                 $product->setVisibility($valueIdOfInvisible);
                 $product->setUrlKey(false);
                 $product->save();
+                sleep(rand(2,4));
             }
         }
     }
