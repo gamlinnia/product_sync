@@ -45,7 +45,7 @@ try{
         }
         $productObject->setUrlKey(false);
 
-        $productObject->setWebsiteIds(getWebisteIds())
+        $productObject->setWebsiteIds(getAllWebisteIds())
             ->setCreatedAt(strtotime('now')) //product creation time
             ->setUpdatedAt(strtotime('now')); //product update time
         $productObject->save();
