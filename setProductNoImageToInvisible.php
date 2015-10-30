@@ -20,7 +20,7 @@ foreach($productCollection as $product) {
             $pathinfo = pathinfo($image['url']);
             preg_match('/cs/', $pathinfo['basename'], $match);
             if ($match) {
-                echo $pathinfo['basename'] . PHP_EOL;
+                echo $pathinfo['basename'] . ' ' . $product->getSku() . PHP_EOL;
             }
         }
     }
