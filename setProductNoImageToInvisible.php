@@ -13,13 +13,13 @@ $productCollection = Mage::getModel('catalog/product')->getCollection()->addAttr
 
 $valueIdOfInvisible = getAttributeValueIdFromOptions('attributeName', 'visibility', 'Not Visible Individually');
 
+$noImageList = array();
 foreach($productCollection as $product) {
     $mediaGalleryImages = Mage::getModel('catalog/product')->load($product->getId())->getMediaGalleryImages();
     if (count($mediaGalleryImages) < 2) {
         if (count($mediaGalleryImages) < 1) {
             echo '***************************' . $product->getSku() . 'has no image ***************************' . PHP_EOL;
         }
-        $noImageList = array();
         foreach ($mediaGalleryImages as $image) {
             $pathinfo = pathinfo($image['url']);
             preg_match('/cs/', $pathinfo['basename'], $match);
