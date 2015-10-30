@@ -12,6 +12,11 @@ Mage::app();
 $productCollection = Mage::getModel('catalog/product')->getCollection();
 
 foreach ($productCollection as $product) {
+    $webisteIds = $product->getWebsiteIds();
+    if (!$webisteIds) {
+        $websiteId = Mage::app()->getWebsite()->getWebsiteId();
+        $product->setWebsiteIds(array($websiteId));
+    }
 
     $product_id = $product->getId();
     $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
