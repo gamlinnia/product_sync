@@ -16,6 +16,9 @@ $valueIdOfInvisible = getAttributeValueIdFromOptions('attributeName', 'visibilit
 foreach($productCollection as $product) {
     $mediaGalleryImages = Mage::getModel('catalog/product')->load($product->getId())->getMediaGalleryImages();
     if (count($mediaGalleryImages) < 2) {
+        if (count($mediaGalleryImages) < 1) {
+            echo '***************************' . $product->getSku() . 'has no image ***************************' . PHP_EOL;
+        }
         foreach ($mediaGalleryImages as $image) {
             $pathinfo = pathinfo($image['url']);
             preg_match('/cs/', $pathinfo['basename'], $match);
