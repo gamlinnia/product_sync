@@ -9,13 +9,12 @@ require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
 Mage::app();
 
-$productCollection = Mage::getModel('catalog/product')->getCollection();
+$productCollection = Mage::getModel('catalog/product')->getCollection()->addAttributeToselect('website_ids');
 
 foreach ($productCollection as $product) {
-    $webisteIds = $product->getWebsiteIds();
-    if (!$webisteIds) {
-        $websiteId = Mage::app()->getWebsite()->getWebsiteId();
-        $product->setWebsiteIds(array($websiteId));
+    $productWebisteIds = $product->getWebsiteIds();
+    if (!$productWebisteIds) {
+        $product->setWebsiteIds(getWebisteIds());
     }
 
     $product_id = $product->getId();

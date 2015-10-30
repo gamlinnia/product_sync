@@ -1130,3 +1130,15 @@ function setProductCategoryIds ($valueToFilter, $filterType='entity_id', $catego
     $product->setUrlKey(false);
     $product->save();
 }
+
+function getWebisteIds () {
+    $allStores = Mage::app()->getStores();
+    $websiteIds = array();
+    foreach ($allStores as $_eachStoreId => $val) {
+        $_storeCode = Mage::app()->getStore($_eachStoreId)->getCode();
+        $_storeName = Mage::app()->getStore($_eachStoreId)->getName();
+        $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
+        $websiteIds[] = $_storeId;
+    }
+    return $websiteIds;
+}
