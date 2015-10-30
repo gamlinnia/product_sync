@@ -6,7 +6,7 @@ $setting = json_decode(file_get_contents('setting.json'), true);
 require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
 /* if use admin, then websiteId will get 0 */
-Mage::app('default');
+Mage::app('admin');
 
 $host = $setting['hostName'];
 $param = array(
@@ -45,8 +45,7 @@ try{
         }
         $productObject->setUrlKey(false);
 
-        $websiteId = Mage::app()->getWebsite()->getWebsiteId();
-        $productObject->setWebsiteIds(array($websiteId))
+        $productObject->setWebsiteIds(getWebisteIds())
             ->setCreatedAt(strtotime('now')) //product creation time
             ->setUpdatedAt(strtotime('now')); //product update time
         $productObject->save();
