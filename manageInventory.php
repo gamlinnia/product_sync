@@ -7,14 +7,14 @@ if (!file_exists('config.json')) {
 $config = json_decode(file_get_contents('config.json'), true);
 require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
-Mage::app();
+Mage::app('admin');
 
 $productCollection = Mage::getModel('catalog/product')->getCollection()->addAttributeToselect('website_ids');
 
 foreach ($productCollection as $product) {
     $productWebisteIds = $product->getWebsiteIds();
     if (!$productWebisteIds) {
-        $product->setWebsiteIds(getWebisteIds());
+        $product->setWebsiteIds(getAllWebisteIds());
         $product->save();
     }
 
