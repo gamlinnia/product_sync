@@ -30,6 +30,8 @@ foreach($productCollection as $product) {
                     'name' => $product->getName(),
                     'cs_name' => $pathinfo['basename']
                 );
+                $product->setVisibility($valueIdOfInvisible);
+                $product->save();
             }
         }
     }
