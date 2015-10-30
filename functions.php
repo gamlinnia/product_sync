@@ -314,7 +314,7 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
         case 'select' :
         case 'boolean' :
             foreach ($optionsArray['options'] as $optionObject) {
-                if ((int)$optionObject['label'] == (int)$valueToBeMapped) {
+                if ($optionObject['label'] == $valueToBeMapped) {
                     return $optionObject['value'];
                 }
             }
@@ -325,7 +325,7 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
             $valueToBeMappedArray = explode(',', $valueToBeMapped);
             if (count($valueToBeMappedArray) < 2) {
                 foreach ($optionsArray['options'] as $optionObject) {
-                    if ((int)$optionObject['label'] == (int)$valueToBeMapped) {
+                    if ($optionObject['label'] == $valueToBeMapped) {
                         return join(',', $optionObject['value']);
                     }
                 }
