@@ -31,6 +31,7 @@ foreach($productCollection as $product) {
                     'cs_name' => $pathinfo['basename']
                 );
                 $product->setVisibility($valueIdOfInvisible);
+                $product->setUrlKey(false);
                 $product->save();
             }
         }
