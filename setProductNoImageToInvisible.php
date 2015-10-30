@@ -14,8 +14,11 @@ $productCollection = Mage::getModel('catalog/product')->getCollection()->addAttr
 $valueIdOfInvisible = getAttributeValueIdFromOptions('attributeName', 'visibility', 'Not Visible Individually');
 
 foreach($productCollection as $product) {
-    foreach (Mage::getModel('catalog/product')->load($product->getId())->getMediaGalleryImages() as $image) {
-        $pathinfo = pathinfo($image['url']);
-        echo $pathinfo['basename'];
+    $mediaGalleryImages = Mage::getModel('catalog/product')->load($product->getId())->getMediaGalleryImages();
+    if (count($mediaGalleryImages) < 2) {
+        foreach ($mediaGalleryImages as $image) {
+            $pathinfo = pathinfo($image['url']);
+            echo $pathinfo['basename'];
+        }
     }
 }
