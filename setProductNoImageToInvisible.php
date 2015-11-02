@@ -31,10 +31,12 @@ foreach($productCollection as $product) {
                     'name' => $product->getName(),
                     'cs_name' => $pathinfo['basename']
                 );
-                $product->setVisibility($valueIdOfInvisible);
-                $product->setUrlKey(false);
-                $product->save();
-                sleep(rand(2,4));
+                if ((string)$product->getVisibility() != (string)$valueIdOfInvisible) {
+                    $product->setVisibility($valueIdOfInvisible);
+                    $product->setUrlKey(false);
+                    $product->save();
+                    sleep(rand(2,4));
+                }
             }
         }
     }

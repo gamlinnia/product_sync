@@ -43,7 +43,9 @@ try{
         foreach ($readyToImportProductInfo as $attrKey => $attrValue) {
                 $productObject->setData($attrKey, $attrValue);
         }
-        $productObject->setUrlKey(false);
+        if ($productExists && $productObject->getUrlKey()) {
+            $productObject->setUrlKey(false);
+        }
 
         $productObject->setWebsiteIds(getAllWebisteIds())
             ->setCreatedAt(strtotime('now')) //product creation time
