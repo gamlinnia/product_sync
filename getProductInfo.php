@@ -8,4 +8,4 @@ require_once 'functions.php';
 Mage::app();
 
 $product = Mage::getModel('catalog/product')->load(1961);
-var_dump(json_encode($product->getData()));
+echo json_encode($product->getData());
