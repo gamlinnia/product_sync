@@ -19,7 +19,11 @@ Mage::app();
 
 $app->post('/api/syncWithNeIm', function () {
     global $input;
-    echo json_encode($input);
+    $response = array(
+        'parsedProduct' => array(),
+        'originalInput' => $input
+    );
+    echo json_encode($response);
 });
 
 $app->post('/api/getProductInfosToSync', function () {
