@@ -17,6 +17,11 @@ require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
 require_once '../functions.php';
 Mage::app();
 
+$app->post('/api/syncWithNeIm', function () {
+    global $input;
+    echo json_encode($input);
+});
+
 $app->post('/api/getProductInfosToSync', function () {
     global $input;
 
