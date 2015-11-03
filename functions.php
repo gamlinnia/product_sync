@@ -52,10 +52,14 @@ function getAttributeOptions ($nameOrId, $value) {
         $attributeData = $attribute->getData();
         $rs = array(
             'attributeCode' => $attributeCode,
-            'attributeId' => $attributeId,
-            'frontend_input' => $attributeData['frontend_input'],
-            'backend_type' => $attributeData['backend_type']
+            'attributeId' => $attributeId
         );
+        if (isset($attributeData['frontend_input'])) {
+            $rs['frontend_input'] = $attributeData['frontend_input'];
+        }
+        if (isset($attributeData['backend_type'])) {
+            $rs['backend_type'] = $attributeData['backend_type'];
+        }
         if ($attribute->usesSource()) {
             $options = $attribute->getSource()->getAllOptions(false);
             $rs['options'] = $options;
@@ -67,9 +71,12 @@ function getAttributeOptions ($nameOrId, $value) {
 }
 
 function getAttributeValueFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMapped) {
+
     /*$nameOrId = 'attributeName' or 'attributeId'*/
-    file_put_contents('log.txt', $attrCodeOrId . ': ' . $valueToBeMapped . PHP_EOL, FILE_APPEND);
     $optionsArray = getAttributeOptions($nameOrId, $attrCodeOrId);
+    if (!isset($optionsArray['frontend_input'])) {
+        return $valueToBeMapped;
+    }
     switch ($optionsArray['frontend_input']) {
         case 'select' :
         case 'boolean' :
@@ -104,9 +111,14 @@ function getAttributeValueFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMappe
             break;
         case 'text' :
         case 'textarea' :
+        case 'price' :
+        case 'weight' :
+        case 'media_image' :
+        case 'date' :
             return $valueToBeMapped;
             break;
         default :
+            return $optionsArray['frontend_input'];
             return '******** no mapping value ********';
     }
     return null;
@@ -186,7 +198,7 @@ function parseClassifiedProductAttributes ($classifiedProductInfo) {
                 $parsedProductInfo['needToBeParsed'][$attrKey] = $attrIdName['name'];
                 break;
             default :
-                $parsedProductInfo['needToBeParsed'][$attrKey] = getAttributeValueFromOptions('attributeName', $attrKey, $attrValue);;
+                $parsedProductInfo['needToBeParsed'][$attrKey] = getAttributeValueFromOptions('attributeName', $attrKey, $attrValue);
         }
     }
     return $parsedProductInfo;

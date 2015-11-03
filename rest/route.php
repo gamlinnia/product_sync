@@ -19,8 +19,16 @@ Mage::app();
 
 $app->post('/api/syncWithNeIm', function () {
     global $input;
+    $parsedProduct = array();
+    foreach ($input as $attrKey => $attrValue) {
+        if (!is_array($attrValue)) {
+            echo $attrKey . ' ' . $attrValue . PHP_EOL;
+            $parsedProduct[$attrKey] = getAttributeValueFromOptions('attributeName', $attrKey, $attrValue);
+            echo getAttributeValueFromOptions('attributeName', $attrKey, $attrValue) . PHP_EOL;
+        }
+    }
     $response = array(
-        'parsedProduct' => array(),
+        'parsedProduct' => $parsedProduct,
         'originalInput' => $input
     );
     echo json_encode($response);
