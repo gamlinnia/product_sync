@@ -30,7 +30,7 @@ foreach($productCollection as $eachProduct) {
         if (count($objectArray) > 0) {
             foreach ($objectArray as $object) {
                 $originFile = var_dump($object->getFile());
-                preg_match('/(\/var\/www\/rosewill\/public_html\/media\/){2,}/', $originFile, $match)
+                preg_match('/(\/var\/www\/rosewill\/public_html\/media\/){2,}/', $originFile, $match);
                 if ($match) {
                     var_dump($match);
                     echo preg_replace('/(\/var\/www\/rosewill\/public_html\/media\/)+/', '$1', $originFile);
