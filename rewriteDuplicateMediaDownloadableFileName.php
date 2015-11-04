@@ -35,6 +35,8 @@ foreach($productCollection as $eachProduct) {
                     echo 'origin file: ' . $originFile . PHP_EOL;
                     $correctedFile = preg_replace('/(\/var\/www\/rosewill\/public_html\/media\/)+/', '', $originFile);
                     echo 'correct to: ' . $correctedFile . PHP_EOL;
+                    $object->setFile($correctedFile);
+                    $object->save();
                 }
             }
         }
