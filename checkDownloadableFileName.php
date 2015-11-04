@@ -33,9 +33,8 @@ foreach($productCollection as $eachProduct) {
                 //var_dump($object);
                 $baseUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
                 $filePath = $object->getFile();
-                if (strpos($filePath, ',') || strpos($filePath, '(') || strpos($filePath, ')'))
-                {
-                    $result[] = $baseUrl.$filePath;
+                if (strpos($filePath, ',') || strpos($filePath, '(') || strpos($filePath, ')')) {
+                    $result[] = $baseUrl . $filePath;
                     $filePath = Mage::getBaseDir('media') . DS . $filePath;
                     if (file_exists($filePath)) {
                         echo 'oh ya!!! has file, don\'t worry.' . $filePath . PHP_EOL;
@@ -63,10 +62,9 @@ foreach($productCollection as $eachProduct) {
 //                $object->save();
                 //var_dump($object);
             }
-            die();
         }
     }
 }
 
 //var_dump($response);
-var_dump($result);
+//var_dump($result);
