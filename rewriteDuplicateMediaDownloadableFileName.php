@@ -29,11 +29,12 @@ foreach($productCollection as $eachProduct) {
         $objectArray = Mage::getModel($relativeModel)->getCollection()->addFieldToFilter('product_id', $eachProduct->getId());
         if (count($objectArray) > 0) {
             foreach ($objectArray as $object) {
-                $originFile = var_dump($object->getFile());
-                preg_match('/(\/var\/www\/rosewill\/public_html\/media\/){2,}/', $originFile, $match);
+                $originFile = $object->getFile();
+                preg_match('/(\/var\/www\/rosewill\/public_html\/media\/)+/', $originFile, $match);
                 if ($match) {
                     var_dump($match);
-                    echo preg_replace('/(\/var\/www\/rosewill\/public_html\/media\/)+/', '$1', $originFile);
+                    $correctedFile = preg_replace('/(\/var\/www\/rosewill\/public_html\/media\/)+/', '$1', $originFile);
+                    echo $correctedFile . PHP_EOL;
                 }
             }
         }
