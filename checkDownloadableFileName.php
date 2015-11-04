@@ -41,8 +41,14 @@ foreach($productCollection as $eachProduct) {
                         echo 'oh ya!!! has file, don\'t worry.' . $filePath . PHP_EOL;
                     } else {
                         $newFilePath = preg_replace(
-                            array('/[ (),]/'),
-                            array('_'),
+                            array(
+                                '/[ ().,]/',
+                                '/[_]([^_]+)$/'
+                            ),
+                            array(
+                                '_',
+                                '.$1'
+                            ),
                             $filePath
                         );
                         echo $newFilePath . PHP_EOL;
@@ -56,10 +62,6 @@ foreach($productCollection as $eachProduct) {
 //                $object->setFile($filePath);
 //                $object->save();
                 //var_dump($object);
-//                $response[$downloadType][] = array(
-//                    'base' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
-//                    'file' => $object->getFile()
-//                );
             }
             die();
         }
