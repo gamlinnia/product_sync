@@ -54,8 +54,8 @@ foreach($productCollection as $eachProduct) {
                         echo "org path" . $filePath . PHP_EOL;
                         if (file_exists(Mage::getBaseDir('media') . DS . $newFilePath)) {
                             echo 'new path works, Please correct path to: ' . $newFilePath . PHP_EOL . PHP_EOL;
-//                            $object->setFile($newFilePath);
-//                            $object->save();
+                            $object->setFile($newFilePath);
+                            $object->save();
                         } else {
                             echo 'oh shit!' . PHP_EOL;
                         }
