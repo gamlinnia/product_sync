@@ -50,6 +50,7 @@ foreach($productCollection as $eachProduct) {
                             ),
                             $filePath
                         );
+                        echo $object->getProductId() . PHP_EOL;
                         echo "org path" . $filePath . PHP_EOL;
                         echo $newFilePath . PHP_EOL;
                         if (file_exists($newFilePath)) {
