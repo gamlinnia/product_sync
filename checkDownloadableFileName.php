@@ -45,7 +45,7 @@ foreach($productCollection as $eachProduct) {
                             array('_'),
                             $filePath
                         );
-                        echo $newFilePath;
+                        echo $newFilePath . PHP_EOL;
                         if (file_exists($newFilePath)) {
                             echo 'new path works' . PHP_EOL;
                         } else {
@@ -61,6 +61,7 @@ foreach($productCollection as $eachProduct) {
 //                    'file' => $object->getFile()
 //                );
             }
+            die();
         }
     }
 }
