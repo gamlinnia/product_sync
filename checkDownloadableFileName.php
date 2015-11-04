@@ -22,6 +22,7 @@ $downloadables = array(
     'driver' => 'drivers/drivers',
     'firmware' => 'firmware/firmware'
 );
+$result = array();
 
 foreach($productCollection as $eachProduct) {
     foreach ($downloadables as $downloadType => $relativeModel) {
@@ -33,11 +34,11 @@ foreach($productCollection as $eachProduct) {
                 $baseUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
                 $filePath = $object->getFile();
                 if (strpos($filePath, ',') || strpos($filePath, '(') || strpos($filePath, ')')) {
+                    $result[] = $baseUrl . $filePath;
                     $fileFullPath = Mage::getBaseDir('media') . DS . $filePath;
                     if (file_exists($fileFullPath)) {
                         echo 'oh ya!!! has file, don\'t worry.' . $filePath . PHP_EOL;
-                    }
-                    else {
+                    } else {
                         $newFilePath = preg_replace(
                             array(
                                 '/__/',
@@ -49,11 +50,10 @@ foreach($productCollection as $eachProduct) {
                             ),
                             $filePath
                         );
-                        echo $object->getProductId() . PHP_EOL;
+                        echo 'Product Id: ' . $object->getProductId() . PHP_EOL;
                         echo "org path" . $filePath . PHP_EOL;
-                        echo $newFilePath . PHP_EOL;
                         if (file_exists(Mage::getBaseDir('media') . DS . $newFilePath)) {
-                            echo 'new path works' . PHP_EOL;
+                            echo 'new path works, Please correct path to: ' . $newFilePath . PHP_EOL . PHP_EOL;
                             $object->setFile($newFilePath);
                             $object->save();
                         } else {
