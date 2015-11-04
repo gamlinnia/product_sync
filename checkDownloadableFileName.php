@@ -35,8 +35,8 @@ foreach($productCollection as $eachProduct) {
                 $filePath = $object->getFile();
                 if (strpos($filePath, ',') || strpos($filePath, '(') || strpos($filePath, ')')) {
                     $result[] = $baseUrl . $filePath;
-                    $filePath = Mage::getBaseDir('media') . DS . $filePath;
-                    if (file_exists($filePath)) {
+                    $fileFullPath = Mage::getBaseDir('media') . DS . $filePath;
+                    if (file_exists($fileFullPath)) {
                         echo 'oh ya!!! has file, don\'t worry.' . $filePath . PHP_EOL;
                     } else {
                         $newFilePath = preg_replace(
@@ -53,7 +53,7 @@ foreach($productCollection as $eachProduct) {
                         echo $object->getProductId() . PHP_EOL;
                         echo "org path" . $filePath . PHP_EOL;
                         echo $newFilePath . PHP_EOL;
-                        if (file_exists($newFilePath)) {
+                        if (file_exists(Mage::getBaseDir('media') . DS . $newFilePath)) {
                             echo 'new path works' . PHP_EOL;
                             echo 'Please correct path to: ' . $newFilePath;
 //                            $object->setFile($newFilePath);
