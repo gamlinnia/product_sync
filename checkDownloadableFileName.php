@@ -41,8 +41,7 @@ foreach($productCollection as $eachProduct) {
                 }
 //                $object->setFile($filePath);
 //                $object->save();
-                var_dump($object);
-                die();
+                //var_dump($object);
 //                $response[$downloadType][] = array(
 //                    'base' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
 //                    'file' => $object->getFile()
