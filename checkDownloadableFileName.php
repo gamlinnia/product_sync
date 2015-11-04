@@ -41,12 +41,10 @@ foreach($productCollection as $eachProduct) {
                     } else {
                         $newFilePath = preg_replace(
                             array(
-                                '/[ ().,]/',
-                                '/[_]([^_]+)$/'
+                                '/[ (),+]/'
                             ),
                             array(
-                                '_',
-                                '.$1'
+                                '_'
                             ),
                             $filePath
                         );
