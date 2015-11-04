@@ -55,13 +55,14 @@ foreach($productCollection as $eachProduct) {
                         echo $newFilePath . PHP_EOL;
                         if (file_exists($newFilePath)) {
                             echo 'new path works' . PHP_EOL;
+                            $object->setFile($filePath);
+                            $object->save();
                         } else {
                             echo 'oh shit!' . PHP_EOL;
                         }
                     }
                 }
-//                $object->setFile($filePath);
-//                $object->save();
+//
                 //var_dump($object);
             }
         }
