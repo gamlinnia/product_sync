@@ -38,25 +38,20 @@ foreach($productCollection as $eachProduct) {
                     $result[] = $baseUrl.$filePath;
                     $filePath = Mage::getBaseDir('media') . DS . $filePath;
                     if (file_exists($filePath)) {
-                        echo 'oh ya!!! has file, don\'t worry.' . $filePath;
+                        echo 'oh ya!!! has file, don\'t worry.' . $filePath . PHP_EOL;
                     } else {
                         $newFilePath = preg_replace(
-                            array(
-                                '/[ (),]/'
-                            ),
-                            array(
-                                '_'
-                            ),
+                            array('/[ (),]/'),
+                            array('_'),
                             $filePath
                         );
                         echo $newFilePath;
                         if (file_exists($newFilePath)) {
-                            echo 'new path works';
+                            echo 'new path works' . PHP_EOL;
                         } else {
-                            echo 'oh shit!';
+                            echo 'oh shit!' . PHP_EOL;
                         }
                     }
-                    die($filePath);
                 }
 //                $object->setFile($filePath);
 //                $object->save();
