@@ -9,7 +9,7 @@ require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
 Mage::app();
 
-$productArray=Mage::getModel('catalog/product')->getCollection();
+$productCollection=Mage::getModel('catalog/product')->getCollection();
 
 $response = array(
     'user_manual' => null,
@@ -22,7 +22,7 @@ $downloadables = array(
     'driver' => 'drivers/drivers',
     'firmware' => 'firmware/firmware'
 );
-foreach($productArray as $eachProduct) {
+foreach($productCollection as $eachProduct) {
     foreach ($downloadables as $downloadType => $relativeModel) {
         $objectArray = Mage::getModel($relativeModel)->getCollection()->addFieldToFilter('product_id', $eachProduct->getId());
         if (count($objectArray) > 0) {
