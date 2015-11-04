@@ -30,11 +30,16 @@ foreach($productCollection as $eachProduct) {
         if (count($objectArray) > 0) {
             $response[$downloadType] = array();
             foreach ($objectArray as $object) {
+                $baseUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
                 $filePath = $object->getFile();
                 if (strpos($filePath, ',') || strpos($filePath, '(') || strpos($filePath, ')'))
                 {
-                    $result[] = $filePath;
+                    $result[] = $baseUrl.$filePath;
                 }
+//                $response[$downloadType][] = array(
+//                    'base' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
+//                    'file' => $object->getFile()
+//                );
             }
         }
     }
