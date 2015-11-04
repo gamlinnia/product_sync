@@ -22,19 +22,23 @@ $downloadables = array(
     'driver' => 'drivers/drivers',
     'firmware' => 'firmware/firmware'
 );
+$result = array();
+
 foreach($productCollection as $eachProduct) {
     foreach ($downloadables as $downloadType => $relativeModel) {
         $objectArray = Mage::getModel($relativeModel)->getCollection()->addFieldToFilter('product_id', $eachProduct->getId());
         if (count($objectArray) > 0) {
             $response[$downloadType] = array();
             foreach ($objectArray as $object) {
-                $response[$downloadType][] = array(
-                    'base' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
-                    'file' => $object->getFile()
-                );
+                $filePath = $object->getFile();
+                if (strpos($filePath, ',') || strpos($filePath, '(') || strpos($filePath, ')'))
+                {
+                    $result[] = $filePath;
+                }
             }
         }
     }
 }
 
-var_dump($response);
+//var_dump($response);
+var_dump($result);
