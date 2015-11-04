@@ -33,7 +33,7 @@ foreach($productCollection as $eachProduct) {
                 preg_match('/(\/var\/www\/rosewill\/public_html\/media\/)+/', $originFile, $match);
                 if ($match) {
                     var_dump($match);
-                    $correctedFile = preg_replace('/(\/var\/www\/rosewill\/public_html\/media\/)+/', '', $originFile);
+                    $correctedFile = preg_replace('/(\/var\/www\/rosewill\/public_html\/media\/)+(.+)/', '$2', $originFile);
                     echo $correctedFile . PHP_EOL;
                 }
             }
