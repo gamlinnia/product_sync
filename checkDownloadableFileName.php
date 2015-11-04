@@ -41,13 +41,16 @@ foreach($productCollection as $eachProduct) {
                     } else {
                         $newFilePath = preg_replace(
                             array(
+                                '/__/',
                                 '/[ (),+]/'
                             ),
                             array(
+                                '_',
                                 '_'
                             ),
                             $filePath
                         );
+                        echo "org path" . $filePath . PHP_EOL;
                         echo $newFilePath . PHP_EOL;
                         if (file_exists($newFilePath)) {
                             echo 'new path works' . PHP_EOL;
