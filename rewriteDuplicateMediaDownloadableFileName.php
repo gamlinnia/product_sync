@@ -30,11 +30,11 @@ foreach($productCollection as $eachProduct) {
         if (count($objectArray) > 0) {
             foreach ($objectArray as $object) {
                 $originFile = $object->getFile();
+                echo 'origin file: ' . $originFile . PHP_EOL;
                 preg_match('/(\/var\/www\/rosewill\/public_html\/media\/)+/', $originFile, $match);
                 if ($match) {
-                    var_dump($match);
-                    $correctedFile = preg_replace('/(\/var\/www\/rosewill\/public_html\/media\/)+(.+)/', '$2', $originFile);
-                    echo $correctedFile . PHP_EOL;
+                    $correctedFile = preg_replace('/(\/var\/www\/rosewill\/public_html\/media\/)+/', '', $originFile);
+                    echo 'correct to: ' . $correctedFile . PHP_EOL;
                 }
             }
         }
