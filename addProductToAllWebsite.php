@@ -15,6 +15,9 @@ $productList = Mage::getModel('catalog/product')
                ->addAttributeToSelect('name')
                ->addAttributeToSelect('url_key');
 
+echo $productList->getCount();
+die();
+
 foreach ($productList as $product){
     //var_dump($product->getData());
     //die();
