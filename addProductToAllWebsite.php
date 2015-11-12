@@ -10,7 +10,7 @@ $websiteIds = getAllWebisteIds();
 //echo 'Website IDs: ';
 //var_dump($websiteIds);
 
-$productList = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('name');
+$productList = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('name')->addAttributeToSelect('url_key');
 foreach ($productList as $product){
     var_dump($product->getData());
     die();
