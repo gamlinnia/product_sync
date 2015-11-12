@@ -45,4 +45,6 @@ while($currentPage <= ($totalProductNum/$currentPage+1) ) {
         //die();
         usleep(500000);
     }
+
+    $productList = null;
 }
