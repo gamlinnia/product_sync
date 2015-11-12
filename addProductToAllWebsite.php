@@ -33,4 +33,5 @@ foreach ($productList as $product){
     $product->setWebsiteIds($websiteIds);
     $product->save();
     //die();
+    sleep(1);
 }
