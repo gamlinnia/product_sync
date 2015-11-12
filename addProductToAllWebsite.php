@@ -41,9 +41,9 @@ while($currentPage <= ($totalProductNum/$currentPage+1) ) {
             echo 'New URL Key: ' . $url . PHP_EOL;
         }
         $product->setWebsiteIds($websiteIds);
+        usleep(500000);
         $product->save();
         //die();
-        usleep(500000);
     }
 
     $productList = null;
