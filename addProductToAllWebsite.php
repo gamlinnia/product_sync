@@ -10,15 +10,15 @@ $websiteIds = getAllWebisteIds();
 //echo 'Website IDs: ';
 //var_dump($websiteIds);
 
-//$productList = Mage::getModel('catalog/product')
-//               ->getCollection()
+$productList = Mage::getModel('catalog/product')
+               ->getCollection();
 //               ->addAttributeToSelect('name')
 //               ->addAttributeToSelect('url_key');
-//$totalProductNum = count($productList);
+$totalProductNum = count($productList);
 
 $pageSize = 100;
 $currentPage=1;
-while($currentPage < 20) {
+while($currentPage <= ($totalProductNum/$currentPage+1) ) {
     $productList = Mage::getModel('catalog/product')
         ->getCollection()
         ->addAttributeToSelect('name')
