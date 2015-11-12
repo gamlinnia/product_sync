@@ -45,6 +45,6 @@ while($currentPage <= ($totalProductNum/$currentPage+1) ) {
         $product->save();
         //die();
     }
-
+    $currentPage++;
     $productList = null;
 }
