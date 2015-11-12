@@ -13,6 +13,8 @@ var_dump($websiteIds);
 
 $productList = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('name');
 foreach ($productList as $product){
+    var_dump($product->getData());
+    die();
     echo 'SKU: ' . $product->getSku() . PHP_EOL;
     echo 'URL Key: ' . $product->getUrlKey() . PHP_EOL;
     $url_key = $product->getUrlKey();
