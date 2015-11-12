@@ -11,7 +11,7 @@ echo 'Website IDs: ';
 var_dump($websiteIds);
 //die();
 
-$productList = Mage::getModel('catalog/product')->getCollection();
+$productList = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('Name');
 $i=0;
 foreach ($productList as $product){
     echo 'SKU: ' . $product->getSku() . PHP_EOL;
