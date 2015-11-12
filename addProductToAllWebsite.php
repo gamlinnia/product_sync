@@ -7,9 +7,8 @@ require_once 'functions.php';
 Mage::app('admin');
 
 $websiteIds = getAllWebisteIds();
-echo 'Website IDs: ';
-var_dump($websiteIds);
-//die();
+//echo 'Website IDs: ';
+//var_dump($websiteIds);
 
 $productList = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('name');
 foreach ($productList as $product){
