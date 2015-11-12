@@ -12,8 +12,8 @@ $websiteIds = getAllWebisteIds();
 
 $productList = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('name')->addAttributeToSelect('url_key');
 foreach ($productList as $product){
-    var_dump($product->getData());
-    die();
+    //var_dump($product->getData());
+    //die();
     echo 'SKU: ' . $product->getSku() . PHP_EOL;
     echo 'URL Key: ' . $product->getUrlKey() . PHP_EOL;
     $url_key = $product->getUrlKey();
