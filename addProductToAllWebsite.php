@@ -16,7 +16,8 @@ $i=0;
 foreach ($productList as $product){
     echo 'SKU: ' . $product->getSku() . PHP_EOL;
     echo 'URL Key: ' . $product->getUrlKey() . PHP_EOL;
-    if($product->getUrlKey()){
+    $url_key = $product->getUrlKey();
+    if(!empty($url_key)){
         $product->setUrlKey(false);
     }
     else{
@@ -24,7 +25,7 @@ foreach ($productList as $product){
         $url = strtolower($url);
         $product->setUrlKey($url);
     }
-    echo 'New URL Key: ' . $product->getUrlKey() . PHP_EOL;
+    echo 'New URL Key: ' . $url . PHP_EOL;
     $product->setWebsiteIds($websiteIds);
     $product->save();
     $i++;
