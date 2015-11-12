@@ -18,6 +18,7 @@ foreach ($productList as $product){
     echo 'URL Key: ' . $product->getUrlKey() . PHP_EOL;
     $url_key = $product->getUrlKey();
     if(!empty($url_key)){
+        echo 'No Url Key~~';
         $product->setUrlKey(false);
     }
     else{
