@@ -17,7 +17,7 @@ foreach ($productList as $product){
     echo 'SKU: ' . $product->getSku() . PHP_EOL;
     echo 'URL Key: ' . $product->getUrlKey() . PHP_EOL;
     $url_key = $product->getUrlKey();
-    if(!$url_key){
+    if(!empty($url_key)){
         $product->setUrlKey(false);
     }
     else{
