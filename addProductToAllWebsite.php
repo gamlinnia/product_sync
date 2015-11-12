@@ -9,7 +9,7 @@ Mage::app('admin');
 $websiteIds = getAllWebisteIds();
 echo 'Website IDs: ';
 var_dump($websiteIds);
-die();
+//die();
 
 $productList = Mage::getModel('catalog/product')->getCollection();
 foreach ($productList as $product){
