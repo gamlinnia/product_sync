@@ -22,7 +22,7 @@ foreach ($productList as $product){
         $product->setUrlKey(false);
     }
     else{
-        $url = preg_replace('/[^0-9a-z]+/ig', '-', $product->getName());
+        $url = preg_replace('/[^0-9a-z]+/i', '-', $product->getName());
         $url = strtolower($url);
         $product->setUrlKey($url);
     }
