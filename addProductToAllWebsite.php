@@ -31,6 +31,6 @@ foreach ($productList as $each) {
         } catch (Exception $e) {
             var_dump($e->getMessage());
         }
-        sleep(rand(1, 3));
+        sleep(1);
     }
 }
