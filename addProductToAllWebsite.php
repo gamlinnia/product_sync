@@ -28,6 +28,7 @@ for($currentPage=1 ; $currentPage <= ($totalProductNum/$currentPage+1) ; $curren
     foreach ($productList as $product) {
         //var_dump($product->getData());
         //die();
+        echo 'Current Page: ' . $currentPage . PHP_EOL;
         echo 'SKU: ' . $product->getSku() . PHP_EOL;
         echo 'URL Key: ' . $product->getUrlKey() . PHP_EOL;
         $url_key = $product->getUrlKey();
