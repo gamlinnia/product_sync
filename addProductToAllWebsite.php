@@ -26,11 +26,7 @@ foreach ($productList as $each) {
     if ( $oldWebsiteIds !== $websiteIds || empty($url_key))
     {
         $product->setWebsiteIds($websiteIds);
-        try {
-            $product->save();
-        } catch (Exception $e) {
-            var_dump($e->getMessage());
-        }
+        $product->save();
         sleep(1);
     }
 }
