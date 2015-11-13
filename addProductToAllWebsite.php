@@ -22,6 +22,7 @@ for($currentPage=1 ; $currentPage <= ($totalProductNum/$currentPage+1) ; $curren
         ->getCollection()
         ->addAttributeToSelect('name')
         ->addAttributeToSelect('url_key')
+        ->addAttributeToSelect('website_ids')
         ->setPageSize($pageSize)
         ->setCurPage($currentPage);
 
@@ -41,9 +42,13 @@ for($currentPage=1 ; $currentPage <= ($totalProductNum/$currentPage+1) ; $curren
                 $product->setUrlKey($url);
                 echo 'New URL Key: ' . $url . PHP_EOL;
             }
-            $product->setWebsiteIds($websiteIds);
-            $product->save();
-            sleep(rand(1, 3));
+            $oldWebsiteIds = $product->getWebsiteIds();
+            if ( $oldWebsiteIds !== $websiteIds)
+            {
+                $product->setWebsiteIds($websiteIds);
+                $product->save();
+                sleep(rand(1, 3));
+            }
             $productList = null;
             //die();
         } catch (Exception $e) {
