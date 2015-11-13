@@ -23,7 +23,7 @@ foreach ($productList as $each) {
         echo 'New URL Key: ' . $url . PHP_EOL;
     }
     $oldWebsiteIds = $product->getWebsiteIds();
-    if ( $oldWebsiteIds !== $websiteIds)
+    if ( $oldWebsiteIds !== $websiteIds || empty($url_key))
     {
         $product->setWebsiteIds($websiteIds);
         try {
