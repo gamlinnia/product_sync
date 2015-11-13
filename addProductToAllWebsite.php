@@ -29,8 +29,7 @@ foreach ($productList as $each) {
         try {
             $product->save();
         } catch (Exception $e) {
-            Mage::log($product->getSku(), null, 'jobs.log');
-            Mage::log($e->getMessage(), null, 'jobs.log');
+            file_put_contents('UrlKey.log', $e->getMessage());
         }
         sleep(rand(1, 3));
     }
