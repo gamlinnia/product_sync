@@ -10,7 +10,7 @@ $websiteIds = getAllWebisteIds();
 $productList = Mage::getModel('catalog/product')->getCollection();
 $count = 1;
 foreach ($productList as $each) {
-    echo $count;
+    echo $count . PHP_EOL;
     $product = Mage::getModel('catalog/product')->load($each->getId());
     $url_key = $product->getUrlKey();
     if (!empty($url_key)) {
