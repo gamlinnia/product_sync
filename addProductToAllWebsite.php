@@ -17,7 +17,7 @@ $productList = Mage::getModel('catalog/product')
 $totalProductNum = count($productList);
 
 $pageSize = 100;
-for($currentPage=1;$currentPage <= ($totalProductNum/$currentPage+1);$currentPage++){
+for($currentPage=1 ; $currentPage <= ($totalProductNum/$currentPage+1) ; $currentPage++){
     $productList = Mage::getModel('catalog/product')
         ->getCollection()
         ->addAttributeToSelect('name')
