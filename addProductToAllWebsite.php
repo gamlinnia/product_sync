@@ -28,22 +28,26 @@ for($currentPage=1 ; $currentPage <= ($totalProductNum/$currentPage+1) ; $curren
     foreach ($productList as $product) {
         //var_dump($product->getData());
         //die();
-        echo 'Current Page: ' . $currentPage . PHP_EOL;
-        echo 'SKU: ' . $product->getSku() . PHP_EOL;
-        echo 'URL Key: ' . $product->getUrlKey() . PHP_EOL;
-        $url_key = $product->getUrlKey();
-        if (!empty($url_key)) {
-            $product->setUrlKey(false);
-        } else {
-            $url = preg_replace('/[^0-9a-z]+/i', '-', $product->getName());
-            $url = strtolower($url);
-            $product->setUrlKey($url);
-            echo 'New URL Key: ' . $url . PHP_EOL;
+        try {
+            echo 'Current Page: ' . $currentPage . PHP_EOL;
+            echo 'SKU: ' . $product->getSku() . PHP_EOL;
+            echo 'URL Key: ' . $product->getUrlKey() . PHP_EOL;
+            $url_key = $product->getUrlKey();
+            if (!empty($url_key)) {
+                $product->setUrlKey(false);
+            } else {
+                $url = preg_replace('/[^0-9a-z]+/i', '-', $product->getName());
+                $url = strtolower($url);
+                $product->setUrlKey($url);
+                echo 'New URL Key: ' . $url . PHP_EOL;
+            }
+            $product->setWebsiteIds($websiteIds);
+            $product->save();
+            sleep(rand(1, 3));
+            $productList = null;
+            //die();
+        } catch (Exception $e) {
+            Mage::log($e->getMessage(), null, 'jobs.log');
         }
-        $product->setWebsiteIds($websiteIds);
-        $product->save();
-        sleep(rand(1,3));
-        //die();
     }
-    $productList = null;
 }
