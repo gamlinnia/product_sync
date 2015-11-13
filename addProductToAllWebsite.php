@@ -40,8 +40,8 @@ for($currentPage=1;$currentPage <= ($totalProductNum/$currentPage+1);$currentPag
             echo 'New URL Key: ' . $url . PHP_EOL;
         }
         $product->setWebsiteIds($websiteIds);
-        usleep(500000);
         $product->save();
+        sleep(rand(1,3));
         //die();
     }
     $productList = null;
