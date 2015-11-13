@@ -29,7 +29,7 @@ foreach ($productList as $each) {
         try {
             $product->save();
         } catch (Exception $e) {
-            var_dump($e->getMessage());
+            var_dump($e);
         }
         sleep(1);
     }
