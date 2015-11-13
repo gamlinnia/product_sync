@@ -11,7 +11,6 @@ $productList = Mage::getModel('catalog/product')->getCollection();
 
 foreach ($productList as $each) {
     $product = Mage::getModel('catalog/product')->load($each->getId());
-    echo 'Current Page: ' . $currentPage . PHP_EOL;
     echo 'SKU: ' . $product->getSku() . PHP_EOL;
     echo 'URL Key: ' . $product->getUrlKey() . PHP_EOL;
     $url_key = $product->getUrlKey();
@@ -30,6 +29,7 @@ foreach ($productList as $each) {
         try {
             $product->save();
         } catch (Exception $e) {
+            Mage::log($product->getSku(), null, 'jobs.log');
             Mage::log($e->getMessage(), null, 'jobs.log');
         }
         sleep(rand(1, 3));
