@@ -11,12 +11,12 @@ $productList = Mage::getModel('catalog/product')->getCollection();
 
 foreach ($productList as $each) {
     $product = Mage::getModel('catalog/product')->load($each->getId());
-    echo 'SKU: ' . $product->getSku() . PHP_EOL;
-    echo 'URL Key: ' . $product->getUrlKey() . PHP_EOL;
     $url_key = $product->getUrlKey();
     if (!empty($url_key)) {
         $product->setUrlKey(false);
     } else {
+        echo 'SKU: ' . $product->getSku() . PHP_EOL;
+        echo 'URL Key: ' . $product->getUrlKey() . PHP_EOL;
         $url = preg_replace('/[^0-9a-z]+/i', '-', $product->getName());
         $url = strtolower($url);
         $product->setUrlKey($url);
