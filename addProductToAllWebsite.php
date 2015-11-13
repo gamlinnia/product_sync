@@ -29,7 +29,7 @@ foreach ($productList as $each) {
         try {
             $product->save();
         } catch (Exception $e) {
-            file_put_contents('UrlKey.log', $e->getMessage());
+            var_dump($e->getMessage());
         }
         sleep(rand(1, 3));
     }
