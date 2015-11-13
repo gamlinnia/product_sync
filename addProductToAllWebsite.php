@@ -17,8 +17,7 @@ $productList = Mage::getModel('catalog/product')
 $totalProductNum = count($productList);
 
 $pageSize = 100;
-$currentPage=1;
-while($currentPage <= ($totalProductNum/$currentPage+1) ) {
+for($currentPage=1;$currentPage <= ($totalProductNum/$currentPage+1);$currentPage++){
     $productList = Mage::getModel('catalog/product')
         ->getCollection()
         ->addAttributeToSelect('name')
@@ -45,6 +44,5 @@ while($currentPage <= ($totalProductNum/$currentPage+1) ) {
         $product->save();
         //die();
     }
-    $currentPage++;
     $productList = null;
 }
