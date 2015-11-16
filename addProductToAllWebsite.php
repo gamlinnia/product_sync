@@ -16,7 +16,7 @@ foreach ($productList as $each) {
     $url_key = $product->getUrlKey();
     echo $count . PHP_EOL;
     if (!empty($url_key)) {
-        echo 'Url Key Exist!' . PHP_EOL;
+        //echo 'Url Key Exist!' . PHP_EOL;
         $product->setUrlKey(false);
     } else {
         echo 'SKU: ' . $sku . PHP_EOL;
