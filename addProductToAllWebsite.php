@@ -15,13 +15,13 @@ foreach ($productList as $each) {
     $name = $product->getName();
     $url_key = $product->getUrlKey();
     echo $count . PHP_EOL;
-    echo 'SKU: ' . $sku . PHP_EOL;
-    echo 'URL Key: ' . $url_key . PHP_EOL;
     if (!empty($url_key)) {
         echo 'Url Key Exist!' . PHP_EOL;
         $product->setUrlKey(false);
     } else {
-        echo 'Url Key Not Exist!' . PHP_EOL;
+        echo 'SKU: ' . $sku . PHP_EOL;
+        echo 'URL Key: ' . $url_key . PHP_EOL;
+        //echo 'Url Key Not Exist!' . PHP_EOL;
         $url = preg_replace('/[^0-9a-z]+/i', '-', $name);
         $url = strtolower($url);
         $product->setUrlKey($url);
