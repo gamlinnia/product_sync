@@ -10,17 +10,19 @@ $websiteIds = getAllWebisteIds();
 $productList = Mage::getModel('catalog/product')->getCollection();
 $count = 1;
 foreach ($productList as $each) {
-    echo $count . PHP_EOL;
-    echo 'SKU: ' . $product->getSku() . PHP_EOL;
-    echo 'URL Key: ' . $product->getUrlKey() . PHP_EOL;
     $product = Mage::getModel('catalog/product')->load($each->getId());
+    $sku = $product->getSKU();
+    $name = $product->getName();
     $url_key = $product->getUrlKey();
+    echo $count . PHP_EOL;
+    echo 'SKU: ' . $sku . PHP_EOL;
+    echo 'URL Key: ' . $url_key . PHP_EOL;
     if (!empty($url_key)) {
         echo 'Url Key Exist!' . PHP_EOL;
         $product->setUrlKey(false);
     } else {
         echo 'Url Key Not Exist!' . PHP_EOL;
-        $url = preg_replace('/[^0-9a-z]+/i', '-', $product->getName());
+        $url = preg_replace('/[^0-9a-z]+/i', '-', $name);
         $url = strtolower($url);
         $product->setUrlKey($url);
         echo 'New URL Key: ' . $url . PHP_EOL;
