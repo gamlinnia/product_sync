@@ -11,13 +11,15 @@ $productList = Mage::getModel('catalog/product')->getCollection();
 $count = 1;
 foreach ($productList as $each) {
     echo $count . PHP_EOL;
+    echo 'SKU: ' . $product->getSku() . PHP_EOL;
+    echo 'URL Key: ' . $product->getUrlKey() . PHP_EOL;
     $product = Mage::getModel('catalog/product')->load($each->getId());
     $url_key = $product->getUrlKey();
     if (!empty($url_key)) {
+        echo 'Url Key Exist!' . PHP_EOL;
         $product->setUrlKey(false);
     } else {
-        echo 'SKU: ' . $product->getSku() . PHP_EOL;
-        echo 'URL Key: ' . $product->getUrlKey() . PHP_EOL;
+        echo 'Url Key Not Exist!' . PHP_EOL;
         $url = preg_replace('/[^0-9a-z]+/i', '-', $product->getName());
         $url = strtolower($url);
         $product->setUrlKey($url);
