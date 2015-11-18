@@ -139,12 +139,12 @@ function classifyProductAttributes ($productInfo) {
             "upc_number",
             "required_options",
             "width",
-            "height"
+            "height",
+            "url_key"
         ),
         'dontCare' => array(
             "created_at",
             "updated_at",
-            "url_key",
             "image",
             "small_image",
             "thumbnail",
