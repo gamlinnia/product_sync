@@ -41,10 +41,16 @@ try{
         $readyToImportProductInfo = parseBackClassifiedProductAttributes($productInfo);
 
         foreach ($readyToImportProductInfo as $attrKey => $attrValue) {
+            if ($attrKey == 'url_key') {
+                $urlKey = $productObject->getUrlKey();
+                if ($productExists && !empty($urlKey)) {
+                    $productObject->setUrlKey(false);
+                } else {
+                    $productObject->setData($attrKey, $attrValue);
+                }
+            } else {
                 $productObject->setData($attrKey, $attrValue);
-        }
-        if ($productExists && $productObject->getUrlKey()) {
-            $productObject->setUrlKey(false);
+            }
         }
 
         $productObject->setWebsiteIds(getAllWebisteIds())
