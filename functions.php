@@ -603,8 +603,6 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
             if ($each->getId() == $imageObject['id']) {
                 unlink( $each->getPath() );
                 $mediaGalleryAttribute->getBackend()->removeImage($product, $each->getFile());
-                echo $each->getFile();
-                echo $each->getPath();
                 $product->save();
             }
         }
@@ -779,6 +777,43 @@ function getDownloadableUrls ($valueToFilter, $filterType='entity_id') {
     return $response;
 }
 
+function uploadAndDeleteDownloadFiles ($downloadableObjectList, $valueToFilter, $filterType='entity_id', $config) {
+    $product = getProductObject($valueToFilter, $filterType);
+    $productId = $product->getId();
+
+    $username = 'rosewill';
+    $password = 'rosewillPIM';
+    $context = stream_context_create(array(
+        'http' => array(
+            'header'  => "Authorization: Basic " . base64_encode("$username:$password")
+        )
+    ));
+    foreach ($downloadableObjectList['delete'] as $downloadableObject) {
+        var_dump($downloadableObject);
+        die();
+//        Mage::getModel($downloadableObject['model'])
+//            ->load()
+//            ->save();
+//        echo "$filterType: $valueToFilter deleted $filePath" . PHP_EOL;
+    }
+    foreach ($downloadableObjectList['add'] as $downloadableObject) {
+        $url = $downloadableObject['baseUrl'] . $downloadableObject['dir'] . $downloadableObject['basename'];
+        if (isset($config['internalHost'])) {
+            $url = str_replace($downloadableObject['host'], $config['internalHost'], $url);
+        }
+        $tmpFile = file_get_contents($url, false, $context);    // get file with base auth
+        $filePath = $downloadableObject['dir'] . $downloadableObject['basename'];
+        file_put_contents(Mage::getBaseDir('media') . DS . $filePath, $tmpFile);
+        Mage::getModel($downloadableObject['model'])
+            ->setFile($filePath)
+            ->setProductId($productId)
+            ->setId(null)
+            ->save();
+        echo "$filterType: $valueToFilter uploaded $filePath" . PHP_EOL;
+    }
+    return true;
+}
+
 function uploadDownloadFiles ($downloadableObjectList, $valueToFilter, $filterType='entity_id', $config) {
     $product = getProductObject($valueToFilter, $filterType);
     $productId = $product->getId();
@@ -806,6 +841,39 @@ function uploadDownloadFiles ($downloadableObjectList, $valueToFilter, $filterTy
         echo "$filterType: $valueToFilter uploaded $filePath" . PHP_EOL;
     }
     return true;
+}
+
+function compareDownloadableWithRemoteIncludeDelete ($localDownloadable, $remoteDownloadable) {
+    $response = array(
+        'add' => array(),
+        'delete' => array()
+    );
+
+    foreach ($remoteDownloadable as $remote) {
+        $match = false;
+        foreach ($localDownloadable as $local) {
+            if ($remote['basename'] == $local['basename']) {
+                $match = true;
+                break;
+            }
+        }
+        if (!$match) {
+            $response['add'][] = $remote;
+        }
+    }
+    foreach ($localDownloadable as $local) {
+        $match = false;
+        foreach ($remoteDownloadable as $remote) {
+            if ($remote['basename'] == $local['basename']) {
+                $match = true;
+                break;
+            }
+        }
+        if (!$match) {
+            $response['delete'][] = $local;
+        }
+    }
+    return $response;
 }
 
 function compareDownloadableWithRemote ($localDownloadable, $remoteDownloadable) {
