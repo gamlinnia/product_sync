@@ -52,7 +52,7 @@ try{
                 $productObject->setData($attrKey, $attrValue);
             }
         }
-
+/*
         $productObject->setWebsiteIds(getAllWebisteIds())
             ->setCreatedAt(strtotime('now')) //product creation time
             ->setUpdatedAt(strtotime('now')); //product update time
@@ -60,10 +60,10 @@ try{
 
         changeToInStockAndSetQty($productInfo['direct']['sku'], 'sku');
         setProductCategoryIds($productInfo['direct']['sku'], 'sku', $productInfo['dontCare']['category']);
-
+*/
         $setting['clonedParam']['updated_at'] = $productInfo['dontCare']['updated_at'];
         $count++;
-        sleep(rand(2, 4));
+//        sleep(rand(2, 4));
     }
     if (isset($config['debug']) && $config['debug']) {
         var_dump($productInfoArray);
