@@ -763,6 +763,7 @@ function getDownloadableUrls ($valueToFilter, $filterType='entity_id') {
                 preg_match('/(.+[\/]{1})([^\/]+)/', $object->getFile(), $match);
 
                 $response[] = array(
+                    'id' => $object->getId(),
                     'type' => $downloadType,
                     'baseUrl' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
                     'dir' => $match[1],
@@ -790,6 +791,7 @@ function uploadAndDeleteDownloadFiles ($downloadableObjectList, $valueToFilter, 
     ));
     foreach ($downloadableObjectList['delete'] as $downloadableObject) {
         var_dump($downloadableObject);
+        echo Mage::getBaseDir('media') . $downloadableObject['dir'] . $downloadableObject['basename'];
         die();
 //        Mage::getModel($downloadableObject['model'])
 //            ->load()
