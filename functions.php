@@ -595,20 +595,21 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
         )
     ));
 
+    /* delete images */
+    $mediaGalleryAttribute = Mage::getModel('catalog/resource_eav_attribute')->loadByCode($product->getEntityTypeId(), 'media_gallery');
     foreach ($imageObjectList['delete'] as $key => $imageObject) {
         $gallery = $product->getMediaGalleryImages();
         foreach ($gallery as $each) {
             if ($each->getId() == $imageObject['id']) {
+                unlink( $each->getPath() );
+                $mediaGalleryAttribute->getBackend()->removeImage($product, $each->getFile());
                 echo $each->getFile();
                 echo $each->getPath();
+                $product->save();
             }
         }
-//        var_dump($imageObject);
-        die();
-        foreach ($gallery as $image)
-            $mediaGalleryAttribute->getBackend()->removeImage($product, $image->getFile());
-        $product->save();
     }
+    /* upload images */
     foreach ($imageObjectList['add'] as $key => $imageObject) {
         if (isset($config['internalHost'])) {
             $imageObject['url'] = str_replace($imageObject['host'], $config['internalHost'], $imageObject['url']);
