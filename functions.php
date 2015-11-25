@@ -791,11 +791,11 @@ function uploadAndDeleteDownloadFiles ($downloadableObjectList, $valueToFilter, 
     ));
     foreach ($downloadableObjectList['delete'] as $downloadableObject) {
         var_dump($downloadableObject);
+        unlink(Mage::getBaseDir('media') . $downloadableObject['dir'] . $downloadableObject['basename']);
         echo Mage::getBaseDir('media') . $downloadableObject['dir'] . $downloadableObject['basename'];
-        die();
-//        Mage::getModel($downloadableObject['model'])
-//            ->load()
-//            ->save();
+        Mage::getModel($downloadableObject['model'])
+            ->load($downloadableObject['id'])
+            ->delete();
 //        echo "$filterType: $valueToFilter deleted $filePath" . PHP_EOL;
     }
     foreach ($downloadableObjectList['add'] as $downloadableObject) {
