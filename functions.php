@@ -791,8 +791,8 @@ function uploadAndDeleteDownloadFiles ($downloadableObjectList, $valueToFilter, 
     ));
     foreach ($downloadableObjectList['delete'] as $downloadableObject) {
         var_dump($downloadableObject);
-        unlink(Mage::getBaseDir('media') . $downloadableObject['dir'] . $downloadableObject['basename']);
-        echo Mage::getBaseDir('media') . $downloadableObject['dir'] . $downloadableObject['basename'];
+        unlink(Mage::getBaseDir('media') . DS . $downloadableObject['dir'] . $downloadableObject['basename']);
+        echo Mage::getBaseDir('media') . DS . $downloadableObject['dir'] . $downloadableObject['basename'];
         Mage::getModel($downloadableObject['model'])
             ->load($downloadableObject['id'])
             ->delete();
