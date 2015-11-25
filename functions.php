@@ -463,6 +463,54 @@ function getProductObject ($valueToFilter, $filterType='entity_id') {
     return $productObject;
 }
 
+function compareImageWithRemoteIncludeDelete ($localImages, $remoteImages) {
+    $response = array(
+        'add' => array(),
+        'delete' => array()
+    );
+    foreach ($remoteImages as $remote) {
+        $match = false;
+        foreach ($localImages as $local) {
+            if (strtolower(substr($local['basename'], 0, 2)) == 'cs' && strtolower(substr($local['basename'], 0, 2)) == strtolower(substr($remote['basename'], 0, 2))) {
+                $match = true;
+                break;
+            } else {
+                preg_match('/[0-9\-]{13}/', $remote['basename'], $remoteMatch);
+                preg_match('/[0-9\-]{13}/', $local['basename'], $localMatch);
+                if ($remoteMatch[0] == $localMatch[0]) {
+                    $match = true;
+                    break;
+                }
+            }
+        }
+        if (!$match) {
+            $response['add'][] = $remote;
+        }
+    }
+
+    foreach ($localImages as $local) {
+        $match = false;
+        foreach ($remoteImages as $remote) {
+            if (strtolower(substr($remote['basename'], 0, 2)) == 'cs' && strtolower(substr($local['basename'], 0, 2)) == strtolower(substr($remote['basename'], 0, 2))) {
+                $match = true;
+                break;
+            } else {
+                preg_match('/[0-9\-]{13}/', $remote['basename'], $remoteMatch);
+                preg_match('/[0-9\-]{13}/', $local['basename'], $localMatch);
+                if ( $remoteMatch[0] == $localMatch[0] ) {
+                    $match = true;
+                    break;
+                }
+            }
+        }
+        if (!$match) {
+            $response['delete'][] = $local;
+        }
+    }
+
+    return $response;
+}
+
 function compareImageWithRemote ($localImages, $remoteImages) {
     $response = array();
     foreach ($remoteImages as $remote) {
@@ -526,6 +574,74 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
 //        ));
     }
     $product->save();
+    return true;
+}
+
+function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFilter, $filterType='entity_id', $config) {
+    $product = getProductObject($valueToFilter, $filterType);
+    $sku = $product->getSku();
+    $media = Mage::getModel('catalog/product_attribute_media_api');
+
+    $importDir = Mage::getBaseDir('media') . DS . 'import/';
+    if (!file_exists($importDir)) {
+        mkdir($importDir);
+    }
+
+    $username = 'rosewill';
+    $password = 'rosewillPIM';
+    $context = stream_context_create(array(
+        'http' => array(
+            'header'  => "Authorization: Basic " . base64_encode("$username:$password")
+        )
+    ));
+
+    foreach ($imageObjectList['delete'] as $key => $imageObject) {
+        var_dump($imageObject);
+        die();
+    }
+    foreach ($imageObjectList['add'] as $key => $imageObject) {
+        if (isset($config['internalHost'])) {
+            $imageObject['url'] = str_replace($imageObject['host'], $config['internalHost'], $imageObject['url']);
+        }
+        $url = $imageObject['url'];
+
+        // get array of dirname, basename, extension, filename
+        $pathInfo = pathinfo($url);
+        switch($pathInfo['extension']){
+            case 'png':
+                $mimeType = 'image/png';
+                break;
+            case 'jpg':
+                $mimeType = 'image/jpeg';
+                break;
+            case 'gif':
+                $mimeType = 'image/gif';
+                break;
+            default :
+                return false;
+        }
+        $fileName = $imageObject['basename'];
+        $tmpFile = file_get_contents($url, false, $context);    // get file with base auth
+        file_put_contents($importDir . $fileName, $tmpFile);
+        $filePath = $importDir . $fileName;
+
+        $newImage = array(
+            'file' => array(
+                'content' => base64_encode($filePath),
+                'mime' => $mimeType,
+                'name' => getFileNameWithoutExtension($imageObject['basename'])         // 不要給extension
+            ),
+            'label' => getFileNameWithoutExtension($imageObject['basename']),
+            'position' => $imageObject['position'],
+            'types' => $imageObject['mediaType'],
+            'exclude' => 0,
+        );
+
+        unlink(Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product' . DS . substr($imageObject['basename'], 0, 1) . DS . substr($imageObject['basename'], 1, 1) . DS . getFileNameWithoutExtension($imageObject['basename']) . '.' . $pathInfo['extension']);
+        echo 'delete file in ' . Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product' . DS . substr($imageObject['basename'], 0, 1) . DS . substr($imageObject['basename'], 1, 1) . DS . $imageObject['basename'] . PHP_EOL;
+
+        $media->create($sku, $newImage);
+    }
     return true;
 }
 

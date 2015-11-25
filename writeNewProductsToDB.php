@@ -85,12 +85,13 @@ try{
         $sku = $imageObject['sku'];
         $imagesInfoArray = $imageObject['images'];
         $localImages = getImagesUrlOfProduct($sku, 'sku');
-        $imagesToBeUpload = compareImageWithRemote($localImages, $imagesInfoArray);
-//        if (isset($config['debug']) && $config['debug']) {
+
+        $imagesToBeUploadOrDelete = compareImageWithRemoteIncludeDelete($localImages, $imagesInfoArray);
+//        $imagesToBeUpload = compareImageWithRemote($localImages, $imagesInfoArray);
         echo 'sku: ' . $sku . PHP_EOL;
-        var_dump($imagesToBeUpload);
-//        }
-        $uploadStatus = uploadImagesWithPositionAndLabel($imagesToBeUpload, $sku, 'sku', $config);
+        var_dump($imagesToBeUploadOrDelete);
+
+        $uploadStatus = uploadAndDeleteImagesWithPositionAndLabel($imagesToBeUploadOrDelete, $sku, 'sku', $config);
         if (!$uploadStatus) {
             echo json_encode(array('message' => 'something wrong'));
         }
