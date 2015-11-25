@@ -597,7 +597,7 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
 
     foreach ($imageObjectList['delete'] as $key => $imageObject) {
         $gallery = $product->getMediaGalleryImages()->load($imageObject['id']);
-        echo $gallery->getFile() . PHP_EOL;
+        var_dump($gallery->getFile());
         var_dump($imageObject);
         die();
         foreach ($gallery as $image)
