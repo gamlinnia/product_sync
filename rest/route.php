@@ -66,12 +66,10 @@ $app->post('/api/getProductInfosToSync', function () {
         );
 
         $downloadableInfo = getDownloadableUrls($productInfo['sku'], 'sku');
-        if (count($downloadableInfo) > 0) {
-            $downloadableResponse[] = array(
-                'sku' => $productInfo['sku'],
-                'files' => $downloadableInfo
-            );
-        }
+        $downloadableResponse[] = array(
+            'sku' => $productInfo['sku'],
+            'files' => $downloadableInfo
+        );
     }
 
     /* 將needToBeParsed的attr從id轉換成string value */
