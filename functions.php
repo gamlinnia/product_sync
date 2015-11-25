@@ -600,6 +600,7 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
         foreach ($gallery as $each) {
             if ($each->getId() == $imageObject['id']) {
                 echo $each->getFile();
+                echo $each->getPath();
             }
         }
 //        var_dump($imageObject);
