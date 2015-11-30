@@ -76,7 +76,7 @@ try{
         if (isset($config['debug']) && $config['debug']) {
             $response['debug'] = true;
         }
-//        file_put_contents('setting.json', json_encode($setting));
+        file_put_contents('setting.json', json_encode($setting));
         echo json_encode($response) . PHP_EOL;
     }
 
