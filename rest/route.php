@@ -15,7 +15,7 @@ require_once ('tools.php');
 
 require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
 require_once '../functions.php';
-Mage::app();
+Mage::app('admin');
 
 $app->post('/api/syncWithNeIm', function () {
     global $input;
