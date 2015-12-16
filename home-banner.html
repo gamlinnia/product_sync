@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<div>
+    <script type="text/javascript">// <![CDATA[
+    jQuery(function(){
+        jQuery('#camera_wrap').camera({
+            alignmen: 'topCenter',
+            height: '78.125%',
+            minHeight: '400px',
+            loader : false,
+            navigation: false,
+            fx: 'simpleFade',
+            navigationHover:false,
+            thumbnails: true,
+            playPause: false,
+            pagination:false,
+        });
+    });
+    // ]]></script>
+</div>
+<div class="slider-block">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                <div class="fluid_container_wrap">
+                    <div class="fluid_container">
+                        <div id="camera_wrap" class="camera_wrap camera_orange_skin">
+                            <div data-link="{{config path="web/secure/base_url"}}rosewill-holiday-deals/" data-thumb="{{config path="web/secure/base_url"}}media/wysiwyg/2015-Q4-Campaign/MainPageBanner/thumbnail_3.jpg" data-src="{{config path="web/secure/base_url"}}media/wysiwyg/2015-Q4-Campaign/MainPageBanner/HOLIDAY_2.jpg"></div>
+                            <div data-link="{{config path="web/secure/base_url"}}rosewill-holiday-deals/" data-thumb="{{config path="web/secure/base_url"}}media/wysiwyg/2015-Q4-Campaign/MainPageBanner/home_thumb.jpg" data-src="{{config path="web/secure/base_url"}}media/wysiwyg/2015-Q4-Campaign/MainPageBanner/home.jpg">
+                                <div class="camera_caption fadeFromLeft">
+                                    <div class="lof_camera_title">Explosive Gear for Your Arsenal</div>
+                                    <p>Powerful Peripherals. Winning Gear.</p>
+                                </div>
+                            </div>
+                            <div data-link="{{config path="web/secure/base_url"}}rosewill-holiday-deals/" data-thumb="{{config path="web/secure/base_url"}}media/wysiwyg/2015-Q4-Campaign/MainPageBanner/gaming_thumb.jpg" data-src="{{config path="web/secure/base_url"}}media/wysiwyg/2015-Q4-Campaign/MainPageBanner/gaming.jpg">
+                                <div class="camera_caption fadeFromLeft">
+                                    <div class="lof_camera_title">Rosewill Connects You to the 21st Century</div>
+                                    <p>Keep Your Systems Running at Their Best</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">&nbsp;</div>
+            </div>
+        </div>
+        <div>
+            <div id=" home-banner-right-1" style="display: none;">{{block type="cms/block" name="cms_test_block" block_id="11" }}</div>
+            <div id=" home-banner-right-2" style="display: none;">{{block type="cms/block" name="cms_test_block" block_id="12" }}</div>
+            <div id=" home-banner-right-3" style="display: none;">{{block type="cms/block" name="cms_test_block" block_id="13" }}</div>
+            <script type="text/javascript">// <![CDATA[
+            jQuery(document).ready(function(){
+
+
+                var camera_thumbs_cont_li_index=0;
+
+
+                $$('.camera_thumbs_cont ul li').each(function(li){
+
+                    camera_thumbs_cont_li_index++;
+
+
+                    var div = document.createElement('div');
+
+                    div.innerHTML=document.getElementById(' home-banner-right-'+camera_thumbs_cont_li_index).innerHTML;
+
+                    div.style.position='absolute';
+
+                    div.style.textAlign='left';
+
+                    div.style.width='170px';
+
+                    div.style.right='0';
+
+                    div.style.top='29px';
+
+                    div.style.color='#000000';
+
+                    li.appendChild(div);
+
+
+
+                })
+
+
+
+            });
+            // ]]></script>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

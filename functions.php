@@ -250,14 +250,14 @@ function getNextProductInfoFromMagento ($filterParam, $pageSize) {
     }
     $productCollection->setOrder('updated_at', 'ASC')->setPageSize($pageSize+1);
 
-    $count = 0;
     foreach ($productCollection as $product) {
-        if ($count > 0) {
-            $productDataArray = $product->debug();
-            $productDataArray['category'] = getProductCategorysInfo($product->getId());
+        $productDataArray = $product->debug();
+        $productDataArray['category'] = getProductCategorysInfo($product->getId());
+        if ( count($productCollection) == 1 && $product->getUpdatedAt() == $filterParam['updated_at']['from'] ) {
+            $response['productsInfo'] = array();
+        } else {
             $response['productsInfo'][] = $productDataArray;
         }
-        $count++;
     }
     return $response;
 }
