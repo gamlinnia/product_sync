@@ -313,7 +313,15 @@ function parseBackClassifiedProductAttributes ($parsedClassifiedProductInfo) {
         }
     }
     foreach ($parsedClassifiedProductInfo['direct'] as $attrKey => $attrValue) {
-        $parsedProductInfo[$attrKey] = $attrValue;
+        switch ($attrKey) {
+            case 'news_from_date' :
+            case 'news_to_date' :
+            $parsedProductInfo[$attrKey] = strtotime($attrValue);
+                break;
+            default :
+                $parsedProductInfo[$attrKey] = $attrValue;
+                break;
+        }
     }
     return $parsedProductInfo;
 }
