@@ -19,6 +19,8 @@ Mage::app('admin');
 
 $app->post('/api/writeReviewToLocal', function () {
     global $input;
+    global $app;
+    file_put_contents('review.log', json_encode($app->request()->headers()->all()), FILE_APPEND);
     file_put_contents('review.log', json_encode($input), FILE_APPEND);
 });
 
