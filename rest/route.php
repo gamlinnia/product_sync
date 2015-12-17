@@ -22,6 +22,7 @@ $app->post('/api/writeReviewToLocal', function () {
     global $app;
     file_put_contents('review.log', json_encode($app->request()->headers()->all()), FILE_APPEND);
     file_put_contents('review.log', json_encode($input), FILE_APPEND);
+    echo json_encode($input);
 });
 
 $app->post('/api/syncWithNeIm', function () {
