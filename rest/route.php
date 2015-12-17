@@ -17,6 +17,11 @@ require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
 require_once '../functions.php';
 Mage::app('admin');
 
+$app->post('/api/writeReviewToLocal', function () {
+    global $input;
+    file_put_contents('review.log', json_encode($input), FILE_APPEND);
+});
+
 $app->post('/api/syncWithNeIm', function () {
     global $input;
     $parsedProduct = array();
