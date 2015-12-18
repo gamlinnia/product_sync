@@ -316,7 +316,7 @@ function parseBackClassifiedProductAttributes ($parsedClassifiedProductInfo) {
         switch ($attrKey) {
             case 'news_from_date' :
             case 'news_to_date' :
-            $parsedProductInfo[$attrKey] = strtotime($attrValue);
+                $parsedProductInfo[$attrKey] = strtotime($attrValue);
                 break;
             default :
                 $parsedProductInfo[$attrKey] = $attrValue;
@@ -1367,4 +1367,46 @@ function getAllStoreIds () {
         $storeIds[] = $_storeId;
     }
     return $storeIds;
+}
+
+function createCustomerNotExist ($customerInfo) {
+    $customerCollection = Mage::getModel('customer/customer')->getCollection()
+        ->addFieldToFilter('email', $customerInfo['email']);
+    if (count($customerCollection) > 0) {
+        foreach ($customerCollection as $eachCustomer) {
+            return $eachCustomer->getEntityId();
+        }
+    }
+
+    $customerModel = Mage::getModel('customer/customer');
+    foreach ($customerInfo as $attr => $value) {
+        switch ($attr) {
+            case 'email' :
+            case 'is_active' :
+            case 'firstname' :
+            case 'lastname' :
+            case 'group_id' :
+                echo 'set ' . $attr . ' value: ' . $value . PHP_EOL;
+                $customerModel->setData($attr, $value);
+        }
+    }
+
+    try {
+        $customerModel->save();
+    } catch (Exception $e) {
+        Zend_Debug::dump($e->getMessage());
+    }
+    return $customerModel->getEntityId();
+}
+
+function createReview ($reviewData, $entity_id, $customer_id) {
+    $reviewModel = Mage::getModel('review/review');
+    foreach ($reviewData as $attr => $value) {
+        switch ($attr) {
+            case 'title' :
+            case 'detail' :
+            case 'status_id' :
+            case 'nickname' :
+        }
+    }
 }
