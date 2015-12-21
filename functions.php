@@ -1399,14 +1399,43 @@ function createCustomerNotExist ($customerInfo) {
     return $customerModel->getEntityId();
 }
 
-function createReview ($reviewData, $entity_id, $customer_id) {
+function createReviewAndRating ($reviewData, $ratingData, $entity_id, $customer_id) {
     $reviewModel = Mage::getModel('review/review');
-    foreach ($reviewData as $attr => $value) {
-        switch ($attr) {
-            case 'title' :
-            case 'detail' :
-            case 'status_id' :
-            case 'nickname' :
+    try {
+        foreach ($reviewData as $attr => $value) {
+            echo 'set ' . $attr . ' value: ' . $value . PHP_EOL;
+            switch ($attr) {
+                case 'title' :
+                case 'entity_id' :
+                case 'detail' :
+                case 'status_id' :
+                case 'nickname' :
+                    $reviewModel->setData($attr, $value);
+                    break;
+                case 'customer_id' :
+                    $reviewModel->setData($attr, $customer_id);
+                    break;
+                case 'created_at' :
+                    $reviewModel->setData($attr, strtotime($value));
+                    break;
+                case 'entity_pk_value' :
+                    $reviewModel->setData($attr, $entity_id);
+                    $product = Mage::getModel('catalog/product')
+                        ->load($entity_id);
+                    $reviewModel->setStoreId($product->getStoreId());
+                    break;
+            }
         }
+        $reviewModel->setData('stores', getAllStoreIds());
+        $reviewModel->save();
+
+        Mage::getModel('rating/rating')
+            ->setRatingId($ratingData['rating_id'])
+            ->setReviewId($reviewModel->getId())
+            ->addOptionVote($ratingData['value'], $entity_id);
+
+        $reviewModel->aggregate();
+    } catch (Mage_Core_Exception $e) {
+        var_dump($e->getMessage());
     }
 }
