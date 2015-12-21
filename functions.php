@@ -1369,6 +1369,21 @@ function getAllStoreIds () {
     return $storeIds;
 }
 
+function getStoreCodeById ($storeId) {
+        return $_storeCode = Mage::app()->getStore($storeId)->getCode();
+}
+
+function getStoreIdByCode ($storeCode) {
+    $allStores = Mage::app()->getStores();
+    foreach ($allStores as $_eachStoreId => $val) {
+       $eachStoreCode = Mage::app()->getStore($_eachStoreId)->getCode();
+        if ($storeCode ==  $eachStoreCode) {
+            return $_eachStoreId;
+        }
+    }
+    return null;
+}
+
 function createCustomerNotExist ($customerInfo) {
     $customerCollection = Mage::getModel('customer/customer')->getCollection()
         ->addFieldToFilter('email', $customerInfo['email']);
@@ -1426,7 +1441,7 @@ function createReviewAndRating ($reviewData, $ratingData, $entity_id, $customer_
                     break;
             }
         }
-        $reviewModel->setData('stores', getAllStoreIds());
+        $reviewModel->setData('stores', getStoreIdByCode($reviewData['storeCode']));
         $reviewModel->save();
 
         Mage::getModel('rating/rating')
