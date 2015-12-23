@@ -1408,10 +1408,10 @@ function createCustomerNotExist ($customerInfo) {
 
     try {
         $customerModel->save();
+        return $customerModel->getEntityId();
     } catch (Exception $e) {
         Zend_Debug::dump($e->getMessage());
     }
-    return $customerModel->getEntityId();
 }
 
 function createReviewAndRating ($reviewData, $ratingData, $entity_id, $customer_id) {
@@ -1454,4 +1454,15 @@ function createReviewAndRating ($reviewData, $ratingData, $entity_id, $customer_
     } catch (Mage_Core_Exception $e) {
         var_dump($e->getMessage());
     }
+}
+
+function updateReviewStatus ($reviews, $status) {
+    foreach ($reviews as $reviewData) {
+        $reviewCollection = Mage::getModel('review/review')->getCollection()
+        ->addFieldToFilter('title', $reviewData['title'])
+        ->addFieldToFilter('detail', $reviewData['detail'])
+        ->addFieldToFilter('nickname', $reviewData['nickname']);
+    }
+
+
 }

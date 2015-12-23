@@ -17,6 +17,19 @@ require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
 require_once '../functions.php';
 Mage::app('admin');
 
+$app->post('/api/updateReviewStatus', function () {
+    global $input;
+    global $app;
+    $headers = $app->request()->headers();
+    if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
+        echo json_encode(array(
+            'message' => 'auth error.'
+        ));
+        return;
+    }
+    updateReviewStatus($input['reviews'], $input['status']);
+});
+
 $app->post('/api/writeReviewToLocal', function () {
     global $input;
     global $app;
