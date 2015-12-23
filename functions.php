@@ -1429,7 +1429,7 @@ function createReviewAndRating ($reviewData, $ratingData, $entity_id, $customer_
                     $reviewModel->setData($attr, $value);
                     break;
                 case 'customer_id' :
-                    $reviewModel->setData($attr, $customer_id);
+                    $reviewModel->setCustomerId($customer_id);
                     break;
                 case 'created_at' :
                     $reviewModel->setData($attr, strtotime($value));
