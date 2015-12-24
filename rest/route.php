@@ -17,7 +17,7 @@ require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
 require_once '../functions.php';
 Mage::app('admin');
 
-$app->post('/api/updateReviewStatus', function () {
+    $app->post('/api/updateReviewStatus', function () {
     global $input;
     global $app;
     $headers = $app->request()->headers();
