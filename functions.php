@@ -1462,6 +1462,9 @@ function updateReviewStatus ($reviews, $status) {
         ->addFieldToFilter('title', $reviewData['title'])
         ->addFieldToFilter('detail', $reviewData['detail'])
         ->addFieldToFilter('nickname', $reviewData['nickname']);
+        foreach ($reviewCollection as $each) {
+            error_log(json_encode($each->getData()));
+        }
     }
 
 
