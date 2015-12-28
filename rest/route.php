@@ -62,6 +62,7 @@ $app->post('/api/writeContactusFormToLocal', function () {
 //    $contactusFormObject = getProductObject($input['product']['sku'], 'sku');
 //    $entity_id = $productObject->getId();
 //    $customerId = createCustomerNotExist($input['customer']);
+    var_dump($input);
    file_put_contents('contactus.log', $input);
 //    createReviewAndRating($input['review'], $input['rating'], $entity_id, $customerId);
 //    file_put_contents('review.log', json_encode($input), FILE_APPEND);
