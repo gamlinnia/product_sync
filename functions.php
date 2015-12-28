@@ -1478,8 +1478,7 @@ function updateReviewStatus ($reviews, $status) {
 function createContactusForm($contactusFormData){
     $contactusModel = Mage::getModel('contactus/contactusform');
     try{
-        $contactusModel//->setId($contactusFormData['id'])
-            ->setFormType($contactusFormData['form_type'])
+        $contactusModel->setFormType($contactusFormData['form_type'])
             ->setCreatedAt($contactusFormData['created_at'])
             ->setUpdatedAt($contactusFormData['updated_at'])
             ->setContent($contactusFormData['content'])

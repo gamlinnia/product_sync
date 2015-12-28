@@ -68,6 +68,23 @@ $app->post('/api/writeContactusFormToLocal', function () {
     echo json_encode($input);
 });
 
+$app->post('/api/massDeleteContactusFormToLocal', function () {
+    global $input;
+    global $app;
+    $headers = $app->request()->headers();
+    if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
+        echo json_encode(array(
+            'message' => 'auth error.'
+        ));
+        return;
+    }
+   // file_put_contents('contactus.log', 'id: ' . $input['id'] . PHP_EOL);
+    //createContactusForm($input);
+    //file_put_contents('contactus.log', json_encode($input), FILE_APPEND);
+    //echo json_encode($input);
+    var_dump($input);
+});
+
 $app->post('/api/syncWithNeIm', function () {
     global $input;
     $parsedProduct = array();
