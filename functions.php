@@ -1490,11 +1490,32 @@ function massDeleteContactusForm($contactusFormData){
     try{
         foreach($contactusFormData as $eachData){
             $contactusCollection = Mage::getModel('contactus/contactusform')->getCollection();
-            $contactusCollection->addFieldToFilter('form_type', $eachData['form_type'])
-                ->addFieldToFilter('created_at', $eachData['created_at'])
-                ->addFieldToFilter('updated_at', $eachData['updated_at'])
-                ->addFieldToFilter('content', $eachData['content'])
-                ->addFieldToFilter('purpose_for_contact', $eachData['purpose_for_contact']);
+            $i = 0;
+            while(count($contactusCollection) > 1 ){
+                switch($i){
+                    case 0:
+                        $contactusCollection->addFieldToFilter('content', $eachData['content']);
+                        break;
+                    case 1:
+                        $contactusCollection->addFieldToFilter('created_at', $eachData['created_at']);
+                        break;
+                    case 2:
+                        $contactusCollection->addFieldToFilter('form_type', $eachData['form_type']);
+                        break;
+                    case 3:
+                        $contactusCollection->addFieldToFilter('purpose_for_contact', $eachData['purpose_for_contact']);
+                        break;
+                    case 4:
+                        $contactusCollection->addFieldToFilter('updated_at', $eachData['updated_at']);
+                        break;
+                }
+                $i++;
+            }
+//            $contactusCollection->addFieldToFilter('form_type', $eachData['form_type'])
+//                ->addFieldToFilter('created_at', $eachData['created_at'])
+//                ->addFieldToFilter('updated_at', $eachData['updated_at'])
+//                ->addFieldToFilter('content', $eachData['content'])
+//                ->addFieldToFilter('purpose_for_contact', $eachData['purpose_for_contact']);
             if($contactusCollection){
                 $id = $contactusCollection->getData()[0]['id'];
                 echo $id . PHP_EOL;
