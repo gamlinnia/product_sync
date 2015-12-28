@@ -52,7 +52,6 @@ $app->post('/api/writeReviewToLocal', function () {
 $app->post('/api/writeContactusFormToLocal', function () {
     global $input;
     global $app;
-    echo $input;
     $headers = $app->request()->headers();
     if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
         echo json_encode(array(
@@ -63,7 +62,7 @@ $app->post('/api/writeContactusFormToLocal', function () {
 //    $contactusFormObject = getProductObject($input['product']['sku'], 'sku');
 //    $entity_id = $productObject->getId();
 //    $customerId = createCustomerNotExist($input['customer']);
-//    file_put_contents('review.log', 'customer id: ' . $customerId . PHP_EOL);
+   file_put_contents('contactus.log', json_encode($input) . PHP_EOL);
 //    createReviewAndRating($input['review'], $input['rating'], $entity_id, $customerId);
 //    file_put_contents('review.log', json_encode($input), FILE_APPEND);
 //    echo json_encode($input);
