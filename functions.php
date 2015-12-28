@@ -1498,7 +1498,10 @@ function massDeleteContactusForm($contactusFormData){
                 ->addFieldToFilter('content', $eachData['content'])
                 ->addFieldToFilter('purpose_for_contact', $eachData['purpose_for_contact']);
             if($contactusCollection){
-                var_dump($contactusCollection->getData());
+                var_dump($contactusCollection->getData()[0]['id']);
+            }
+            else{
+                echo "Recoed not found!";
             }
         }
     }
