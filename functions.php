@@ -1498,7 +1498,9 @@ function massDeleteContactusForm($contactusFormData){
                 ->addFieldToFilter('content', $eachData['content'])
                 ->addFieldToFilter('purpose_for_contact', $eachData['purpose_for_contact']);
             if($contactusCollection){
-                var_dump($contactusCollection->getData()[0]['id']);
+                $id = $contactusCollection->getData()[0]['id'];
+                echo $id . PHP_EOL;
+                //Mage::getModel('contactus/contactusform')->load($id)->delete();
             }
             else{
                 echo "Recoed not found!";
