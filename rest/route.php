@@ -53,6 +53,7 @@ $app->post('/api/writeContactusFormToLocal', function () {
     global $input;
     global $app;
     $headers = $app->request()->headers();
+    echo $headers;
     if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
         echo json_encode(array(
             'message' => 'auth error.'
