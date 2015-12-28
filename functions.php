@@ -1481,9 +1481,7 @@ function createContactusForm($contactusFormData){
             ->save();
     }
     catch (Exception $e){
-        echo "Exception: ";
         var_dump($e->getMessage());
-        echo PHP_EOL;
     }
 }
 
@@ -1508,8 +1506,6 @@ function massDeleteContactusForm($contactusFormData){
         }
     }
     catch (Exception $e){
-        echo "Exception: ";
         var_dump($e->getMessage());
-        echo PHP_EOL;
     }
 }
