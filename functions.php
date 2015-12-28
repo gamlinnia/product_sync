@@ -1489,6 +1489,7 @@ function createContactusForm($contactusFormData){
         $contactusModel->aggregate();
     }
     catch (Exception $e){
+        echo "Exception: ";
         var_dump($e->getMessage());
     }
 }
