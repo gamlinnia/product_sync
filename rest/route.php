@@ -68,7 +68,7 @@ $app->post('/api/writeContactusFormToLocal', function () {
     echo json_encode($input);
 });
 
-$app->post('/api/massDeleteContactusFormToLocal', function () {
+$app->post('/api/massDeleteContactusFormFromLocal', function () {
     global $input;
     global $app;
     $headers = $app->request()->headers();

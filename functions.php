@@ -1503,7 +1503,7 @@ function massDeleteContactusForm($contactusFormData){
                 //Mage::getModel('contactus/contactusform')->load($id)->delete();
             }
             else{
-                echo "Recoed not found!";
+                echo "Record not found!";
             }
         }
     }
