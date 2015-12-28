@@ -17,7 +17,7 @@ require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
 require_once '../functions.php';
 Mage::app('admin');
 
-    $app->post('/api/updateReviewStatus', function () {
+$app->post('/api/updateReviewStatus', function () {
     global $input;
     global $app;
     $headers = $app->request()->headers();
@@ -62,9 +62,10 @@ $app->post('/api/writeContactusFormToLocal', function () {
 //    $contactusFormObject = getProductObject($input['product']['sku'], 'sku');
 //    $entity_id = $productObject->getId();
 //    $customerId = createCustomerNotExist($input['customer']);
-   createContactusForm($input);
-   file_put_contents('contactus.log', json_encode($input), FILE_APPEND);
-   echo json_encode($input);
+    file_put_contents('contactus.log', 'id: ' . $input['id'] . PHP_EOL);
+    createContactusForm($input);
+    file_put_contents('contactus.log', json_encode($input), FILE_APPEND);
+    echo json_encode($input);
 });
 
 $app->post('/api/syncWithNeIm', function () {
