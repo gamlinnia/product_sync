@@ -1485,6 +1485,8 @@ function createContactusForm($contactusFormData){
             ->setContent($contactusFormData['content'])
             ->setPurposeForContact($contactusFormData['purpose_for_contact'])
             ->save();
+
+        $contactusModel->aggregate();
     }
     catch (Exception $e){
         var_dump($e->getMessage());
