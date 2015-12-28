@@ -59,7 +59,6 @@ $app->post('/api/writeContactusFormToLocal', function () {
         ));
         return;
     }
-    file_put_contents('contactus.log', json_encode($input), FILE_APPEND);
     createContactusForm($input);
     echo json_encode($input);
 });
@@ -74,7 +73,6 @@ $app->post('/api/massDeleteContactusFormFromLocal', function () {
         ));
         return;
     }
-    file_put_contents('contactus.log', json_encode($input), FILE_APPEND);
     massDeleteContactusForm($input);
     echo json_encode($input);
 });
