@@ -52,6 +52,7 @@ $app->post('/api/writeReviewToLocal', function () {
 $app->post('/api/writeContactusFormToLocal', function () {
     global $input;
     global $app;
+    echo $input;
     $headers = $app->request()->headers();
     if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
         echo json_encode(array(
