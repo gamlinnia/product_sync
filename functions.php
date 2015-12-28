@@ -1498,7 +1498,7 @@ function massDeleteContactusForm($contactusFormData){
             if($contactusCollection){
                 $id = $contactusCollection->getData()[0]['id'];
                 echo $id . PHP_EOL;
-                //Mage::getModel('contactus/contactusform')->load($id)->delete();
+                Mage::getModel('contactus/contactusform')->load($id)->delete();
             }
             else{
                 echo "Record not found!";
