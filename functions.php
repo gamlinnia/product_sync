@@ -1486,7 +1486,7 @@ function createContactusForm($contactusFormData){
             ->setPurposeForContact($contactusFormData['purpose_for_contact'])
             ->save();
     }
-    catch (Mage_Core_Exception $e){
+    catch (Exception $e){
         var_dump($e->getMessage());
     }
 }
