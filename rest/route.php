@@ -59,9 +59,6 @@ $app->post('/api/writeContactusFormToLocal', function () {
         ));
         return;
     }
-//    $contactusFormObject = getProductObject($input['product']['sku'], 'sku');
-//    $entity_id = $productObject->getId();
-//    $customerId = createCustomerNotExist($input['customer']);
     file_put_contents('contactus.log', json_encode($input), FILE_APPEND);
     createContactusForm($input);
     echo json_encode($input);
@@ -77,9 +74,7 @@ $app->post('/api/massDeleteContactusFormFromLocal', function () {
         ));
         return;
     }
-   // file_put_contents('contactus.log', 'id: ' . $input['id'] . PHP_EOL);
     massDeleteContactusForm($input);
-    //file_put_contents('contactus.log', json_encode($input), FILE_APPEND);
     echo json_encode($input);
 });
 
