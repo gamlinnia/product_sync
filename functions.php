@@ -1468,11 +1468,6 @@ function updateReviewStatus ($reviews, $status) {
             echo json_encode($each->getData());
         }
     }
-
-    function createContactusForm($contactusData){
-
-    }
-
 }
 
 function createContactusForm($contactusFormData){
@@ -1484,6 +1479,21 @@ function createContactusForm($contactusFormData){
             ->setContent($contactusFormData['content'])
             ->setPurposeForContact($contactusFormData['purpose_for_contact'])
             ->save();
+    }
+    catch (Exception $e){
+        echo "Exception: ";
+        var_dump($e->getMessage());
+        echo PHP_EOL;
+    }
+}
+
+function massDeleteContactusForm($contactusFormData){
+
+    $contactusModel = Mage::getModel('contactus/contactusform');
+    try{
+        foreach($contactusFormData as $eachData){
+            var_dump($eachData);
+        }
     }
     catch (Exception $e){
         echo "Exception: ";

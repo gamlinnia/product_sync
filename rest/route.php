@@ -79,10 +79,9 @@ $app->post('/api/massDeleteContactusFormToLocal', function () {
         return;
     }
    // file_put_contents('contactus.log', 'id: ' . $input['id'] . PHP_EOL);
-    //createContactusForm($input);
+    massDeleteContactusForm($input);
     //file_put_contents('contactus.log', json_encode($input), FILE_APPEND);
     //echo json_encode($input);
-    var_dump($input);
 });
 
 $app->post('/api/syncWithNeIm', function () {
