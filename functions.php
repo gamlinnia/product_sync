@@ -1489,9 +1489,9 @@ function createContactusForm($contactusFormData){
 
 function massDeleteContactusForm($contactusFormData){
 
-    $contactusCollection = Mage::getModel('contactus/contactusform')->getCollection();
     try{
         foreach($contactusFormData as $eachData){
+            $contactusCollection = Mage::getModel('contactus/contactusform')->getCollection();
             $contactusCollection->addFieldToFilter('form_type', $eachData['form_type'])
                 ->addFieldToFilter('created_at', $eachData['created_at'])
                 ->addFieldToFilter('updated_at', $eachData['updated_at'])
