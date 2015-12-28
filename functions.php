@@ -1478,14 +1478,13 @@ function updateReviewStatus ($reviews, $status) {
 function createContactusForm($contactusFormData){
     $contactusModel = Mage::getModel('contactus/contactusform');
     try{
-        var_dump($contactusFormData);
-//        $contactusModel->setId($contactusFormData['id'])
-//            ->setFormType($contactusFormData['form_type'])
-//            ->setCreatedAt($contactusFormData['created_at'])
-//            ->setUpdatedAt($contactusFormData['updated_at'])
-//            ->setContent($contactusFormData['content'])
-//            ->setPurposeForContact($contactusFormData['purpose_for_contact'])
-//            ->save();
+        $contactusModel->setId($contactusFormData['id'])
+            ->setFormType($contactusFormData['form_type'])
+            ->setCreatedAt($contactusFormData['created_at'])
+            ->setUpdatedAt($contactusFormData['updated_at'])
+            ->setContent($contactusFormData['content'])
+            ->setPurposeForContact($contactusFormData['purpose_for_contact'])
+            ->save();
     }
     catch (Mage_Core_Exception $e){
         var_dump($e->getMessage());
