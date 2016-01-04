@@ -1477,7 +1477,7 @@ function deleteReview ($reviewData, $adminEmail) {
        ->addFieldToFilter('nickname', $reviewData['nickname']);
     foreach ($reviewCollection as $each) {
         $deletedReviewId = $each->getReviewId();
-        $each->delete();
+        $each->aggregate()->delete();
         return $deletedReviewId;
     }
     return null;
