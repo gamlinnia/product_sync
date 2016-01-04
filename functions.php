@@ -1468,6 +1468,17 @@ function updateReviewStatus ($reviews, $status) {
             echo json_encode($each->getData());
         }
     }
+}
 
-
+function deleteReview ($reviewData, $adminEmail) {
+    $reviewCollection = Mage::getModel('review/review')->getCollection()
+       ->addFieldToFilter('title', $reviewData['title'])
+       ->addFieldToFilter('detail', $reviewData['detail'])
+       ->addFieldToFilter('nickname', $reviewData['nickname']);
+    $reviewId = array();
+    foreach ($reviewCollection as $each) {
+        $reviewId[] = $each->getReviewId();
+        $each->delete();
+    }
+    echo json_encode('Review id:' . explode(',', $reviewId) . ' has been deleted.');
 }
