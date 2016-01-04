@@ -1484,9 +1484,8 @@ function getSpecificReview ($reviewData) {
 
 function deleteReview ($reviewId) {
     try {
-        Mage::getModel('review/review')->setId($reviewId)
-            ->aggregate()
-            ->delete();
+        $model = Mage::getModel('review/review')->load($reviewId);
+        $model->delete();
     } catch (Mage_Core_Exception $e) {
         echo json_encode(array('message' => $e->getMessage()));
     } catch (Exception $e){
