@@ -1470,17 +1470,26 @@ function updateReviewStatus ($reviews, $status) {
     }
 }
 
-function deleteReview ($reviewData, $adminEmail) {
+function getSpecificReview ($reviewData) {
     $reviewCollection = Mage::getModel('review/review')->getCollection()
-       ->addFieldToFilter('title', $reviewData['title'])
-       ->addFieldToFilter('detail', $reviewData['detail'])
-       ->addFieldToFilter('nickname', $reviewData['nickname']);
+        ->addFieldToFilter('title', $reviewData['title'])
+        ->addFieldToFilter('detail', $reviewData['detail'])
+        ->addFieldToFilter('nickname', $reviewData['nickname']);
     foreach ($reviewCollection as $each) {
         $deletedReviewId = $each->getReviewId();
-        Mage::getModel('review/review')->setId($deletedReviewId)
-            ->aggregate()
-            ->delete();
         return $deletedReviewId;
     }
     return null;
+}
+
+function deleteReview ($reviewId) {
+    try {
+        Mage::getModel('review/review')->setId($reviewId)
+            ->aggregate()
+            ->delete();
+    } catch (Mage_Core_Exception $e) {
+        echo json_encode(array('message' => $e->getMessage()));
+    } catch (Exception $e){
+        var_dump($e);
+    }
 }

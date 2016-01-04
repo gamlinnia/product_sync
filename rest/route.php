@@ -27,7 +27,8 @@ $app->post('/api/deleteAwsReview', function () {
         ));
         return;
     }
-    deleteReview($input['review'], $input['adminEmail']);
+    $reviewId = deleteReview($input['review'], $input['adminEmail']);
+    deleteReview($reviewId);
     echo json_encode(array('message' => 'success'));
 });
 
