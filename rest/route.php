@@ -29,7 +29,14 @@ $app->post('/api/deleteAwsReview', function () {
     }
     $reviewId = getSpecificReview($input['review']);
     echo $reviewId;
-    deleteReview($reviewId);
+    try {
+        $model = Mage::getModel('review/review')->load($reviewId);
+        $model->delete();
+    } catch (Mage_Core_Exception $e) {
+        echo json_encode(array('message' => $e->getMessage()));
+    } catch (Exception $e){
+        var_dump($e);
+    }
     echo json_encode(array('message' => 'success'));
 });
 
