@@ -1475,10 +1475,10 @@ function deleteReview ($reviewData, $adminEmail) {
        ->addFieldToFilter('title', $reviewData['title'])
        ->addFieldToFilter('detail', $reviewData['detail'])
        ->addFieldToFilter('nickname', $reviewData['nickname']);
-    $reviewId = array();
     foreach ($reviewCollection as $each) {
-        $reviewId[] = $each->getReviewId();
+        $deletedReviewId = $each->getReviewId();
         $each->delete();
+        return $deletedReviewId;
     }
-    echo json_encode('Review id:' . explode(',', $reviewId) . ' has been deleted.');
+    return null;
 }
