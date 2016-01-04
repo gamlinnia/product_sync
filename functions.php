@@ -1476,6 +1476,8 @@ function deleteReview ($reviewData, $adminEmail) {
        ->addFieldToFilter('detail', $reviewData['detail'])
        ->addFieldToFilter('nickname', $reviewData['nickname']);
     foreach ($reviewCollection as $each) {
+        var_dump($each);
+        die();
         $deletedReviewId = $each->getReviewId();
         echo $deletedReviewId;
         Mage::getModel('review/review')->setId($deletedReviewId)
