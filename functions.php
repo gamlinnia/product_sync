@@ -1493,7 +1493,6 @@ function createContactusForm($contactusFormData){
             ->setContent($contactusFormData['content'])
             ->setPurposeForContact($contactusFormData['purpose_for_contact'])
             ->save();
-        echo "Success";
     }
     catch (Exception $e){
         var_dump($e->getMessage());
