@@ -1483,3 +1483,43 @@ function getSpecificReview ($reviewData) {
     }
     return null;
 }
+
+function createContactusForm($contactusFormData){
+    $contactusModel = Mage::getModel('contactus/contactusform');
+    try{
+        $contactusModel->setFormType($contactusFormData['form_type'])
+            ->setCreatedAt($contactusFormData['created_at'])
+            ->setUpdatedAt($contactusFormData['updated_at'])
+            ->setContent($contactusFormData['content'])
+            ->setPurposeForContact($contactusFormData['purpose_for_contact'])
+            ->save();
+    }
+    catch (Exception $e){
+        var_dump($e->getMessage());
+    }
+}
+
+function massDeleteContactusForm($contactusFormData){
+
+    try{
+        foreach($contactusFormData as $eachData){
+            $contactusCollection = Mage::getModel('contactus/contactusform')->getCollection();
+            $contactusCollection->addFieldToFilter('form_type', $eachData['form_type'])
+                ->addFieldToFilter('created_at', $eachData['created_at'])
+                ->addFieldToFilter('updated_at', $eachData['updated_at'])
+                ->addFieldToFilter('content', $eachData['content'])
+                ->addFieldToFilter('purpose_for_contact', $eachData['purpose_for_contact']);
+            if($contactusCollection){
+                $id = $contactusCollection->getData()[0]['id'];
+                echo $id . PHP_EOL;
+                Mage::getModel('contactus/contactusform')->load($id)->delete();
+            }
+            else{
+                echo "Record not found!";
+            }
+        }
+    }
+    catch (Exception $e){
+        var_dump($e->getMessage());
+    }
+}

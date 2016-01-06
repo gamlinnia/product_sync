@@ -171,4 +171,32 @@ $app->get('/api/getAllVideoGalleryInfos', function () {
     ));
 });
 
+$app->post('/api/writeContactusFormToLocal', function () {
+    global $input;
+    global $app;
+    $headers = $app->request()->headers();
+    if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
+        echo json_encode(array(
+            'message' => 'auth error.'
+        ));
+        return;
+    }
+    createContactusForm(json_decode($input['contactus'], true));
+    echo json_encode($input);
+});
+
+$app->post('/api/massDeleteContactusFormFromLocal', function () {
+    global $input;
+    global $app;
+    $headers = $app->request()->headers();
+    if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
+        echo json_encode(array(
+            'message' => 'auth error.'
+        ));
+        return;
+    }
+    massDeleteContactusForm(json_decode($input['contactus'], true));
+    echo json_encode($input);
+});
+
 $app->run();
