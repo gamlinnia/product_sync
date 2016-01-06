@@ -181,7 +181,7 @@ $app->post('/api/writeContactusFormToLocal', function () {
         ));
         return;
     }
-    createContactusForm(json_decode($input['contactus'], true));
+    createContactusForm($input['contactus']);
     echo json_encode($input);
 });
 
@@ -195,7 +195,7 @@ $app->post('/api/massDeleteContactusFormFromLocal', function () {
         ));
         return;
     }
-    massDeleteContactusForm(json_decode($input['contactus'], true));
+    massDeleteContactusForm($input['contactus']);
     echo json_encode($input);
 });
 
