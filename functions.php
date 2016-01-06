@@ -1509,7 +1509,7 @@ function massDeleteContactusForm($contactusFormData){
             ->addFieldToFilter('updated_at', $eachData['updated_at'])
             ->addFieldToFilter('content', $eachData['content'])
             ->addFieldToFilter('purpose_for_contact', $eachData['purpose_for_contact']);
-        if ($contactusCollection) {
+        if (count($contactusCollection) > 0) {
             $id = $contactusCollection->getData()[0]['id'];
             echo $id . PHP_EOL;
             try {
