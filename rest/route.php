@@ -17,29 +17,6 @@ require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
 require_once '../functions.php';
 Mage::app('admin');
 
-$app->post('/api/deleteAwsReview', function () {
-    global $input;
-    global $app;
-    $headers = $app->request()->headers();
-    if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
-        echo json_encode(array(
-            'message' => 'auth error.'
-        ));
-        return;
-    }
-    $reviewId = getSpecificReview($input['review']);
-    echo $reviewId;
-    try {
-        $model = Mage::getModel('review/review')->load($reviewId);
-        $model->delete();
-    } catch (Mage_Core_Exception $e) {
-        echo json_encode(array('message' => $e->getMessage()));
-    } catch (Exception $e){
-        var_dump($e);
-    }
-    echo json_encode(array('message' => 'success'));
-});
-
 $app->post('/api/updateReviewStatus', function () {
     global $input;
     global $app;
@@ -69,6 +46,34 @@ $app->post('/api/writeReviewToLocal', function () {
     file_put_contents('review.log', 'customer id: ' . $customerId . PHP_EOL);
     createReviewAndRating($input['review'], $input['rating'], $entity_id, $customerId);
     file_put_contents('review.log', json_encode($input), FILE_APPEND);
+    echo json_encode($input);
+});
+
+$app->post('/api/writeContactusFormToLocal', function () {
+    global $input;
+    global $app;
+    $headers = $app->request()->headers();
+    if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
+        echo json_encode(array(
+            'message' => 'auth error.'
+        ));
+        return;
+    }
+    createContactusForm(json_decode($input['contactus'], true));
+    echo json_encode($input);
+});
+
+$app->post('/api/massDeleteContactusFormFromLocal', function () {
+    global $input;
+    global $app;
+    $headers = $app->request()->headers();
+    if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
+        echo json_encode(array(
+            'message' => 'auth error.'
+        ));
+        return;
+    }
+    massDeleteContactusForm(json_decode($input['contactus'], true));
     echo json_encode($input);
 });
 
