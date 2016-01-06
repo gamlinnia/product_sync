@@ -1500,7 +1500,7 @@ function createContactusForm($contactusFormData){
 }
 
 function massDeleteContactusForm($contactusFormData){
-    if(isset($contactusFormData)) {
+    if(!empty($contactusFormData)) {
         foreach ($contactusFormData as $eachData) {
             $contactusCollection = Mage::getModel('contactus/contactusform')->getCollection();
             $contactusCollection->addFieldToFilter('form_type', $eachData['form_type'])
