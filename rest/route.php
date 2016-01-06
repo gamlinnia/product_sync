@@ -199,7 +199,8 @@ $app->post('/api/massDeleteContactusFormFromLocal', function () {
     }
     if(!empty($input['contactus'])) {
         massDeleteContactusForm($input['contactus']);
-        echo json_encode($input);
+        //echo json_encode($input);
+        echo json_encode(array('message' => 'success'));
     }
 });
 
