@@ -1520,7 +1520,6 @@ function massDeleteContactusForm($contactusFormData){
         }
         if (count($contactusCollection) > 0) {
             $id = $contactusCollection->getData()[0]['id'];
-            echo $id . PHP_EOL;
             try {
                 Mage::getModel('contactus/contactusform')->load($id)->delete();
             } catch (Exception $e) {
