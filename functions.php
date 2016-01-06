@@ -1470,6 +1470,8 @@ function updateReviewStatus ($reviews, $status) {
     }
 }
 
+
+/* getSpecificReview */
 function getSpecificReview ($reviewData) {
     $reviewCollection = Mage::getModel('review/review')->getCollection()
         ->addFieldToFilter('title', $reviewData['title'])
