@@ -1504,22 +1504,29 @@ function massDeleteContactusForm($contactusFormData){
 
     foreach ($contactusFormData as $eachData) {
         $contactusCollection = Mage::getModel('contactus/contactusform')->getCollection();
-        $contactusCollection->addFieldToFilter('form_type', $eachData['form_type'])
-            ->addFieldToFilter('created_at', $eachData['created_at'])
-            ->addFieldToFilter('updated_at', $eachData['updated_at'])
-            ->addFieldToFilter('content', $eachData['content'])
-            ->addFieldToFilter('purpose_for_contact', $eachData['purpose_for_contact']);
-        if (count($contactusCollection) > 0) {
+        if(isset($eachData['content'])){
+            $contactusCollection->addFieldToFilter('content', $eachData['content']);
+            if(count($contactusCollection) > 1 && isset($eachData['form_type'])){
+                $contactusCollection->addFieldToFilter('form_type', $eachData['form_type']);
+                if(count($contactusCollection) > 1 && isset($eachData['purpose_for_contact'])) {
+                    $contactusCollection->addFieldToFilter('purpose_for_contact', $eachData['purpose_for_contact']);
+                    if(count($contactusCollection) > 1 && isset($eachData['created_at'])) {
+                        $contactusCollection->addFieldToFilter('created_at', $eachData['created_at']);
+                        if(count($contactusCollection) > 1 && isset($eachData['updated_at'])) {
+                            $contactusCollection->addFieldToFilter('updated_at', $eachData['updated_at']);
+                        }
+                    }
+                }
+            }
+        }
+        if (count($contactusCollection) == 1) {
             $id = $contactusCollection->getData()[0]['id'];
             echo $id . PHP_EOL;
             try {
                 Mage::getModel('contactus/contactusform')->load($id)->delete();
-                echo "Success delete";
             } catch (Exception $e) {
                 var_dump($e->getMessage());
             }
-        } else {
-            echo "Record not found!";
         }
     }
 }
