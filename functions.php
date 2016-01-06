@@ -407,11 +407,11 @@ function getImagesUrlOfProduct ($valueToFilter, $type='entity_id') {
     $product = getProductObject($valueToFilter, $type);
     $mediaType = array(
         'image' => Mage::getModel('catalog/product_media_config')
-                ->getMediaUrl( $product->getImage() ),
+            ->getMediaUrl( $product->getImage() ),
         'small_image' => Mage::getModel('catalog/product_media_config')
-                ->getMediaUrl( $product->getSmallImage() ),
+            ->getMediaUrl( $product->getSmallImage() ),
         'thumbnail' => Mage::getModel('catalog/product_media_config')
-                ->getMediaUrl( $product->getThumbnail() )
+            ->getMediaUrl( $product->getThumbnail() )
     );
 
     $response = array();
@@ -1370,13 +1370,13 @@ function getAllStoreIds () {
 }
 
 function getStoreCodeById ($storeId) {
-        return $_storeCode = Mage::app()->getStore($storeId)->getCode();
+    return $_storeCode = Mage::app()->getStore($storeId)->getCode();
 }
 
 function getStoreIdByCode ($storeCode) {
     $allStores = Mage::app()->getStores();
     foreach ($allStores as $_eachStoreId => $val) {
-       $eachStoreCode = Mage::app()->getStore($_eachStoreId)->getCode();
+        $eachStoreCode = Mage::app()->getStore($_eachStoreId)->getCode();
         if ($storeCode ==  $eachStoreCode) {
             return $_eachStoreId;
         }
@@ -1459,9 +1459,9 @@ function createReviewAndRating ($reviewData, $ratingData, $entity_id, $customer_
 function updateReviewStatus ($reviews, $status) {
     foreach ($reviews as $reviewData) {
         $reviewCollection = Mage::getModel('review/review')->getCollection()
-        ->addFieldToFilter('title', $reviewData['title'])
-        ->addFieldToFilter('detail', $reviewData['detail'])
-        ->addFieldToFilter('nickname', $reviewData['nickname']);
+            ->addFieldToFilter('title', $reviewData['title'])
+            ->addFieldToFilter('detail', $reviewData['detail'])
+            ->addFieldToFilter('nickname', $reviewData['nickname']);
         foreach ($reviewCollection as $each) {
             $each->setStatusId($status);
             $each->save();
@@ -1500,26 +1500,29 @@ function createContactusForm($contactusFormData){
 }
 
 function massDeleteContactusForm($contactusFormData){
-
-    try{
-        foreach($contactusFormData as $eachData){
+    if(isset($contactusFormData)) {
+        foreach ($contactusFormData as $eachData) {
             $contactusCollection = Mage::getModel('contactus/contactusform')->getCollection();
             $contactusCollection->addFieldToFilter('form_type', $eachData['form_type'])
                 ->addFieldToFilter('created_at', $eachData['created_at'])
                 ->addFieldToFilter('updated_at', $eachData['updated_at'])
                 ->addFieldToFilter('content', $eachData['content'])
                 ->addFieldToFilter('purpose_for_contact', $eachData['purpose_for_contact']);
-            if($contactusCollection){
+            if ($contactusCollection) {
                 $id = $contactusCollection->getData()[0]['id'];
                 echo $id . PHP_EOL;
-                Mage::getModel('contactus/contactusform')->load($id)->delete();
-            }
-            else{
+                try {
+                    Mage::getModel('contactus/contactusform')->load($id)->delete();
+                }
+                catch (Exception $e) {
+                    var_dump($e->getMessage());
+                }
+            } else {
                 echo "Record not found!";
             }
         }
     }
-    catch (Exception $e){
-        var_dump($e->getMessage());
+    else{
+        echo "Empty input";
     }
 }
