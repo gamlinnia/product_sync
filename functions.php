@@ -1493,6 +1493,7 @@ function createContactusForm($contactusFormData){
             ->setContent($contactusFormData['content'])
             ->setPurposeForContact($contactusFormData['purpose_for_contact'])
             ->save();
+        echo "Success";
     }
     catch (Exception $e){
         var_dump($e->getMessage());
@@ -1500,29 +1501,25 @@ function createContactusForm($contactusFormData){
 }
 
 function massDeleteContactusForm($contactusFormData){
-    if(!empty($contactusFormData)) {
-        foreach ($contactusFormData as $eachData) {
-            $contactusCollection = Mage::getModel('contactus/contactusform')->getCollection();
-            $contactusCollection->addFieldToFilter('form_type', $eachData['form_type'])
-                ->addFieldToFilter('created_at', $eachData['created_at'])
-                ->addFieldToFilter('updated_at', $eachData['updated_at'])
-                ->addFieldToFilter('content', $eachData['content'])
-                ->addFieldToFilter('purpose_for_contact', $eachData['purpose_for_contact']);
-            if ($contactusCollection) {
-                $id = $contactusCollection->getData()[0]['id'];
-                echo $id . PHP_EOL;
-                try {
-                    Mage::getModel('contactus/contactusform')->load($id)->delete();
-                }
-                catch (Exception $e) {
-                    var_dump($e->getMessage());
-                }
-            } else {
-                echo "Record not found!";
+
+    foreach ($contactusFormData as $eachData) {
+        $contactusCollection = Mage::getModel('contactus/contactusform')->getCollection();
+        $contactusCollection->addFieldToFilter('form_type', $eachData['form_type'])
+            ->addFieldToFilter('created_at', $eachData['created_at'])
+            ->addFieldToFilter('updated_at', $eachData['updated_at'])
+            ->addFieldToFilter('content', $eachData['content'])
+            ->addFieldToFilter('purpose_for_contact', $eachData['purpose_for_contact']);
+        if ($contactusCollection) {
+            $id = $contactusCollection->getData()[0]['id'];
+            echo $id . PHP_EOL;
+            try {
+                Mage::getModel('contactus/contactusform')->load($id)->delete();
+                echo "Success delete";
+            } catch (Exception $e) {
+                var_dump($e->getMessage());
             }
+        } else {
+            echo "Record not found!";
         }
-    }
-    else{
-        echo "Empty input";
     }
 }
