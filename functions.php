@@ -1420,7 +1420,7 @@ function createReviewAndRating ($reviewData, $ratingData, $entity_id, $customer_
         foreach ($reviewData as $attr => $value) {
             echo 'set ' . $attr . ' value: ' . $value . PHP_EOL;
             switch ($attr) {
-                case 'review_id' :
+                //case 'review_id' :
                 case 'title' :
                 case 'entity_id' :
                 case 'detail' :
