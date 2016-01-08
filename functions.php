@@ -1436,13 +1436,15 @@ function createReviewAndRating ($reviewData, $ratingData, $entity_id, $customer_
                     break;
                 case 'entity_pk_value' :
                     $reviewModel->setData($attr, $entity_id);
-                    $product = Mage::getModel('catalog/product')
-                        ->load($entity_id);
-                    $reviewModel->setStoreId(1);
                     break;
+                case 'storeCode' :
+                    $storeId = getStoreIdByCode($value);
+                    $reviewModel->setStoreId($storeId);
+                    break;
+
             }
         }
-        $reviewModel->setData('stores', getStoreIdByCode($reviewData['storeCode']));
+        $reviewModel->setData('stores', $reviewData['stores']);
         $reviewModel->save();
 
         Mage::getModel('rating/rating')
