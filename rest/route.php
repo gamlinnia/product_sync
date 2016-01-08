@@ -68,6 +68,7 @@ $app->post('/api/writeReviewToLocal', function () {
     $entity_id = $productObject->getId();
     $customerId = createCustomerNotExist($input['customer']);
     createReviewAndRating($input['review'], $input['rating'], $entity_id, $customerId);
+    file_put_contents('review.log', json_encode($input), FILE_APPEND);
     echo json_encode($input);
 });
 
