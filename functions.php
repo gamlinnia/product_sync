@@ -1444,7 +1444,12 @@ function createReviewAndRating ($reviewData, $ratingData, $entity_id, $customer_
 
             }
         }
-        $reviewModel->setData('stores', $reviewData['stores']);
+        if(isset($reviewData['stores'])) {
+            $reviewModel->setData('stores', $reviewData['stores']);
+        }
+        else{
+            $reviewModel->setData('stores', getStoreIdByCode($reviewData['storeCode']));
+        }
         $reviewModel->save();
 
         Mage::getModel('rating/rating')
