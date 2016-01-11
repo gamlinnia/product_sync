@@ -1418,7 +1418,6 @@ function createReviewAndRating ($reviewData, $ratingData, $entity_id, $customer_
     $reviewModel = Mage::getModel('review/review');
     try {
         foreach ($reviewData as $attr => $value) {
-            echo 'set ' . $attr . ' value: ' . $value . PHP_EOL;
             switch ($attr) {
                 //case 'review_id' :
                 case 'title' :
