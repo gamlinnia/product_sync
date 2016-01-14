@@ -127,6 +127,10 @@ try{
 
     echo 'Last Product updated_at is ' . $productInfoArray['data'][count($productInfoArray['data'])-1]['dontCare']['updated_at'] . PHP_EOL;
 
+    if (count($productInfoArray['data']) > 0) {
+        Mage::dispatchEvent('adminhtml_cache_refresh_type', array('type' => 'full_page'));
+    }
+
 } catch (Exception $e) {
     var_dump($e->getMessage());
 }
