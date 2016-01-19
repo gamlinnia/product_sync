@@ -168,7 +168,21 @@
         height: 70px;
     }
 </style>
-
+<script type="text/javascript">
+    (function($){
+        $(document).ready(function() {
+            var imgCount = $('.more-views img').length;
+            if(imgCount < 4){
+                $('.tumbSlider-prev').hide();
+                $('.tumbSlider-next').hide();
+            }
+            else{
+                $('.tumbSlider-prev').show();
+                $('.tumbSlider-next').show();
+            }
+        })
+    })(jQuery);
+</script>
 <div class="product-view" itemscope itemtype="http://schema.org/Product">
     <div class="product-essential">
         <div class="product-img-box">
