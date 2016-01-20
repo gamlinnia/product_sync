@@ -1470,6 +1470,7 @@ function updateReviewStatus ($reviews, $status) {
             ->addFieldToFilter('nickname', $reviewData['nickname']);
         foreach ($reviewCollection as $each) {
             $each->setStatusId($status);
+            $each->setStores($reviewData['stores']);
             $each->save();
             echo json_encode($each->getData());
         }
