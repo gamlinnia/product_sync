@@ -1507,7 +1507,6 @@ function createContactusForm($contactusFormData){
 }
 
 function massDeleteContactusForm($contactusFormData){
-
     foreach ($contactusFormData as $eachData) {
         $contactusCollection = Mage::getModel('contactus/contactusform')->getCollection();
         if(isset($eachData['content'])){
@@ -1534,4 +1533,8 @@ function massDeleteContactusForm($contactusFormData){
             }
         }
     }
+}
+
+function getChannelsProductReviews () {
+
 }
