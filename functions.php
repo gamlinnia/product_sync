@@ -1535,6 +1535,24 @@ function massDeleteContactusForm($contactusFormData){
     }
 }
 
-function getChannelsProductReviews () {
-
+function getLatestChannelsProductReviews ($channel, $sku) {
+    /* need to include ganon.php */
+    $response = array();
+    switch ($channel) {
+        case 'newegg' :
+            $html = file_get_dom('http://www.newegg.com/Product/Product.aspx?Item='.$sku.'&Pagesize=100');
+            foreach($html('#Community_Content .grpReviews tr td .details') as $element) {
+                $nike_name=$element->parent->parent->getChild(1)->getChild(1)->getChild(1)->getPlainText();
+                $created=$element->parent->parent->getChild(1)->getChild(1)->getChild(3)->getPlainText();
+                $subject=$element->parent->parent->getChild(3)->getChild(3)->getChild(-1)->getPlainText();
+                $response[] = array(
+                    'detail' => $element->html(),
+                    'nickname' => $nike_name,
+                    'title' => $subject,
+                    'created' => $created
+                );
+            }
+            break;
+    }
+    return $response;
 }
