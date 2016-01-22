@@ -28,16 +28,25 @@ $app->post('/api/deleteAwsReview', function () {
         return;
     }
     $reviewId = getSpecificReview($input['review']);
-    echo $reviewId;
-    try {
-        $model = Mage::getModel('review/review')->load($reviewId);
-        $model->delete();
-    } catch (Mage_Core_Exception $e) {
-        echo json_encode(array('message' => $e->getMessage()));
-    } catch (Exception $e){
-        var_dump($e);
+    if ($reviewId) {
+        try {
+            $model = Mage::getModel('review/review')->load($reviewId);
+            $model->delete();
+        } catch (Mage_Core_Exception $e) {
+            echo json_encode(array('message' => $e->getMessage()));
+        } catch (Exception $e){
+            var_dump($e);
+        }
+        echo json_encode(array(
+            'status' => 'success',
+            'message' => 'success'
+        ));
+    } else {
+        echo json_encode(array(
+            'status' => 'success',
+            'message' => 'no review deleted.'
+        ));
     }
-    echo json_encode(array('message' => 'success'));
 });
 
 $app->post('/api/updateReviewStatus', function () {
