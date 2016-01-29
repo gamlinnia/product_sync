@@ -56,7 +56,7 @@ foreach($productCollection as $each){
                 }
             }
             else{
-                echo "Already Exist!";
+                echo "Already Exist!" . PHP_EOL;
             }
         }
     }
