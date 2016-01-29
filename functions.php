@@ -1560,7 +1560,7 @@ function getLatestChannelsProductReviews ($channel, $sku) {
                 }
 
                 $response[] = array(
-                    'detail' => $element->getInnerText(),
+                    'detail' => $element->getPlainText(),
                     'nickname' => $nickname,
                     'subject' => $subject,
                     'created_at' => $created,
