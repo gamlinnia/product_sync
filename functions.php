@@ -1540,7 +1540,6 @@ function getLatestChannelsProductReviews ($channel, $sku) {
     $response = array();
     switch ($channel) {
         case 'newegg' :
-            $html = null;
             $html = file_get_dom('http://www.newegg.com/Product/Product.aspx?Item='.$sku.'&Pagesize=100');
             foreach($html('#Community_Content .grpReviews tr td .details') as $element) {
                 $nickname = $element->parent->parent->getChild(1)->getChild(1)->getChild(1)->getPlainText();

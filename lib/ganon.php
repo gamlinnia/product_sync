@@ -1020,7 +1020,8 @@ class HTML_Node {
 	function clear() {
 		foreach($this->children as $c) {
 			$c->parent = null;
-			$c->delete();
+			//$c->delete();
+			$c = null;
 		}
 		$this->children = array();
 	}
