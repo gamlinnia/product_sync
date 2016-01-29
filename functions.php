@@ -1574,5 +1574,5 @@ function getLatestChannelsProductReviews ($channel, $sku) {
 
 
 function removeQuestionMark($input){
-    return preg_replace('/[?]/', '_', $input);
+    return preg_replace('/[\\\/?]/', '_', $input);
 }

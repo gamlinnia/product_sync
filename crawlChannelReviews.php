@@ -23,6 +23,7 @@ foreach($productCollection as $each){
         $channelReviews = getLatestChannelsProductReviews($channel, $sku);
         /*foreach review*/
         foreach($channelReviews as $eachReview){
+            /*addFieldToFilter will facing problem with the character question mark(?) */
             $reviewCollection = $reviewModel->getCollection()
                     ->addFieldToFilter('entity_id', $entity_id)
                     ->addFieldToFilter('channel', $channel)
