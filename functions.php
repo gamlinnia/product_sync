@@ -1571,3 +1571,8 @@ function getLatestChannelsProductReviews ($channel, $sku) {
     }
     return $response;
 }
+
+
+function removeQuestionMark($input){
+    return preg_replace('/[?]/', '_', $input);
+}
