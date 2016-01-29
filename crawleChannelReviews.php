@@ -6,7 +6,7 @@ if (!file_exists('config.json')) {
 $config = json_decode(file_get_contents('config.json'), true);
 require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
-require_once 'lib/ganon_v72.php';
+require_once 'lib/ganon_rev72/ganon.php';
 Mage::app('admin');
 
 $collection = Mage::getModel('catalog/product')->getCollection();
