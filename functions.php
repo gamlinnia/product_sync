@@ -1545,11 +1545,20 @@ function getLatestChannelsProductReviews ($channel, $sku) {
                 $nike_name=$element->parent->parent->getChild(1)->getChild(1)->getChild(1)->getPlainText();
                 $created=$element->parent->parent->getChild(1)->getChild(1)->getChild(3)->getPlainText();
                 $subject=$element->parent->parent->getChild(3)->getChild(3)->getChild(-1)->getPlainText();
+                /* ratingText => 'Rating: 4/5' */
+                $ratingText=$element->parent->parent->getChild(3)->getChild(3)->getChild(-2)->getPlainText();
+
+                preg_match('/(\d).?\/.?\d/', $ratingText, $match);
+                if(count($match) == 2){
+                    $rating =$match[1];
+                }
+
                 $response[] = array(
                     'detail' => $element->html(),
                     'nickname' => $nike_name,
-                    'title' => $subject,
-                    'created' => $created
+                    'subject' => $subject,
+                    'created_at' => $created,
+                    'rating' => $rating
                 );
             }
             break;
