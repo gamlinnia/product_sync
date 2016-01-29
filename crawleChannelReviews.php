@@ -6,7 +6,7 @@ if (!file_exists('config.json')) {
 $config = json_decode(file_get_contents('config.json'), true);
 require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
-require_once 'lib/ganon.php';
+require_once 'lib/ganon_v72.php';
 Mage::app('admin');
 
 $collection = Mage::getModel('catalog/product')->getCollection();
@@ -16,7 +16,6 @@ $channels = array('newegg');
 /*foreach product*/
 foreach($collection as $each){
     $sku = $each->getSku();
-    echo 'SKU: ' . $sku . PHP_EOL;
     $entity_id = $each->getId();
     /*foreach channel*/
     foreach($channels as $channel) {
