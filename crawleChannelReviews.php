@@ -23,7 +23,7 @@ foreach($productCollection as $each){
         $channelReviews = getLatestChannelsProductReviews($channel, $sku);
         /*foreach review*/
         foreach($channelReviews as $eachReview){
-            $reviewCollection = $reviewModel->getCollection()
+            $reviewCollection = Mage::getModel('channelreviews/channelreviews')->getCollection()
                 ->addFieldToFilter('entity_id', $entity_id)
                 ->addFieldToFilter('channel', $channel)
                 ->addFieldToFilter('detail', $eachReview['detail'])
