@@ -47,9 +47,9 @@ foreach($productCollection as $each){
                     $data['subject'] = $eachReview['subject'];
                     $data['created_at'] = $eachReview['created_at'];
                     $data['rating'] = $eachReview['rating'];
-                    //$reviewModel->setData($data);
-                    //$reviewModel->save();
-                    var_dump($data);
+                    $reviewModel->setData($data);
+                    $reviewModel->save();
+                    //var_dump($data);
                 }
                 catch (Exception $e){
 
