@@ -16,7 +16,7 @@ $channels = array('newegg');
 /*foreach product*/
 foreach($productCollection as $each){
     $sku = $each->getSku();
-//    echo 'SKU: ' . $sku . PHP_EOL;
+    echo 'SKU: ' . $sku . PHP_EOL;
     $entity_id = $each->getId();
     /*foreach channel*/
     foreach($channels as $channel) {
@@ -49,14 +49,16 @@ foreach($productCollection as $each){
                     $data['rating'] = $eachReview['rating'];
                     $reviewModel->setData($data);
                     $reviewModel->save();
-                    //var_dump($data);
+                    var_dump($data);
                 }
                 catch (Exception $e){
 
                 }
             }
+            else{
+                echo "Already Exist!";
+            }
         }
     }
-    sleep(3);
 }
 
