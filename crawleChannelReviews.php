@@ -24,13 +24,13 @@ foreach($collection as $each){
         /*foreach review*/
         foreach($channelReviews as $eachReview){
             $collection_count = $reviewModel->getCollection()
-                ->addFiledToFilter('entity_id', $entity_id)
-                ->addFiledToFilter('channel', $channel)
-                ->addFiledToFilter('detail', $eachReview['detail'])
-                ->addFiledToFilter('nickname', $eachReview['nickname'])
-                ->addFiledToFilter('subject', $eachReview['subject'])
-                ->addFiledToFilter('created_at', $eachReview['created_at'])
-                ->addFiledToFilter('rating', $eachReview['rating'])
+                ->addFieldToFilter('entity_id', $entity_id)
+                ->addFieldToFilter('channel', $channel)
+                ->addFieldToFilter('detail', $eachReview['detail'])
+                ->addFieldToFilter('nickname', $eachReview['nickname'])
+                ->addFieldToFilter('subject', $eachReview['subject'])
+                ->addFieldToFilter('created_at', $eachReview['created_at'])
+                ->addFieldToFilter('rating', $eachReview['rating'])
                 ->count();
 
             /*if review doesn't exist in database, then save*/
