@@ -1542,16 +1542,21 @@ function getLatestChannelsProductReviews ($channel, $sku) {
         case 'newegg' :
             $html = file_get_dom('http://www.newegg.com/Product/Product.aspx?Item='.$sku.'&Pagesize=100');
             foreach($html('#Community_Content .grpReviews tr td .details') as $element) {
-                $nickname=$element->parent->parent->getChild(1)->getChild(1)->getChild(1)->getPlainText();
-                $created=$element->parent->parent->getChild(1)->getChild(1)->getChild(3)->getPlainText();
-                $subject=$element->parent->parent->getChild(3)->getChild(3)->getChild(-1)->getPlainText();
-                echo $subject . PHP_EOL;
-                /* ratingText => 'Rating: 4/5' */
-                $ratingText=$element->parent->parent->getChild(3)->getChild(3)->getChild(-2)->getPlainText();
+                $nickname = $element->parent->parent->getChild(1)->getChild(1)->getChild(1)->getPlainText();
+                $created = $element->parent->parent->getChild(1)->getChild(1)->getChild(3)->getPlainText();
 
+                /* ratingText => 'Rating: 4/5' */
+                $ratingText = $element->parent->parent->getChild(3)->getChild(3)->getChild(0)->getPlainText();
                 preg_match('/(\d).?\/.?\d/', $ratingText, $match);
                 if(count($match) == 2){
-                    $rating =$match[1];
+                    $rating = $match[1];
+                }
+
+                if($element->parent->parent->getChild(3)->getChild(3)->getChild(1)) {
+                    $subject = $element->parent->parent->getChild(3)->getChild(3)->getChild(1)->getPlainText();
+                }
+                else{
+                    $subject = null;
                 }
 
                 $response[] = array(
