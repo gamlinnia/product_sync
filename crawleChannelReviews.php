@@ -9,32 +9,36 @@ require_once 'functions.php';
 require_once 'lib/ganon.php';
 Mage::app('admin');
 
-$collection = Mage::getModel('catalog/product')->getCollection();
+$productCollection = Mage::getModel('catalog/product')->getCollection();
 $reviewModel = Mage::getModel('channelreviews/channelreviews');
 $channels = array('newegg');
 
 /*foreach product*/
-foreach($collection as $each){
+foreach($productCollection as $each){
     $sku = $each->getSku();
-    echo 'SKU: ' . $sku . PHP_EOL;
+//    echo 'SKU: ' . $sku . PHP_EOL;
     $entity_id = $each->getId();
     /*foreach channel*/
     foreach($channels as $channel) {
         $channelReviews = getLatestChannelsProductReviews($channel, $sku);
         /*foreach review*/
         foreach($channelReviews as $eachReview){
-            $collection_count = $reviewModel->getCollection()
+            $reviewCollection = $reviewModel->getCollection()
                 ->addFieldToFilter('entity_id', $entity_id)
                 ->addFieldToFilter('channel', $channel)
                 ->addFieldToFilter('detail', $eachReview['detail'])
                 ->addFieldToFilter('nickname', $eachReview['nickname'])
-                ->addFieldToFilter('subject', $eachReview['subject'])
                 ->addFieldToFilter('created_at', $eachReview['created_at'])
-                ->addFieldToFilter('rating', $eachReview['rating'])
-                ->count();
+                ->addFieldToFilter('rating', $eachReview['rating']);
+
+            if(!empty($eachReview['subject'])){
+                $reviewCollection->addFieldToFilter('subject', $eachReview['subject']);
+            }
+
+            $reviewCollectionCount = $reviewCollection->count();
 
             /*if review doesn't exist in database, then save*/
-            if($collection_count == 0) {
+            if($reviewCollectionCount == 0) {
                 try {
                     $data['entity_id'] = $entity_id;
                     $data['channel'] = $channel;
