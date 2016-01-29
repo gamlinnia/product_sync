@@ -26,7 +26,7 @@ foreach($productCollection as $each){
             $reviewCollection = $reviewModel->getCollection()
                     ->addFieldToFilter('entity_id', $entity_id)
                     ->addFieldToFilter('channel', $channel)
-                    //->addFieldToFilter('detail', $eachReview['detail'])
+                    ->addFieldToFilter('detail', $eachReview['detail'])
                     ->addFieldToFilter('nickname', $eachReview['nickname'])
                     ->addFieldToFilter('created_at', array('eq' => date("Y-m-d H:i:s", strtotime($eachReview['created_at']))))
                     ->addFieldToFilter('rating', $eachReview['rating']);
