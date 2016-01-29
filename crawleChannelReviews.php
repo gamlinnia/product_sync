@@ -23,12 +23,13 @@ foreach($productCollection as $each){
         $channelReviews = getLatestChannelsProductReviews($channel, $sku);
         /*foreach review*/
         foreach($channelReviews as $eachReview){
-            $reviewCollection = Mage::getModel('channelreviews/channelreviews')->getCollection()
-                ->addFieldToFilter('entity_id', $entity_id)
-                ->addFieldToFilter('channel', $channel)
-                ->addFieldToFilter('nickname', $eachReview['nickname'])
-                ->addFieldToFilter('created_at', $eachReview['created_at'])
-                ->addFieldToFilter('rating', $eachReview['rating']);
+            $reviewCollection = $reviewModel->getCollection()
+                    ->addFieldToFilter('entity_id', $entity_id)
+                    ->addFieldToFilter('channel', $channel)
+                    ->addFieldToFilter('detail', $eachReview['detail'])
+                    ->addFieldToFilter('nickname', $eachReview['nickname'])
+                    ->addFieldToFilter('created_at', array('eq' => date("Y-m-d H:i:s", strtotime($eachReview['created_at']))))
+                    ->addFieldToFilter('rating', $eachReview['rating']);
 
             if(!empty($eachReview['subject'])){
                 $reviewCollection->addFieldToFilter('subject', $eachReview['subject']);
