@@ -1542,7 +1542,7 @@ function getLatestChannelsProductReviews ($channel, $sku) {
         case 'newegg' :
             $html = file_get_dom('http://www.newegg.com/Product/Product.aspx?Item='.$sku.'&Pagesize=100');
             foreach($html('#Community_Content .grpReviews tr td .details') as $element) {
-                $nike_name=$element->parent->parent->getChild(1)->getChild(1)->getChild(1)->getPlainText();
+                $nickname=$element->parent->parent->getChild(1)->getChild(1)->getChild(1)->getPlainText();
                 $created=$element->parent->parent->getChild(1)->getChild(1)->getChild(3)->getPlainText();
                 $subject=$element->parent->parent->getChild(3)->getChild(3)->getChild(-1)->getPlainText();
                 /* ratingText => 'Rating: 4/5' */
@@ -1555,7 +1555,7 @@ function getLatestChannelsProductReviews ($channel, $sku) {
 
                 $response[] = array(
                     'detail' => $element->html(),
-                    'nickname' => $nike_name,
+                    'nickname' => $nickname,
                     'subject' => $subject,
                     'created_at' => $created,
                     'rating' => $rating

@@ -16,6 +16,7 @@ $channels = array('newegg');
 /*foreach product*/
 foreach($collection as $each){
     $sku = $each->getSku();
+    echo 'SKU: ' . $sku . PHP_EOL;
     $entity_id = $each->getId();
     /*foreach channel*/
     foreach($channels as $channel) {
