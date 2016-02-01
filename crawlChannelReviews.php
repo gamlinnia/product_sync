@@ -10,7 +10,8 @@ require_once 'lib/ganon.php';
 Mage::app('admin');
 
 $productCollection = Mage::getModel('catalog/product')->getCollection();
-$productCollection->setOrder('id', 'desc');
+$productCollection->setOrder('entity_id', 'desc');
+$productCollection->load();
 $reviewModel = Mage::getModel('channelreviews/channelreviews');
 $channels = array('newegg');
 
