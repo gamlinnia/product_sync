@@ -1582,10 +1582,9 @@ function replaceSpecialCharacters($input){
     return preg_replace('/[\\\\\/?]/', '_', $input);
 }
 
-function getInformationFromIntelligence ($itemNumberTemp = '', $returnResponse = false) {
+function getInformationFromIntelligence ($itemNumber, $returnResponse = false) {
     global $app;
     global $intelligenceBaseUrl;
-    $itemNumber = $app->request->get('itemNumber') ? $app->request->get('itemNumber') : $itemNumberTemp;
     $restPostfix = '/itemservice/detail';
     $data = array(
         "CompanyCode" => 1003,
