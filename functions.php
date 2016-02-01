@@ -1585,7 +1585,7 @@ function replaceSpecialCharacters($input){
 
 function getInformationFromIntelligence ($itemNumber, $returnResponse = false) {
     global $app;
-    global $intelligenceBaseUrl;
+    $intelligenceBaseUrl = 'http://172.16.16.110:8461';
     $restPostfix = '/itemservice/detail';
     $data = array(
         "CompanyCode" => 1003,
