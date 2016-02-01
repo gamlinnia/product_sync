@@ -1560,9 +1560,9 @@ function getLatestChannelsProductReviews ($channel, $sku) {
                 }
 
                 $response[] = array(
-                    'detail' => $element->html(),
-                    'nickname' => $nickname,
-                    'subject' => $subject,
+                    'detail' => htmlentities(trim($element->getPlainText())),
+                    'nickname' => htmlentities($nickname),
+                    'subject' => htmlentities($subject),
                     'created_at' => $created,
                     'rating' => $rating
                 );
@@ -1572,33 +1572,12 @@ function getLatestChannelsProductReviews ($channel, $sku) {
     return $response;
 }
 
-function getInformationFromIntelligence ($itemNumberTemp = '', $returnResponse = false) {
-    global $app;
-    global $intelligenceBaseUrl;
-    $itemNumber = $app->request->get('itemNumber') ? $app->request->get('itemNumber') : $itemNumberTemp;
-    $restPostfix = '/itemservice/detail';
-    $data = array(
-        "CompanyCode" => 1003,
-        "CountryCode" => "USA",
-        "Fields" => null,
-        "Items" => array(
-            array("ItemNumber" => $itemNumber)
-        ),
-        "RequestModel" => "RW"
-    );
-    $header = array('Content-Type: application/json', 'Accept: application/json');
-    $response = CallAPI('POST', $intelligenceBaseUrl . $restPostfix, $header, $data);
-    if ($returnResponse) {
-        return $response;
-    }
-    echo json_encode(array(
-        'status' => 'success',
-        'DataCollection' => array(
-            'ItemNumber' => $response['detailinfo'][0]['ItemNumber'],
-            'DetailSpecification' => $response['detailinfo'][0]['DetailSpecification'],
-            'Introduction' => $response['detailinfo'][0]['Introduction'],
-            'IntroductionImage' => $response['detailinfo'][0]['IntroductionImage'],
-            'Intelligence' => $response['detailinfo'][0]['Intelligence']
-        )
-    ));
+/*
+ *'\', '/', '?' make magento addAttributeToFilter equal function inactive, so replace them with sql wildcard character '_' and use 'like' search
+ * '\' => '\\\\'
+ * '/' => '\/'
+ * '?' => '?'
+*/
+function replaceSpecialCharacters($input){
+    return preg_replace('/[\\\\\/?]/', '_', $input);
 }
