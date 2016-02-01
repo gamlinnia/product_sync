@@ -1572,7 +1572,12 @@ function getLatestChannelsProductReviews ($channel, $sku) {
     return $response;
 }
 
-/* '\', '/', '?' make magento addAttributeToFilter equal function inactive, so replace them with sql wildcard character '_' and use 'like' search*/
+/*
+ *'\', '/', '?' make magento addAttributeToFilter equal function inactive, so replace them with sql wildcard character '_' and use 'like' search
+ * '\' => '\\\\'
+ * '/' => '\/'
+ * '?' => '?'
+*/
 function replaceSpecialCharacters($input){
-    return preg_replace('/[\\\/?]/', '_', $input);
+    return preg_replace('/[\\\\\/?]/', '_', $input);
 }
