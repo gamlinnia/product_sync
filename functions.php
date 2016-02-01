@@ -1582,3 +1582,33 @@ function getLatestChannelsProductReviews ($channel, $sku) {
 function replaceSpecialCharacters($input){
     return preg_replace('/[\\\\\/?]/', '_', $input);
 }
+
+function getInformationFromIntelligence ($itemNumber, $returnResponse = false) {
+    global $app;
+    global $intelligenceBaseUrl;
+    $restPostfix = '/itemservice/detail';
+    $data = array(
+        "CompanyCode" => 1003,
+        "CountryCode" => "USA",
+        "Fields" => null,
+        "Items" => array(
+            array("ItemNumber" => $itemNumber)
+        ),
+        "RequestModel" => "RW"
+    );
+    $header = array('Content-Type: application/json', 'Accept: application/json');
+    $response = CallAPI('POST', $intelligenceBaseUrl . $restPostfix, $header, $data);
+    if ($returnResponse) {
+        return $response;
+    }
+    echo json_encode(array(
+        'status' => 'success',
+        'DataCollection' => array(
+            'ItemNumber' => $response['detailinfo'][0]['ItemNumber'],
+            'DetailSpecification' => $response['detailinfo'][0]['DetailSpecification'],
+            'Introduction' => $response['detailinfo'][0]['Introduction'],
+            'IntroductionImage' => $response['detailinfo'][0]['IntroductionImage'],
+            'Intelligence' => $response['detailinfo'][0]['Intelligence']
+        )
+    ));
+}
