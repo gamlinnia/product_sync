@@ -1572,7 +1572,7 @@ function getLatestChannelsProductReviews ($channel, $sku) {
     return $response;
 }
 
-
-function removeQuestionMark($input){
+/* '\', '/', '?' make magento addAttributeToFilter equal function inactive, so replace them with sql wildcard character '_' and use 'like' search*/
+function replaceSpecialCharacters($input){
     return preg_replace('/[\\\/?]/', '_', $input);
 }

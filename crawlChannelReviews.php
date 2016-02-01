@@ -27,13 +27,13 @@ foreach($productCollection as $each){
             $reviewCollection = $reviewModel->getCollection()
                     ->addFieldToFilter('entity_id', $entity_id)
                     ->addFieldToFilter('channel', $channel)
-                    ->addFieldToFilter('detail', array('like'=> removeQuestionMark($eachReview['detail'])))
-                    ->addFieldToFilter('nickname', array('like'=> removeQuestionMark($eachReview['nickname'])))
+                    ->addFieldToFilter('detail', array('like'=> replaceSpecialCharacters($eachReview['detail'])))
+                    ->addFieldToFilter('nickname', array('like'=> replaceSpecialCharacters($eachReview['nickname'])))
                     ->addFieldToFilter('created_at', array('eq' => date("Y-m-d H:i:s", strtotime($eachReview['created_at']))))
                     ->addFieldToFilter('rating', $eachReview['rating']);
 
             if(!empty($eachReview['subject'])){
-                $reviewCollection->addFieldToFilter('subject', array('like'=> removeQuestionMark($eachReview['subject'])));
+                $reviewCollection->addFieldToFilter('subject', array('like'=> replaceSpecialCharacters($eachReview['subject'])));
             }
 
             $reviewCollectionCount = $reviewCollection->count();
