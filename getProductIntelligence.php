@@ -8,4 +8,4 @@ require_once 'functions.php';
 Mage::app('admin');
 
 $intelligence = getInformationFromIntelligence('23-201-072', true);
-echo json_encode($intelligence);
+var_dump($intelligence);
