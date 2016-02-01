@@ -1540,33 +1540,37 @@ function getLatestChannelsProductReviews ($channel, $sku) {
     $response = array();
     switch ($channel) {
         case 'newegg' :
-            $html = file_get_dom('http://www.newegg.com/Product/Product.aspx?Item='.$sku.'&Pagesize=100');
-            foreach($html('#Community_Content .grpReviews tr td .details') as $element) {
-                $nickname = $element->parent->parent->getChild(1)->getChild(1)->getChild(1)->getPlainText();
-                $created = $element->parent->parent->getChild(1)->getChild(1)->getChild(3)->getPlainText();
+            try {
+                $html = file_get_dom('http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=100');
+                foreach ($html('#Community_Content .grpReviews tr td .details') as $element) {
+                    $nickname = $element->parent->parent->getChild(1)->getChild(1)->getChild(1)->getPlainText();
+                    $created = $element->parent->parent->getChild(1)->getChild(1)->getChild(3)->getPlainText();
 
-                /* ratingText => 'Rating: 4/5' */
-                $ratingText = $element->parent->parent->getChild(3)->getChild(3)->getChild(0)->getPlainText();
-                preg_match('/(\d).?\/.?\d/', $ratingText, $match);
-                if(count($match) == 2){
-                    $rating = $match[1];
-                }
+                    /* ratingText => 'Rating: 4/5' */
+                    $ratingText = $element->parent->parent->getChild(3)->getChild(3)->getChild(0)->getPlainText();
+                    preg_match('/(\d).?\/.?\d/', $ratingText, $match);
+                    if (count($match) == 2) {
+                        $rating = $match[1];
+                    }
 
-                if($element->parent->parent->getChild(3)->getChild(3)->getChild(1)) {
-                    $subject = $element->parent->parent->getChild(3)->getChild(3)->getChild(1)->getPlainText();
-                }
-                else{
-                    $subject = null;
-                }
+                    if ($element->parent->parent->getChild(3)->getChild(3)->getChild(1)) {
+                        $subject = $element->parent->parent->getChild(3)->getChild(3)->getChild(1)->getPlainText();
+                    } else {
+                        $subject = null;
+                    }
 
-                $response[] = array(
-                    //'detail' => htmlentities(trim($element->getPlainText())),
-                    'detail' => trim($element->getPlainText()),
-                    'nickname' => htmlentities($nickname),
-                    'subject' => htmlentities($subject),
-                    'created_at' => $created,
-                    'rating' => $rating
-                );
+                    $response[] = array(
+                        //'detail' => htmlentities(trim($element->getPlainText())),
+                        'detail' => trim($element->getPlainText()),
+                        'nickname' => htmlentities($nickname),
+                        'subject' => htmlentities($subject),
+                        'created_at' => $created,
+                        'rating' => $rating
+                    );
+                }
+            }
+            catch (Exception $e){
+                file_put_contents('crawler_channel_reviews.log', $e->getMessage() . '\n\r', FILE_APPEND);
             }
             break;
     }
