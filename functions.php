@@ -1661,6 +1661,7 @@ function sendMailWithDownloadUrl ($action, $fileList) {
 }
 
 function templateReplace ($action) {
+    /*use ganon.php to parse html file*/
     $doc = file_get_dom('email/content/template.html');
 
     $contentTitle = array(
