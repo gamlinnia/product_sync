@@ -9,8 +9,13 @@ require_once 'functions.php';
 require_once 'lib/ganon.php';
 require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
-$channels = array('newegg');
-$productCollection = Mage::getModel('catalog/product')->getCollection();
+
+$channels = array(
+    'newegg' => 'http://www.newegg.com/Product/Product.aspx?Item=',
+
+);
+
+$productCollection = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('name');
 $productCollection->setOrder('entity_id', 'desc');
 $channelReviewModel = Mage::getModel('channelreviews/channelreviews');
 $fileList = array();
@@ -30,15 +35,17 @@ if ($debug) {
 }
 
 /*foreach channel*/
-foreach($channels as $channel) {
+foreach($channels as $channel => $url) {
     /*each excel for each channel */
     $arrayToExcel = array();
     /*foreach product*/
     foreach($productCollection as $each){
         $sku = $each->getSku();
         $entity_id = $each->getId();
+        $productName = $each->getName();
         echo 'SKU: ' . $sku . PHP_EOL;
         echo 'ID: ' . $entity_id . PHP_EOL;
+
         $channelReviews = getLatestChannelsProductReviews($channel, $sku);
         /*foreach review*/
         foreach($channelReviews as $eachReview) {
@@ -78,6 +85,10 @@ foreach($channels as $channel) {
 
                     /*push  rating 1~2 reviews to array and wait for export to excel*/
                     if ((int)$rating <= 2) {
+                        /*add more information for excel*/
+                        $data['product_name'] = $productName;
+                        $data['product_url'] = $url . $sku;
+                        $data['item_number'] = $sku;
                         $arrayToExcel[] = $data;
                     }
                 } catch (Exception $e) {

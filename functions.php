@@ -1651,13 +1651,13 @@ function sendMailWithDownloadUrl ($action, $fileList, $recipient_array) {
 }
 
 function templateReplace ($action) {
-    /*use ganon.php to parse html file*/
-    $doc = file_get_dom('email/content/template.html');
-
     $contentTitle = array(
         'Crawler Report' => 'NE.com and Amazon.com Daily Crawling Report',
         'Channel Reviews' => 'Channel Reviews Notification'
     );
+
+    /*use ganon.php to parse html file*/
+    $doc = file_get_dom('email/content/template.html');
 
     $doc('.description p', 0)->setPlainText($contentTitle[$action]);
     $doc('.descriptionTitle p', 0)->setPlainText($contentTitle[$action]);
