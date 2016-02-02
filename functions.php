@@ -1619,3 +1619,66 @@ function getInformationFromIntelligence ($itemNumber, $returnResponse = false) {
         )
     ));
 }
+
+function sendMailWithDownloadUrl ($action, $fileList) {
+    global $debug;
+
+    if ($debug) {
+        $recipient_array = array(
+            'to' => array('Tim.H.Huang@newegg.com'),
+            'bcc' => array('Li.L.Liu@newegg.com', 'Tim.H.Huang@newegg.com')
+        );
+    } else {
+        $recipient_array = array(
+            'to' => array('Stephanie.Y.Chang@rosewill.com'),
+            'bcc' => array('Li.L.Liu@newegg.com', 'Tim.H.Huang@newegg.com')
+        );
+    }
+
+    require_once 'class/Email.class.php';
+    require_once 'class/EmailFactory.class.php';
+
+    /* SMTP server name, port, user/passwd */
+    $smtpInfo = array("host" => "127.0.0.1",
+        "port" => "25",
+        "auth" => false);
+    $emailFactory = EmailFactory::getEmailFactory($smtpInfo);
+
+    $attachments = array();
+    foreach($fileList as $each){
+        $fileName = $each;
+        $excelFileType =  'application/vnd.ms-excel';
+        $attachments[$fileName] = $excelFileType;
+    }
+    /* $email = class Email */
+    $email = $emailFactory->getEmail($action, $recipient_array);
+    $content = templateReplace($action);
+    $email->setContent($content);
+    $email->setAttachments($attachments);
+    $email->sendMail();
+
+    return true;
+}
+
+function templateReplace ($action) {
+    require_once 'PHPExcel/Classes/PHPExcel.php';
+    $content = file_get_contents('email/content/template.html');
+    $doc = phpQuery::newDocumentHTML($content);
+
+    $contentTitle = array(
+        'Crawler Report' => 'NE.com and Amazon.com Daily Crawling Report',
+        'Channel Reviews' => 'Channel Reviews Notification'
+    );
+    (isset($contentTitle[$action])) ? $doc['.descriptionTitle'] = $contentTitle[$action] : $doc['.descriptionTitle'] = $action;
+
+    $emailContent = array();
+    $description = "Hi All:" . "<div>Data as attachments</div>";
+    $doc['.description'] = $description;
+    $doc['.logoImage']->attr('src', 'images/rosewilllogo.png');
+    return $doc;
+}
+
+function currentTime () {
+    $now = new DateTime(null, new DateTimeZone('UTC'));
+    return $now->format('Y-m-d H:i:s');    /*MySQL datetime format*/
+}
