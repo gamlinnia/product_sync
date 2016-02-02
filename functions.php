@@ -1677,8 +1677,3 @@ function templateReplace ($action) {
     $doc['.logoImage']->attr('src', 'images/rosewilllogo.png');
     return $doc;
 }
-
-function currentTime () {
-    $now = new DateTime(null, new DateTimeZone('UTC'));
-    return $now->format('Y-m-d H:i:s');    /*MySQL datetime format*/
-}
