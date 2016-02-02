@@ -76,11 +76,13 @@ foreach($productCollection as $each){
         }
 
         /*export all reviews with 1 or 2 rate to excel by channel*/
-        $now = date('Y-m-d');
-        exportArrayToXlsx($arrayToExcel, array(
-            "filename" => $channel . '_' .  $now . '.xls',
-            "title" => "Sheet 1"
-        ));
+        if(!empty($arrayToExcel)) {
+            $now = date('Y-m-d');
+            exportArrayToXlsx($arrayToExcel, array(
+                "filename" => $channel . '_' . $now . '.xls',
+                "title" => "Sheet 1"
+            ));
+        }
 
         /*sleep for 0.5 second*/
         usleep(500000);
