@@ -7,7 +7,7 @@ $config = json_decode(file_get_contents('config.json'), true);
 require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
 require_once 'lib/ganon.php';
-require_once 'PHPExcel-1.8/Classes/PHPExcel.php';
+require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
 
 $productCollection = Mage::getModel('catalog/product')->getCollection();
