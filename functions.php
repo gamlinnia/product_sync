@@ -1621,6 +1621,7 @@ function getInformationFromIntelligence ($itemNumber, $returnResponse = false) {
 
 function sendMailWithDownloadUrl ($action, $fileList) {
     global $debug;
+    $debug = true;
 
     if ($debug) {
         $recipient_array = array(
