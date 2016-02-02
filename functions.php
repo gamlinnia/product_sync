@@ -1661,7 +1661,7 @@ function sendMailWithDownloadUrl ($action, $fileList) {
 }
 
 function templateReplace ($action) {
-    require_once 'PHPExcel/Classes/PHPExcel.php';
+    //require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
     $content = file_get_contents('email/content/template.html');
     $doc = phpQuery::newDocumentHTML($content);
 
