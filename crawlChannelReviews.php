@@ -16,6 +16,20 @@ $productCollection->setOrder('entity_id', 'desc');
 $channelReviewModel = Mage::getModel('channelreviews/channelreviews');
 $fileList = array();
 
+$debug = true;
+
+if ($debug) {
+    $recipient_array = array(
+        'to' => array('Tim.H.Huang@newegg.com'),
+        'bcc' => array('Li.L.Liu@newegg.com', 'Tim.H.Huang@newegg.com')
+    );
+} else {
+    $recipient_array = array(
+        'to' => array('Stephanie.Y.Chang@rosewill.com'),
+        'bcc' => array('Li.L.Liu@newegg.com', 'Tim.H.Huang@newegg.com')
+    );
+}
+
 /*foreach channel*/
 foreach($channels as $channel) {
     /*each excel for each channel */
@@ -52,13 +66,13 @@ foreach($channels as $channel) {
             /*if review doesn't exist in database, then save*/
             if ($reviewCollectionCount == 0) {
                 try {
-                    $data['entity_id'] = $entity_id;
                     $data['channel'] = $channel;
-                    $data['detail'] = $detail;
                     $data['nickname'] = $nickname;
                     $data['subject'] = $subject;
-                    $data['created_at'] = $created_at;
+                    $data['detail'] = $detail;
                     $data['rating'] = $rating;
+                    $data['created_at'] = $created_at;
+                    $data['entity_id'] = $entity_id;
                     $channelReviewModel->setData($data);
                     $channelReviewModel->save();
                     var_dump($data);
@@ -92,7 +106,7 @@ foreach($channels as $channel) {
 /*send email notification*/
 if(!empty($fileList)) {
     /*sendEmail*/
-    sendMailWithDownloadUrl('Channel Reviews', $fileList);
+    sendMailWithDownloadUrl('Channel Reviews', $fileList, $recipient_array);
 }
 
 

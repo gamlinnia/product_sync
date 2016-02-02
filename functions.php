@@ -1619,22 +1619,7 @@ function getInformationFromIntelligence ($itemNumber, $returnResponse = false) {
     ));
 }
 
-function sendMailWithDownloadUrl ($action, $fileList) {
-    global $debug;
-    $debug = true;
-
-    if ($debug) {
-        $recipient_array = array(
-            'to' => array('Tim.H.Huang@newegg.com'),
-            'bcc' => array('Li.L.Liu@newegg.com', 'Tim.H.Huang@newegg.com')
-        );
-    } else {
-        $recipient_array = array(
-            'to' => array('Stephanie.Y.Chang@rosewill.com'),
-            'bcc' => array('Li.L.Liu@newegg.com', 'Tim.H.Huang@newegg.com')
-        );
-    }
-
+function sendMailWithDownloadUrl ($action, $fileList, $recipient_array) {
     require_once 'class/Email.class.php';
     require_once 'class/EmailFactory.class.php';
     require_once 'rest/tools.php';
