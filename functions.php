@@ -1661,19 +1661,20 @@ function sendMailWithDownloadUrl ($action, $fileList) {
 }
 
 function templateReplace ($action) {
-    require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
-    $content = file_get_contents('email/content/template.html');
-    $doc = phpQuery::newDocumentHTML($content);
+    $doc = file_get_dom('email/content/template.html');
 
     $contentTitle = array(
         'Crawler Report' => 'NE.com and Amazon.com Daily Crawling Report',
         'Channel Reviews' => 'Channel Reviews Notification'
     );
-    (isset($contentTitle[$action])) ? $doc['.descriptionTitle'] = $contentTitle[$action] : $doc['.descriptionTitle'] = $action;
 
-    $emailContent = array();
+    $doc('.description p', 0)->setPlainText($contentTitle[$action]);
+    $doc('.descriptionTitle p', 0)->setPlainText($contentTitle[$action]);
+
+    (isset($contentTitle[$action])) ? $doc('.descriptionTitle p', 0)->setPlainText($contentTitle[$action]) : $doc('.descriptionTitle p', 0)->setPlainText($action);
+
     $description = "Hi All:" . "<div>Data as attachments</div>";
-    $doc['.description'] = $description;
-    $doc['.logoImage']->attr('src', 'images/rosewilllogo.png');
+    $doc('.description p', 0)->setPlainText($description);
+    $doc('.logoImage', 0)->setAttribute('src', 'images/rosewilllogo.png');
     return $doc;
 }
