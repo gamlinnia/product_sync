@@ -1643,6 +1643,10 @@ function sendMailWithDownloadUrl ($action, $fileList, $recipient_array) {
     $email->setAttachments($attachments);
     $email->sendMail();
 
+    foreach($fileList as $each){
+        unlink($each);
+    }
+
     return true;
 }
 
@@ -1660,8 +1664,8 @@ function templateReplace ($action) {
 
     (isset($contentTitle[$action])) ? $doc('.descriptionTitle p', 0)->setPlainText($contentTitle[$action]) : $doc('.descriptionTitle p', 0)->setPlainText($action);
 
-    $description = "Hi All:" . "<div>Data as attachments</div>";
-    $doc('.description p', 0)->setPlainText($description);
+    $description = "Hi All: Data as attachments";
+    $doc('.description p', 0)->parent->setInnerText($description);
     $doc('.logoImage', 0)->setAttribute('src', 'images/rosewilllogo.png');
     return $doc;
 }
