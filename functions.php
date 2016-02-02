@@ -1539,6 +1539,25 @@ function getLatestChannelsProductReviews ($channel, $sku) {
     /* need to include ganon.php */
     $response = array();
     switch ($channel) {
+        case 'amazon' :
+            $url = 'http://www.amazon.com/product-reviews/B00G505M4S/ref=cm_cr_pr_viewopt_srt?ie=UTF8&showViewpoints=1&sortBy=recent&pageNumber=1';
+            $html = file_get_dom($url);
+            $data = array();
+            foreach ($html('#cm_cr-review_list > .a-section') as $index => $element) {
+                echo $index . PHP_EOL;
+
+                $data[] = array(
+                    'detail' => $element->getChild(3)->getPlainText(),
+                    'rating' => $element->getChild(0)->getChild(0)->getPlainText(),
+                    'subject' => $element->getChild(0)->lastChild()->getPlainText(),
+                    'created_at' => $element->getChild(1)->lastChild()->getPlainText(),
+                    'nickname' => $element->getChild(1)->getChild(0)->getPlainText()
+                );
+
+            }
+            echo json_encode($data) . PHP_EOL;
+
+            break;
         case 'newegg' :
             try {
                 $html = file_get_dom('http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=50');
