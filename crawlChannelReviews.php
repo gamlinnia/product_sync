@@ -8,6 +8,7 @@ require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
 require_once 'lib/ganon.php';
 require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
+require_once 'lib/phpQuery/phpQuery/phpQuery.php';
 Mage::app('admin');
 $channels = array('newegg');
 $productCollection = Mage::getModel('catalog/product')->getCollection();
