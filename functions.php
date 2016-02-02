@@ -1085,7 +1085,7 @@ function exportArrayToXlsx ($exportArray, $exportParam) {
     //$objPHPExcel->setCellValueByColumnAndRow($column, $row, $value);
     //$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, 1, "This is A1");
     for($row = 0; $row < count($exportArray); $row++){
-        ksort($exportArray[$row]);  // sort by key
+        //ksort($exportArray[$row]);  // sort by key
         foreach ($exportArray[$row] AS $key => $value){
             // Find key index from first row
             $key_index = -1;
