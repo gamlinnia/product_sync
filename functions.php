@@ -1541,7 +1541,7 @@ function getLatestChannelsProductReviews ($channel, $sku) {
     switch ($channel) {
         case 'newegg' :
             try {
-                $html = file_get_dom('http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=100');
+                $html = file_get_dom('http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=50');
             }
             catch (Exception $e){
                 file_put_contents('crawler_channel_reviews.log', $e->getMessage() . '\n\r', FILE_APPEND);
@@ -1579,13 +1579,14 @@ function getLatestChannelsProductReviews ($channel, $sku) {
     return $response;
 }
 
-/*
- *'\', '/', '?' make magento addAttributeToFilter equal function inactive, so replace them with sql wildcard character '_' and use 'like' search
- * '\' => '\\\\'
- * '/' => '\/'
- * '?' => '?'
-*/
+
 function replaceSpecialCharacters($input){
+    /*
+    *'\', '/', '?' make magento addAttributeToFilter equal function inactive, so replace them with sql wildcard character '_' and use 'like' search
+    * '\' => '\\\\'
+    * '/' => '\/'
+    * '?' => '?'
+    */
     return preg_replace('/[\\\\\/?]/', '_', $input);
 }
 

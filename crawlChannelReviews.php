@@ -7,19 +7,20 @@ $config = json_decode(file_get_contents('config.json'), true);
 require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
 require_once 'lib/ganon.php';
+require_once 'PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
 
 $productCollection = Mage::getModel('catalog/product')->getCollection();
 $productCollection->setOrder('entity_id', 'desc');
-$productCollection->load();
 $reviewModel = Mage::getModel('channelreviews/channelreviews');
 $channels = array('newegg');
 
 /*foreach product*/
 foreach($productCollection as $each){
     $sku = $each->getSku();
-    echo 'SKU: ' . $sku . PHP_EOL;
     $entity_id = $each->getId();
+    echo 'SKU: ' . $sku . PHP_EOL;
+    echo 'ID: ' . $entity_id . PHP_EOL;
     /*foreach channel*/
     $arrayToExcel = array();
     foreach($channels as $channel) {
@@ -75,10 +76,10 @@ foreach($productCollection as $each){
         }
 
         /*export all reviews with 1 or 2 rate to excel by channel*/
-//        exportArrayToXlsx($arrayToExcel, array(
-//            "filename" => $channel,
-//            "title" => "Sheet 1"
-//        ));
+        exportArrayToXlsx($arrayToExcel, array(
+            "filename" => $channel,
+            "title" => "Sheet 1"
+        ));
 
         /*sleep for 0.5 second*/
         usleep(500000);
