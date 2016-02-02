@@ -1637,6 +1637,7 @@ function sendMailWithDownloadUrl ($action, $fileList) {
 
     require_once 'class/Email.class.php';
     require_once 'class/EmailFactory.class.php';
+    require_once 'rest/tools.php';
 
     /* SMTP server name, port, user/passwd */
     $smtpInfo = array("host" => "127.0.0.1",
