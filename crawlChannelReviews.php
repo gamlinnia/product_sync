@@ -10,15 +10,6 @@ require_once 'lib/ganon.php';
 require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
 
-$channels = array(
-    'newegg' => 'http://www.newegg.com/Product/Product.aspx?Item=',
-
-);
-
-$productCollection = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('name');
-$productCollection->setOrder('entity_id', 'desc');
-$channelReviewModel = Mage::getModel('channelreviews/channelreviews');
-$fileList = array();
 
 $debug = true;
 
@@ -34,6 +25,19 @@ if ($debug) {
     );
 }
 
+$productCollection = Mage::getModel('catalog/product')
+                            ->getCollection()
+                            ->addAttributeToSelect('name')
+                            ->addAttributeToSelect('model_number');
+
+$productCollection->setOrder('entity_id', 'desc');
+$channelReviewModel = Mage::getModel('channelreviews/channelreviews');
+$fileList = array();
+
+$channels = array(
+    'newegg' => 'http://www.newegg.com/Product/Product.aspx?Item=',
+);
+
 /*foreach channel*/
 foreach($channels as $channel => $url) {
     /*each excel for each channel */
@@ -43,6 +47,7 @@ foreach($channels as $channel => $url) {
         $sku = $each->getSku();
         $entity_id = $each->getId();
         $productName = $each->getName();
+        $modelNumber = $each->getModelNumber();
         echo 'SKU: ' . $sku . PHP_EOL;
         echo 'ID: ' . $entity_id . PHP_EOL;
 
@@ -55,6 +60,7 @@ foreach($channels as $channel => $url) {
             $rating = $eachReview['rating'];
             $subject = $eachReview['subject'];
 
+            /*check if this review already in database*/
             $reviewCollection = $channelReviewModel->getCollection()
                 ->addFieldToFilter('entity_id', $entity_id)
                 ->addFieldToFilter('channel', $channel)
@@ -86,9 +92,10 @@ foreach($channels as $channel => $url) {
                     /*push  rating 1~2 reviews to array and wait for export to excel*/
                     if ((int)$rating <= 2) {
                         /*add more information for excel*/
+                        $data['item_number'] = $sku;
+                        $data['model_number'] = $modelNumber;
                         $data['product_name'] = $productName;
                         $data['product_url'] = $url . $sku;
-                        $data['item_number'] = $sku;
                         $arrayToExcel[] = $data;
                     }
                 } catch (Exception $e) {
