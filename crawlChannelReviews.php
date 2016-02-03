@@ -55,6 +55,13 @@ foreach($channels as $channel => $url) {
         /*foreach review*/
         foreach($channelReviews as $eachReview) {
             $detail = $eachReview['detail'];
+            /*remove "This review is from: <product name>" and add <br /> in front of "Crons:" and "Other Thoughts:"*/
+            $detail = str_replace($productName, "", $detail);
+            $detail = str_replace('This review is from: ', "", $detail);
+            //$detail = str_replace('Pros:', '<br />Pros:', $detail);
+            $detail = str_replace('Cons:', '<br />Cons:', $detail);
+            $detail = str_replace('Other Thoughts:', '<br />Other Thoughts:', $detail);
+            $detail = trim($detail);
             $nickname = $eachReview['nickname'];
             $created_at = $eachReview['created_at'];
             $rating = $eachReview['rating'];
@@ -78,25 +85,32 @@ foreach($channels as $channel => $url) {
             /*if review doesn't exist in database, then save*/
             if ($reviewCollectionCount == 0) {
                 try {
+                    $data['entity_id'] = $entity_id;
                     $data['channel'] = $channel;
                     $data['nickname'] = $nickname;
                     $data['subject'] = $subject;
                     $data['detail'] = $detail;
                     $data['rating'] = $rating;
                     $data['created_at'] = $created_at;
-                    $data['entity_id'] = $entity_id;
                     $channelReviewModel->setData($data);
                     $channelReviewModel->save();
                     var_dump($data);
 
                     /*push  rating 1~2 reviews to array and wait for export to excel*/
                     if ((int)$rating <= 2) {
-                        /*add more information for excel*/
-                        $data['item_number'] = $sku;
-                        $data['model_number'] = $modelNumber;
-                        $data['product_name'] = $productName;
-                        $data['product_url'] = $url . $sku;
-                        $arrayToExcel[] = $data;
+                        $excelData = [];
+                        $excelData['entity_id'] = $entity_id;
+                        $excelData['created_at'] = $created_at;
+                        $excelData['channel'] = $channel;
+                        $excelData['item_number'] = $sku;
+                        $excelData['model_number'] = $modelNumber;
+                        $excelData['product_name'] = $productName;
+                        $excelData['nickname'] = $nickname;
+                        $excelData['rating'] = $rating;
+                        $excelData['subject'] = $subject;
+                        $excelData['detail'] = str_replace("<br />", "\r\n", $detail);
+                        $excelData['product_url'] = $url . $sku;
+                        $arrayToExcel[] = $excelData;
                     }
                 } catch (Exception $e) {
 
