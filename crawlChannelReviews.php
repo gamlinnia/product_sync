@@ -99,17 +99,21 @@ foreach($channels as $channel => $url) {
                     /*push  rating 1~2 reviews to array and wait for export to excel*/
                     if ((int)$rating <= 2) {
                         $excelData = [];
-                        $excelData['entity_id'] = $entity_id;
-                        $excelData['created_at'] = $created_at;
-                        $excelData['channel'] = $channel;
                         $excelData['item_number'] = $sku;
-                        $excelData['model_number'] = $modelNumber;
                         $excelData['product_name'] = $productName;
-                        $excelData['nickname'] = $nickname;
+                        $excelData['model_number'] = $modelNumber;
+                        $excelData['product_url'] = $url . $sku;
                         $excelData['rating'] = $rating;
                         $excelData['subject'] = $subject;
                         $excelData['detail'] = str_replace("<br />", "\r\n", $detail);
-                        $excelData['product_url'] = $url . $sku;
+                        $excelData['created_at'] = $created_at;
+                        $excelData['entity_id'] = $entity_id;
+                        $excelData['nickname'] = $nickname;
+                        $excelData['channel'] = $channel;
+
+
+
+
                         $arrayToExcel[] = $excelData;
                     }
                 } catch (Exception $e) {
