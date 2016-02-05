@@ -11,7 +11,7 @@ require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
 
 
-$debug = true;
+$debug = false;
 
 if ($debug) {
     $recipient_array = array(
@@ -20,15 +20,43 @@ if ($debug) {
     );
 } else {
     $recipient_array = array(
-        'to' => array('Stephanie.Y.Chang@rosewill.com'),
-        'bcc' => array('Li.L.Liu@newegg.com', 'Tim.H.Huang@newegg.com')
+        'to' => array(
+            'Fred.F.Yang@rosewill.com',
+            'Kenny.T.Chan@rosewill.com',
+            'Wentao.W.Zhu@rosewill.com',
+            'Thaid.C.Thor@rosewill.com',
+            'Audrey.X.Feng@rosewill.com',
+            'Sam.T.Chou@rosewill.com',
+            'Wayne.M.Chou@rosewill.com',
+        ),
+        'bcc' => array(
+            'Li.L.Liu@newegg.com',
+            'Tim.H.Huang@newegg.com',
+            'Carl.S.Pittman@rosewill.com',
+            'Jesus.J.Penaloza@rosewill.com',
+            'Sunny.S.Ooi@rosewill.com',
+            'Gary.K.Peng@rosewill.com',
+            'Ray.C.Huang@rosewill.com',
+            'Tom.M.Liu@rosewill.com',
+            'Jessy.Y.Chu@rosewill.com',
+            'Connie.Y.Lu@newegg.com',
+            'Mike.L.Zhang@newegg.com',
+            'Peggie.P.Hsieh@rosewill.com',
+            'Susan.S.Sun@newegg.com',
+            'Thompson.Y.Lu@rosewill.com',
+            'Weiyu.W.Chen@rosewill.com',
+            'Yama.M.Wu@rosewill.com',
+            'SB.S.Wu@newegg.com',
+            'Bruce.C.Lai@rosewill.com',
+            'Stephanie.Y.Chang@rosewill.com'
+        )
     );
 }
 
 $productCollection = Mage::getModel('catalog/product')
-                            ->getCollection()
-                            ->addAttributeToSelect('name')
-                            ->addAttributeToSelect('model_number');
+    ->getCollection()
+    ->addAttributeToSelect('name')
+    ->addAttributeToSelect('model_number');
 
 $productCollection->setOrder('entity_id', 'desc');
 $channelReviewModel = Mage::getModel('channelreviews/channelreviews');
@@ -111,9 +139,6 @@ foreach($channels as $channel => $url) {
                         $excelData['nickname'] = $nickname;
                         $excelData['channel'] = $channel;
 
-
-
-
                         $arrayToExcel[] = $excelData;
                     }
                 } catch (Exception $e) {
@@ -141,7 +166,7 @@ foreach($channels as $channel => $url) {
 /*send email notification*/
 if(!empty($fileList)) {
     /*sendEmail*/
-    sendMailWithDownloadUrl('Channel Reviews', $fileList, $recipient_array);
+    sendMailWithDownloadUrl('Bad product review alert,', $fileList, $recipient_array);
 }
 
 
