@@ -11,7 +11,7 @@ require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
 
 
-$debug = true;
+$debug = false;
 
 if ($debug) {
     $recipient_array = array(
@@ -168,7 +168,3 @@ if(!empty($fileList)) {
     /*sendEmail*/
     sendMailWithDownloadUrl('Bad product review alert,', $fileList, $recipient_array);
 }
-
-
-
-
