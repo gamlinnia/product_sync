@@ -27,7 +27,7 @@ if ($debug) {
             'Thaid.C.Thor@rosewill.com',
             'Audrey.X.Feng@rosewill.com',
             'Sam.T.Chou@rosewill.com',
-            'Wayne.M.Chou@rosewill.com',
+            'Wayne.M.Chou@rosewill.com'
         ),
         'bcc' => array(
             'Li.L.Liu@newegg.com',
