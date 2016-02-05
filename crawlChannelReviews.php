@@ -11,7 +11,7 @@ require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
 
 
-$debug = false;
+$debug = true;
 
 if ($debug) {
     $recipient_array = array(
