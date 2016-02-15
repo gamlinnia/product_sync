@@ -1,5 +1,8 @@
 <?php
 
+$now = new DateTime(null, new DateTimeZone('UTC'));
+file_put_contents('crawlChannelReviews.log', "Process start at: " . $now->format('Y-m-d H:i:s') . PHP_EOL, FILE_APPEND);
+
 if (!file_exists('config.json')) {
     echo 'config.json is not exist.';
 }
@@ -173,4 +176,4 @@ if(!empty($fileList)) {
 }
 
 $now = new DateTime(null, new DateTimeZone('UTC'));
-file_put_contents('crawlChannelReviews.log', $now->format('Y-m-d H:i:s') . PHP_EOL, FILE_APPEND);
+file_put_contents('crawlChannelReviews.log', "Process end at: " . $now->format('Y-m-d H:i:s') . PHP_EOL, FILE_APPEND);
