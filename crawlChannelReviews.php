@@ -84,11 +84,11 @@ foreach($channels as $channel => $url) {
     /*each excel for each channel */
     $arrayToExcel = array();
     /*foreach product*/
-    foreach($productCollection as $each){
-        $sku = $each->getSku();
-        $entity_id = $each->getId();
-        $productName = $each->getName();
-        $modelNumber = $each->getModelNumber();
+    foreach($productCollection as $eachProduct){
+        $sku = $eachProduct->getSku();
+        $entity_id = $eachProduct->getId();
+        $productName = $eachProduct->getName();
+        $modelNumber = $eachProduct->getModelNumber();
         echo 'SKU: ' . $sku . PHP_EOL;
         echo 'ID: ' . $entity_id . PHP_EOL;
 
