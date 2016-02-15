@@ -1583,9 +1583,15 @@ function getLatestChannelsProductReviews ($channel, $sku) {
                         $subject = null;
                     }
 
+                    $detail = trim($element->getPlainText());
+                    /*remove string before "Pros: " and add <br /> in front of "Crons:" and "Other Thoughts:"*/
+                    $detail =  substr($detail, strpos($detail, 'Pros:'), strlen($detail));
+                    $detail = str_replace('Cons:', '<br /><br />Cons:', $detail);
+                    $detail = str_replace('Other Thoughts:', '<br /><br />Other Thoughts:', $detail);
+                    $detail = trim($detail);
+
                     $response[] = array(
-                        //'detail' => htmlentities(trim($element->getPlainText())),
-                        'detail' => trim($element->getPlainText()),
+                        'detail' => $detail,
                         'nickname' => htmlentities($nickname),
                         'subject' => htmlentities($subject),
                         'created_at' => $created,
@@ -1597,7 +1603,6 @@ function getLatestChannelsProductReviews ($channel, $sku) {
     }
     return $response;
 }
-
 
 function replaceSpecialCharacters($input){
     /*

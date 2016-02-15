@@ -1,8 +1,10 @@
 <?php
 
+/*log starting time*/
 $now = new DateTime(null, new DateTimeZone('UTC'));
 file_put_contents('crawlChannelReviews.log', "Process start at: " . $now->format('Y-m-d H:i:s') . PHP_EOL, FILE_APPEND);
 
+/*get config setting*/
 if (!file_exists('config.json')) {
     echo 'config.json is not exist.';
 }
@@ -13,17 +15,22 @@ require_once 'lib/ganon.php';
 require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
 
-$debug = false;
+$debug = true;
 
+/*product collection*/
 $productCollection = Mage::getModel('catalog/product')
     ->getCollection()
     ->addAttributeToSelect('name')
     ->addAttributeToSelect('model_number');
-
 $productCollection->setOrder('entity_id', 'desc');
+
+/*channel review model*/
 $channelReviewModel = Mage::getModel('channelreviews/channelreviews');
+
+/*file list array*/
 $fileList = array();
 
+/*channels array*/
 $channels = array(
     'newegg' => 'http://www.newegg.com/Product/Product.aspx?Item=',
 );
@@ -89,13 +96,6 @@ foreach($channels as $channel => $url) {
         /*foreach review*/
         foreach($channelReviews as $eachReview) {
             $detail = $eachReview['detail'];
-            /*remove "This review is from: <product name>" and add <br /> in front of "Crons:" and "Other Thoughts:"*/
-            $detail = str_replace($productName, "", $detail);
-            $detail = str_replace('This review is from: ', "", $detail);
-            //$detail = str_replace('Pros:', '<br />Pros:', $detail);
-            $detail = str_replace('Cons:', '<br />Cons:', $detail);
-            $detail = str_replace('Other Thoughts:', '<br />Other Thoughts:', $detail);
-            $detail = trim($detail);
             $nickname = $eachReview['nickname'];
             $created_at = $eachReview['created_at'];
             $rating = $eachReview['rating'];
@@ -175,5 +175,6 @@ if(!empty($fileList)) {
     sendMailWithDownloadUrl('Bad product review alert', $fileList, $recipient_array);
 }
 
+/*log ending time*/
 $now = new DateTime(null, new DateTimeZone('UTC'));
 file_put_contents('crawlChannelReviews.log', "Process end at: " . $now->format('Y-m-d H:i:s') . PHP_EOL, FILE_APPEND);
