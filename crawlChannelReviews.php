@@ -10,10 +10,23 @@ require_once 'lib/ganon.php';
 require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
 
-
 $debug = true;
 
+$productCollection = Mage::getModel('catalog/product')
+    ->getCollection()
+    ->addAttributeToSelect('name')
+    ->addAttributeToSelect('model_number');
+
+$productCollection->setOrder('entity_id', 'desc');
+$channelReviewModel = Mage::getModel('channelreviews/channelreviews');
+$fileList = array();
+
+$channels = array(
+    'newegg' => 'http://www.newegg.com/Product/Product.aspx?Item=',
+);
+
 if ($debug) {
+    $productCollection->setPageSize(1);
     $recipient_array = array(
         'to' => array('Tim.H.Huang@newegg.com'),
         'cc' => array('Stephanie.Y.Chang@rosewill.com'),
@@ -55,19 +68,6 @@ if ($debug) {
         )
     );
 }
-
-$productCollection = Mage::getModel('catalog/product')
-    ->getCollection()
-    ->addAttributeToSelect('name')
-    ->addAttributeToSelect('model_number');
-
-$productCollection->setOrder('entity_id', 'desc');
-$channelReviewModel = Mage::getModel('channelreviews/channelreviews');
-$fileList = array();
-
-$channels = array(
-    'newegg' => 'http://www.newegg.com/Product/Product.aspx?Item=',
-);
 
 /*foreach channel*/
 foreach($channels as $channel => $url) {
