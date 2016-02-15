@@ -169,5 +169,5 @@ foreach($channels as $channel => $url) {
 /*send email notification*/
 if(!empty($fileList)) {
     /*sendEmail*/
-    sendMailWithDownloadUrl('Bad product review alert,', $fileList, $recipient_array);
+    sendMailWithDownloadUrl('Bad product review alert', $fileList, $recipient_array);
 }
