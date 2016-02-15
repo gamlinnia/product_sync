@@ -173,4 +173,4 @@ if(!empty($fileList)) {
 }
 
 $now = new DateTime(null, new DateTimeZone('UTC'));
-file_put_contents('crawlChannelReviews.log', $now->format('Y-m-d H:i:s'), FILE_APPEND);
+file_put_contents('crawlChannelReviews.log', $now->format('Y-m-d H:i:s') . '\n\r', FILE_APPEND);
