@@ -26,7 +26,7 @@ $channels = array(
 );
 
 if ($debug) {
-    $productCollection->setPageSize(100);
+    $productCollection->setPageSize(1);
     $recipient_array = array(
         'to' => array('Tim.H.Huang@newegg.com'),
         'cc' => array('Stephanie.Y.Chang@rosewill.com'),
@@ -171,3 +171,5 @@ if(!empty($fileList)) {
     /*sendEmail*/
     sendMailWithDownloadUrl('Bad product review alert', $fileList, $recipient_array);
 }
+
+file_put_contents('crawlChannelReviews.log', currentTime(), FILE_APPEND);
