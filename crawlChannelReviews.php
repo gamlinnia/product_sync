@@ -11,11 +11,12 @@ require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
 
 
-$debug = false;
+$debug = true;
 
 if ($debug) {
     $recipient_array = array(
         'to' => array('Tim.H.Huang@newegg.com'),
+        'cc' => array('Stephanie.Y.Chang@rosewill.com'),
         'bcc' => array('Li.L.Liu@newegg.com', 'Tim.H.Huang@newegg.com')
     );
 } else {
@@ -46,7 +47,7 @@ if ($debug) {
             'Yama.M.Wu@rosewill.com',
             'SB.S.Wu@newegg.com',
             'Bruce.C.Lai@rosewill.com',
-            'Stephanie.Y.Chang@rosewill.com'
+
         ),
         'bcc' => array(
             'Li.L.Liu@newegg.com',
