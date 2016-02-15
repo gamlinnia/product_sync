@@ -10,7 +10,7 @@ require_once 'lib/ganon.php';
 require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
 
-$debug = true;
+$debug = false;
 
 $productCollection = Mage::getModel('catalog/product')
     ->getCollection()
