@@ -26,7 +26,7 @@ $channels = array(
 );
 
 if ($debug) {
-    $productCollection->setPageSize(1);
+    $productCollection->setPageSize(100);
     $recipient_array = array(
         'to' => array('Tim.H.Huang@newegg.com'),
         'cc' => array('Stephanie.Y.Chang@rosewill.com'),
