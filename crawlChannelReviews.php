@@ -172,4 +172,5 @@ if(!empty($fileList)) {
     sendMailWithDownloadUrl('Bad product review alert', $fileList, $recipient_array);
 }
 
-file_put_contents('crawlChannelReviews.log', currentTime(), FILE_APPEND);
+$now = new DateTime(null, new DateTimeZone('UTC'));
+file_put_contents('crawlChannelReviews.log', $now->format('Y-m-d H:i:s'), FILE_APPEND);
