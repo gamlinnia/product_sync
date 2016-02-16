@@ -130,7 +130,7 @@ foreach($channels as $channel => $url) {
                     $channelReviewModel->save();
                     var_dump($data);
 
-                    /*push  rating 1~2 reviews to array and wait for export to excel*/
+                    /*push rating 1~2 reviews to array and wait for export to excel*/
                     if ((int)$rating <= 2) {
                         $excelData = [];
                         $excelData['item_number'] = $sku;
