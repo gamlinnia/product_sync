@@ -15,7 +15,7 @@ require_once 'lib/ganon.php';
 require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
 
-$debug = true;
+$debug = false;
 
 /*product collection*/
 $productCollection = Mage::getModel('catalog/product')
@@ -74,7 +74,7 @@ if ($debug) {
         ),
         'bcc' => array(
             'Li.L.Liu@newegg.com',
-            'Tim.H.Huang@newegg.com',
+            'Tim.H.Huang@newegg.com'
         )
     );
 }
