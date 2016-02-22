@@ -195,7 +195,7 @@ function morethanDays ($dateTimeString, $locale = 'America/Los_Angeles', $daysMo
     $diff =  $nowLATimeStamp - $reviewTimeStamp;
     $days = $diff / 86400;
     if ($days > $daysMoreThan) {
-        echo "More than $daysMoreThan days";
+        echo "More than $daysMoreThan days" . PHP_EOL;
         return true;
     }
     return false;
