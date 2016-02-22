@@ -1540,7 +1540,8 @@ function getLatestChannelsProductReviews ($channel, $sku) {
     $response = array();
     switch ($channel) {
         case 'amazon' :
-            $url = 'http://www.amazon.com/product-reviews/B00G505M4S/ref=cm_cr_pr_viewopt_srt?ie=UTF8&showViewpoints=1&sortBy=recent&pageNumber=1';
+
+            $url = 'http://www.amazon.com/product-reviews/' . $sku . '/ref=cm_cr_pr_viewopt_srt?ie=UTF8&showViewpoints=1&sortBy=recent&pageNumber=1';
             $html = file_get_dom($url);
             $data = array();
             foreach ($html('#cm_cr-review_list > .a-section') as $index => $element) {
@@ -1556,7 +1557,6 @@ function getLatestChannelsProductReviews ($channel, $sku) {
 
             }
             echo json_encode($data) . PHP_EOL;
-
             break;
         case 'newegg' :
             $html = file_get_dom('http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=50');
