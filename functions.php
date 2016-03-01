@@ -483,9 +483,12 @@ function compareImageWithRemoteIncludeDelete ($localImages, $remoteImages) {
                 $match = true;
                 break;
             } else {
-                preg_match('/[0-9\-]{13}/', $remote['basename'], $remoteMatch);
-                preg_match('/[0-9\-]{13}/', $local['basename'], $localMatch);
-                if ($remoteMatch[0] == $localMatch[0]) {
+                /* match basename not end with underline and dot */
+                preg_match('/^[^_^.]+/', $remote['basename'], $remoteMatch);
+                preg_match('/^[^_^.]+/', $local['basename'], $localMatch);
+//                preg_match('/[0-9\-]{13}/', $remote['basename'], $remoteMatch);
+//                preg_match('/[0-9\-]{13}/', $local['basename'], $localMatch);
+                if (count($remoteMatch) > 0 && count($localMatch) > 0 && $remoteMatch[0] == $localMatch[0]) {
                     $match = true;
                     break;
                 }
@@ -503,9 +506,11 @@ function compareImageWithRemoteIncludeDelete ($localImages, $remoteImages) {
                 $match = true;
                 break;
             } else {
-                preg_match('/[0-9\-]{13}/', $remote['basename'], $remoteMatch);
-                preg_match('/[0-9\-]{13}/', $local['basename'], $localMatch);
-                if ( $remoteMatch[0] == $localMatch[0] ) {
+                preg_match('/^[^_^.]+/', $remote['basename'], $remoteMatch);
+                preg_match('/^[^_^.]+/', $local['basename'], $localMatch);
+//                preg_match('/[0-9\-]{13}/', $remote['basename'], $remoteMatch);
+//                preg_match('/[0-9\-]{13}/', $local['basename'], $localMatch);
+                if ( count($remoteMatch) > 0 && count($localMatch) > 0 && $remoteMatch[0] == $localMatch[0] ) {
                     $match = true;
                     break;
                 }
