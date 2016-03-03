@@ -9,11 +9,14 @@ require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
 Mage::app('admin');
 
-$collection = Mage::getModel('catalog/product')->getCollection()->addFieldToFilter('description', 'This product contains a chemical known to the State of California to cause cancer');
-
+$collection = Mage::getModel('catalog/product')->getCollection();
+$collection->addAttributeToFilter('description', array(
+    array('like' => '% '. 'This product contains a chemical known to the State of California to cause cancer' .' %')
+));
 
 foreach ($collection as $product) {
-
+    echo $product->getDescription();
 }
 
 echo $collection->count();
+
