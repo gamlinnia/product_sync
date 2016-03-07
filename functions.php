@@ -1274,6 +1274,30 @@ function getProductCategoryNames ($valueToFilter, $filterType='entity_id') {
     return implode(PHP_EOL, $categoryNamesArray);
 }
 
+function getProductCategoryNamesArray ($valueToFilter, $filterType='entity_id') {
+    $product = getProductObject($valueToFilter, $filterType);
+    $categoryCollection = $product->getCategoryCollection()->addAttributeToSelect('name');
+    $categoryNamesArray = array();
+    $count = 0;
+    if ($categoryCollection->count() == 3) {
+        foreach ($categoryCollection as $each) {
+            switch ($count) {
+                case 0 :
+                    $categoryNamesArray['main'] = $each->getName();
+                    break;
+                case 1 :
+                    $categoryNamesArray['category'] = $each->getName();
+                    break;
+                case 2 :
+                    $categoryNamesArray['sub'] = $each->getName();
+                    break;
+            }
+            $count++;
+        }
+    }
+    return $categoryNamesArray;
+}
+
 function getProductCategorysInfo ($valueToFilter, $filterType='entity_id') {
     $product = getProductObject($valueToFilter, $filterType);
     $categoryCollection = $product->getCategoryCollection()->addAttributeToSelect('name');
