@@ -19,7 +19,8 @@ Mage::app('admin');
 $productCollection = Mage::getModel('catalog/product')
     ->getCollection()
     ->addAttributeToSelect('name')
-    ->addAttributeToSelect('model_number');
+    ->addAttributeToSelect('model_number')
+    ->addAttributeToSelect('url_path');
 $productCollection->setOrder('entity_id', 'desc');
 
 /*channels array*/
@@ -46,7 +47,6 @@ foreach($channels as $channel => $url) {
             'id' => $entity_id,
             'url_path' => $eachProduct->getUrlPath(),
             'product_path' => 'http://www.rosewill.com/catalog/product/view/id/' . $entity_id .'/',
-            'hyperlink' => $hyperlink
         );
         $count++;
     }
