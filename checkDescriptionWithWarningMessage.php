@@ -42,7 +42,8 @@ foreach($channels as $channel => $url) {
                 $categoryArray[] = $productCategorys . $attrInfo['name'];
                 $arrayToExcel[] = array(
                     'category' => $productCategorys,
-                    'attribute_set' => $attrInfo['name']
+                    'attribute_set' => $attrInfo['name'],
+                    'warning' => $eachProduct->getWarning()
                 );
             }
         }
