@@ -30,15 +30,14 @@ foreach($channels as $channel => $url) {
             $entity_id = $eachProduct->getId();
             $productName = $eachProduct->getName();
             $modelNumber = $eachProduct->getModelNumber();
-            $categoryIds = $eachProduct->getCategoryIds();
             $attribute_set_id = $eachProduct->getAttributeSetId();
             $attrInfo = attributeSetNameAndId('attributeSetId', $attribute_set_id);
             echo 'SKU: ' . $sku . PHP_EOL;
             echo 'ID: ' . $entity_id . PHP_EOL;
             echo $eachProduct->getWarning() . PHP_EOL;
-            $arrayToExcel = array(
+            $arrayToExcel[] = array(
                 'sku' => $sku,
-                'categorys' => $categoryIds,
+                'categorys' => getProductCategoryNames($entity_id),
                 '$attribute_set_id' => $attrInfo['name']
             );
         }
