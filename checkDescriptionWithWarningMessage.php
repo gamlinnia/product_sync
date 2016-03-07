@@ -32,16 +32,16 @@ foreach($channels as $channel => $url) {
             $productName = $eachProduct->getName();
             $modelNumber = $eachProduct->getModelNumber();
             $attribute_set_id = $eachProduct->getAttributeSetId();
-            $productCategorys = getProductCategoryNamesArray($entity_id);
+            $productCategorys = getProductCategoryNames($entity_id, 'entity_id', ' - ');
             $attrInfo = attributeSetNameAndId('attributeSetId', $attribute_set_id);
             echo 'SKU: ' . $sku . PHP_EOL;
             echo 'ID: ' . $entity_id . PHP_EOL;
             echo $eachProduct->getWarning() . PHP_EOL;
 
-            if (!in_array($productCategorys['category'] . ' - ' . $productCategorys['sub'] . ' - ' . $attrInfo['name'], $categoryArray)) {
-                $categoryArray[] = $productCategorys['category'] . ' - ' . $productCategorys['sub'] . ' - ' . $attrInfo['name'];
+            if (!in_array($productCategorys, $categoryArray)) {
+                $categoryArray[] = $productCategorys;
                 $arrayToExcel[] = array(
-                    'category' => $productCategorys['category'] . ' - ' . $productCategorys['sub'],
+                    'category' => $productCategorys,
                     'attribute_set' => $attrInfo['name']
                 );
             }

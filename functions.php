@@ -1264,38 +1264,14 @@ function getAttributeValueFromOptionsForExport ($nameOrId, $attrCodeOrId, $value
     return $valueToBeMapped;
 }
 
-function getProductCategoryNames ($valueToFilter, $filterType='entity_id') {
+function getProductCategoryNames ($valueToFilter, $filterType='entity_id', $implodeSymbol = PHP_EOL) {
     $product = getProductObject($valueToFilter, $filterType);
     $categoryCollection = $product->getCategoryCollection()->addAttributeToSelect('name');
     $categoryNamesArray = array();
     foreach ($categoryCollection as $each) {
         $categoryNamesArray[] = $each->getName();
     }
-    return implode(PHP_EOL, $categoryNamesArray);
-}
-
-function getProductCategoryNamesArray ($valueToFilter, $filterType='entity_id') {
-    $product = getProductObject($valueToFilter, $filterType);
-    $categoryCollection = $product->getCategoryCollection()->addAttributeToSelect('name');
-    $categoryNamesArray = array();
-    $count = 0;
-    if ($categoryCollection->count() == 3) {
-        foreach ($categoryCollection as $each) {
-            switch ($count) {
-                case 0 :
-                    $categoryNamesArray['main'] = $each->getName();
-                    break;
-                case 1 :
-                    $categoryNamesArray['category'] = $each->getName();
-                    break;
-                case 2 :
-                    $categoryNamesArray['sub'] = $each->getName();
-                    break;
-            }
-            $count++;
-        }
-    }
-    return $categoryNamesArray;
+    return implode($implodeSymbol, $categoryNamesArray);
 }
 
 function getProductCategorysInfo ($valueToFilter, $filterType='entity_id') {
