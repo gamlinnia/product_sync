@@ -18,9 +18,7 @@ Mage::app('admin');
 /*product collection*/
 $productCollection = Mage::getModel('catalog/product')
     ->getCollection()
-    ->addAttributeToSelect('name')
-    ->addAttributeToSelect('model_number')
-    ->addAttributeToSelect('url_path');
+    ->addAttributeToSelect('*');
 $productCollection->setOrder('entity_id', 'desc');
 
 /*channels array*/
@@ -46,6 +44,8 @@ foreach($channels as $channel => $url) {
             'sku' => $sku,
             'id' => $entity_id,
             'url_path' => $eachProduct->getUrlPath(),
+            'subcategory' => $eachProduct->getData('subcategory'),
+            'subcategory_id' => $eachProduct->getData('ne_subcategory_by_code'),
             'product_path' => 'http://www.rosewill.com/catalog/product/view/id/' . $entity_id .'/',
         );
         $count++;
