@@ -18,8 +18,7 @@ Mage::app('admin');
 /*product collection*/
 $productCollection = Mage::getModel('catalog/product')
     ->getCollection()
-    ->addAttributeToSelect('name')
-    ->addAttributeToSelect('model_number');
+    ->addAttributeToSelect('*');
 $productCollection->setOrder('entity_id', 'desc');
 
 /*channels array*/
