@@ -38,8 +38,8 @@ foreach($channels as $channel => $url) {
             echo 'ID: ' . $entity_id . PHP_EOL;
             echo $eachProduct->getWarning() . PHP_EOL;
 
-            if (!in_array($productCategorys, $categoryArray)) {
-                $categoryArray[] = $productCategorys;
+            if (!in_array($productCategorys . $attrInfo['name'], $categoryArray)) {
+                $categoryArray[] = $productCategorys . $attrInfo['name'];
                 $arrayToExcel[] = array(
                     'category' => $productCategorys,
                     'attribute_set' => $attrInfo['name']
