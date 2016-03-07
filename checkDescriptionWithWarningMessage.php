@@ -23,6 +23,7 @@ $channels = array(
 foreach($channels as $channel => $url) {
     /*each excel for each channel */
     $arrayToExcel = array();
+    $categoryArray = array();
     /*foreach product*/
     foreach($productCollection as $eachProduct){
         if ($eachProduct->getWarning()) {
@@ -36,12 +37,14 @@ foreach($channels as $channel => $url) {
             echo 'SKU: ' . $sku . PHP_EOL;
             echo 'ID: ' . $entity_id . PHP_EOL;
             echo $eachProduct->getWarning() . PHP_EOL;
-            $arrayToExcel[] = array(
-                'sku' => $sku,
-                'category' => $productCategorys['category'],
-                'subcategory' => $productCategorys['sub'],
-                'attribute_set' => $attrInfo['name']
-            );
+
+            if (!in_array($productCategorys['category'] . ' - ' . $productCategorys['sub'], $categoryArray)) {
+                $categoryArray[] = $productCategorys['category'] . ' - ' . $productCategorys['sub'];
+                $arrayToExcel[] = array(
+                    'category' => $productCategorys['category'] . ' - ' . $productCategorys['sub'],
+                    'attribute_set' => $attrInfo['name']
+                );
+            }
         }
     }
     /*export all reviews with 1 or 2 rate to excel by channel*/
