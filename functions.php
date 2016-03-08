@@ -1453,9 +1453,9 @@ function createReviewAndRating ($reviewData, $ratingData, $entity_id, $customer_
         $isReviewExist = checkReviewExist(
             $entity_id,
             array(
-                $reviewData['nickname'],
-                $reviewData['title'],
-                $reviewData['detail']
+                'nickname' => $reviewData['nickname'],
+                'title' => $reviewData['title'],
+                'detail' => $reviewData['detail']
             ),
             array(
                 $ratingData['rating_id'] => $ratingData['value']
