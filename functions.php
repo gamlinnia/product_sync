@@ -1449,28 +1449,14 @@ function createReviewAndRating ($reviewData, $ratingData, $entity_id, $customer_
         else{
             $reviewModel->setData('stores', getStoreIdByCode($reviewData['storeCode']));
         }
+        $reviewModel->save();
 
-        $isReviewExist = checkReviewExist(
-            $entity_id,
-            array(
-                $reviewData['nickname'],
-                $reviewData['title'],
-                $reviewData['detail']
-            ),
-            array(
-                $ratingData['rating_id'] => $ratingData['value']
-            )
-        );
-        if(!$isReviewExist){
-            $reviewModel->save();
+        Mage::getModel('rating/rating')
+            ->setRatingId($ratingData['rating_id'])
+            ->setReviewId($reviewModel->getId())
+            ->addOptionVote($ratingData['value'], $entity_id);
 
-            Mage::getModel('rating/rating')
-                ->setRatingId($ratingData['rating_id'])
-                ->setReviewId($reviewModel->getId())
-                ->addOptionVote($ratingData['value'], $entity_id);
-
-            $reviewModel->aggregate();
-        }
+        $reviewModel->aggregate();
     } catch (Mage_Core_Exception $e) {
         var_dump($e->getMessage());
     }
@@ -1702,34 +1688,4 @@ function templateReplace ($action) {
     $doc('.description p', 0)->parent->setInnerText($description);
     $doc('.logoImage', 0)->setAttribute('src', 'images/rosewilllogo.png');
     return $doc;
-}
-
-function checkReviewExist($productId, $review, $rating){
-    $reviewCollection = Mage::getModel('review/review')->getCollection();
-    $reviewCollection->addFieldToFilter('title', $review['title'])
-        ->addFieldToFilter('nickname', $review['nickname'])
-        ->addFieldToFilter('detail', $review['detail'])
-        ->addFieldToFilter('entity_pk_value', $productId);
-
-    $reviewCount = $reviewCollection->count();
-    if($reviewCount >= 1) {
-        foreach ($reviewCollection as $eachReview) {
-            $reviewId = $eachReview->getReviewId();
-            foreach ($rating as $ratingId => $optionId) {
-                $ratingCollection = Mage::getModel('rating/rating_option_vote')->getCollection();
-                $ratingCollection->addFieldToFilter('review_id', $reviewId)
-                    ->addFieldToFilter('rating_id', $ratingId)
-                    ->addFieldToFilter('option_id', $optionId);
-                if ($ratingCollection->count() >= 1) {
-                    return true;
-                }
-                else{
-                    return false;
-                }
-            }
-        }
-    }
-    else{
-        return false;
-    }
 }
