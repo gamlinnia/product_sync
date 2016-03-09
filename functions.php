@@ -1713,7 +1713,6 @@ function checkReviewExist($productId, $review, $rating){
 
     $reviewCount = $reviewCollection->count();
     Mage::log('review count: ' . $reviewCount, null, 'contactus.log');
-    $reviewExist = false;
     if($reviewCount >= 1) {
         foreach ($reviewCollection as $eachReview) {
             $reviewId = $eachReview->getReviewId();
@@ -1724,14 +1723,10 @@ function checkReviewExist($productId, $review, $rating){
                     ->addFieldToFilter('option_id', $optionId);
                 if ($ratingCollection->count() >= 1) {
                     Mage::log('Exist', null, 'contactus.log');
-                    $reviewExist = true;
-                }
-                else{
-                    Mage::log('Not Exist', null, 'contactus.log');
-                    $reviewExist = false;
+                    return true;
                 }
             }
         }
     }
-    return $reviewExist;
+    return false;
 }
