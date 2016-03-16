@@ -483,12 +483,9 @@ function compareImageWithRemoteIncludeDelete ($localImages, $remoteImages) {
                 $match = true;
                 break;
             } else {
-                /* match basename not end with underline and dot */
-                preg_match('/^[^_^.]+/', $remote['basename'], $remoteMatch);
-                preg_match('/^[^_^.]+/', $local['basename'], $localMatch);
-//                preg_match('/[0-9\-]{13}/', $remote['basename'], $remoteMatch);
-//                preg_match('/[0-9\-]{13}/', $local['basename'], $localMatch);
-                if (count($remoteMatch) > 0 && count($localMatch) > 0 && $remoteMatch[0] == $localMatch[0]) {
+                preg_match('/[0-9\-]{13}/', $remote['basename'], $remoteMatch);
+                preg_match('/[0-9\-]{13}/', $local['basename'], $localMatch);
+                if ($remoteMatch[0] == $localMatch[0]) {
                     $match = true;
                     break;
                 }
@@ -506,11 +503,9 @@ function compareImageWithRemoteIncludeDelete ($localImages, $remoteImages) {
                 $match = true;
                 break;
             } else {
-                preg_match('/^[^_^.]+/', $remote['basename'], $remoteMatch);
-                preg_match('/^[^_^.]+/', $local['basename'], $localMatch);
-//                preg_match('/[0-9\-]{13}/', $remote['basename'], $remoteMatch);
-//                preg_match('/[0-9\-]{13}/', $local['basename'], $localMatch);
-                if ( count($remoteMatch) > 0 && count($localMatch) > 0 && $remoteMatch[0] == $localMatch[0] ) {
+                preg_match('/[0-9\-]{13}/', $remote['basename'], $remoteMatch);
+                preg_match('/[0-9\-]{13}/', $local['basename'], $localMatch);
+                if ( $remoteMatch[0] == $localMatch[0] ) {
                     $match = true;
                     break;
                 }
@@ -1264,14 +1259,14 @@ function getAttributeValueFromOptionsForExport ($nameOrId, $attrCodeOrId, $value
     return $valueToBeMapped;
 }
 
-function getProductCategoryNames ($valueToFilter, $filterType='entity_id', $implodeSymbol = PHP_EOL) {
+function getProductCategoryNames ($valueToFilter, $filterType='entity_id') {
     $product = getProductObject($valueToFilter, $filterType);
     $categoryCollection = $product->getCategoryCollection()->addAttributeToSelect('name');
     $categoryNamesArray = array();
     foreach ($categoryCollection as $each) {
         $categoryNamesArray[] = $each->getName();
     }
-    return implode($implodeSymbol, $categoryNamesArray);
+    return implode(PHP_EOL, $categoryNamesArray);
 }
 
 function getProductCategorysInfo ($valueToFilter, $filterType='entity_id') {
@@ -1454,14 +1449,28 @@ function createReviewAndRating ($reviewData, $ratingData, $entity_id, $customer_
         else{
             $reviewModel->setData('stores', getStoreIdByCode($reviewData['storeCode']));
         }
-        $reviewModel->save();
 
-        Mage::getModel('rating/rating')
-            ->setRatingId($ratingData['rating_id'])
-            ->setReviewId($reviewModel->getId())
-            ->addOptionVote($ratingData['value'], $entity_id);
+        $isReviewExist = checkReviewExist(
+            $entity_id,
+            array(
+                'nickname' => $reviewData['nickname'],
+                'title' => $reviewData['title'],
+                'detail' => $reviewData['detail']
+            ),
+            array(
+                $ratingData['rating_id'] => $ratingData['value']
+            )
+        );
+        if(!$isReviewExist){
+            $reviewModel->save();
 
-        $reviewModel->aggregate();
+            Mage::getModel('rating/rating')
+                ->setRatingId($ratingData['rating_id'])
+                ->setReviewId($reviewModel->getId())
+                ->addOptionVote($ratingData['value'], $entity_id);
+
+            $reviewModel->aggregate();
+        }
     } catch (Mage_Core_Exception $e) {
         var_dump($e->getMessage());
     }
@@ -1545,8 +1554,7 @@ function getLatestChannelsProductReviews ($channel, $sku) {
     $response = array();
     switch ($channel) {
         case 'amazon' :
-
-            $url = 'http://www.amazon.com/product-reviews/' . $sku . '/ref=cm_cr_pr_viewopt_srt?ie=UTF8&showViewpoints=1&sortBy=recent&pageNumber=1';
+            $url = 'http://www.amazon.com/product-reviews/B00G505M4S/ref=cm_cr_pr_viewopt_srt?ie=UTF8&showViewpoints=1&sortBy=recent&pageNumber=1';
             $html = file_get_dom($url);
             $data = array();
             foreach ($html('#cm_cr-review_list > .a-section') as $index => $element) {
@@ -1562,6 +1570,7 @@ function getLatestChannelsProductReviews ($channel, $sku) {
 
             }
             echo json_encode($data) . PHP_EOL;
+
             break;
         case 'newegg' :
             $html = file_get_dom('http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=50');
@@ -1693,4 +1702,31 @@ function templateReplace ($action) {
     $doc('.description p', 0)->parent->setInnerText($description);
     $doc('.logoImage', 0)->setAttribute('src', 'images/rosewilllogo.png');
     return $doc;
+}
+
+function checkReviewExist($productId, $review, $rating){
+    $reviewCollection = Mage::getModel('review/review')->getCollection();
+    $reviewCollection->addFieldToFilter('title', $review['title'])
+        ->addFieldToFilter('nickname', $review['nickname'])
+        ->addFieldToFilter('detail', $review['detail'])
+        ->addFieldToFilter('entity_pk_value', $productId);
+
+    $reviewCount = $reviewCollection->count();
+    Mage::log('review count: ' . $reviewCount, null, 'contactus.log');
+    if($reviewCount >= 1) {
+        foreach ($reviewCollection as $eachReview) {
+            $reviewId = $eachReview->getReviewId();
+            foreach ($rating as $ratingId => $optionId) {
+                $ratingCollection = Mage::getModel('rating/rating_option_vote')->getCollection();
+                $ratingCollection->addFieldToFilter('review_id', $reviewId)
+                    ->addFieldToFilter('rating_id', $ratingId)
+                    ->addFieldToFilter('option_id', $optionId);
+                if ($ratingCollection->count() >= 1) {
+                    Mage::log('Exist', null, 'contactus.log');
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
