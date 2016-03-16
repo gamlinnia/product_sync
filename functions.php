@@ -1555,7 +1555,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
     switch ($channel) {
         case 'amazon' :
             if ( (!isset($channelsinfo['channel_sku']['Amazon.com']) || empty($channelsinfo['channel_sku']['Amazon.com'])) || (!isset($channelsinfo['product_url']['Amazon.com']) || empty($channelsinfo['product_url']['Amazon.com'])) ) {
-                return array();
+                return $response;
             }
             if (isset($channelsinfo['channel_sku']['Amazon.com']) && !empty($channelsinfo['channel_sku']['Amazon.com'])) {
                 var_dump($channelsinfo['channel_sku']);
