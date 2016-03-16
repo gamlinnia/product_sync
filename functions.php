@@ -1558,6 +1558,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 return array();
             }
             if (isset($channelsinfo['channel_sku']) && !empty($channelsinfo['channel_sku'])) {
+                var_dump($channelsinfo['channel_sku']);
                 $url = 'http://www.amazon.com/product-reviews/' . $channelsinfo['channel_sku'][$channel] . '/ref=cm_cr_pr_viewopt_srt?ie=UTF8&showViewpoints=1&sortBy=recent&pageNumber=1';
             }
             echo $url . PHP_EOL;
