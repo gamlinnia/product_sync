@@ -16,6 +16,9 @@ require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
 
 $debug = false;
+if (in_array('debug', $argv)) {
+    $debug = true;
+}
 
 /*product collection*/
 $productCollection = Mage::getModel('catalog/product')
@@ -39,7 +42,6 @@ if ($debug) {
     $productCollection->setPageSize(1);
     $recipient_array = array(
         'to' => array('Tim.H.Huang@newegg.com'),
-        'cc' => array('Stephanie.Y.Chang@rosewill.com'),
         'bcc' => array('Li.L.Liu@newegg.com', 'Tim.H.Huang@newegg.com')
     );
 } else {
@@ -81,6 +83,11 @@ if ($debug) {
 
 /*foreach channel*/
 foreach($channels as $channel => $url) {
+    if ($debug) {
+        if (!in_array($channel, $argv)) {
+            continue;
+        }
+    }
     /*each excel for each channel */
     $arrayToExcel = array();
     /*foreach product*/
