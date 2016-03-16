@@ -36,13 +36,13 @@ $fileList = array();
 /*channels array*/
 $channels = array(
     'newegg' => 'http://www.newegg.com/Product/Product.aspx?Item=',
+    'amazon' => 'http://www.amazon.com/Rosewill-MicroATX-Tower-Computer-FBM-01/product-reviews/B005LIDU5S/ref=cm_cr_arp_d_viewopt_srt?ie=UTF8&showViewpoints=1&sortBy=recent&pageNumber=1'
 );
 
 if ($debug) {
     $productCollection->setPageSize(1);
     $recipient_array = array(
-        'to' => array('Tim.H.Huang@newegg.com'),
-        'bcc' => array('Li.L.Liu@newegg.com', 'Tim.H.Huang@newegg.com')
+        'to' => array('Li.L.Liu@newegg.com', 'Tim.H.Huang@newegg.com')
     );
 } else {
     $recipient_array = array(
@@ -94,12 +94,13 @@ foreach($channels as $channel => $url) {
     foreach($productCollection as $eachProduct){
         $sku = $eachProduct->getSku();
         $entity_id = $eachProduct->getId();
+        $channelsinfo = Mage::getModel('catalog/product')->load($entity_id)->getChannelsinfo();
         $productName = $eachProduct->getName();
         $modelNumber = $eachProduct->getModelNumber();
         echo 'SKU: ' . $sku . PHP_EOL;
         echo 'ID: ' . $entity_id . PHP_EOL;
 
-        $channelReviews = getLatestChannelsProductReviews($channel, $sku);
+        $channelReviews = getLatestChannelsProductReviews($channel, $sku, $channelsinfo);
         /*foreach review*/
         foreach($channelReviews as $eachReview) {
             $detail = $eachReview['detail'];
@@ -133,9 +134,12 @@ foreach($channels as $channel => $url) {
                     $data['detail'] = $detail;
                     $data['rating'] = $rating;
                     $data['created_at'] = $created_at;
-                    $channelReviewModel->setData($data);
-                    $channelReviewModel->save();
                     var_dump($data);
+                    if ($debug) {
+                        $channelReviewModel->setData($data);
+                        $channelReviewModel->save();
+                        echo 'Debug Mode , not saving' . PHP_EOL;
+                    }
 
                     /*push rating 1~2 reviews to array and wait for export to excel*/
                     if ((int)$rating <= 2 && !morethanDays($created_at, 'America/Los_Angeles', 2)) {
