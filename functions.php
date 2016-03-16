@@ -1554,10 +1554,10 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
     $response = array();
     switch ($channel) {
         case 'amazon' :
-            if ( (!isset($channelsinfo['channel_sku']) || empty($channelsinfo['channel_sku'])) || (!isset($channelsinfo['product_url']) || empty($channelsinfo['product_url'])) ) {
+            if ( (!isset($channelsinfo['channel_sku']['Amazon.com']) || empty($channelsinfo['channel_sku']['Amazon.com'])) || (!isset($channelsinfo['product_url']['Amazon.com']) || empty($channelsinfo['product_url']['Amazon.com'])) ) {
                 return array();
             }
-            if (isset($channelsinfo['channel_sku']) && !empty($channelsinfo['channel_sku'])) {
+            if (isset($channelsinfo['channel_sku']['Amazon.com']) && !empty($channelsinfo['channel_sku']['Amazon.com'])) {
                 var_dump($channelsinfo['channel_sku']);
                 $url = 'http://www.amazon.com/product-reviews/' . $channelsinfo['channel_sku'][$channel] . '/ref=cm_cr_pr_viewopt_srt?ie=UTF8&showViewpoints=1&sortBy=recent&pageNumber=1';
             }
