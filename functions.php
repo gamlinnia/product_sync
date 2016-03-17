@@ -1585,7 +1585,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                     $response[]['nickname'] = trim($nickname);
                     $response[]['review'] = trim($matchReviewText[1][$index]);
                     $response[]['date'] = trim($matchPostDate[1][$index]);
-                    $response[]['rating'] = trim($matchRating[1][$index]);
+                    $response[]['rating'] = trim($matchRating[1][$index +1]);      // first one is overall rating
 
                 }
             }
