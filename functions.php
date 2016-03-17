@@ -1553,6 +1553,31 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
     /* need to include ganon.php */
     $response = array();
     switch ($channel) {
+        case 'homedepot' :
+            if ( (!isset($channelsinfo['channel_sku']['HomeDepot.com']) || empty($channelsinfo['channel_sku']['HomeDepot.com'])) || (!isset($channelsinfo['product_url']['HomeDepot.com']) || empty($channelsinfo['product_url']['HomeDepot.com'])) ) {
+                return $response;
+            }
+            if (isset($channelsinfo['channel_sku']['HomeDepot.com']) && !empty($channelsinfo['channel_sku']['HomeDepot.com'])) {
+                var_dump($channelsinfo['channel_sku']);
+                $url = 'http://homedepot.ugc.bazaarvoice.com/1999aa/' . $channelsinfo['channel_sku']['HomeDepot.com'] . '/reviews.djs?format=embeddedhtml&page=3&sort=submissionTime&scrollToTop=true';
+            }
+            echo $url . PHP_EOL;
+            $html = file_get_dom($url);
+            $data = array();
+            foreach ($html('.BVRRReviewText') as $index => $element) {
+                echo $index . PHP_EOL;
+
+                $data[] = array(
+                    'detail' => $element->getChild(3)->getPlainText(),
+                    'rating' => $element->getChild(0)->getChild(0)->getPlainText(),
+                    'subject' => $element->getChild(0)->lastChild()->getPlainText(),
+                    'created_at' => $element->getChild(1)->lastChild()->getPlainText(),
+                    'nickname' => $element->getChild(1)->getChild(0)->getPlainText()
+                );
+
+            }
+            echo json_encode($data) . PHP_EOL;
+            break;
         case 'amazon' :
             if ( (!isset($channelsinfo['channel_sku']['Amazon.com']) || empty($channelsinfo['channel_sku']['Amazon.com'])) || (!isset($channelsinfo['product_url']['Amazon.com']) || empty($channelsinfo['product_url']['Amazon.com'])) ) {
                 return $response;
@@ -1566,18 +1591,18 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             $data = array();
             foreach ($html('#cm_cr-review_list > .a-section') as $index => $element) {
                 echo $index . PHP_EOL;
+                echo $element->getPlainText() . PHP_EOL;
 
-                $data[] = array(
-                    'detail' => $element->getChild(3)->getPlainText(),
-                    'rating' => $element->getChild(0)->getChild(0)->getPlainText(),
-                    'subject' => $element->getChild(0)->lastChild()->getPlainText(),
-                    'created_at' => $element->getChild(1)->lastChild()->getPlainText(),
-                    'nickname' => $element->getChild(1)->getChild(0)->getPlainText()
-                );
+//                $data[] = array(
+//                    'detail' => $element->getChild(3)->getPlainText(),
+//                    'rating' => $element->getChild(0)->getChild(0)->getPlainText(),
+//                    'subject' => $element->getChild(0)->lastChild()->getPlainText(),
+//                    'created_at' => $element->getChild(1)->lastChild()->getPlainText(),
+//                    'nickname' => $element->getChild(1)->getChild(0)->getPlainText()
+//                );
 
             }
             echo json_encode($data) . PHP_EOL;
-
             break;
         case 'newegg' :
             $html = file_get_dom('http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=50');
