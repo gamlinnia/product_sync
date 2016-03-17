@@ -1557,7 +1557,13 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             /*
              * no channel_sku or no product_url will exit.
              * */
-            if ( (!isset($channelsinfo['channel_sku']['HomeDepot.com']) || empty($channelsinfo['channel_sku']['HomeDepot.com'])) && (!isset($channelsinfo['product_url']['HomeDepot.com']) || empty($channelsinfo['product_url']['HomeDepot.com'])) ) {
+            $withValue = false;
+            foreach (array('channel_sku', 'product_url') as $attr) {
+                if ( isset($channelsinfo[$attr]['HomeDepot.com']) && !empty($channelsinfo[$attr]['HomeDepot.com']) ) {
+                    $withValue = true;
+                }
+            }
+            if (!$withValue) {
                 echo 'no sku provided.' . PHP_EOL;
                 return $response;
             }
