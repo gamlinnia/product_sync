@@ -1565,7 +1565,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 var_dump($channelsinfo['channel_sku']);
                 $url = 'http://homedepot.ugc.bazaarvoice.com/1999aa/' . $channelsinfo['channel_sku']['HomeDepot.com'] . '/reviews.djs?format=embeddedhtml&page=3&sort=submissionTime&scrollToTop=true';
             }
-            echo $url . PHP_EOL;
+            var_dump($url);
             $html = file_get_dom($url);
             $data = array();
             foreach ($html('.BVRRReviewText') as $index => $element) {
