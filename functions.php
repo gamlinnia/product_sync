@@ -1574,15 +1574,18 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 $url = 'http://homedepot.ugc.bazaarvoice.com/1999aa/' . $channelsinfo['channel_sku']['HomeDepot.com'] . '/reviews.djs?format=embeddedhtml&page=3&sort=submissionTime&scrollToTop=true';
             }
             $url = 'http://homedepot.ugc.bazaarvoice.com/1999aa/205479530/reviews.djs?format=embeddedhtml&page=1&sort=submissionTime&scrollToTop=true';
-            preg_match_all('/<span itemprop="author" class="BVRRNickname">([^>^<]+)<\/span>/', stripslashes(file_get_contents($url)), $matchNickname);
-            preg_match_all('/<span class="BVRRReviewText">([^>^<]+)<\/span>/', stripslashes(file_get_contents($url)), $matchReviewText);
-            preg_match_all('/<span class="BVRRValue BVRRReviewDate">[^>^<]+<meta itemprop="datePublished" content="([^\"]+)"\/><\/span>/', stripslashes(file_get_contents($url)), $matchPostDate);
-            var_dump($matchPostDate);
+            $content = stripslashes(file_get_contents($url));
+            preg_match_all('/<span itemprop="author" class="BVRRNickname">([^>^<]+)<\/span>/', $content, $matchNickname);
+            preg_match_all('/<span class="BVRRReviewText">([^>^<]+)<\/span>/', $content, $matchReviewText);
+            preg_match_all('/<span class="BVRRValue BVRRReviewDate">[^>^<]+<meta itemprop="datePublished" content="([^\"]+)"\/><\/span>/', $content, $matchPostDate);
+            preg_match_all('/<span itemprop="ratingValue" class="BVRRNumber BVRRRatingNumber">([^<>]+)<\/span>/', $content, $matchRating);
+            var_dump($matchRating);
             if (!empty($matchNickname[1])) {
                 foreach ($matchNickname[1] as $index => $nickname) {
                     $response[]['nickname'] = trim($nickname);
                     $response[]['review'] = trim($matchReviewText[1][$index]);
                     $response[]['date'] = trim($matchPostDate[1][$index]);
+                    $response[]['rating'] = trim($matchRating[1][$index]);
 
                 }
             }
