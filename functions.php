@@ -1567,6 +1567,8 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 echo 'no sku provided.' . PHP_EOL;
                 return $response;
             }
+            echo 'with value' . PHP_EOL;
+            var_dump($channelsinfo);
             if (isset($channelsinfo['channel_sku']['HomeDepot.com']) && !empty($channelsinfo['channel_sku']['HomeDepot.com'])) {
                 var_dump($channelsinfo['channel_sku']);
                 $url = 'http://homedepot.ugc.bazaarvoice.com/1999aa/' . $channelsinfo['channel_sku']['HomeDepot.com'] . '/reviews.djs?format=embeddedhtml&page=3&sort=submissionTime&scrollToTop=true';
