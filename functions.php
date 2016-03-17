@@ -1573,7 +1573,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 var_dump($channelsinfo['channel_sku']);
                 $url = 'http://homedepot.ugc.bazaarvoice.com/1999aa/' . $channelsinfo['channel_sku']['HomeDepot.com'] . '/reviews.djs?format=embeddedhtml&page=3&sort=submissionTime&scrollToTop=true';
             }
-            preg_match_all('/<span itemprop="author" class="BVRRNickname">([^>^<]+)<\/span>/', file_get_contents($url), $match);
+            preg_match_all('/<span itemprop="author" class="BVRRNickname">([^>^<]+)<\/span>/', stripslashes(file_get_contents($url)), $match);
             var_dump($match);
             die();
             $html = file_get_dom($url);
