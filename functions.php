@@ -1554,12 +1554,12 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
     $response = array();
     switch ($channel) {
         case 'homedepot' :
+            var_dump($channelsinfo['channel_sku']);
             if ( (!isset($channelsinfo['channel_sku']['HomeDepot.com']) || empty($channelsinfo['channel_sku']['HomeDepot.com'])) || (!isset($channelsinfo['product_url']['HomeDepot.com']) || empty($channelsinfo['product_url']['HomeDepot.com'])) ) {
                 echo 'no sku provided.' . PHP_EOL;
                 return $response;
             }
             if (isset($channelsinfo['channel_sku']['HomeDepot.com']) && !empty($channelsinfo['channel_sku']['HomeDepot.com'])) {
-                var_dump($channelsinfo['channel_sku']);
                 $url = 'http://homedepot.ugc.bazaarvoice.com/1999aa/' . $channelsinfo['channel_sku']['HomeDepot.com'] . '/reviews.djs?format=embeddedhtml&page=3&sort=submissionTime&scrollToTop=true';
             }
             echo $url . PHP_EOL;
