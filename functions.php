@@ -1553,6 +1553,25 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
     /* need to include ganon.php */
     $response = array();
     switch ($channel) {
+        case 'wayfair' :
+            $withValue = false;
+            foreach (array('channel_sku', 'product_url') as $attr) {
+                if ( isset($channelsinfo[$attr]['Wayfair.com']) && !empty($channelsinfo[$attr]['Wayfair.com']) ) {
+                    $withValue = true;
+                }
+            }
+            if (!$withValue) {
+                echo 'no sku provided.' . PHP_EOL;
+                return $response;
+            }
+            echo 'with value' . PHP_EOL;
+            var_dump($channelsinfo);
+            if (isset($channelsinfo['channel_sku']['Wayfair.com']) && !empty($channelsinfo['channel_sku']['Wayfair.com'])) {
+                $url = 'http://www.wayfair.com/a/product_review_page/get_update_reviews_json?_format=json&product_sku=' . $channelsinfo[$attr]['Wayfair.com'] . '&page_number=1&sort_order=date_desc&filter_rating=&filter_tag=&item_per_page=10';
+            }
+            $jsonContent = json_decode(file_get_contents($url), true);
+            echo json_encode($jsonContent['reviews']) . PHP_EOL;
+            break;
         case 'homedepot' :
             /*
              * no channel_sku or no product_url will exit.
@@ -1606,7 +1625,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 echo $index . PHP_EOL;
                 echo $element->getPlainText() . PHP_EOL;
 
-                preg_match('/(\d).?\/.?\d/', $element->getChild(0)->getChild(0)->getPlainText(), $matchRating);
+                preg_match('/(\d).?/', $element->getChild(0)->getChild(0)->getPlainText(), $matchRating);
                 if (count($matchRating) == 2) {
                     $rating = $matchRating[1];
                     $response[] = array(
