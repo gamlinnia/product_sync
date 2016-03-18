@@ -140,6 +140,8 @@ foreach($channels as $channel => $url) {
                     if (!$debug) {
                         $channelReviewModel->setData($data);
                         $channelReviewModel->save();
+                    }
+                    else{
                         echo 'Debug Mode , not saving' . PHP_EOL;
                     }
 
