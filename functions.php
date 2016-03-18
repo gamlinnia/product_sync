@@ -1582,29 +1582,17 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             preg_match_all('/<span itemprop="name" class="BVRRValue BVRRReviewTitle">([^<>]+)<\/span>/', $content, $matchSubject);
             if (!empty($matchNickname[1])) {
                 foreach ($matchNickname[1] as $index => $nickname) {
-                    $response[]['nickname'] = trim($nickname);
-                    $response[]['review'] = trim($matchReviewText[1][$index]);
-                    $response[]['date'] = trim($matchPostDate[1][$index]);
-                    $response[]['subject'] = trim($matchSubject[1][$index]);
-                    $response[]['rating'] = trim($matchRating[1][$index +1]);      // first one is overall rating
+                    $data = array(
+                        'nickname' => trim($nickname),
+                        'review' => trim($matchReviewText[1][$index]),
+                        'created_at' => trim($matchPostDate[1][$index]),
+                        'subject' => trim($matchSubject[1][$index]),
+                        'rating' => trim($matchRating[1][$index +1])        // first one is overall rating
+                    );
+                    $response[] = $data;
                 }
             }
-            var_dump($response);
-            $html = file_get_dom($url);
-            $data = array();
-            foreach ($html('.BVRRReviewText') as $index => $element) {
-                echo $index . PHP_EOL;
-
-                $data[] = array(
-                    'detail' => $element->getChild(3)->getPlainText(),
-                    'rating' => $element->getChild(0)->getChild(0)->getPlainText(),
-                    'subject' => $element->getChild(0)->lastChild()->getPlainText(),
-                    'created_at' => $element->getChild(1)->lastChild()->getPlainText(),
-                    'nickname' => $element->getChild(1)->getChild(0)->getPlainText()
-                );
-
-            }
-            echo json_encode($data) . PHP_EOL;
+            echo json_encode($response) . PHP_EOL;
             break;
         case 'amazon' :
             if ( (!isset($channelsinfo['channel_sku']['Amazon.com']) || empty($channelsinfo['channel_sku']['Amazon.com'])) || (!isset($channelsinfo['product_url']['Amazon.com']) || empty($channelsinfo['product_url']['Amazon.com'])) ) {
@@ -1621,13 +1609,13 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 echo $index . PHP_EOL;
                 echo $element->getPlainText() . PHP_EOL;
 
-//                $data[] = array(
-//                    'detail' => $element->getChild(3)->getPlainText(),
-//                    'rating' => $element->getChild(0)->getChild(0)->getPlainText(),
-//                    'subject' => $element->getChild(0)->lastChild()->getPlainText(),
-//                    'created_at' => $element->getChild(1)->lastChild()->getPlainText(),
-//                    'nickname' => $element->getChild(1)->getChild(0)->getPlainText()
-//                );
+                $response[] = array(
+                    'detail' => $element->getChild(3)->getPlainText(),
+                    'rating' => $element->getChild(0)->getChild(0)->getPlainText(),
+                    'subject' => $element->getChild(0)->lastChild()->getPlainText(),
+                    'created_at' => $element->getChild(1)->lastChild()->getPlainText(),
+                    'nickname' => $element->getChild(1)->getChild(0)->getPlainText()
+                );
 
             }
             echo json_encode($data) . PHP_EOL;
