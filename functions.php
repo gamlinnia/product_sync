@@ -1567,7 +1567,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             echo 'with value' . PHP_EOL;
             var_dump($channelsinfo);
             if (isset($channelsinfo['channel_sku']['Wayfair.com']) && !empty($channelsinfo['channel_sku']['Wayfair.com'])) {
-                $url = 'http://www.wayfair.com/a/product_review_page/get_update_reviews_json?_format=json&page_number=1&sort_order=date_desc&filter_rating=&filter_tag=&item_per_page=10&product_sku=' . $channelsinfo[$attr]['Wayfair.com'];
+                $url = 'http://www.wayfair.com/a/product_review_page/get_update_reviews_json?_format=json&page_number=1&sort_order=date_desc&filter_rating=&filter_tag=&item_per_page=10&product_sku=' . $channelsinfo['channel_sku']['Wayfair.com'];
             }
             $content = file_get_contents($url);
             echo $content . PHP_EOL;
