@@ -1598,7 +1598,6 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 return $response;
             }
             if (isset($channelsinfo['channel_sku']['Amazon.com']) && !empty($channelsinfo['channel_sku']['Amazon.com'])) {
-                var_dump($channelsinfo['channel_sku']);
                 $url = 'http://www.amazon.com/product-reviews/' . $channelsinfo['channel_sku']['Amazon.com'] . '/ref=cm_cr_pr_viewopt_srt?ie=UTF8&showViewpoints=1&sortBy=recent&pageNumber=1';
             }
             echo $url . PHP_EOL;
@@ -1607,14 +1606,17 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 echo $index . PHP_EOL;
                 echo $element->getPlainText() . PHP_EOL;
 
-                $response[] = array(
-                    'detail' => $element->getChild(3)->getPlainText(),
-                    'rating' => $element->getChild(0)->getChild(0)->getPlainText(),
-                    'subject' => $element->getChild(0)->lastChild()->getPlainText(),
-                    'created_at' => $element->getChild(1)->lastChild()->getPlainText(),
-                    'nickname' => $element->getChild(1)->getChild(0)->getPlainText()
-                );
-
+                preg_match('/(\d).?\/.?\d/', $element->getChild(0)->getChild(0)->getPlainText(), $matchRating);
+                if (count($matchRating) == 2) {
+                    $rating = $matchRating[1];
+                    $response[] = array(
+                        'detail' => $element->getChild(3)->getPlainText(),
+                        'rating' => $rating,
+                        'subject' => $element->getChild(0)->lastChild()->getPlainText(),
+                        'created_at' => $element->getChild(1)->lastChild()->getPlainText(),
+                        'nickname' => $element->getChild(1)->getChild(0)->getPlainText()
+                    );
+                }
             }
             echo json_encode($response) . PHP_EOL;
             break;
