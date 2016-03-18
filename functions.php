@@ -1570,7 +1570,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 $url = 'http://www.wayfair.com/a/product_review_page/get_update_reviews_json?_format=json&page_number=1&sort_order=date_desc&filter_rating=&filter_tag=&item_per_page=10&product_sku=' . $channelsinfo['channel_sku']['Wayfair.com'];
                 echo $url . PHP_EOL;
             }
-            $content = file_get_contents($url);
+            $content = CallAPI('GET', $url);
             echo $content . PHP_EOL;
             $jsonContent = json_decode(trim(file_get_contents($url)), true);
             echo json_encode($jsonContent['reviews']) . PHP_EOL;
