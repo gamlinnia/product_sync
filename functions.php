@@ -1579,14 +1579,15 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             preg_match_all('/<span class="BVRRReviewText">([^>^<]+)<\/span>/', $content, $matchReviewText);
             preg_match_all('/<span class="BVRRValue BVRRReviewDate">[^>^<]+<meta itemprop="datePublished" content="([^\"]+)"\/><\/span>/', $content, $matchPostDate);
             preg_match_all('/<span itemprop="ratingValue" class="BVRRNumber BVRRRatingNumber">([^<>]+)<\/span>/', $content, $matchRating);
-            var_dump($matchRating);
+            preg_match_all('/<span itemprop="name" class="BVRRValue BVRRReviewTitle">([^<>]+)<\/span>/', $content, $matchSubject);
+            var_dump($matchSubject);
             if (!empty($matchNickname[1])) {
                 foreach ($matchNickname[1] as $index => $nickname) {
                     $response[]['nickname'] = trim($nickname);
                     $response[]['review'] = trim($matchReviewText[1][$index]);
                     $response[]['date'] = trim($matchPostDate[1][$index]);
+                    $response[]['subject'] = trim($matchSubject[1][$index]);
                     $response[]['rating'] = trim($matchRating[1][$index +1]);      // first one is overall rating
-
                 }
             }
             die();
