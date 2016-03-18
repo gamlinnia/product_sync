@@ -1603,7 +1603,6 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             }
             echo $url . PHP_EOL;
             $html = file_get_dom($url);
-            $data = array();
             foreach ($html('#cm_cr-review_list > .a-section') as $index => $element) {
                 echo $index . PHP_EOL;
                 echo $element->getPlainText() . PHP_EOL;
@@ -1617,7 +1616,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 );
 
             }
-            echo json_encode($data) . PHP_EOL;
+            echo json_encode($response) . PHP_EOL;
             break;
         case 'newegg' :
             $html = file_get_dom('http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=50');
