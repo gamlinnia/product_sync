@@ -1584,7 +1584,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 foreach ($matchNickname[1] as $index => $nickname) {
                     $data = array(
                         'nickname' => trim($nickname),
-                        'review' => trim($matchReviewText[1][$index]),
+                        'detail' => trim($matchReviewText[1][$index]),
                         'created_at' => trim($matchPostDate[1][$index]),
                         'subject' => trim($matchSubject[1][$index]),
                         'rating' => trim($matchRating[1][$index +1])        // first one is overall rating
