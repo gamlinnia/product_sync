@@ -136,7 +136,8 @@ foreach($channels as $channel => $url) {
                     $data['rating'] = $rating;
                     $data['created_at'] = $created_at;
                     var_dump($data);
-                    if ($debug) {
+                    //if in debug mode, do not save
+                    if (!$debug) {
                         $channelReviewModel->setData($data);
                         $channelReviewModel->save();
                         echo 'Debug Mode , not saving' . PHP_EOL;
