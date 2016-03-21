@@ -37,7 +37,8 @@ $fileList = array();
 $channels = array(
     'newegg' => 'http://www.newegg.com/Product/Product.aspx?Item=',
     'amazon' => 'http://www.amazon.com/Rosewill-MicroATX-Tower-Computer-FBM-01/product-reviews/B005LIDU5S/ref=cm_cr_arp_d_viewopt_srt?ie=UTF8&showViewpoints=1&sortBy=recent&pageNumber=1',
-    'homedepot' => 'http://homedepot.ugc.bazaarvoice.com/1999aa/205479530/reviews.djs?format=embeddedhtml&page=3&sort=submissionTime&scrollToTop=true'
+    'homedepot' => 'http://homedepot.ugc.bazaarvoice.com/1999aa/205479530/reviews.djs?format=embeddedhtml&page=3&sort=submissionTime&scrollToTop=true',
+    'sears' => 'http://www.sears.com/content/pdp/ratings/single/search/Sears/SPM3300036421&targetType=product&limit=50&offset=0'
 );
 
 if ($debug) {
