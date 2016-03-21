@@ -187,7 +187,7 @@ foreach($channels as $channel => $url) {
 }
 
 /*send email notification*/
-if(!empty($fileList)) {
+if(!empty($fileList) && !$debug) {
     /*sendEmail*/
     sendMailWithDownloadUrl('Bad product review alert', $fileList, $recipient_array);
 }
