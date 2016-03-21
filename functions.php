@@ -1554,6 +1554,28 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
     $response = array();
     $review_limit = 50;
     switch ($channel) {
+        case 'wayfair' :
+            $withValue = false;
+            foreach (array('channel_sku', 'product_url') as $attr) {
+                if ( isset($channelsinfo[$attr]['Wayfair.com']) && !empty($channelsinfo[$attr]['Wayfair.com']) ) {
+                    $withValue = true;
+                }
+            }
+            if (!$withValue) {
+                echo 'no sku provided.' . PHP_EOL;
+                return $response;
+            }
+            echo 'with value' . PHP_EOL;
+            var_dump($channelsinfo);
+            if (isset($channelsinfo['channel_sku']['Wayfair.com']) && !empty($channelsinfo['channel_sku']['Wayfair.com'])) {
+                $url = 'http://www.wayfair.com/a/product_review_page/get_update_reviews_json?_format=json&page_number=1&sort_order=date_desc&filter_rating=&filter_tag=&item_per_page=10&product_sku=' . $channelsinfo['channel_sku']['Wayfair.com'];
+                echo $url . PHP_EOL;
+            }
+            $content = CallAPI('GET', $url);
+            var_dump($content);
+            $jsonContent = json_decode(trim(file_get_contents($url)), true);
+            echo json_encode($jsonContent['reviews']) . PHP_EOL;
+            break;
         case 'sears' :
             $channel_title = 'Sears.com';
             $withValue = false;
@@ -1660,7 +1682,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             echo json_encode($response) . PHP_EOL;
             break;
         case 'newegg' :
-            $html = file_get_dom("http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=" . $review_limit);
+            $html = file_get_dom('http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=50');
             if(!empty($html)) {
                 foreach ($html('#Community_Content .grpReviews tr td .details') as $element) {
                     $nickname = $element->parent->parent->getChild(1)->getChild(1)->getChild(1)->getPlainText();
