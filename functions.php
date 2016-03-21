@@ -1554,6 +1554,7 @@ function massDeleteContactusForm($contactusFormData){
 function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
     /* need to include ganon.php */
     $response = array();
+    $review_limit = 50;
     switch ($channel) {
         case 'wayfair' :
             $withValue = false;
@@ -1576,6 +1577,44 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             var_dump($content);
             $jsonContent = json_decode(trim(file_get_contents($url)), true);
             echo json_encode($jsonContent['reviews']) . PHP_EOL;
+            break;
+        case 'sears' :
+            $channel_title = 'Sears.com';
+            $withValue = false;
+            foreach (array('channel_sku', 'product_url') as $attr) {
+                if ( isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title]) ) {
+                    $withValue = true;
+                }
+            }
+            if (!$withValue) {
+                echo 'no sku provided.' . PHP_EOL;
+                return $response;
+            }
+            echo 'with value' . PHP_EOL;
+            var_dump($channelsinfo);
+            if (isset($channelsinfo['channel_sku'][$channel_title]) && !empty($channelsinfo['channel_sku'][$channel_title])) {
+                var_dump($channelsinfo['channel_sku']);
+                $url = "http://www.sears.com/content/pdp/ratings/single/search/Sears/" . $channelsinfo['channel_sku'][$channel_title] ."&targetType=product&limit=". $review_limit . "&offset=0";
+            }
+
+            $html = file_get_contents($url);
+            $html = json_decode($html,true);
+            $review_data = $html['data']['reviews'];
+
+            if(!empty($review_data)){
+                foreach($review_data as $each_review){
+                    $date = new Zend_Date(strtotime($each_review['published_date']));
+                    $data = array(
+                        'detail' => $each_review['content'],
+                        'nickname' => htmlentities($each_review['author']['screenName']),
+                        'subject' => htmlentities($each_review['summary']),
+                        'created_at' => $date->get('MMM dd, yyyy'),
+                        'rating' => $each_review['attribute_rating'][0]['value']
+                    );
+                    $response[] = $data;
+                }
+            }
+            echo json_encode($response) . PHP_EOL;
             break;
         case 'homedepot' :
             /*
@@ -1630,7 +1669,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 echo $index . PHP_EOL;
                 echo $element->getPlainText() . PHP_EOL;
 
-                preg_match('/(\d).?/', $element->getChild(0)->getChild(0)->getPlainText(), $matchRating);
+                preg_match('/(\d).?\/.?\d/', $element->getChild(0)->getChild(0)->getPlainText(), $matchRating);
                 if (count($matchRating) == 2) {
                     $rating = $matchRating[1];
                     $response[] = array(
