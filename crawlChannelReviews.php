@@ -1,9 +1,4 @@
 <?php
-
-/*log starting time*/
-$now = new DateTime(null, new DateTimeZone('UTC'));
-file_put_contents('crawlChannelReviews.log', "Process start at: " . $now->format('Y-m-d H:i:s') . PHP_EOL, FILE_APPEND);
-
 /*get config setting*/
 if (!file_exists('config.json')) {
     echo 'config.json is not exist.';
@@ -83,6 +78,10 @@ if ($debug) {
         )
     );
 }
+
+/*log starting time*/
+$now = new DateTime(null, new DateTimeZone('UTC'));
+file_put_contents('crawlChannelReviews.log', "Process start at: " . $now->format('Y-m-d H:i:s') . PHP_EOL, FILE_APPEND);
 
 /*foreach channel*/
 foreach($channels as $channel => $url) {
@@ -187,7 +186,7 @@ foreach($channels as $channel => $url) {
 }
 
 /*send email notification*/
-if(!empty($fileList) && !$debug) {
+if(!empty($fileList)) {
     /*sendEmail*/
     sendMailWithDownloadUrl('Bad product review alert', $fileList, $recipient_array);
 }
