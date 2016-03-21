@@ -1571,7 +1571,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 echo $url . PHP_EOL;
             }
             $content = CallAPI('GET', $url);
-            echo $content . PHP_EOL;
+            var_dump($content);
             $jsonContent = json_decode(trim(file_get_contents($url)), true);
             echo json_encode($jsonContent['reviews']) . PHP_EOL;
             break;
