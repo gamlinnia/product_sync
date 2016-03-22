@@ -9,6 +9,8 @@ require_once 'functions.php';
 require_once 'lib/ganon.php';
 require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
+require 'vendor/autoload.php';
+use JonnyW\PhantomJs\Client;
 
 $debug = false;
 if (in_array('debug', $argv)) {
