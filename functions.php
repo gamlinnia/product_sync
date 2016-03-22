@@ -411,11 +411,11 @@ function getImagesUrlOfProduct ($valueToFilter, $type='entity_id') {
     $product = getProductObject($valueToFilter, $type);
     $mediaType = array(
         'image' => Mage::getModel('catalog/product_media_config')
-            ->getMediaUrl( $product->getImage() ),
+                ->getMediaUrl( $product->getImage() ),
         'small_image' => Mage::getModel('catalog/product_media_config')
-            ->getMediaUrl( $product->getSmallImage() ),
+                ->getMediaUrl( $product->getSmallImage() ),
         'thumbnail' => Mage::getModel('catalog/product_media_config')
-            ->getMediaUrl( $product->getThumbnail() )
+                ->getMediaUrl( $product->getThumbnail() )
     );
 
     $response = array();
@@ -1648,6 +1648,30 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                     $i++;
                 }
             }
+            break;
+        case 'walmart' :
+            $withValue = false;
+            foreach (array('channel_sku', 'product_url') as $attr) {
+                if ( isset($channelsinfo[$attr]['Walmart.com']) && !empty($channelsinfo[$attr]['Walmart.com']) ) {
+                    $withValue = true;
+                }
+            }
+            if (!$withValue) {
+                echo 'no sku provided.' . PHP_EOL;
+                return $response;
+            }
+            $url = 'http://www.walmart.com/reviews/api/product/' . $channelsinfo['channel_sku']['Wayfair.com'] . '?limit=10&sort=submission-desc&filters=&showProduct=false';
+            $client = Client::getInstance();
+            $request  = $client->getMessageFactory()->createRequest();
+            $response = $client->getMessageFactory()->createResponse();
+            $request->setMethod('GET');
+            $request->setUrl($url);
+
+            $client->send($request, $response);
+            echo $response->getContent();
+            /*            if(!empty($html)) {
+                            foreach ($html('#Community_Content .grpReviews tr td .details') as $element) {*/
+
             break;
         case 'wayfair' :
             $withValue = false;
