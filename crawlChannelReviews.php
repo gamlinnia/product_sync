@@ -150,7 +150,7 @@ foreach($channels as $channel => $url) {
                     }
 
                     /*push rating 1~2 reviews to array and wait for export to excel*/
-                    if ((int)$rating <= 2 && !morethanDays($created_at, 'America/Los_Angeles', 2)) {
+                    if ((float)$rating <= 2 && !morethanDays($created_at, 'America/Los_Angeles', 2)) {
                         $excelData = [];
                         $excelData['item_number'] = $sku;
                         $excelData['product_name'] = $productName;
