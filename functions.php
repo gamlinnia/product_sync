@@ -1586,23 +1586,41 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                     //nickname wasn't set in rakuten.com
                     $nickname = "None";
                     //rating
-                    $ratingText = $element->parent->getChild(3)->getChild(1)->getChild(1)->getInnerText();
-                    preg_match_all('/class="s([^>^<]+)">/', $ratingText, $matchRating);
+                    $ratingStr = $element->parent->getChild(3)->getChild(1)->getChild(1)->getInnerText();
+                    preg_match_all('/class="s(.+)">/', $ratingStr, $matchRating);
                     $rating = trim($matchRating[1][0]);
-                    //rating is set as format 45 or 5, if 45 means 4.5
                     if($rating > 10){
                         $rating = $rating/10;
                     }
-                    //$element->parent->getChild(5)->html() => "<p><span id="dnn_ctr16846_View_ctlCustomerReviews_customerReviews_ratingInfo_1"><b>Rosewill Halogen Convection Oven</b> 9/22/2015<br /></span></p>"
-                    $subjectAndCreatedatStr = $element->parent->getChild(5)->html();
-                    //title betwnne <b> and </b>
-                    preg_match_all('/<b>([^>^<]+)<\/b>/', $subjectAndCreatedatStr, $matchSubject);
-                    $subject = trim($matchSubject[1][0]);
-                    //created at between </b> and <br />
-                    preg_match_all('/<\/b>([^>^<]+)<br \/>/', $subjectAndCreatedatStr, $matchCreatedat);
-                    $created_at = trim($matchCreatedat[1][0]);
-                    //Detail
+                    $subjectAndCreatedatAndNicknameStr = $element->parent->getChild(5)->html();
+                    //var_dump($subjectAndCreatedatAndNicknameStr);
+                    //if contain </span><span, means there has nickname
+                    if(strpos($subjectAndCreatedatAndNicknameStr, "</span><span")){
+                        preg_match_all('/<b>(.+)<\/b>/', $subjectAndCreatedatAndNicknameStr, $matchSubjectAndCreatedatAndNickname);
+                        $subjectAndCreatedatAndNicknameStr = $matchSubjectAndCreatedatAndNickname[1][0];
+
+                        //title
+                        preg_match_all('/(.+)<\/b>/', $subjectAndCreatedatAndNicknameStr, $matchSubject);
+                        $subject = trim($matchSubject[1][0]);
+                        //created at
+                        preg_match_all('/<\/b>(.+)<br \/>/', $subjectAndCreatedatAndNicknameStr, $matchCreatedat);
+                        $created_at = trim($matchCreatedat[1][0]);
+                        //nickname
+                        preg_match_all('/<b>(.+)/', $subjectAndCreatedatAndNicknameStr, $matchNickname);
+                        $nickname = trim($matchNickname[1][0]);
+                    }
+                    else{
+                        //no nickname, process title and created only
+                        //title
+                        preg_match_all('/<b>(.+)<\/b>/', $subjectAndCreatedatAndNicknameStr, $matchSubject);
+                        $subject = trim($matchSubject[1][0]);
+                        //created at
+                        preg_match_all('/<\/b>(.+)<br \/>/', $subjectAndCreatedatAndNicknameStr, $matchCreatedat);
+                        $created_at = trim($matchCreatedat[1][0]);
+                    }
+                    //detail
                     $detail = trim($element->parent->getChild(6)->getPlainText());
+
                     $data = array(
                         'detail' => $detail,
                         'nickname' => $nickname,
