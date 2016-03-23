@@ -1579,7 +1579,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
 
             if(!empty($html)){
                 foreach($html('ul.list-reviews li div.rating-block') as $element){
-                    //nickname wasn't set in rakuten.com
+                    //nickname could be empty in rakuten.com
                     $nickname = "None";
                     //rating
                     $ratingStr = $element->parent->getChild(3)->getChild(1)->getChild(1)->getInnerText();
@@ -1589,9 +1589,8 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                         $rating = $rating/10;
                     }
                     $subjectAndCreatedatAndNicknameStr = $element->parent->getChild(5)->html();
-                    //var_dump($subjectAndCreatedatAndNicknameStr);
-                    //if contain </span><span, means there has nickname
                     if(strpos($subjectAndCreatedatAndNicknameStr, "</span><span")){
+                        //if contain </span><span, means there has nickname
                         preg_match_all('/<b>(.+)<\/b>/', $subjectAndCreatedatAndNicknameStr, $matchSubjectAndCreatedatAndNickname);
                         $subjectAndCreatedatAndNicknameStr = $matchSubjectAndCreatedatAndNickname[1][0];
 
@@ -1627,12 +1626,10 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                     $response[] = $data;
                 }
             }
-
             break;
+        /*
+         * //rosewill don't sale on bestbuy.com anymore,this case ignore
         case 'bestbuy':
-            /*
-             * rosewill don't sale on bestbuy.com anymore,this case ignore
-            */
             $url = "http://www.bestbuy.com/site/samsung-4-2-cu-ft-9-cycle-high-efficiency-steam-front-loading-washer-white/3460004.p?skuId=3460004";
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url );
@@ -1663,6 +1660,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 }
             }
             break;
+        */
         case 'walmart' :
             $withValue = false;
             foreach (array('channel_sku', 'product_url') as $attr) {
