@@ -112,7 +112,7 @@ foreach($channels as $channel => $url) {
             $created_at = $eachReview['created_at'];
             $rating = $eachReview['rating'];
             $subject = $eachReview['subject'];
-            $url = $eachReview['product_url'];
+            $product_url = $eachReview['product_url'];
 
             /*check if this review already in database*/
             $reviewCollection = $channelReviewModel->getCollection()
@@ -155,7 +155,7 @@ foreach($channels as $channel => $url) {
                         $excelData['item_number'] = $sku;
                         $excelData['product_name'] = $productName;
                         $excelData['model_number'] = $modelNumber;
-                        $excelData['product_url'] = $url;
+                        $excelData['product_url'] = $product_url;
                         $excelData['rating'] = $rating;
                         $excelData['subject'] = $subject;
                         $excelData['detail'] = str_replace("<br />", "\r\n", $detail);
