@@ -1554,6 +1554,97 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
     $response = array();
     $review_limit = 50;
     switch ($channel) {
+        case 'rakuten':
+            /*
+             * need url instead of sku
+            */
+            $channel_title = 'Rakuten.com';
+            $withValue = false;
+            foreach (array('channel_sku', 'product_url') as $attr) {
+                if ( isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title]) ) {
+                    $withValue = true;
+                }
+            }
+            if (!$withValue) {
+                echo 'no sku provided.' . PHP_EOL;
+                return $response;
+            }
+            echo 'with value' . PHP_EOL;
+            var_dump($channelsinfo);
+            if (isset($channelsinfo['channel_url'][$channel_title]) && !empty($channelsinfo['channel_url'][$channel_title])) {
+                var_dump($channelsinfo['channel_url']);
+                $url = $channelsinfo['channel_url'][$channel_title];
+            }
+            $html = file_get_dom($url);
+
+            if(!empty($html)){
+                foreach($html('ul.list-reviews li div.rating-block') as $element){
+                    //nickname wasn't set in rakuten.com
+                    $nickname = "None";
+                    //rating
+                    $ratingText = $element->parent->getChild(3)->getChild(1)->getChild(1)->getInnerText();
+                    preg_match_all('/class="s([^>^<]+)">/', $ratingText, $matchRating);
+                    $rating = trim($matchRating[1][0]);
+                    //rating is set as format 45 or 5, if 45 means 4.5
+                    if($rating > 10){
+                        $rating = $rating/10;
+                    }
+                    //$element->parent->getChild(5)->html() => "<p><span id="dnn_ctr16846_View_ctlCustomerReviews_customerReviews_ratingInfo_1"><b>Rosewill Halogen Convection Oven</b> 9/22/2015<br /></span></p>"
+                    $subjectAndCreatedatStr = $element->parent->getChild(5)->html();
+                    //title betwnne <b> and </b>
+                    preg_match_all('/<b>([^>^<]+)<\/b>/', $subjectAndCreatedatStr, $matchSubject);
+                    $subject = trim($matchSubject[1][0]);
+                    //created at between </b> and <br />
+                    preg_match_all('/<\/b>([^>^<]+)<br \/>/', $subjectAndCreatedatStr, $matchCreatedat);
+                    $created_at = trim($matchCreatedat[1][0]);
+                    //Detail
+                    $detail = trim($element->parent->getChild(6)->getPlainText());
+                    $data = array(
+                        'detail' => $detail,
+                        'nickname' => $nickname,
+                        'subject' => $subject,
+                        'created_at' => $created_at,
+                        'rating' => $rating
+                    );
+                    $response[] = $data;
+                }
+            }
+
+            break;
+        case 'bestbuy':
+            /*
+             * rosewill don't sale on bestbuy.com anymore,this case ignore
+            */
+            $url = "http://www.bestbuy.com/site/samsung-4-2-cu-ft-9-cycle-high-efficiency-steam-front-loading-washer-white/3460004.p?skuId=3460004";
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url );
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 1);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $agent= 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.0.3705; .NET CLR 1.1.4322)';
+            curl_setopt($ch, CURLOPT_USERAGENT, $agent);
+            $html = curl_exec($ch);
+            curl_close($ch);
+
+            file_put_contents('bestbuy.html', $html);
+
+            $dom = file_get_dom('bestbuy.html');
+
+            if(!empty($dom)){
+                $i = 1;
+                foreach($dom('div[itemprop="reviews"]') as $element){
+                    echo $i . ": " . PHP_EOL;
+                    echo "    Subject: " . $element('span[itemprop="name"]', 0)->getPlainText() . PHP_EOL;
+                    echo "    Rating: " . $element('span[itemprop="ratingValue"]', 0)->getPlainText() . PHP_EOL;
+                    echo "    Post by: " . $element('span[itemprop="author"]', 0)->getPlainText() . PHP_EOL;
+                    echo "    Deatil: " . $element('span[itemprop="description"]', 0)->getPlainText() . PHP_EOL;
+                    foreach($element('meta[itemprop="datePublished"]') as $eachDate){
+                        echo "    Created at: " . $eachDate->content . PHP_EOL;
+                    }
+                    $i++;
+                }
+            }
+            break;
         case 'walmart' :
             $withValue = false;
             foreach (array('channel_sku', 'product_url') as $attr) {
