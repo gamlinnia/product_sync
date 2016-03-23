@@ -1581,9 +1581,9 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             }
             echo 'with value' . PHP_EOL;
             var_dump($channelsinfo);
-            if (isset($channelsinfo['channel_url'][$channel_title]) && !empty($channelsinfo['channel_url'][$channel_title])) {
-                var_dump($channelsinfo['channel_url']);
-                $url = $channelsinfo['channel_url'][$channel_title];
+            if (isset($channelsinfo['product_url'][$channel_title]) && !empty($channelsinfo['product_url'][$channel_title])) {
+                var_dump($channelsinfo['product_url']);
+                $url = $channelsinfo['product_url'][$channel_title];
             }
             $html = file_get_dom($url);
 
