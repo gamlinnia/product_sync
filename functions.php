@@ -1,5 +1,10 @@
 <?php
 
+function isJson($string) {
+    json_decode(trim($string));
+    return (json_last_error() == JSON_ERROR_NONE);
+}
+
 function attributeSetNameAndId ($nameOrId, $value) {
     /*$nameOrId = 'attributeSetName' or 'attributeSetId'*/
     $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection') ->load();
@@ -400,7 +405,10 @@ function CallAPI($method, $url, $header = null, $data = false) {
 
     curl_close($curl);
 
-    return json_decode($result, true);
+    if (isJson($result)) {
+        return json_decode($result, true);
+    }
+    return $result;
 }
 
 function getImagesUrlOfProduct ($valueToFilter, $type='entity_id') {
