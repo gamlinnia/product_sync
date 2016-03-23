@@ -1556,7 +1556,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
     switch ($channel) {
         case 'rakuten':
             /*
-             * need url instead of sku
+             * need product_url instead of product_sku
             */
             $channel_title = 'Rakuten.com';
             $withValue = false;
