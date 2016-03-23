@@ -1684,17 +1684,27 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 return $response;
             }
             $url = 'http://www.walmart.com/reviews/api/product/' . $channelsinfo['channel_sku']['Wayfair.com'] . '?limit=10&sort=submission-desc&filters=&showProduct=false';
-            $client = Client::getInstance();
-            $request  = $client->getMessageFactory()->createRequest();
-            $response = $client->getMessageFactory()->createResponse();
-            $request->setMethod('GET');
-            $request->setUrl($url);
-
-            $client->send($request, $response);
-            echo $response->getContent();
-            /*            if(!empty($html)) {
-                            foreach ($html('#Community_Content .grpReviews tr td .details') as $element) {*/
-
+            $html = CallAPI('GET', $url);
+            $content = $html['reviewsHtml'];
+            preg_match_all('/<h3 class=\"visuallyhidden\">Customer review by ([^>]+)/', $content, $matchNickname);
+            preg_match_all('/<[^>]+customer-review-title">([^>^<]+)/', $content, $matchSubject);
+            preg_match_all('/<p class=\"js-customer-review-text\"[^>]+>([^>^<]+)/', $content, $matchReviewText);
+            preg_match_all('/<span class="Grid-col[^>]+customer-review-date[^>]+>([^<]+)/', $content, $matchPostDate);
+            preg_match_all('/<span class="visuallyhidden">([^>]+) stars/', $content, $matchRating);
+            if (!empty($matchNickname[1])) {
+                foreach ($matchNickname[1] as $index => $nickname) {
+                    $data = array(
+                        'nickname' => trim($nickname),
+                        'detail' => trim($matchReviewText[1][$index]),
+                        'created_at' => trim($matchPostDate[1][$index]),
+                        'subject' => trim($matchSubject[1][$index]),
+                        'rating' => trim($matchRating[1][$index]),       // first one is overall rating
+                        'product_url' => $url
+                    );
+                    $response[] = $data;
+                }
+            }
+            echo json_encode($response) . PHP_EOL;
             break;
         case 'wayfair' :
             $withValue = false;
