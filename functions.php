@@ -1,7 +1,7 @@
 <?php
 
 function isJson($string) {
-    json_decode($string);
+    json_decode(trim($string));
     return (json_last_error() == JSON_ERROR_NONE);
 }
 
