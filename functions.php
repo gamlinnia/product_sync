@@ -1621,7 +1621,8 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                         'nickname' => $nickname,
                         'subject' => $subject,
                         'created_at' => $created_at,
-                        'rating' => $rating
+                        'rating' => $rating,
+                        'product_url' => $url
                     );
                     $response[] = $data;
                 }
@@ -1738,7 +1739,8 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                         'nickname' => htmlentities($each_review['author']['screenName']),
                         'subject' => htmlentities($each_review['summary']),
                         'created_at' => $date->get('MMM dd, yyyy'),
-                        'rating' => $each_review['attribute_rating'][0]['value']
+                        'rating' => $each_review['attribute_rating'][0]['value'],
+                        'product_url' => $url
                     );
                     $response[] = $data;
                 }
@@ -1778,7 +1780,8 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                         'detail' => trim($matchReviewText[1][$index]),
                         'created_at' => trim($matchPostDate[1][$index]),
                         'subject' => trim($matchSubject[1][$index]),
-                        'rating' => trim($matchRating[1][$index +1])        // first one is overall rating
+                        'rating' => trim($matchRating[1][$index +1]),       // first one is overall rating
+                        'product_url' => $url
                     );
                     $response[] = $data;
                 }
@@ -1806,14 +1809,16 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                         'rating' => $rating,
                         'subject' => $element->getChild(0)->lastChild()->getPlainText(),
                         'created_at' => $element->getChild(1)->lastChild()->getPlainText(),
-                        'nickname' => $element->getChild(1)->getChild(0)->getPlainText()
+                        'nickname' => $element->getChild(1)->getChild(0)->getPlainText(),
+                        'product_url' => $url
                     );
                 }
             }
             echo json_encode($response) . PHP_EOL;
             break;
         case 'newegg' :
-            $html = file_get_dom('http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=50');
+            $url = 'http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=50';
+            $html = file_get_dom($url);
             if(!empty($html)) {
                 foreach ($html('#Community_Content .grpReviews tr td .details') as $element) {
                     $nickname = $element->parent->parent->getChild(1)->getChild(1)->getChild(1)->getPlainText();
@@ -1845,7 +1850,8 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                         'nickname' => htmlentities($nickname),
                         'subject' => htmlentities($subject),
                         'created_at' => $created,
-                        'rating' => $rating
+                        'rating' => $rating,
+                        'product_url' => $url
                     );
                 }
             }
