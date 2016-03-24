@@ -1719,14 +1719,111 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             }
             echo 'with value' . PHP_EOL;
             var_dump($channelsinfo);
+
+            //need correct
+            $product_url = $channelsinfo['product_url']['Wayfair.com'];
+
+            //need correct
+            $product_sku = $channelsinfo['channel_sku']['Wayfair.com'];
+
             if (isset($channelsinfo['channel_sku']['Wayfair.com']) && !empty($channelsinfo['channel_sku']['Wayfair.com'])) {
-                $url = 'http://www.wayfair.com/a/product_review_page/get_update_reviews_json?_format=json&page_number=1&sort_order=date_desc&filter_rating=&filter_tag=&item_per_page=10&product_sku=' . $channelsinfo['channel_sku']['Wayfair.com'];
-                echo $url . PHP_EOL;
+                $review_url = "http://www.wayfair.com/a/product_review_page/get_update_reviews_json?_format=json&page_number=1&sort_order=date_desc&filter_rating=&filter_tag=&item_per_page=10&product_sku=" . $product_sku;
+                echo $review_url . PHP_EOL;
             }
-            $content = CallAPI('GET', $url);
-            var_dump($content);
-            $jsonContent = json_decode(trim(file_get_contents($url)), true);
-            echo json_encode($jsonContent['reviews']) . PHP_EOL;
+
+            //vaildate
+            $html = CallAPI('GET', $review_url);
+
+            preg_match('/<script type=\"text\/javascript\" src=\"\/(wf-[a-z]+.js)\"/', trim($html), $match);
+            $js_file = $match[1];
+            $base_url = parse_url($review_url);
+            $second_url = $base_url['scheme'] . "://" .  $base_url['host'] . "/" . $js_file;
+            $js_headers = get_headers($second_url, 1);
+            $third_url = $base_url['scheme'] . "://" .  $base_url['host'] . $js_headers['X-JU'];
+            $X_AH = $js_headers['X-AH'];
+
+            $data = 'p=%7B%22appName%22%3A%22Netscape%22%2C%22platform%22%3A%22Win32%22%2C%22cookies%22%3A1%2C%22syslang%22%3A%22zh-TW%22%2C%22userlang%22%3A%22zh-TW%22%2C%22cpu%22%3A%22%22%2C%22productSub%22%3A%2220030107%22%2C%22setTimeout%22%3A0%2C%22setInterval%22%3A0%2C%22plugins%22%3A%7B%220%22%3A%22ShockwaveFlash%22%2C%221%22%3A%22WidevineContentDecryptionModule%22%2C%222%22%3A%22ChromePDFViewer%22%2C%223%22%3A%22NativeClient%22%2C%224%22%3A%22ChromePDFViewer%22%7D%2C%22mimeTypes%22%3A%7B%220%22%3A%22ShockwaveFlashapplication%2Fx-shockwave-flash%22%2C%221%22%3A%22ShockwaveFlashapplication%2Ffuturesplash%22%2C%222%22%3A%22WidevineContentDecryptionModuleapplication%2Fx-ppapi-widevine-cdm%22%2C%223%22%3A%22application%2Fpdf%22%2C%224%22%3A%22NativeClientExecutableapplication%2Fx-nacl%22%2C%225%22%3A%22PortableNativeClientExecutableapplication%2Fx-pnacl%22%2C%226%22%3A%22PortableDocumentFormatapplication%2Fx-google-chrome-pdf%22%7D%2C%22screen%22%3A%7B%22width%22%3A1440%2C%22height%22%3A900%2C%22colorDepth%22%3A24%7D%2C%22fonts%22%3A%7B%220%22%3A%22Calibri%22%2C%221%22%3A%22Cambria%22%2C%222%22%3A%22Constantia%22%2C%223%22%3A%22LucidaBright%22%2C%224%22%3A%22Georgia%22%2C%225%22%3A%22SegoeUI%22%2C%226%22%3A%22Candara%22%2C%227%22%3A%22TrebuchetMS%22%2C%228%22%3A%22Verdana%22%2C%229%22%3A%22Consolas%22%2C%2210%22%3A%22LucidaConsole%22%2C%2211%22%3A%22LucidaSansTypewriter%22%2C%2212%22%3A%22CourierNew%22%2C%2213%22%3A%22Courier%22%7D%7D';
+
+            $headers = array(
+                'Content-Type' => 'text/plain;charset=UTF-8',
+                'Content-Length' => strlen($data),
+                'X-Distil-Ajax' =>  $X_AH,
+                'Referer' => $review_url,
+                'Accept' => '*/*',
+                'Accept-Encoding' => 'gzip, deflate',
+                'Accept-Language' => 'zh-TW,zh;q=0.8,en-US;q=0.6,en;q=0.4',
+                'Cache-Control' => 'max-age=0',
+                'Host' => 'www.wayfair.com',
+                'Origin' => 'http://www.wayfair.com',
+                'Proxy-Connection' => 'keep-alive',
+                'User-Agent' =>'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36'
+            );
+
+            $ch = curl_init($third_url);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            //curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_COOKIEJAR, "cookie.txt");
+            $result = curl_exec($ch);
+            curl_close($ch);
+
+            //get cookie
+            $cookie_file = file_get_contents('cookie.txt');
+
+            $data = explode("\n", $cookie_file);
+            $cookies = array();
+            foreach($data as $index => $line) {
+                if($index >= 4 && $index < 9){
+                    $str = explode("\t", $line);
+                    $cookies[] = $str[5] . "=" . $str[6];
+                    //var_dump($str);
+                }
+            }
+            $cookie = implode(';', $cookies);
+
+            //get review data
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $review_url );
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 1);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            //curl_setopt($ch, CURLOPT_COOKIEJAR, "cookie.txt");
+            curl_setopt($ch, CURLOPT_COOKIE, $cookie);
+            $agent= 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.0.3705; .NET CLR 1.1.4322)';
+            curl_setopt($ch, CURLOPT_USERAGENT, $agent);
+            $html = curl_exec($ch);
+            curl_close($ch);
+            //var_dump($html);
+            $content = json_decode(trim($html), true);
+            //$i = 1;
+            foreach($content['reviews'] as $each){
+                $detail = trim($each['product_comments']);
+                $subject = trim($each['headline']);
+                $nickname = trim($each['reviewer_name']);
+                $created_at = trim($each['date']);
+                $rating = trim($each['rating']);
+
+                $data = array(
+                    'detail' => $detail,
+                    'nickname' => $nickname,
+                    'subject' => $subject,
+                    'created_at' => $created_at,
+                    'rating' => $rating,
+                    'product_url' => $product_url
+                );
+                $response[] = $data;
+                //echo "===================$i=======================" . PHP_EOL;
+                //echo "Subject: " . $each['headline'] . PHP_EOL;
+                //echo "Nickname: " . $each['reviewer_name'] . PHP_EOL;
+                //echo "Created at: " . $each['date'] . PHP_EOL;
+                //echo "Rating: " . $each['rating'] . PHP_EOL;
+                //echo "Detail: " . $each['product_comments'] . PHP_EOL;
+                //echo "============================================" . PHP_EOL;
+                //$i++;
+            }
+            //var_dump($content['reviews']);
+
             break;
         case 'sears' :
             $channel_title = 'Sears.com';
