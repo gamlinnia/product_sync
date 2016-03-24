@@ -674,11 +674,6 @@ function parseMagentoJson ($magentoObject) {
     return $result;
 }
 
-function isJson($string) {
-    json_decode($string);
-    return (json_last_error() == JSON_ERROR_NONE);
-}
-
 function totalSpendTime ($startTimeStamp) {
     $endTimeStamp = currentTimeStamp();
     $duration = $endTimeStamp - $startTimeStamp;
