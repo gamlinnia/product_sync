@@ -1725,11 +1725,10 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             $product_url = $channelsinfo['product_url']['Wayfair.com'];
             $product_sku = $channelsinfo['channel_sku']['Wayfair.com'];
 
-            if (isset($channelsinfo['channel_sku']['Wayfair.com']) && !empty($channelsinfo['channel_sku']['Wayfair.com'])) {
-                $review_url = "http://www.wayfair.com/a/product_review_page/get_update_reviews_json?_format=json&page_number=1&sort_order=date_desc&filter_rating=&filter_tag=&item_per_page=10&product_sku=" . $product_sku;
-                echo $review_url . PHP_EOL;
+            if (!isset($channelsinfo['channel_sku']['Wayfair.com']) || empty($channelsinfo['channel_sku']['Wayfair.com'])) {
+                return;
             }
-
+            $review_url = "http://www.wayfair.com/a/product_review_page/get_update_reviews_json?_format=json&page_number=1&sort_order=date_desc&filter_rating=&filter_tag=&item_per_page=10&product_sku=" . $product_sku;
 //            //vaildate
 //            $html = CallAPI('GET', $review_url);
 //
