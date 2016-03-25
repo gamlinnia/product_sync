@@ -1768,7 +1768,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
 
             //get review data
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $review_url );
+            curl_setopt($ch, CURLOPT_URL, $product_url );
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 1);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
