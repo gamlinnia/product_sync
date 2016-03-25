@@ -1708,8 +1708,10 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             break;
         case 'wayfair' :
             $withValue = false;
+            $count = 0;
             foreach (array('channel_sku', 'product_url') as $attr) {
                 if ( isset($channelsinfo[$attr]['Wayfair.com']) && !empty($channelsinfo[$attr]['Wayfair.com']) ) {
+                    $count++;
                     $withValue = true;
                 }
             }
@@ -1734,7 +1736,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             //vaildate
             $html = CallAPI('GET', $review_url);
 
-            preg_match('/<script type=\"text\/javascript\" src=\"\/(wf-[a-z]+.js)\"/', trim($html), $match);
+            preg_match('/<script type=\"text\/javascript\" src=\"\/(wf-[^>]+.js)\"/', trim($html), $match);
             $js_file = $match[1];
             $base_url = parse_url($review_url);
             $second_url = $base_url['scheme'] . "://" .  $base_url['host'] . "/" . $js_file;
