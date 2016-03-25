@@ -215,6 +215,7 @@ $app->post('/api/massDeleteContactusFormFromLocal', function () {
 $app->post('/api/getCookies', function  () {
     global $input;
     global $app;
+    $headers = $app->request()->headers();
     if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
         echo json_encode(array(
             'message' => 'auth error.'
