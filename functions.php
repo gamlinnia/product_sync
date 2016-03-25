@@ -2048,15 +2048,19 @@ function checkReviewExist($productId, $review, $rating){
 }
 
 function getCookieFromAws($channel, $channel_sku, $product_url){
+    $awsRestUrl = 'http://www.rosewill.com/rest/route.php/api/';
+    $getCookieApiName = 'etCookies';
+    $restMethod = 'POST';
+    $token = array('Token: rosewill');
     $data = array(
         'channel' => $channel,
         'channel_sku' => $channel_sku,
         'product_url' => $product_url
     );
     $response = CallAPI(
-        'POST',
-        'http://www.rosewill.com/rest/route.php/api/getCookies',
-        array('Token: rosewill'),
+        $restMethod,
+        $awsRestUrl . $getCookieApiName,
+        $token,
         $data
     );
 
