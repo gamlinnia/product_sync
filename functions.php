@@ -1683,7 +1683,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 echo 'no sku provided.' . PHP_EOL;
                 return $response;
             }
-            $url = 'http://www.walmart.com/reviews/api/product/' . $channelsinfo['channel_sku']['Wayfair.com'] . '?limit=10&sort=submission-desc&filters=&showProduct=false';
+            $url = 'http://www.walmart.com/reviews/api/product/' . $channelsinfo['channel_sku']['Walmart.com'] . '?limit=10&sort=submission-desc&filters=&showProduct=false';
             $html = CallAPI('GET', $url);
             $content = $html['reviewsHtml'];
             preg_match_all('/<h3 class=\"visuallyhidden\">Customer review by ([^>]+)/', $content, $matchNickname);
