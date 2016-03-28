@@ -331,6 +331,8 @@ function parseBackClassifiedProductAttributes ($parsedClassifiedProductInfo) {
         switch ($attrKey) {
             case 'news_from_date' :
             case 'news_to_date' :
+            case 'special_from_date' :
+            case 'special_to_date' :
                 $parsedProductInfo[$attrKey] = strtotime($attrValue);
                 break;
             default :
