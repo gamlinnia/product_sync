@@ -158,7 +158,10 @@ function classifyProductAttributes ($productInfo) {
             "stock_item",
             "entity_id",
             "is_returnable",
-            'category'
+            'category',
+            "is_in_stock",
+            "tier_price_changed",
+            "group_price_changed"
         )
     );
 
