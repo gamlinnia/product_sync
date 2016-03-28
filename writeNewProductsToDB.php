@@ -51,7 +51,11 @@ try{
                     $productObject->setData($attrKey, $attrValue);
                 }
             } else {
-                echo "Set attr key: $attrKey to $attrValue" . PHP_EOL;
+                if (is_array($attrValue)) {
+                    var_dump($attrValue);
+                } else {
+                    echo "Set attr key: $attrKey to $attrValue" . PHP_EOL;
+                }
                 $productObject->setData($attrKey, $attrValue);
             }
         }
