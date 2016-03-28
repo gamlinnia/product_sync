@@ -145,7 +145,8 @@ function classifyProductAttributes ($productInfo) {
             "required_options",
             "width",
             "height",
-            "url_key"
+            "url_key",
+            "channelsinfo"
         ),
         'dontCare' => array(
             "created_at",
@@ -157,7 +158,14 @@ function classifyProductAttributes ($productInfo) {
             "stock_item",
             "entity_id",
             "is_returnable",
-            'category'
+            'category',
+            "is_in_stock",
+            "is_salable",
+            "tier_price_changed",
+            "group_price_changed",
+            "ne_product_specifications",
+            "ewra",
+            "msds_sheet"
         )
     );
 
@@ -171,6 +179,11 @@ function classifyProductAttributes ($productInfo) {
         # dontCare class -> in pre-defined dontCare_keyWord array
         if( preg_in_array($attrKey, $keyWord['dontCare']) ){
             $response['dontCare'][$attrKey] = $attrValue;
+        }
+        else if (is_array($attrValue)) {
+            if (preg_in_array($attrKey, $keyWord['direct'])) {
+                $response['direct'][$attrKey] = $attrValue;
+            }
         }
         # direct class -> the value is not numeric or in pre-defined direct_keyWord array
         else if ( isFloat($attrValue) || !is_numeric($attrValue) || preg_in_array($attrKey, $keyWord['direct'])){
@@ -256,8 +269,9 @@ function getNextProductInfoFromMagento ($filterParam, $pageSize) {
     $productCollection->setOrder('updated_at', 'ASC')->setPageSize($pageSize+1);
 
     foreach ($productCollection as $product) {
-        $productDataArray = $product->debug();
-        $productDataArray['category'] = getProductCategorysInfo($product->getId());
+        $productId = $product->getId();
+        $productDataArray = Mage::getModel('catalog/product')->load($productId)->getData();
+        $productDataArray['category'] = getProductCategorysInfo($productId);
         if ( count($productCollection) == 1 && $product->getUpdatedAt() == $filterParam['updated_at']['from'] ) {
             $response['productsInfo'] = array();
         } else {
@@ -288,6 +302,9 @@ function getJsonFile ($setting) {
 }
 
 function isFloat ($element) {
+    if (is_array($element)) {
+        return false;
+    }
     preg_match('/[\d]+[\.]{1}[\d]+/', $element, $match);
     if ($match) {
         return true;
@@ -321,7 +338,13 @@ function parseBackClassifiedProductAttributes ($parsedClassifiedProductInfo) {
         switch ($attrKey) {
             case 'news_from_date' :
             case 'news_to_date' :
-                $parsedProductInfo[$attrKey] = strtotime($attrValue);
+            case 'special_from_date' :
+            case 'special_to_date' :
+                if ($attrValue) {
+                    $parsedProductInfo[$attrKey] = strtotime($attrValue);
+                } else {
+                    $parsedProductInfo[$attrKey] = null;
+                }
                 break;
             default :
                 $parsedProductInfo[$attrKey] = $attrValue;
@@ -1694,7 +1717,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             preg_match_all('/<[^>]+customer-review-title">([^>^<]+)/', $content, $matchSubject);
             preg_match_all('/<p class=\"js-customer-review-text\"[^>]+>([^>^<]+)/', $content, $matchReviewText);
             preg_match_all('/<span class="Grid-col[^>]+customer-review-date[^>]+>([^<]+)/', $content, $matchPostDate);
-            preg_match_all('/<span class="visuallyhidden">([^>]+) stars/', $content, $matchRating);
+            preg_match_all('/<span class="visuallyhidden">([^>^<]+) stars/', $content, $matchRating);
             if (!empty($matchNickname[1])) {
                 foreach ($matchNickname[1] as $index => $nickname) {
                     $data = array(
