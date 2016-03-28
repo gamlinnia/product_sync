@@ -145,7 +145,8 @@ function classifyProductAttributes ($productInfo) {
             "required_options",
             "width",
             "height",
-            "url_key"
+            "url_key",
+            "channelsinfo"
         ),
         'dontCare' => array(
             "created_at",
@@ -1690,7 +1691,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             preg_match_all('/<[^>]+customer-review-title">([^>^<]+)/', $content, $matchSubject);
             preg_match_all('/<p class=\"js-customer-review-text\"[^>]+>([^>^<]+)/', $content, $matchReviewText);
             preg_match_all('/<span class="Grid-col[^>]+customer-review-date[^>]+>([^<]+)/', $content, $matchPostDate);
-            preg_match_all('/<span class="visuallyhidden">([^>]+) stars/', $content, $matchRating);
+            preg_match_all('/<span class="visuallyhidden">([^>^<]+) stars/', $content, $matchRating);
             if (!empty($matchNickname[1])) {
                 foreach ($matchNickname[1] as $index => $nickname) {
                     $data = array(
