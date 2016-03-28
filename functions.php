@@ -290,6 +290,9 @@ function getJsonFile ($setting) {
 }
 
 function isFloat ($element) {
+    if (is_array($element)) {
+        return false;
+    }
     preg_match('/[\d]+[\.]{1}[\d]+/', $element, $match);
     if ($match) {
         return true;
