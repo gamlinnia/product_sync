@@ -173,6 +173,11 @@ function classifyProductAttributes ($productInfo) {
         if( preg_in_array($attrKey, $keyWord['dontCare']) ){
             $response['dontCare'][$attrKey] = $attrValue;
         }
+        else if (is_array($attrValue)) {
+            if (preg_in_array($attrKey, $keyWord['direct'])) {
+                $response['direct'][$attrKey] = $attrValue;
+            }
+        }
         # direct class -> the value is not numeric or in pre-defined direct_keyWord array
         else if ( isFloat($attrValue) || !is_numeric($attrValue) || preg_in_array($attrKey, $keyWord['direct'])){
             /*determine the multiselect case 147,148,149,150*/
