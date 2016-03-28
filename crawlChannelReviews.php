@@ -37,7 +37,8 @@ $channels = array(
     'homedepot' => 'http://homedepot.ugc.bazaarvoice.com/1999aa/205479530/reviews.djs?format=embeddedhtml&page=3&sort=submissionTime&scrollToTop=true',
     'walmart' => 'http://www.walmart.com/reviews/api/product/',
     'wayfair' => 'http://www.wayfair.com/a/product_review_page/get_update_reviews_json?_format=json&page_number=1&sort_order=date_desc&filter_rating=&filter_tag=&item_per_page=10&product_sku=',
-    'sears' => 'http://www.sears.com/content/pdp/ratings/single/search/Sears/SPM3300036421&targetType=product&limit=50&offset=0'
+    'sears' => 'http://www.sears.com/content/pdp/ratings/single/search/Sears/SPM3300036421&targetType=product&limit=50&offset=0',
+    'rakuten' => 'http://rosewillinc.shop.rakuten.com/p/rosewill-rps-200-6-outlets-power-strip-125v-input-voltage-1875w/229101142.html'
 );
 
 if ($debug) {
