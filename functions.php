@@ -1565,27 +1565,23 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
     $review_limit = 50;
     switch ($channel) {
         case 'rakuten':
-            /*
-             * need product_url instead of product_sku
-            */
             $channel_title = 'Rakuten.com';
-            $withValue = false;
-            foreach (array('channel_sku', 'product_url') as $attr) {
+            //product_url is required for this channel
+            $required_fields = array('product_url');
+            $count = 0;
+            foreach ($required_fields as $attr) {
                 if ( isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title]) ) {
-                    $withValue = true;
+                    $count++;
                 }
             }
-            if (!$withValue) {
-                echo 'no sku provided.' . PHP_EOL;
+            if ($count < count($required_fields)) {
+                echo 'loss required information' . PHP_EOL;
                 return $response;
             }
-            echo 'with value' . PHP_EOL;
-            var_dump($channelsinfo);
-            if (isset($channelsinfo['product_url'][$channel_title]) && !empty($channelsinfo['product_url'][$channel_title])) {
-                var_dump($channelsinfo['product_url']);
-                $url = $channelsinfo['product_url'][$channel_title];
-            }
-            $html = file_get_dom($url);
+
+            $review_url = $product_url = $channelsinfo['product_url'][$channel_title];
+
+            $html = file_get_dom($review_url);
 
             if(!empty($html)){
                 foreach($html('ul.list-reviews li div.rating-block') as $element){
@@ -1632,7 +1628,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                         'subject' => $subject,
                         'created_at' => $created_at,
                         'rating' => $rating,
-                        'product_url' => $url
+                        'product_url' => $product_url
                     );
                     $response[] = $data;
                 }
@@ -1673,18 +1669,26 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             break;
         */
         case 'walmart' :
-            $withValue = false;
-            foreach (array('channel_sku', 'product_url') as $attr) {
-                if ( isset($channelsinfo[$attr]['Walmart.com']) && !empty($channelsinfo[$attr]['Walmart.com']) ) {
-                    $withValue = true;
+            $channel_title = 'Walmart.com';
+            //channel_sku is required for this channel
+            $required_fields = array('channel_sku');
+            $count = 0;
+            foreach ($required_fields as $attr) {
+                if ( isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title]) ) {
+                    $count++;
                 }
             }
-            if (!$withValue) {
+            if ($count < count($required_fields)) {
                 echo 'no sku provided.' . PHP_EOL;
                 return $response;
             }
-            $url = 'http://www.walmart.com/reviews/api/product/' . $channelsinfo['channel_sku']['Walmart.com'] . '?limit=10&sort=submission-desc&filters=&showProduct=false';
-            $html = CallAPI('GET', $url);
+
+            $channel_sku = $channelsinfo['channel_sku'][$channel_title];
+            $product_url = 'http://www.walmart.com/ip/' . $channel_sku;
+
+            $review_url = 'http://www.walmart.com/reviews/api/product/' . $channel_sku . '?limit=10&sort=submission-desc&filters=&showProduct=false';
+
+            $html = CallAPI('GET', $review_url);
             $content = $html['reviewsHtml'];
             preg_match_all('/<h3 class=\"visuallyhidden\">Customer review by ([^>^<]+)/', $content, $matchNickname);
             preg_match_all('/<[^>]+customer-review-title">([^>^<]+)/', $content, $matchSubject);
@@ -1699,7 +1703,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                         'created_at' => trim($matchPostDate[1][$index]),
                         'subject' => trim($matchSubject[1][$index]),
                         'rating' => trim($matchRating[1][$index]),       // first one is overall rating
-                        'product_url' => $url
+                        'product_url' => $product_url
                     );
                     $response[] = $data;
                 }
@@ -1707,28 +1711,24 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             echo json_encode($response) . PHP_EOL;
             break;
         case 'wayfair' :
-            $withValue = false;
+            $channel_title = 'Wayfair.com';
+            // both channel_sku and product_url are required
+            $required_fields = array('channel_sku', 'product_url');
             $count = 0;
-            foreach (array('channel_sku', 'product_url') as $attr) {
-                if ( isset($channelsinfo[$attr]['Wayfair.com']) && !empty($channelsinfo[$attr]['Wayfair.com']) ) {
+            foreach ($required_fields as $attr) {
+                if ( isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title]) ) {
                     $count++;
-                    $withValue = true;
                 }
             }
-            if (!$withValue) {
-                echo 'no sku provided.' . PHP_EOL;
+            if ($count < count($required_fields)) {
+                echo 'loss required information' . PHP_EOL;
                 return $response;
             }
-            echo 'with value' . PHP_EOL;
-            var_dump($channelsinfo);
 
-            $product_url = $channelsinfo['product_url']['Wayfair.com'];
-            $product_sku = $channelsinfo['channel_sku']['Wayfair.com'];
+            $product_url = $channelsinfo['product_url'][$channel_title];
+            $channel_sku = $channelsinfo['channel_sku'][$channel_title];
 
-            if (!isset($channelsinfo['channel_sku']['Wayfair.com']) || empty($channelsinfo['channel_sku']['Wayfair.com'])) {
-                return;
-            }
-            $review_url = "http://www.wayfair.com/a/product_review_page/get_update_reviews_json?_format=json&page_number=1&sort_order=date_desc&filter_rating=&filter_tag=&item_per_page=10&product_sku=" . $product_sku;
+            $review_url = "http://www.wayfair.com/a/product_review_page/get_update_reviews_json?_format=json&page_number=1&sort_order=date_desc&filter_rating=&filter_tag=&item_per_page=" . $review_limit. "&product_sku=" . $channel_sku;
 //            //vaildate
 //            $html = CallAPI('GET', $review_url);
 //
@@ -1763,11 +1763,11 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
 //            }
 //            $cookie = implode(';', $cookies);
 
-            $cookie = getCookieFromAws('wayfair', $product_sku, $product_url);
+            $cookie = getCookieFromAws('wayfair', $channel_sku, $product_url);
 
             //get review data
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $review_url );
+            curl_setopt($ch, CURLOPT_URL, $review_url);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 1);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -1777,9 +1777,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             curl_setopt($ch, CURLOPT_USERAGENT, $agent);
             $html = curl_exec($ch);
             curl_close($ch);
-            //var_dump($html);
             $content = json_decode(trim($html), true);
-            //$i = 1;
             foreach($content['reviews'] as $each){
                 $detail = trim($each['product_comments']);
                 $subject = trim($each['headline']);
@@ -1796,51 +1794,43 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                     'product_url' => $product_url
                 );
                 $response[] = $data;
-                //echo "===================$i=======================" . PHP_EOL;
-                //echo "Subject: " . $each['headline'] . PHP_EOL;
-                //echo "Nickname: " . $each['reviewer_name'] . PHP_EOL;
-                //echo "Created at: " . $each['date'] . PHP_EOL;
-                //echo "Rating: " . $each['rating'] . PHP_EOL;
-                //echo "Detail: " . $each['product_comments'] . PHP_EOL;
-                //echo "============================================" . PHP_EOL;
-                //$i++;
             }
-            //var_dump($content['reviews']);
 
             break;
         case 'sears' :
             $channel_title = 'Sears.com';
-            $withValue = false;
-            foreach (array('channel_sku', 'product_url') as $attr) {
+            // both channel_sku and product_url are required
+            $required_fields = array('channel_sku', 'product_url');
+            $count = 0;
+            foreach ($required_fields as $attr) {
                 if ( isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title]) ) {
-                    $withValue = true;
+                    $count++;
                 }
             }
-            if (!$withValue) {
+            if ($count < count($required_fields)) {
                 echo 'no sku provided.' . PHP_EOL;
                 return $response;
             }
-            echo 'with value' . PHP_EOL;
-            var_dump($channelsinfo);
-            if (isset($channelsinfo['channel_sku'][$channel_title]) && !empty($channelsinfo['channel_sku'][$channel_title])) {
-                var_dump($channelsinfo['channel_sku']);
-                $url = "http://www.sears.com/content/pdp/ratings/single/search/Sears/" . $channelsinfo['channel_sku'][$channel_title] ."&targetType=product&limit=". $review_limit . "&offset=0";
-            }
 
-            $html = file_get_contents($url);
+            $channel_sku = $channelsinfo['channel_sku'][$channel_title];
+            $product_url = $channelsinfo['product_url'][$channel_title];
+
+            $review_url = "http://www.sears.com/content/pdp/ratings/single/search/Sears/" . $channel_sku ."&targetType=product&limit=". $review_limit . "&offset=0";
+
+            $html = file_get_contents($review_url);
             $html = json_decode($html,true);
             $review_data = $html['data']['reviews'];
 
             if(!empty($review_data)){
                 foreach($review_data as $each_review){
-                    $date = new Zend_Date(strtotime($each_review['published_date']));
+                    $date = new Zend_Date(strtotime(trim($each_review['published_date'])));
                     $data = array(
-                        'detail' => $each_review['content'],
-                        'nickname' => htmlentities($each_review['author']['screenName']),
-                        'subject' => htmlentities($each_review['summary']),
+                        'detail' => trim($each_review['content']),
+                        'nickname' => htmlentities(trim($each_review['author']['screenName'])),
+                        'subject' => htmlentities(trim($each_review['summary'])),
                         'created_at' => $date->get('MMM dd, yyyy'),
-                        'rating' => $each_review['attribute_rating'][0]['value'],
-                        'product_url' => $url
+                        'rating' => trim($each_review['attribute_rating'][0]['value']),
+                        'product_url' => $product_url
                     );
                     $response[] = $data;
                 }
@@ -1848,26 +1838,26 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             echo json_encode($response) . PHP_EOL;
             break;
         case 'homedepot' :
-            /*
-             * no channel_sku or no product_url will exit.
-             * */
-            $withValue = false;
-            foreach (array('channel_sku', 'product_url') as $attr) {
-                if ( isset($channelsinfo[$attr]['HomeDepot.com']) && !empty($channelsinfo[$attr]['HomeDepot.com']) ) {
-                    $withValue = true;
+            $channel_title = 'HomeDepot.com';
+            // channel_sku is required
+            $required_fields = array('channel_sku');
+            $count = 0;
+            foreach ($required_fields as $attr) {
+                if ( isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title]) ) {
+                    $count++;
                 }
             }
-            if (!$withValue) {
+            if ($count < count($required_fields)) {
                 echo 'no sku provided.' . PHP_EOL;
                 return $response;
             }
-            echo 'with value' . PHP_EOL;
-            var_dump($channelsinfo);
-            if (isset($channelsinfo['channel_sku']['HomeDepot.com']) && !empty($channelsinfo['channel_sku']['HomeDepot.com'])) {
-                var_dump($channelsinfo['channel_sku']);
-                $url = 'http://homedepot.ugc.bazaarvoice.com/1999aa/' . $channelsinfo['channel_sku']['HomeDepot.com'] . '/reviews.djs?format=embeddedhtml&page=1&sort=submissionTime&scrollToTop=true';
-            }
-            $content = stripslashes(file_get_contents($url));
+
+            $channel_sku = $channelsinfo['channel_sku'][$channel_title];
+            $product_url = 'http://www.homedepot.com/p/' . $channel_sku;
+
+            $review_url = 'http://homedepot.ugc.bazaarvoice.com/1999aa/' . $channel_sku . '/reviews.djs?format=embeddedhtml&page=1&sort=submissionTime&scrollToTop=true';
+
+            $content = stripslashes(file_get_contents($review_url));
             preg_match_all('/<span itemprop="author" class="BVRRNickname">([^>^<]+)<\/span>/', $content, $matchNickname);
             preg_match_all('/<span class="BVRRReviewText">([^>^<]+)<\/span>/', $content, $matchReviewText);
             preg_match_all('/<span class="BVRRValue BVRRReviewDate">[^>^<]+<meta itemprop="datePublished" content="([^\"]+)"\/><\/span>/', $content, $matchPostDate);
@@ -1881,7 +1871,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                         'created_at' => trim($matchPostDate[1][$index]),
                         'subject' => trim($matchSubject[1][$index]),
                         'rating' => trim($matchRating[1][$index +1]),       // first one is overall rating
-                        'product_url' => $url
+                        'product_url' => $product_url
                     );
                     $response[] = $data;
                 }
@@ -1889,14 +1879,25 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             echo json_encode($response) . PHP_EOL;
             break;
         case 'amazon' :
-            if ( (!isset($channelsinfo['channel_sku']['Amazon.com']) || empty($channelsinfo['channel_sku']['Amazon.com'])) || (!isset($channelsinfo['product_url']['Amazon.com']) || empty($channelsinfo['product_url']['Amazon.com'])) ) {
+            $channel_title = 'Amazon.com';
+
+            $required_fields = array('channel_sku');
+            $count = 0;
+            foreach ($required_fields as $attr) {
+                if ( isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title]) ) {
+                    $count++;
+                }
+            }
+            if ($count < count($required_fields)) {
+                echo 'no sku provided.' . PHP_EOL;
                 return $response;
             }
-            if (isset($channelsinfo['channel_sku']['Amazon.com']) && !empty($channelsinfo['channel_sku']['Amazon.com'])) {
-                $url = 'http://www.amazon.com/product-reviews/' . $channelsinfo['channel_sku']['Amazon.com'] . '/ref=cm_cr_pr_viewopt_srt?ie=UTF8&showViewpoints=1&sortBy=recent&pageNumber=1';
-            }
-            echo $url . PHP_EOL;
-            $html = file_get_dom($url);
+
+            $channel_sku = $channelsinfo['channel_sku'][$channel_title];
+            $product_url = 'http://www.amazon.com/gp/product/' . $channel_sku;
+            $review_url = 'http://www.amazon.com/product-reviews/' . $channel_sku . '/ref=cm_cr_pr_viewopt_srt?ie=UTF8&showViewpoints=1&sortBy=recent&pageNumber=1';
+
+            $html = file_get_dom($review_url);
             foreach ($html('#cm_cr-review_list > .a-section') as $index => $element) {
                 echo $index . PHP_EOL;
                 echo $element->getPlainText() . PHP_EOL;
@@ -1910,15 +1911,15 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                         'subject' => $element->getChild(0)->lastChild()->getPlainText(),
                         'created_at' => $element->getChild(1)->lastChild()->getPlainText(),
                         'nickname' => $element->getChild(1)->getChild(0)->getPlainText(),
-                        'product_url' => $url
+                        'product_url' => $product_url
                     );
                 }
             }
             echo json_encode($response) . PHP_EOL;
             break;
         case 'newegg' :
-            $url = 'http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=' . $review_limit;
-            $html = file_get_dom($url);
+            $review_url = $product_url = 'http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=' . $review_limit;
+            $html = file_get_dom($review_url);
             if(!empty($html)) {
                 foreach ($html('#Community_Content .grpReviews tr td .details') as $element) {
                     $nickname = $element->parent->parent->getChild(1)->getChild(1)->getChild(1)->getPlainText();
@@ -1951,7 +1952,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                         'subject' => htmlentities($subject),
                         'created_at' => $created,
                         'rating' => $rating,
-                        'product_url' => $url
+                        'product_url' => $product_url
                     );
                 }
             }
