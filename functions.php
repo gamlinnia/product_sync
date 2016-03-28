@@ -1650,7 +1650,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                         'nickname' => $nickname,
                         'subject' => $subject,
                         'created_at' => $created_at,
-                        'rating' => $rating,
+                        'rating' => (string)$rating,
                         'product_url' => $product_url
                     );
                     $response[] = $data;
@@ -1702,7 +1702,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 }
             }
             if ($count < count($required_fields)) {
-                echo 'no sku provided.' . PHP_EOL;
+                echo 'loss required information' . PHP_EOL;
                 return $response;
             }
 
@@ -1831,7 +1831,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 }
             }
             if ($count < count($required_fields)) {
-                echo 'no sku provided.' . PHP_EOL;
+                echo 'loss required information' . PHP_EOL;
                 return $response;
             }
 
@@ -1871,7 +1871,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 }
             }
             if ($count < count($required_fields)) {
-                echo 'no sku provided.' . PHP_EOL;
+                echo 'loss required information' . PHP_EOL;
                 return $response;
             }
 
@@ -1912,7 +1912,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 }
             }
             if ($count < count($required_fields)) {
-                echo 'no sku provided.' . PHP_EOL;
+                echo 'loss required information' . PHP_EOL;
                 return $response;
             }
 
@@ -1925,7 +1925,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 echo $index . PHP_EOL;
                 echo $element->getPlainText() . PHP_EOL;
 
-                preg_match('/(\d).?\/.?\d/', $element->getChild(0)->getChild(0)->getPlainText(), $matchRating);
+                preg_match('/(.+) out of/', $element->getChild(0)->getChild(0)->getPlainText(), $matchRating);
                 if (count($matchRating) == 2) {
                     $rating = $matchRating[1];
                     $response[] = array(
