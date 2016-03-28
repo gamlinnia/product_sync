@@ -162,7 +162,10 @@ function classifyProductAttributes ($productInfo) {
             "is_in_stock",
             "is_salable",
             "tier_price_changed",
-            "group_price_changed"
+            "group_price_changed",
+            "ne_product_specifications",
+            "ewra",
+            "msds_sheet"
         )
     );
 
