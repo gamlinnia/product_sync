@@ -1686,7 +1686,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             $url = 'http://www.walmart.com/reviews/api/product/' . $channelsinfo['channel_sku']['Walmart.com'] . '?limit=10&sort=submission-desc&filters=&showProduct=false';
             $html = CallAPI('GET', $url);
             $content = $html['reviewsHtml'];
-            preg_match_all('/<h3 class=\"visuallyhidden\">Customer review by ([^>]+)/', $content, $matchNickname);
+            preg_match_all('/<h3 class=\"visuallyhidden\">Customer review by ([^>^<]+)/', $content, $matchNickname);
             preg_match_all('/<[^>]+customer-review-title">([^>^<]+)/', $content, $matchSubject);
             preg_match_all('/<p class=\"js-customer-review-text\"[^>]+>([^>^<]+)/', $content, $matchReviewText);
             preg_match_all('/<span class="Grid-col[^>]+customer-review-date[^>]+>([^<]+)/', $content, $matchPostDate);
