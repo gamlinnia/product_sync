@@ -69,8 +69,13 @@ foreach($productCollection as $each) {
             }
             echo '    New color attribute value: ' . $new_attribute_value . PHP_EOL;
             //$new_attribute_value =
-            $product->setData($new_attribute_code, $new_attribute_value);
-            $product->save();
+            try {
+                $product->setData($new_attribute_code, $new_attribute_value);
+                $product->save();
+            }
+            catch (exception $e){
+                echo $e->getMessage() . PHP_EOL;
+            }
         }
         else{
             echo "    No color attribute value." . PHP_EOL;
