@@ -12,11 +12,11 @@ function getAllBrandOption(){
     foreach($attributeSetCollection as $each){
         $attributes = Mage::getModel('catalog/product_attribute_api')->items($each->getId());
         foreach($attributes as $eachAttr){
-            //echo $eachAttr['code'] . PHP_EOL;
+//            echo $eachAttr['code'] . PHP_EOL;
             preg_match('/_brand$/', $eachAttr['code'], $matchBrand);
             //var_dump($matchBrand);
             if(count($matchBrand) >= 1){
-                //echo $each->getAttributeSetName() . PHP_EOL;
+                echo $each->getAttributeSetName() . PHP_EOL;
                 $attributeOptions = getAttributeOptions('attributeId', $eachAttr['attribute_id']);
                 if(isset($attributeOptions['options'])){
                     foreach($attributeOptions['options'] as $eachOption){
