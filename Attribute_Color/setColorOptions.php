@@ -1,11 +1,9 @@
 <?php
 
 $config = json_decode(file_get_contents('config.json'), true);
-require_once '../' . $config['magentoDir'] . 'app/Mage.php';
-require_once 'functions.php';
+require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
+require_once '../functions.php';
 Mage::app('admin');
-
-require_once 'lib/ganon.php';
 
 require_once 'getAllColorOptions.php';
 

@@ -1,11 +1,9 @@
 <?php
 
 $config = json_decode(file_get_contents('config.json'), true);
-require_once '../' . $config['magentoDir'] . 'app/Mage.php';
-require_once 'functions.php';
+require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
+require_once '../functions.php';
 Mage::app('admin');
-
-require_once 'lib/ganon.php';
 
 function getAllColorOption(){
     $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection');

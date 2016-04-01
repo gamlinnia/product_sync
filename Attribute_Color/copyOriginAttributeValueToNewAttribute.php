@@ -4,11 +4,9 @@
  *
  * */
 $config = json_decode(file_get_contents('config.json'), true);
-require_once '../' . $config['magentoDir'] . 'app/Mage.php';
-require_once 'functions.php';
+require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
+require_once '../functions.php';
 Mage::app('admin');
-
-require_once 'lib/ganon.php';
 
 $excludeArray = array('c19000_group_he_cables_color', 'b65170_group_adpt_chnger_color');
 //$product = Mage::getModel('catalog/product')->load(1770);
