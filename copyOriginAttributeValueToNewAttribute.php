@@ -44,7 +44,7 @@ foreach($productCollection as $each) {
         } else if ($attributeCode[0]['type'] == 'text' || $attributeCode[0]['type'] == 'textarea') {
             $attribute_value = $product->getData($attributeCode[0]['code']);
         } else {
-            echo "    Multi-select." . PHP_EOL;
+            echo "    "  . $attributeCode[0]['type'] . PHP_EOL;
         }
 
         if(!empty($attribute_value)){
