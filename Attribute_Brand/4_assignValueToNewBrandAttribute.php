@@ -25,10 +25,13 @@ $productCollection = Mage::getModel('catalog/product')->getCollection();
 foreach($productCollection as $each) {
     $product = Mage::getModel('catalog/product')->load($each->getId());
     echo "Product ID: " . $product->getId() . PHP_EOL;
-    try {
-        $product->setData($new_attribute_code, $new_attribute_value);
-        $product->save();
-    } catch (exception $e) {
-        echo $e->getMessage() . PHP_EOL;
+    $brandValue = $product->getBrand();
+    if(empty($brandValue)) {
+        try {
+            $product->setData($new_attribute_code, $new_attribute_value);
+            $product->save();
+        } catch (exception $e) {
+            echo $e->getMessage() . PHP_EOL;
+        }
     }
 }
