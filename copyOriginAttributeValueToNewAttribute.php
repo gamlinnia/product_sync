@@ -43,32 +43,31 @@ foreach($productCollection as $each) {
         } else {
             echo "    Multi-select." . PHP_EOL;
         }
-    }
 
-    if(!empty($attribute_value)){
-        $new_attribute_code = $attributeCode[1]['code'];
-        if($attributeCode[1]['type'] == 'select'){
-            $new_attribute_options = getAttributeOptions('attributeId', $attributeCode[1]['attribute_id']);
-            //var_dump($new_attribute_options);
-            foreach($new_attribute_options['options'] as $option){
-                if(strtolower($option['label']) == strtolower($attribute_value)){
-                    $new_attribute_value = $option['value'];
+        if(!empty($attribute_value)){
+            $new_attribute_code = $attributeCode[1]['code'];
+            if($attributeCode[1]['type'] == 'select'){
+                $new_attribute_options = getAttributeOptions('attributeId', $attributeCode[1]['attribute_id']);
+                //var_dump($new_attribute_options);
+                foreach($new_attribute_options['options'] as $option){
+                    if(strtolower($option['label']) == strtolower($attribute_value)){
+                        $new_attribute_value = $option['value'];
+                    }
                 }
             }
-        }
-        else if ($attributeCode[1]['type'] == 'text'){
-            $new_attribute_value = $attribute_value;
+            else if ($attributeCode[1]['type'] == 'text'){
+                $new_attribute_value = $attribute_value;
+            }
+            else{
+                return;
+            }
+            echo '    New color attribute value: ' . $new_attribute_value . PHP_EOL;
+            //$new_attribute_value =
+            $product->setData($new_attribute_code, $new_attribute_value);
+            $product->save();
         }
         else{
-            return;
+            echo "    No color attribute value." . PHP_EOL;
         }
-        echo '    New color attribute value: ' . $new_attribute_value . PHP_EOL;
-        //$new_attribute_value =
-        $product->setData($new_attribute_code, $new_attribute_value);
-        $product->save();
     }
-    else{
-        echo "    No color attribute value." . PHP_EOL;
-    }
-
 }
