@@ -16,6 +16,10 @@ $productCollection = Mage::getModel('catalog/product')->getCollection();
 foreach($productCollection as $each) {
     $product = Mage::getModel('catalog/product')->load($each->getId());
     echo "Prodcut ID: " . $product->getId() . PHP_EOL;
+    $existColorAttribute = $product->getData('color');
+    if(!empty($existColorAttribute)) {
+        continue;
+    }
     $attribute_set_id = $product->getAttributeSetId();
     $attributes = Mage::getModel('catalog/product_attribute_api')->items($attribute_set_id);
 
@@ -29,7 +33,7 @@ foreach($productCollection as $each) {
             if (strlen($eachAttr['code']) > 5) {
                 if (isset($attributeCode[0])) {
                     echo "    Alert~~" . PHP_EOL;
-                    return;
+                    continue;
                 }
                 $attributeCode[0] = $eachAttr;
             } else {
@@ -46,6 +50,11 @@ foreach($productCollection as $each) {
             }
         } else if ($attributeCode[0]['type'] == 'text' || $attributeCode[0]['type'] == 'textarea') {
             $attribute_value = $product->getData($attributeCode[0]['code']);
+        } else if($attributeCode[0]['type'] == 'multiselect'){
+            $product_attribute_value = $product->getData($attributeCode[0]['code']);
+            if(!empty ($product_attribute_value)) {
+                $attribute_value = getAttributeValueFromOptions('attributeId', $attributeCode[0]['attribute_id'], $product_attribute_value);
+            }
         } else {
             echo "    "  . $attributeCode[0]['type'] . PHP_EOL;
         }
@@ -68,12 +77,11 @@ foreach($productCollection as $each) {
                 return;
             }
             echo '    New color attribute value: ' . $new_attribute_value . PHP_EOL;
-            //$new_attribute_value =
+
             try {
                 $product->setData($new_attribute_code, $new_attribute_value);
                 $product->save();
-            }
-            catch (exception $e){
+            } catch (exception $e) {
                 echo $e->getMessage() . PHP_EOL;
             }
         }
