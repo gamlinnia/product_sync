@@ -10,6 +10,7 @@ Mage::app('admin');
 
 require_once 'lib/ganon.php';
 
+$excludeArray = array('c19000_group_he_cables_color');
 //$product = Mage::getModel('catalog/product')->load(1770);
 $productCollection = Mage::getModel('catalog/product')->getCollection();
 foreach($productCollection as $each) {
@@ -21,6 +22,9 @@ foreach($productCollection as $each) {
 
     $attributeCode = array();
     foreach ($attributes as $eachAttr) {
+        if(in_array($eachAttr['code'], $excludeArray)){
+            continue;
+        }
         preg_match('/color$/', $eachAttr['code'], $matchColor);
         if (count($matchColor) >= 1) {
             if (strlen($eachAttr['code']) > 5) {
