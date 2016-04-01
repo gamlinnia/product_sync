@@ -17,7 +17,6 @@ foreach($productCollection as $each) {
     $product = Mage::getModel('catalog/product')->load($each->getId());
     echo "Prodcut ID: " . $product->getId() . PHP_EOL;
     $attribute_set_id = $product->getAttributeSetId();
-    $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection');
     $attributes = Mage::getModel('catalog/product_attribute_api')->items($attribute_set_id);
 
     $attributeCode = array();
