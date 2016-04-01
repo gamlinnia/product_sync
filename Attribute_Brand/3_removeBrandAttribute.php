@@ -8,8 +8,6 @@ require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
 require_once '../functions.php';
 Mage::app('admin');
 
-$excludeArray = array('c19000_group_he_cables_color');
-
 $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection');
 
 $prepareToRemove = array();
@@ -17,11 +15,8 @@ foreach($attributeSetCollection as $each) {
     $attributes = Mage::getModel('catalog/product_attribute_api')->items($each->getId());
     $attributeCode = array();
     foreach ($attributes as $eachAttr) {
-        if (in_array($eachAttr['code'], $excludeArray)) {
-            continue;
-        }
-        preg_match('/color$/', $eachAttr['code'], $matchColor);
-        if (count($matchColor) >= 1) {
+        preg_match('/_brand$/', $eachAttr['code'], $matchBrand);
+        if (count($matchBrand) >= 1) {
             if (strlen($eachAttr['code']) > 5) {
                 if (isset($attributeCode[0])) {
                     echo "    More than one" . PHP_EOL;
@@ -51,8 +46,8 @@ foreach($attributeSetCollection as $each) {
         echo "Attrbiute ID: " . $attributeCode[0]['attribute_id'] . PHP_EOL;
         echo "=============================================================================" . PHP_EOL;
         //delete attribute from database
-        $setup = Mage::getResourceModel('catalog/setup','catalog_setup');
-        $setup->removeAttribute('catalog_product', $attributeCode[0]['code']);
+//        $setup = Mage::getResourceModel('catalog/setup','catalog_setup');
+//        $setup->removeAttribute('catalog_product', $attributeCode[0]['code']);
 
         //Mage::getModel('catalog/resource_eav_attribute')->load($attributeId)->delete();
     } else if (count($attributeCode) > 2) {
@@ -69,10 +64,11 @@ foreach($attributeSetCollection as $each) {
         echo "Attrbiute ID: " . $attributeCode[1]['attribute_id'] . PHP_EOL;
         echo "=============================================================================" . PHP_EOL;
         //remove attribute from attribute set
-        Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeCode[1]['attribute_id'], $each->getId());
+//        Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeCode[1]['attribute_id'], $each->getId());
     } else {
 
     }
 }
 
-//file_put_contents('remove_color_attribute.txt', json_encode($prepareToRemove));
+var_dump($prepareToRemove);
+file_put_contents('remove_brand_attribute.txt', json_encode($prepareToRemove));

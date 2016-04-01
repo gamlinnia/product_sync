@@ -8,8 +8,6 @@ require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
 require_once '../functions.php';
 Mage::app('admin');
 
-$excludeArray = array('c19000_group_he_cables_color', 'b65170_group_adpt_chnger_color');
-//$product = Mage::getModel('catalog/product')->load(1770);
 $productCollection = Mage::getModel('catalog/product')->getCollection();
 foreach($productCollection as $each) {
     $product = Mage::getModel('catalog/product')->load($each->getId());
