@@ -10,7 +10,7 @@ Mage::app('admin');
 
 require_once 'lib/ganon.php';
 
-$excludeArray = array('c19000_group_he_cables_color');
+$excludeArray = array('c19000_group_he_cables_color', 'b65170_group_adpt_chnger_color');
 //$product = Mage::getModel('catalog/product')->load(1770);
 $productCollection = Mage::getModel('catalog/product')->getCollection();
 foreach($productCollection as $each) {
