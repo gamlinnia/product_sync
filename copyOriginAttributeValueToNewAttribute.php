@@ -34,10 +34,13 @@ foreach($productCollection as $each) {
             }
         }
     }
-
+    $attribute_value = null;
     if (count($attributeCode) == 2) {
         if ($attributeCode[0]['type'] == 'select') {
-            $attribute_value = getAttributeValueFromOptions('attributeId', $attributeCode[0]['attribute_id'], $product->getData($attributeCode[0]['code']));
+            $product_attribute_value = $product->getData($attributeCode[0]['code']);
+            if(!empty ($product_attribute_value)) {
+                $attribute_value = getAttributeValueFromOptions('attributeId', $attributeCode[0]['attribute_id'], $product_attribute_value);
+            }
         } else if ($attributeCode[0]['type'] == 'text') {
             $attribute_value = $product->getData($attributeCode[0]['code']);
         } else {
