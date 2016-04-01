@@ -10,22 +10,21 @@ Mage::app('admin');
 
 $new_attribute_options = getAttributeOptions('attributeName', 'brand');
 var_dump($new_attribute_options);
+//die();
+foreach($new_attribute_options['options'] as $option){
+    if(strtolower($option['label']) == strtolower('rosewill')){
+        $new_attribute_value = $option['value'];
+    }
+}
+echo $new_attribute_value . PHP_EOL;
 die();
 
 $productCollection = Mage::getModel('catalog/product')->getCollection();
 foreach($productCollection as $each) {
-    //var_dump($new_attribute_options);
-    foreach($new_attribute_options['options'] as $option){
-        if(strtolower($option['label']) == strtolower($attribute_value)){
-            $new_attribute_value = $option['value'];
-        }
-    }
-/*
     try {
         $product->setData($new_attribute_code, $new_attribute_value);
         $product->save();
     } catch (exception $e) {
         echo $e->getMessage() . PHP_EOL;
     }
-*/
 }
