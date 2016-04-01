@@ -7,7 +7,7 @@ Mage::app('admin');
 
 $model=Mage::getModel('eav/entity_setup','core_setup');
 
-$attributeDataArray=$model->getAttribute('catalog_product','color');
+$attributeDataArray=$model->getAttribute('catalog_product','brand');
 $attributeId = $attributeDataArray['attribute_id'];
 
 $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection');
@@ -15,8 +15,8 @@ $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_colle
 foreach($attributeSetCollection as $each){
     $attributes = Mage::getModel('catalog/product_attribute_api')->items($each->getId());
     foreach($attributes as $eachAttr){
-        preg_match('/_color$/', $eachAttr['code'], $matchColor);
-        if(count($matchColor) >= 1){
+        preg_match('/_brand$/', $eachAttr['code'], $matchBrand);
+        if(count($matchBrand) >= 1){
             $attribute_set_name = $each->getAttributeSetName();
             //echo $attribute_set_name . PHP_EOL;
             $attributeSetId=$model->getAttributeSetId('catalog_product',$attribute_set_name);
