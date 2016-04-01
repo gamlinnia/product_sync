@@ -29,6 +29,7 @@ foreach($productCollection as $each) {
     if(empty($brandValue)) {
         try {
             $product->setData($new_attribute_code, $new_attribute_value);
+            $product->setUrlKey(false);
             $product->save();
         } catch (exception $e) {
             echo $e->getMessage() . PHP_EOL;
