@@ -17,6 +17,9 @@ foreach($attributeSetCollection as $each){
     foreach($attributes as $eachAttr){
         preg_match('/_brand$/', $eachAttr['code'], $matchBrand);
         if(count($matchBrand) >= 1){
+            //remove 'brand' attribute from 'General' group
+            Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeId, $each->getId());
+
             $attribute_set_name = $each->getAttributeSetName();
             //echo $attribute_set_name . PHP_EOL;
             $attributeSetId=$model->getAttributeSetId('catalog_product',$attribute_set_name);
