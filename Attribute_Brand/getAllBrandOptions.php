@@ -16,10 +16,11 @@ function getAllBrandOption(){
             preg_match('/_brand$/', $eachAttr['code'], $matchBrand);
             //var_dump($matchBrand);
             if(count($matchBrand) >= 1){
-                echo $each->getAttributeSetName() . PHP_EOL;
+//                echo $each->getAttributeSetName() . PHP_EOL;
                 $attributeOptions = getAttributeOptions('attributeId', $eachAttr['attribute_id']);
                 if(isset($attributeOptions['options'])){
                     foreach($attributeOptions['options'] as $eachOption){
+                        echo $eachOption['label'] . PHP_EOL;
                         $allBrandOptions[] = $eachOption['label'];
                     }
                 }
