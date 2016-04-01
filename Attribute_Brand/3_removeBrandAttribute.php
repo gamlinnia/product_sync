@@ -29,8 +29,8 @@ foreach($attributeSetCollection as $each) {
             echo "Attrbiute name: " . $eachAttr['code'] . PHP_EOL;
             echo "Attrbiute ID: " . $eachAttr['attribute_id'] . PHP_EOL;
             //delete attribute from database
-            //$setup = Mage::getResourceModel('catalog/setup','catalog_setup');
-            //$setup->removeAttribute('catalog_product', $eachAttr['code']);
+            $setup = Mage::getResourceModel('catalog/setup','catalog_setup');
+            $setup->removeAttribute('catalog_product', $eachAttr['code']);
         }
     }
 
