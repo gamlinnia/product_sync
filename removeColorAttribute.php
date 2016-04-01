@@ -77,4 +77,4 @@ foreach($attributeSetCollection as $each) {
     }
 }
 
-file_put_contents('remove_color_attribute.txt', json_encode($prepareToRemove));
+//file_put_contents('remove_color_attribute.txt', json_encode($prepareToRemove));
