@@ -51,6 +51,7 @@ foreach($attributeSetCollection as $each) {
         echo "Attrbiute set ID: " . $each->getId() . PHP_EOL;
         echo "Attrbiute name: " . $attributeCode[0]['code'] . PHP_EOL;
         echo "Attrbiute ID: " . $attributeCode[0]['attribute_id'] . PHP_EOL;
+        echo "=============================================================================";
         Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeCode[0]['attribute_id'], $each->getId());
     } else if (count($attributeCode) > 2) {
 //        $prepareToRemove[] = array(
@@ -64,6 +65,7 @@ foreach($attributeSetCollection as $each) {
         echo "Attrbiute set ID: " . $each->getId() . PHP_EOL;
         echo "Attrbiute name: " . $attributeCode[1]['code'] . PHP_EOL;
         echo "Attrbiute ID: " . $attributeCode[1]['attribute_id'] . PHP_EOL;
+        echo "=============================================================================";
         Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeCode[0]['attribute_id'], $each->getId());
     } else {
 
