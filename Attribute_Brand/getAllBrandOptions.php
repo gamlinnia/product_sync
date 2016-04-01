@@ -18,9 +18,10 @@ function getAllBrandOption(){
             if(count($matchBrand) >= 1){
 //                echo $each->getAttributeSetName() . PHP_EOL;
                 $attributeOptions = getAttributeOptions('attributeId', $eachAttr['attribute_id']);
+                echo $eachAttr['code'] . PHP_EOL;
                 if(isset($attributeOptions['options'])){
                     foreach($attributeOptions['options'] as $eachOption){
-                        echo $eachOption['label'] . PHP_EOL;
+                        echo "    " . $eachOption['label'] . PHP_EOL;
                         $allBrandOptions[] = $eachOption['label'];
                     }
                 }
