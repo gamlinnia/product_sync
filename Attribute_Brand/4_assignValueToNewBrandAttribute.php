@@ -24,7 +24,7 @@ echo $new_attribute_value . PHP_EOL;
 $productCollection = Mage::getModel('catalog/product')->getCollection();
 foreach($productCollection as $each) {
     $product = Mage::getModel('catalog/product')->load($each->getId());
-    echo "Product ID: " . $product->getId();
+    echo "Product ID: " . $product->getId() . PHP_EOL;
     try {
         $product->setData($new_attribute_code, $new_attribute_value);
         $product->save();
