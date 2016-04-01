@@ -12,14 +12,14 @@ $new_attribute_code = 'brand';
 
 $new_attribute_options = getAttributeOptions('attributeName', 'brand');
 
-var_dump($new_attribute_options);
+//var_dump($new_attribute_options);
 
 foreach($new_attribute_options['options'] as $option){
     if(strtolower($option['label']) == strtolower('rosewill')){
         $new_attribute_value = $option['value'];
     }
 }
-echo $new_attribute_value . PHP_EOL;
+//echo $new_attribute_value . PHP_EOL;
 
 $productCollection = Mage::getModel('catalog/product')->getCollection();
 foreach($productCollection as $each) {
