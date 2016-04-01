@@ -32,8 +32,8 @@ foreach($productCollection as $each) {
         if (count($matchColor) >= 1) {
             if (strlen($eachAttr['code']) > 5) {
                 if (isset($attributeCode[0])) {
-                    echo "    Alert~~" . PHP_EOL;
-                    continue;
+                    echo "    More than one" . PHP_EOL;
+                    $attributeCode[2] = $eachAttr;
                 }
                 $attributeCode[0] = $eachAttr;
             } else {
