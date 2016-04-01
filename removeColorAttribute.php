@@ -52,7 +52,11 @@ foreach($attributeSetCollection as $each) {
         echo "Attrbiute name: " . $attributeCode[0]['code'] . PHP_EOL;
         echo "Attrbiute ID: " . $attributeCode[0]['attribute_id'] . PHP_EOL;
         echo "=============================================================================" . PHP_EOL;
-//        Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeCode[0]['attribute_id'], $each->getId());
+        //delete attribute from database
+        //$setup = Mage::getResourceModel('catalog/setup','catalog_setup');
+        //$setup->removeAttribute('catalog_product', $attributeCode[0]['code']);
+
+        //Mage::getModel('catalog/resource_eav_attribute')->load($attributeId)->delete();
     } else if (count($attributeCode) > 2) {
         $prepareToRemove[] = array(
             'attribute_set_id' => $each->getId(),
@@ -66,6 +70,7 @@ foreach($attributeSetCollection as $each) {
         echo "Attrbiute name: " . $attributeCode[1]['code'] . PHP_EOL;
         echo "Attrbiute ID: " . $attributeCode[1]['attribute_id'] . PHP_EOL;
         echo "=============================================================================" . PHP_EOL;
+        //remove attribute from attribute set
 //        Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeCode[0]['attribute_id'], $each->getId());
     } else {
 
