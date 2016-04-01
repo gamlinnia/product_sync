@@ -14,6 +14,7 @@ $excludeArray = array('c19000_group_he_cables_color');
 
 $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection');
 
+$prepareToRemove = array();
 foreach($attributeSetCollection as $each) {
     $attributes = Mage::getModel('catalog/product_attribute_api')->items($each->getId());
     $attributeCode = array();
@@ -25,8 +26,8 @@ foreach($attributeSetCollection as $each) {
         if (count($matchColor) >= 1) {
             if (strlen($eachAttr['code']) > 5) {
                 if (isset($attributeCode[0])) {
-                    echo "    Alert~~" . PHP_EOL;
-                    return;
+                    echo "    More than one" . PHP_EOL;
+                    $attributeCode[2] = $eachAttr;
                 }
                 $attributeCode[0] = $eachAttr;
             } else {
@@ -35,10 +36,32 @@ foreach($attributeSetCollection as $each) {
         }
     }
     $attribute_value = null;
+    //delete
     if (count($attributeCode) == 2) {
-        var_dump($attributeCode);
+        $prepareToRemove[] = array(
+                'attribute_set_id' => $each->getId(),
+                'attribute_set_name' => $each->getAttributeSetName(),
+                'attribute_code' => $attributeCode[0]['code'],
+                'attribute_id' => $attributeCode[0]['attribute_id'],
+                'action' => 'delete'
+            );
         //$setup = Mage::getResourceModel('catalog/setup','catalog_setup');
         //$attribute_code = $attributeCode[0]['code'];
-        //$setup->removeAttribute('catalog_product',$attribute_code);
+        //Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attId, $set->getId());
+    }
+    else if(count($attributeCode) > 2){
+        $prepareToRemove[] = array(
+            'attribute_set_id' => $each->getId(),
+            'attribute_set_name' => $each->getAttributeSetName(),
+            'attribute_code' => $attributeCode[1]['code'],
+            'attribute_id' => $attributeCode[1]['attribute_id'],
+            'action' => 'remove'
+        );
+    }
+    else{
+
     }
 }
+
+
+var_dump($prepareToRemove);
