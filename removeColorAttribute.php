@@ -71,7 +71,7 @@ foreach($attributeSetCollection as $each) {
         echo "Attrbiute ID: " . $attributeCode[1]['attribute_id'] . PHP_EOL;
         echo "=============================================================================" . PHP_EOL;
         //remove attribute from attribute set
-        Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeCode[0]['attribute_id'], $each->getId());
+        Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeCode[1]['attribute_id'], $each->getId());
     } else {
 
     }
