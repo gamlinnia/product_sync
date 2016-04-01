@@ -38,36 +38,38 @@ foreach($attributeSetCollection as $each) {
     $attribute_value = null;
     //delete
     if (count($attributeCode) == 2) {
-//        $prepareToRemove[] = array(
-//            'attribute_set_id' => $each->getId(),
-//            'attribute_set_name' => $each->getAttributeSetName(),
-//            'attribute_code' => $attributeCode[0]['code'],
-//            'attribute_id' => $attributeCode[0]['attribute_id'],
-//            'action' => 'delete'
-//        );
+        $prepareToRemove[] = array(
+            'attribute_set_id' => $each->getId(),
+            'attribute_set_name' => $each->getAttributeSetName(),
+            'attribute_code' => $attributeCode[0]['code'],
+            'attribute_id' => $attributeCode[0]['attribute_id'],
+            'action' => 'delete'
+        );
         //$setup = Mage::getResourceModel('catalog/setup','catalog_setup');
         //$attribute_code = $attributeCode[0]['code'];
         echo "Attrbiute set name: " . $each->getAttributeSetName() . PHP_EOL;
         echo "Attrbiute set ID: " . $each->getId() . PHP_EOL;
         echo "Attrbiute name: " . $attributeCode[0]['code'] . PHP_EOL;
         echo "Attrbiute ID: " . $attributeCode[0]['attribute_id'] . PHP_EOL;
-        echo "=============================================================================";
-        Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeCode[0]['attribute_id'], $each->getId());
+        echo "=============================================================================" . PHP_EOL;
+//        Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeCode[0]['attribute_id'], $each->getId());
     } else if (count($attributeCode) > 2) {
-//        $prepareToRemove[] = array(
-//            'attribute_set_id' => $each->getId(),
-//            'attribute_set_name' => $each->getAttributeSetName(),
-//            'attribute_code' => $attributeCode[1]['code'],
-//            'attribute_id' => $attributeCode[1]['attribute_id'],
-//            'action' => 'remove'
-//        );.
+        $prepareToRemove[] = array(
+            'attribute_set_id' => $each->getId(),
+            'attribute_set_name' => $each->getAttributeSetName(),
+            'attribute_code' => $attributeCode[1]['code'],
+            'attribute_id' => $attributeCode[1]['attribute_id'],
+            'action' => 'remove'
+        );
         echo "Attrbiute set name: " . $each->getAttributeSetName() . PHP_EOL;
         echo "Attrbiute set ID: " . $each->getId() . PHP_EOL;
         echo "Attrbiute name: " . $attributeCode[1]['code'] . PHP_EOL;
         echo "Attrbiute ID: " . $attributeCode[1]['attribute_id'] . PHP_EOL;
-        echo "=============================================================================";
-        Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeCode[0]['attribute_id'], $each->getId());
+        echo "=============================================================================" . PHP_EOL;
+//        Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeCode[0]['attribute_id'], $each->getId());
     } else {
 
     }
 }
+
+file_put_contents('remove_color_attribute.txt', json_encode($prepareToRemove));
