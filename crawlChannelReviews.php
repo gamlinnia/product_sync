@@ -108,6 +108,7 @@ foreach($channels as $channel => $url) {
         echo 'Channel: ' . $channel . PHP_EOL;
 
         $channelReviews = getLatestChannelsProductReviews($channel, $sku, $channelsinfo);
+        var_dump($channelReviews);
         /*foreach review*/
         foreach($channelReviews as $eachReview) {
             $detail = $eachReview['detail'];
