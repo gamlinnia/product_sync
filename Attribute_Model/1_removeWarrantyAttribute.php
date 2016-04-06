@@ -18,8 +18,9 @@ $attributeCollection = Mage::getModel('catalog/resource_eav_attribute')->getColl
 $prepareToRemove = array();
 
 foreach ($attributeCollection as $eachAttr) {
-    preg_match('/_model/', $eachAttr->getCode(), $matchWarranty);
-    if (count($matchWarranty) >= 1) {
+    var_dump($eachAttr->getData());
+    preg_match('/_model/', $eachAttr->getCode(), $matchModel);
+    if (count($matchModel) >= 1) {
         $prepareToRemove[] = array(
             'attribute_code' => $eachAttr->getCode(),
             'attribute_id' => $eachAttr->getId()
