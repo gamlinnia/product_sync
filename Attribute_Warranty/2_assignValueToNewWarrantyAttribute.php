@@ -10,7 +10,10 @@ $debug = true;
 $attributesNeedToAssign = array('_manufacturer_warranty_p' => 'manufacturer_warranty_parts', '_manufacturer_warranty_l' => 'manufacturer_warranty_labor');
 
 foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
-    $productCollection = Mage::getModel('catalog/product')->getCollection();
+    //$productCollection = Mage::getModel('catalog/product')->getCollection();
+    if($debug) {
+        $productCollection = Mage::getModel('catalog/product')->getCollection()->addFieldToFilter('entity_id', array('gt'=>'1345'));
+    }
     foreach($productCollection as $each) {
         $product = Mage::getModel('catalog/product')->load($each->getId());
         echo "Prodcut ID: " . $product->getId() . PHP_EOL;
@@ -47,10 +50,9 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
 
             if(!empty($attribute_label)) {
                 echo "Attribute Label: " . $attribute_label;
-                $new_attribute_code = $attributeCode['code'];
+
                 if($attributeCode['type'] == 'select'){
-                    $new_attribute_options = getAttributeOptions('attributeId', $attributeCode['attribute_id']);
-                    //var_dump($new_attribute_options);
+                    $new_attribute_options = getAttributeOptions('attributeName', $eachNeedToAssign);
                     foreach($new_attribute_options['options'] as $option){
                         if(strtolower($option['label']) == strtolower($attribute_label)){
                             $new_attribute_value = $option['value'];
@@ -71,7 +73,7 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
                     }
                 }
                 else{
-                    echo $new_attribute_code . ": " . $new_attribute_value;
+                    echo $new_attribute_code . ": " . $new_attribute_value . PHP_EOL;
                 }
             }
             else{
