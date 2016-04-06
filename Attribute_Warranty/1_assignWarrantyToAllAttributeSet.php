@@ -18,8 +18,8 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
     $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection');
 
     foreach ($attributeSetCollection as $each) {
-        $attribute_set_name = $each->getAttributeSetName();
-        echo $attribute_set_name . PHP_EOL;
+        $attributeSetName = $each->getAttributeSetName();
+        echo $attributeSetName . PHP_EOL;
         $attributes = Mage::getModel('catalog/product_attribute_api')->items($each->getId());
         foreach ($attributes as $eachAttr) {
 //            echo "    " . $eachAttr['code'] . PHP_EOL;
@@ -27,8 +27,7 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
             if (count($matchWarranty) >= 1) {
                 echo "    " . $eachAttr['code'] . PHP_EOL;
                 $attributeSetId = $each->getAttributeSetId();
-                //$attributeSetId = $model->getAttributeSetId('catalog_product', $attribute_set_name);
-                $attributeGroupDataArray = $model->getAttributeGroup('catalog_product', $attributeSetId, $attribute_set_name);
+                $attributeGroupDataArray = $model->getAttributeGroup('catalog_product', $attributeSetId, $attributeSetName);
                 if(!debug){
                     $model->addAttributeToSet('catalog_product', $attributeSetId, $attributeGroupDataArray["attribute_group_id"], $attributeId);
                 }
