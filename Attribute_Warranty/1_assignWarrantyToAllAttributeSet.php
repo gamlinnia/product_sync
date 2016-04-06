@@ -8,6 +8,9 @@ Mage::app('admin');
 $model=Mage::getModel('eav/entity_setup','core_setup');
 
 $debug = false;
+if (in_array('debug', $argv)) {
+    $debug = true;
+}
 
 $attributesNeedToAssign = array('_manufacturer_warranty_p' => 'manufacturer_warranty_parts', '_manufacturer_warranty_l' => 'manufacturer_warranty_labor');
 
