@@ -19,13 +19,12 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
 
     foreach ($attributeSetCollection as $each) {
         $attributes = Mage::getModel('catalog/product_attribute_api')->items($each->getId());
+        $attribute_set_name = $each->getAttributeSetName();
+        echo $attribute_set_name . PHP_EOL;
         foreach ($attributes as $eachAttr) {
+            echo "    " . $eachAttr['code'] . PHP_EOL;
             preg_match($regularEx, $eachAttr['code'], $matchWarranty);
             if (count($matchWarranty) >= 1) {
-                $attribute_set_name = $each->getAttributeSetName();
-                echo $attribute_set_name . PHP_EOL;
-                echo "    " . $eachAttr['code'] . PHP_EOL;
-
                 if(!debug){
                     $attributeSetId = $model->getAttributeSetId('catalog_product', $attribute_set_name);
                     $attributeGroupDataArray = $model->getAttributeGroup('catalog_product', $attributeSetId, $attribute_set_name);
