@@ -18,7 +18,7 @@ $attributesNeedToRemove = array('_manufacturer_warranty_p', '_manufacturer_warra
 $attributeCollection = Mage::getResourceModel('eav/entity_attribute_collection');
 
 $prepareToRemove = array();
-foreach($attributeSetCollection as $eachAttr) {
+foreach($attributeCollection as $eachAttr) {
     foreach($attributesNeedToRemove as $eachAttrNeedToRemove) {
         $attributeCode  = $eachAttr->getAttributeCode();
         $attributeId = $eachAttr->getId();
