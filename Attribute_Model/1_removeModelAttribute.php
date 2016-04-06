@@ -13,7 +13,6 @@ if (in_array('debug', $argv)) {
     $debug = true;
 }
 
-//$attributeCollection = Mage::getModel('catalog/resource_eav_attribute')->getCollection();
 $attributeCollection = Mage::getResourceModel('catalog/product_attribute_collection');
 
 $prepareToRemove = array();
