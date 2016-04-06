@@ -28,13 +28,9 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
                 echo "    " . $eachAttr['code'] . PHP_EOL;
                 $attributeSetId = $each->getAttributeSetId();
                 $attributeGroupDataArray = $model->getAttributeGroup('catalog_product', $attributeSetId, $attributeSetName);
-                if(!debug){
+                if(!$debug){
                     $model->addAttributeToSet('catalog_product', $attributeSetId, $attributeGroupDataArray["attribute_group_id"], $attributeId);
                 }
-                echo $attributeSetId . PHP_EOL;
-                var_dump($attributeGroupDataArray);
-                echo $attributeId . PHP_EOL;
-                die();
             }
         }
     }
