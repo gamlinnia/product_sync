@@ -49,7 +49,6 @@ if ($debug) {
 } else {
     $recipient_array = array(
         'to' => array(
-            'Fred.F.Yang@rosewill.com',
             'Kenny.T.Chan@rosewill.com',
             'Wentao.W.Zhu@rosewill.com',
             'Thaid.C.Thor@rosewill.com',
@@ -64,17 +63,18 @@ if ($debug) {
             'Gary.K.Peng@rosewill.com',
             'Ray.C.Huang@rosewill.com',
             'Tom.M.Liu@rosewill.com',
-            'Jessy.Y.Chu@rosewill.com',
             'Connie.Y.Lu@newegg.com',
             'Mike.L.Zhang@newegg.com',
             'Peggie.P.Hsieh@rosewill.com',
             'Susan.S.Sun@newegg.com',
             'Thompson.Y.Lu@rosewill.com',
-            'Weiyu.W.Chen@rosewill.com',
             'Yama.M.Wu@rosewill.com',
             'SB.S.Wu@newegg.com',
             'Bruce.C.Lai@rosewill.com',
-            'Stephanie.Y.Chang@rosewill.com'
+            'Stephanie.Y.Chang@rosewill.com',
+            'Vincent.W.Hsueh@newegg.com',
+            'Shirley.Q.Pi@rosewill.com'
+
         ),
         'bcc' => array(
             'Li.L.Liu@newegg.com',
@@ -105,6 +105,7 @@ foreach($channels as $channel => $url) {
         $modelNumber = $eachProduct->getModelNumber();
         echo 'SKU: ' . $sku . PHP_EOL;
         echo 'ID: ' . $entity_id . PHP_EOL;
+        echo 'Channel: ' . $channel . PHP_EOL;
 
         $channelReviews = getLatestChannelsProductReviews($channel, $sku, $channelsinfo);
         /*foreach review*/
