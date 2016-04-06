@@ -8,7 +8,7 @@ require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
 require_once '../functions.php';
 Mage::app('admin');
 
-$debug = true;
+$debug = false;
 
 $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection');
 
