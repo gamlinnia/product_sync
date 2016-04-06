@@ -5,14 +5,16 @@ require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
 require_once '../functions.php';
 Mage::app('admin');
 
-$debug = true;
+$debug = false;
 
 $attributesNeedToAssign = array('_manufacturer_warranty_p' => 'manufacturer_warranty_parts', '_manufacturer_warranty_l' => 'manufacturer_warranty_labor');
 
 foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
-    //$productCollection = Mage::getModel('catalog/product')->getCollection();
     if($debug) {
         $productCollection = Mage::getModel('catalog/product')->getCollection()->addFieldToFilter('entity_id', array('gt'=>'1344'));
+    }
+    else{
+        $productCollection = Mage::getModel('catalog/product')->getCollection()->setOrder('entity_id', 'desc');
     }
     foreach($productCollection as $each) {
         $product = Mage::getModel('catalog/product')->load($each->getId());
@@ -66,14 +68,14 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
 
                 if(!$debug) {
                     try {
-                        $product->setData($new_attribute_code, $new_attribute_value);
+                        $product->setData($eachNeedToAssign, $new_attribute_value);
                         $product->save();
                     } catch (exception $e) {
                         echo $e->getMessage() . PHP_EOL;
                     }
                 }
                 else{
-                    echo $new_attribute_code . ": " . $new_attribute_value . PHP_EOL;
+                    echo $eachNeedToAssign . ": " . $new_attribute_value . PHP_EOL;
                 }
             }
             else{
