@@ -23,9 +23,6 @@ foreach($attributeSetCollection as $each) {
     $attributeCode = array();
     foreach ($attributes as $eachAttr) {
         foreach($attributesNeedToRemove as $eachAttrNeedToRemove) {
-            echo "=============================================================================" . PHP_EOL;
-            echo "Attrbiute set name: " . $each->getAttributeSetName() . PHP_EOL;
-            echo "Attrbiute set ID: " . $each->getId() . PHP_EOL;
             preg_match('/' . $eachAttrNeedToRemove .'/', $eachAttr['code'], $matchWarranty);
             if (count($matchWarranty) >= 1) {
                 $prepareToRemove[] = array(
@@ -34,8 +31,16 @@ foreach($attributeSetCollection as $each) {
                     'attribute_code' => $eachAttr['code'],
                     'attribute_id' => $eachAttr['attribute_id']
                 );
+                echo "=============================================================================" . PHP_EOL;
+                echo "Attrbiute set name: " . $each->getAttributeSetName() . PHP_EOL;
+                echo "Attrbiute set ID: " . $each->getId() . PHP_EOL;
                 echo "    Attrbiute name: " . $eachAttr['code'] . PHP_EOL;
                 echo "    Attrbiute ID: " . $eachAttr['attribute_id'] . PHP_EOL;
+                if(!$debug) {
+                    //delete attribute from database
+                    $setup = Mage::getResourceModel('catalog/setup', 'catalog_setup');
+                    $setup->removeAttribute('catalog_product', $eachAttr['code']);
+                }
             }
         }
     }
@@ -43,12 +48,4 @@ foreach($attributeSetCollection as $each) {
 }
 
 var_dump($prepareToRemove);
-die();
-foreach($prepareToRemove as $each){
-    if(!$debug) {
-        //delete attribute from database
-        $setup = Mage::getResourceModel('catalog/setup', 'catalog_setup');
-        $setup->removeAttribute('catalog_product', $eachAttr['code']);
-    }
-}
 //file_put_contents('remove_warranty_attribute.txt', json_encode($prepareToRemove));
