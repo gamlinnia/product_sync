@@ -20,7 +20,7 @@ $prepareToRemove = array();
 $excludeArray = array('name_long', 'name');
 foreach ($attributeCollection as $eachAttr) {
     //var_dump($eachAttr->getData());
-    $attributeLabel = $eachAttr->getAttributeLabel();
+    $attributeLabel = $eachAttr->getFrontendLabel();
     $attributeCode  = $eachAttr->getAttributeCode();
     $attributeId = $eachAttr->getId();
     //use label to find attribute
