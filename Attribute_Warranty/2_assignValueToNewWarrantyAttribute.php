@@ -69,6 +69,7 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
                 if(!$debug) {
                     try {
                         $product->setData($eachNeedToAssign, $new_attribute_value);
+                        $product->setUrlKey(false);
                         $product->save();
                     } catch (exception $e) {
                         echo $e->getMessage() . PHP_EOL;
