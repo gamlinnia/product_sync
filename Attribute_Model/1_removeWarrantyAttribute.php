@@ -32,7 +32,7 @@ foreach ($attributeCollection as $eachAttr) {
         if(!$debug) {
             //delete attribute from database
             $setup = Mage::getResourceModel('catalog/setup', 'catalog_setup');
-            $setup->removeAttribute('catalog_product', $eachAttr->getCode());
+            $setup->removeAttribute('catalog_product', $eachAttr->getAttributeCode());
         }
     }
 }
