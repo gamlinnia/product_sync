@@ -19,7 +19,7 @@ $attributeCollection = Mage::getResourceModel('catalog/product_attribute_collect
 $prepareToRemove = array();
 
 foreach ($attributeCollection as $eachAttr) {
-    var_dump($eachAttr->getData());
+    //var_dump($eachAttr->getData());
     preg_match('/_model/', $eachAttr->getAttributeCode(), $matchModel);
     if (count($matchModel) >= 1) {
         $prepareToRemove[] = array(
