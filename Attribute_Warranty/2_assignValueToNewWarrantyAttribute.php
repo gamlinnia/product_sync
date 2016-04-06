@@ -12,7 +12,7 @@ $attributesNeedToAssign = array('_manufacturer_warranty_p' => 'manufacturer_warr
 foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
     //$productCollection = Mage::getModel('catalog/product')->getCollection();
     if($debug) {
-        $productCollection = Mage::getModel('catalog/product')->getCollection()->addFieldToFilter('entity_id', array('gt'=>'1345'));
+        $productCollection = Mage::getModel('catalog/product')->getCollection()->addFieldToFilter('entity_id', array('gt'=>'1344'));
     }
     foreach($productCollection as $each) {
         $product = Mage::getModel('catalog/product')->load($each->getId());
