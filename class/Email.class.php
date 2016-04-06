@@ -86,7 +86,8 @@ class Email{
         //var_dump($attachments);
 
         $headers = array(
-            "From" => "System@rosewill.com",
+            //"From" => "System@rosewill.com",
+            "From" => "System@hobbitking.com",
             "To" => join(',', $this->recipient_array['to']),
             "Subject" => $subject
         );
