@@ -20,14 +20,14 @@ $prepareToRemove = array();
 
 foreach ($attributeCollection as $eachAttr) {
     var_dump($eachAttr->getData());
-    preg_match('/_model/', $eachAttr->getCode(), $matchModel);
+    preg_match('/_model/', $eachAttr->getAttributeCode(), $matchModel);
     if (count($matchModel) >= 1) {
         $prepareToRemove[] = array(
-            'attribute_code' => $eachAttr->getCode(),
+            'attribute_code' => $eachAttr->getAttributeCode(),
             'attribute_id' => $eachAttr->getId()
         );
         echo "=============================================================================" . PHP_EOL;
-        echo "    Attrbiute name: " . $eachAttr->getCode() . PHP_EOL;
+        echo "    Attrbiute name: " . $eachAttr->getAttributeCode() . PHP_EOL;
         echo "    Attrbiute ID: " . $eachAttr->getId() . PHP_EOL;
         if(!$debug) {
             //delete attribute from database
