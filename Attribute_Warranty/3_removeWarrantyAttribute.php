@@ -23,6 +23,9 @@ foreach($attributeSetCollection as $each) {
     $attributeCode = array();
     foreach ($attributes as $eachAttr) {
         foreach($attributesNeedToRemove as $eachAttrNeedToRemove) {
+            echo "=============================================================================" . PHP_EOL;
+            echo "Attrbiute set name: " . $each->getAttributeSetName() . PHP_EOL;
+            echo "Attrbiute set ID: " . $each->getId() . PHP_EOL;
             preg_match('/' . $eachAttrNeedToRemove .'/', $eachAttr['code'], $matchWarranty);
             if (count($matchWarranty) >= 1) {
                 $prepareToRemove[] = array(
@@ -31,11 +34,8 @@ foreach($attributeSetCollection as $each) {
                     'attribute_code' => $eachAttr['code'],
                     'attribute_id' => $eachAttr['attribute_id']
                 );
-                echo "=============================================================================" . PHP_EOL;
-                echo "Attrbiute set name: " . $each->getAttributeSetName() . PHP_EOL;
-                echo "Attrbiute set ID: " . $each->getId() . PHP_EOL;
-                echo "Attrbiute name: " . $eachAttr['code'] . PHP_EOL;
-                echo "Attrbiute ID: " . $eachAttr['attribute_id'] . PHP_EOL;
+                echo "    Attrbiute name: " . $eachAttr['code'] . PHP_EOL;
+                echo "    Attrbiute ID: " . $eachAttr['attribute_id'] . PHP_EOL;
             }
         }
     }
