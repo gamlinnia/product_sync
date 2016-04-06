@@ -108,7 +108,7 @@ foreach($channels as $channel => $url) {
         echo 'Channel: ' . $channel . PHP_EOL;
 
         $channelReviews = getLatestChannelsProductReviews($channel, $sku, $channelsinfo);
-        var_dump($channelReviews);
+        //var_dump($channelReviews);
         /*foreach review*/
         foreach($channelReviews as $eachReview) {
             $detail = $eachReview['detail'];
@@ -117,6 +117,8 @@ foreach($channels as $channel => $url) {
             $rating = $eachReview['rating'];
             $subject = $eachReview['subject'];
             $product_url = $eachReview['product_url'];
+
+            var_dump($eachReview);
 
             /*check if this review already in database*/
             $reviewCollection = $channelReviewModel->getCollection()
@@ -146,7 +148,6 @@ foreach($channels as $channel => $url) {
                     var_dump($data);
                     //if in debug mode, do not save
                     if (!$debug) {
-                        echo "Save" . PHP_EOL;
                         $channelReviewModel->setData($data);
                         $channelReviewModel->save();
                     }
