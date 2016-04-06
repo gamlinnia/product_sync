@@ -7,7 +7,7 @@ Mage::app('admin');
 
 $debug = true;
 
-$attributesNeedToAssign = array('_warranty_p' => 'manufacturer_warranty_parts', '_warranty_l' => 'manufacturer_warranty_labor');
+$attributesNeedToAssign = array('_manufacturer_warranty_p' => 'manufacturer_warranty_parts', '_manufacturer_warranty_l' => 'manufacturer_warranty_labor');
 
 foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
     $productCollection = Mage::getModel('catalog/product')->getCollection();
