@@ -17,7 +17,7 @@ $attributeCollection = Mage::getResourceModel('catalog/product_attribute_collect
 
 $prepareToRemove = array();
 
-$excludeArray = array('name_long', 'name');
+$excludeArray = array('name_long', 'name', 'a01290_case_series', 'b01290_case_series');
 foreach ($attributeCollection as $eachAttr) {
     //var_dump($eachAttr->getData());
     $attributeLabel = $eachAttr->getFrontendLabel();
