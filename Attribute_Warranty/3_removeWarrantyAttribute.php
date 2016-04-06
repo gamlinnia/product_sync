@@ -36,16 +36,19 @@ foreach($attributeSetCollection as $each) {
                 echo "Attrbiute set ID: " . $each->getId() . PHP_EOL;
                 echo "Attrbiute name: " . $eachAttr['code'] . PHP_EOL;
                 echo "Attrbiute ID: " . $eachAttr['attribute_id'] . PHP_EOL;
-                if(!$debug) {
-                    //delete attribute from database
-                    $setup = Mage::getResourceModel('catalog/setup', 'catalog_setup');
-                    $setup->removeAttribute('catalog_product', $eachAttr['code']);
-                }
             }
         }
     }
 
 }
 
-//var_dump($prepareToRemove);
+var_dump($prepareToRemove);
+die();
+foreach($prepareToRemove as $each){
+    if(!$debug) {
+        //delete attribute from database
+        $setup = Mage::getResourceModel('catalog/setup', 'catalog_setup');
+        $setup->removeAttribute('catalog_product', $eachAttr['code']);
+    }
+}
 //file_put_contents('remove_warranty_attribute.txt', json_encode($prepareToRemove));
