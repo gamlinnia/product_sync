@@ -25,6 +25,7 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
             echo "    " . $eachAttr['code'] . PHP_EOL;
             preg_match($regularEx, $eachAttr['code'], $matchWarranty);
             if (count($matchWarranty) >= 1) {
+                echo "=================================================Match=========================================================" . PHP_EOL;
                 if(!debug){
                     $attributeSetId = $model->getAttributeSetId('catalog_product', $attribute_set_name);
                     $attributeGroupDataArray = $model->getAttributeGroup('catalog_product', $attributeSetId, $attribute_set_name);
