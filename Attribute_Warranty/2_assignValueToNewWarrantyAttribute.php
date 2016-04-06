@@ -31,10 +31,9 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
             }
         }
 
-        var_dump($attributeCode);
-
         $attribute_label = null;
         if ($attributeCode) {
+            var_dump($attributeCode);
             if ($attributeCode['type'] == 'select') {
                 $product_attribute_value = $product->getData($attributeCode['code']);
                 if(!empty ($product_attribute_value)) {
@@ -46,9 +45,8 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
                 echo "    "  . $attributeCode['type'] . PHP_EOL;
             }
 
-            echo "Attribute Label: " . $attribute_label;
-
-            if(!empty($attribute_label)){
+            if(!empty($attribute_label)) {
+                echo "Attribute Label: " . $attribute_label;
                 $new_attribute_code = $attributeCode['code'];
                 if($attributeCode['type'] == 'select'){
                     $new_attribute_options = getAttributeOptions('attributeId', $attributeCode['attribute_id']);
