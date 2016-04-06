@@ -7,7 +7,7 @@ Mage::app('admin');
 
 $model=Mage::getModel('eav/entity_setup','core_setup');
 
-$debug = true;
+$debug = false;
 
 $attributesNeedToAssign = array('_warranty_p' => 'manufacturer_warranty_parts', '_warranty_l' => 'manufacturer_warranty_labor');
 
@@ -22,10 +22,11 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
         $attribute_set_name = $each->getAttributeSetName();
         echo $attribute_set_name . PHP_EOL;
         foreach ($attributes as $eachAttr) {
-            echo "    " . $eachAttr['code'] . PHP_EOL;
+//            echo "    " . $eachAttr['code'] . PHP_EOL;
             preg_match('/' . $regularEx . '/', $eachAttr['code'], $matchWarranty);
             if (count($matchWarranty) >= 1) {
-                echo "=================================================Match=========================================================" . PHP_EOL;
+                echo "    " . $eachAttr['code'] . PHP_EOL;
+//                echo "=================================================Match=========================================================" . PHP_EOL;
                 if(!debug){
                     $attributeSetId = $model->getAttributeSetId('catalog_product', $attribute_set_name);
                     $attributeGroupDataArray = $model->getAttributeGroup('catalog_product', $attributeSetId, $attribute_set_name);
