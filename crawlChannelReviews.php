@@ -146,6 +146,7 @@ foreach($channels as $channel => $url) {
                     var_dump($data);
                     //if in debug mode, do not save
                     if (!$debug) {
+                        echo "Save" . PHP_EOL;
                         $channelReviewModel->setData($data);
                         $channelReviewModel->save();
                     }
