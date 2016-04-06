@@ -9,7 +9,7 @@ $model=Mage::getModel('eav/entity_setup','core_setup');
 
 $debug = false;
 
-$attributesNeedToAssign = array('_warranty_p' => 'manufacturer_warranty_parts', '_warranty_l' => 'manufacturer_warranty_labor');
+$attributesNeedToAssign = array('_manufacturer_warranty_p' => 'manufacturer_warranty_parts', '_manufacturer_warranty_l' => 'manufacturer_warranty_labor');
 
 foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
     $attributeDataArray = $model->getAttribute('catalog_product', $eachNeedToAssign);
