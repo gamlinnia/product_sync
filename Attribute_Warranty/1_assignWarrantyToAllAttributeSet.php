@@ -23,7 +23,7 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
         echo $attribute_set_name . PHP_EOL;
         foreach ($attributes as $eachAttr) {
             echo "    " . $eachAttr['code'] . PHP_EOL;
-            preg_match($regularEx, $eachAttr['code'], $matchWarranty);
+            preg_match('/' . $regularEx . '/', $eachAttr['code'], $matchWarranty);
             if (count($matchWarranty) >= 1) {
                 echo "=================================================Match=========================================================" . PHP_EOL;
                 if(!debug){
