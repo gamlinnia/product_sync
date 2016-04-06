@@ -7,7 +7,7 @@ Mage::app('admin');
 
 require_once 'getAllWarrantyOptions.php';
 
-//$allBrandOptions = getAllBrandOption();
+$allBrandOptions = getAllBrandOption();
 //$allBrandOptions = array('1 years', '2 Years', '3 Years', '4 Years', '5 Years', '6 Years', '7 Years', '10 Years', 'Lifetime');
 
 var_dump($allBrandOptions);
