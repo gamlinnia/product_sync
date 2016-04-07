@@ -42,6 +42,7 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
 
         if ($origAttributeValue) {
             if(!$debug) {
+                echo "Prodcut ID: " . $productId . PHP_EOL;
                 try {
                     $product->setData($eachNeedToAssign, $origAttributeValue);
                     $product->setUrlKey(false);
