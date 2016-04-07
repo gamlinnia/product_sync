@@ -16,6 +16,8 @@ if (in_array('debug', $argv)) {
 $attributesNeedToAssign = array('_dimension[s]?[_]?' => 'dimension');
 
 $count = 0;
+$attrType = array();
+
 foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
     //new attribute data and id
     $attributeDataArray = $model->getAttribute('catalog_product', $eachNeedToAssign);
@@ -33,6 +35,7 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
 //            echo "    " . $eachAttr['code'] . PHP_EOL;
             preg_match('/' . $regularEx . '/', $eachAttr['code'], $matchArray);
             if (count($matchArray) >= 1) {
+                $attrType[] = $eachAttr['type'];
                 $count++;
                 echo $attributeSetName. PHP_EOL;
                 echo "    " . $eachAttr['code'] . PHP_EOL;
@@ -46,3 +49,5 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
 }
 
 echo "Total: " . $count . " records.". PHP_EOL;
+
+var_dump(array_unique($attrType));
