@@ -23,7 +23,7 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
         $product = Mage::getModel('catalog/product')->load($each->getId());
         echo "Prodcut ID: " . $product->getId() . PHP_EOL;
 
-        $existColorAttribute = $product->getData($eachNeedToAssign);
+        $existWarrantyAttribute = $product->getData($eachNeedToAssign);
         if(!empty($existWarrantyAttribute)) {
             continue;
         }
