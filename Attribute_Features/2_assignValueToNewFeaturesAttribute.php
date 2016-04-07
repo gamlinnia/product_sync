@@ -32,10 +32,10 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
         $origAttributeValue = '';
         $origAttributeCode = '';
         foreach ($attributes as $eachAttr) {
-            $origAttributeCode = $eachAttr['code'];
-            preg_match('/'. $regularEx . '/', $origAttributeCode, $matchArray);
+            preg_match('/'. $regularEx . '/', $eachAttr['code'], $matchArray);
             if (count($matchArray) >= 1) {
                 $count++;
+                $origAttributeCode = $eachAttr['code'];
                 $origAttributeValue = $product->getData($origAttributeCode);
             }
         }
