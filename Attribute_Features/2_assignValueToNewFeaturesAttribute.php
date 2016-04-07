@@ -13,6 +13,7 @@ if (in_array('debug', $argv)) {
 // regular expression => new attribute code
 $attributesNeedToAssign = array('_feature[s]?$' => 'features');
 
+$count = 0;
 foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
 
     $productCollection = Mage::getModel('catalog/product')->getCollection()->setOrder('entity_id', 'desc');
@@ -29,60 +30,31 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
         $attributeSetId = $product->getAttributeSetId();
         $attributes = Mage::getModel('catalog/product_attribute_api')->items($attributeSetId);
 
+        $origAttributeValue = '';
         foreach ($attributes as $eachAttr) {
             preg_match('/'. $regularEx . '/', $eachAttr['code'], $matchArray);
             if (count($matchArray) >= 1) {
-                $attributeValue = $product->getData($eachAttr['code']);
+                $count++;
+                $origAttributeValue = $product->getData($eachAttr['code']);
             }
         }
 
-        var_dump($attributeValue);
-/*
-        $attribute_label = null;
-        if ($attributeCode) {
-            $product_attribute_value = $product->getData($attributeCode['code']);
-            if ($attributeCode['type'] == 'text' || $attributeCode['type'] == 'textarea') {
-                $product_attribute_value = $product->getData($attributeCode['code']);
-                if(!empty ($product_attribute_value)) {
-
-                }
-            } else {
-                echo "    "  . $attributeCode['type'] . PHP_EOL;
-            }
-
-            if(!empty($attribute_label)) {
-                echo "Attribute Label: " . $attribute_label;
-
-                if($attributeCode['type'] == 'select'){
-                    $new_attribute_options = getAttributeOptions('attributeName', $eachNeedToAssign);
-                    foreach($new_attribute_options['options'] as $option){
-                        if(strtolower($option['label']) == strtolower($attribute_label)){
-                            $new_attribute_value = $option['value'];
-                        }
-                    }
-                }
-                else{
-                    echo "    "  . $attributeCode['type'] . PHP_EOL;
-                }
-                echo '    New warranty attribute value: ' . $new_attribute_value . PHP_EOL;
-
-                if(!$debug) {
-                    try {
-                        $product->setData($eachNeedToAssign, $new_attribute_value);
-                        $product->setUrlKey(false);
-                        $product->save();
-                    } catch (exception $e) {
-                        echo $e->getMessage() . PHP_EOL;
-                    }
-                }
-                else{
-                    echo $eachNeedToAssign . ": " . $new_attribute_value . PHP_EOL;
+        if ($origAttributeValue) {
+            if(!$debug) {
+                try {
+                    $product->setData($eachNeedToAssign, $origAttributeValue);
+                    $product->setUrlKey(false);
+                    $product->save();
+                } catch (exception $e) {
+                    echo $e->getMessage() . PHP_EOL;
                 }
             }
             else{
-                echo "    No features attribute value." . PHP_EOL;
+                echo $eachAttr['code'] . ": " . $origAttributeValue . PHP_EOL;
             }
         }
-*/
+
     }
 }
+
+echo "Total: " . $count . " records.". PHP_EOL;
