@@ -21,6 +21,7 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
     foreach($productCollection as $each) {
         $product = Mage::getModel('catalog/product')->load($each->getId());
         $productId = $product->getId();
+        echo "Prodcut ID: " . $productId . PHP_EOL;
         $existFeaturesAttribute = $product->getData($eachNeedToAssign);
         if(!empty($existFeaturesAttribute)) {
             continue;
@@ -41,7 +42,6 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
         }
 
         if ($origAttributeValue) {
-            echo "Prodcut ID: " . $productId . PHP_EOL;
             echo "    " . $origAttributeCode . PHP_EOL;
             if(!$debug) {
                 try {
