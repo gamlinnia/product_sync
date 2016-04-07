@@ -41,8 +41,9 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
         }
 
         if ($origAttributeValue) {
+            echo "Prodcut ID: " . $productId . PHP_EOL;
+            echo "    " . $origAttributeCode . PHP_EOL;
             if(!$debug) {
-                echo "Prodcut ID: " . $productId . PHP_EOL;
                 try {
                     $product->setData($eachNeedToAssign, $origAttributeValue);
                     $product->setUrlKey(false);
@@ -50,10 +51,6 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
                 } catch (exception $e) {
                     echo $e->getMessage() . PHP_EOL;
                 }
-            }
-            else{
-                echo "Prodcut ID: " . $productId . PHP_EOL;
-                echo "    " . $origAttributeCode . ": " . $origAttributeValue . PHP_EOL;
             }
         }
 
