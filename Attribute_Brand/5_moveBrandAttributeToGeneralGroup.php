@@ -16,7 +16,7 @@ if (in_array('debug', $argv)) {
 $attributeName = 'brand';
 $groupName = 'General';
 
-$attributeCollection = Mage::getResourceModel('eav/entity_attribute_collection');
+$attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection');
 
 foreach($attributeSetCollection as $each){
     $attributes = Mage::getModel('catalog/product_attribute_api')->items($each->getId());
