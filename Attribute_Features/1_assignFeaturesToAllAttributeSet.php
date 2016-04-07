@@ -26,13 +26,13 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
 
     foreach ($attributeSetCollection as $each) {
         $attributeSetName = $each->getAttributeSetName();
-        echo $attributeSetName . PHP_EOL;
         $attributes = Mage::getModel('catalog/product_attribute_api')->items($each->getId());
         foreach ($attributes as $eachAttr) {
 //            echo "    " . $eachAttr['code'] . PHP_EOL;
             preg_match('/' . $regularEx . '/', $eachAttr['code'], $matchArray);
             if (count($matchArray) >= 1) {
                 $count++;
+                echo $attributeSetName . PHP_EOL;
                 echo "    " . $eachAttr['code'] . PHP_EOL;
                 $attributeSetId = $each->getAttributeSetId();
                 $attributeGroupDataArray = $model->getAttributeGroup('catalog_product', $attributeSetId, $attributeSetName);
