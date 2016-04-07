@@ -14,6 +14,7 @@ if (in_array('debug', $argv)) {
 $attributesNeedToAssign = array('_dimension[s]?[_]?' => 'dimension');;
 
 $count = 0;
+$attrType = array();
 foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
 
     $productCollection = Mage::getModel('catalog/product')->getCollection()->setOrder('entity_id', 'desc');
@@ -38,6 +39,7 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
                 $count++;
                 $origAttributeCode = $eachAttr['code'];
                 $origAttributeValue = $product->getData($origAttributeCode);
+                $attrType[] = $eachAttr['type'];
             }
         }
 
@@ -58,3 +60,5 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
 }
 
 echo "Total: " . $count . " records.". PHP_EOL;
+
+var_dump(array_unique($attrType));
