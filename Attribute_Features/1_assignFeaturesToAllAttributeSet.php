@@ -26,15 +26,16 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
 
     foreach ($attributeSetCollection as $each) {
         $attributeSetName = $each->getAttributeSetName();
+        $attributeSetId = $each->getAttributeSetId();
+        //get all attributes for this attribute set
         $attributes = Mage::getModel('catalog/product_attribute_api')->items($each->getId());
         foreach ($attributes as $eachAttr) {
 //            echo "    " . $eachAttr['code'] . PHP_EOL;
             preg_match('/' . $regularEx . '/', $eachAttr['code'], $matchArray);
             if (count($matchArray) >= 1) {
                 $count++;
-                echo $attributeSetName . PHP_EOL;
+                echo $attributeSetName. PHP_EOL;
                 echo "    " . $eachAttr['code'] . PHP_EOL;
-                $attributeSetId = $each->getAttributeSetId();
                 $attributeGroupDataArray = $model->getAttributeGroup('catalog_product', $attributeSetId, $attributeSetName);
                 if(!$debug){
                     $model->addAttributeToSet('catalog_product', $attributeSetId, $attributeGroupDataArray["attribute_group_id"], $attributeId);
