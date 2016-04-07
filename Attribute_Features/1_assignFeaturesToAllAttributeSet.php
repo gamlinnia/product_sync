@@ -45,4 +45,4 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
     }
 }
 
-echo "Total: " . $count . "records.". PHP_EOL;
+echo "Total: " . $count . " records.". PHP_EOL;
