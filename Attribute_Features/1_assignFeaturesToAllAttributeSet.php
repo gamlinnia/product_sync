@@ -13,7 +13,7 @@ if (in_array('debug', $argv)) {
 }
 
 // regular expression => new attribute code
-$attributesNeedToAssign = array('_feature' => 'features');
+$attributesNeedToAssign = array('_feature[s]?$' => 'features');
 
 foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
     //new attribute data and id
