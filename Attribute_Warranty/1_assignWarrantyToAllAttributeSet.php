@@ -12,7 +12,20 @@ if (in_array('debug', $argv)) {
     $debug = true;
 }
 
-$attributesNeedToAssign = array('_manufacturer_warranty_p' => 'manufacturer_warranty_parts', '_manufacturer_warranty_l' => 'manufacturer_warranty_labor');
+//$attributesNeedToAssign = array('_manufacturer_warranty_p' => 'manufacturer_warranty_parts', '_manufacturer_warranty_l' => 'manufacturer_warranty_labor');
+
+//exception case
+$attributesNeedToAssign = array(
+    'a01470_case_manufacturer_warra' => 'manufacturer_warranty_parts',
+    'a01460_case_manufacturer_warra' => 'manufacturer_warranty_labor',
+    'b01470_case_manufacturer_warra' => 'manufacturer_warranty_parts',
+    'b01460_case_manufacturer_warra' => 'manufacturer_warranty_labor'
+);
+
+$exceptionArray = array(
+    'a01_Gaming_Case',
+    'b01_Computer_Case'
+);
 
 foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
     $attributeDataArray = $model->getAttribute('catalog_product', $eachNeedToAssign);
@@ -22,6 +35,9 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
 
     foreach ($attributeSetCollection as $each) {
         $attributeSetName = $each->getAttributeSetName();
+        if(!in_array($attributeSetName, $exceptionArray)){
+            continue;
+        }
         echo $attributeSetName . PHP_EOL;
         $attributes = Mage::getModel('catalog/product_attribute_api')->items($each->getId());
         foreach ($attributes as $eachAttr) {
