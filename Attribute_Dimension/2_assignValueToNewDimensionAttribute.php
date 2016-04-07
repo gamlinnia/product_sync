@@ -15,9 +15,7 @@ $attributesNeedToAssign = array('_dimension[s]?[_]?' => 'dimension');;
 
 $count = 0;
 foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
-
     $productCollection = Mage::getModel('catalog/product')->getCollection()->setOrder('entity_id', 'desc');
-
     foreach($productCollection as $each) {
         $product = Mage::getModel('catalog/product')->load($each->getId());
         $productId = $product->getId();
