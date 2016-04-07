@@ -29,15 +29,14 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
         $attributeSetId = $product->getAttributeSetId();
         $attributes = Mage::getModel('catalog/product_attribute_api')->items($attributeSetId);
 
-        $attributeCode = array();
         foreach ($attributes as $eachAttr) {
             preg_match('/'. $regularEx . '/', $eachAttr['code'], $matchArray);
             if (count($matchArray) >= 1) {
-                $attributeCode = $eachAttr;
+                $attributeValue = $product->getData($eachAttr['code']);
             }
         }
 
-        var_dump($attributeCode);
+        var_dump($attributeValue);
 /*
         $attribute_label = null;
         if ($attributeCode) {
