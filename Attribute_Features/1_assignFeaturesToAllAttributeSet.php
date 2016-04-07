@@ -15,6 +15,7 @@ if (in_array('debug', $argv)) {
 // regular expression => new attribute code
 $attributesNeedToAssign = array('_feature[s]?$' => 'features');
 
+$count = 0;
 foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
     //new attribute data and id
     $attributeDataArray = $model->getAttribute('catalog_product', $eachNeedToAssign);
@@ -31,6 +32,7 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
 //            echo "    " . $eachAttr['code'] . PHP_EOL;
             preg_match('/' . $regularEx . '/', $eachAttr['code'], $matchArray);
             if (count($matchArray) >= 1) {
+                $count++;
                 echo "    " . $eachAttr['code'] . PHP_EOL;
                 $attributeSetId = $each->getAttributeSetId();
                 $attributeGroupDataArray = $model->getAttributeGroup('catalog_product', $attributeSetId, $attributeSetName);
@@ -41,3 +43,5 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
         }
     }
 }
+
+echo $count . PHP_EOL;
