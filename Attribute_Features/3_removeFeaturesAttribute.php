@@ -13,7 +13,7 @@ if (in_array('debug', $argv)) {
     $debug = true;
 }
 
-$attributesNeedToRemove =  array('_feature' => 'features');
+$attributesNeedToRemove =  array('_feature[s]?$' => 'features');
 
 $attributeCollection = Mage::getResourceModel('eav/entity_attribute_collection');
 
