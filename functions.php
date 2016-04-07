@@ -2122,3 +2122,18 @@ function getCookieFromAws($channel, $channel_sku, $product_url){
     return $response['cookie'];
 
 }
+
+function moveAttributeToGroup($attributeName, $attributeSetName, $groupName){
+    $attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_product', $attributeName);
+    $attributeSetId = Mage::getModel('eav/entity_attribute_set')->load($attributeSetName, 'attribute_set_name')->getAttributeSetId();
+
+    $model=Mage::getModel('eav/entity_setup','core_setup');
+    $attributeGroupData=$model->getAttributeGroup('catalog_product', $attributeSetId, $groupName);
+    $groupId = $attributeGroupData["attribute_group_id"];
+
+    //remove attribute from attribute set
+    Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeId, $attributeSetId);
+
+    //re-add attribute to specific group in same attribute set
+    $model->addAttributeToSet('catalog_product',$attributeSetId, $groupId, $attributeId);
+}
