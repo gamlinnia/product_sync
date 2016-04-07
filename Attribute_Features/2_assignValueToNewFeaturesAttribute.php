@@ -20,8 +20,7 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
 
     foreach($productCollection as $each) {
         $product = Mage::getModel('catalog/product')->load($each->getId());
-        echo "Prodcut ID: " . $product->getId() . PHP_EOL;
-
+        $productId = $product->getId();
         $existFeaturesAttribute = $product->getData($eachNeedToAssign);
         if(!empty($existFeaturesAttribute)) {
             continue;
@@ -31,11 +30,13 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
         $attributes = Mage::getModel('catalog/product_attribute_api')->items($attributeSetId);
 
         $origAttributeValue = '';
+        $origAttributeCode = '';
         foreach ($attributes as $eachAttr) {
-            preg_match('/'. $regularEx . '/', $eachAttr['code'], $matchArray);
+            $origAttributeCode = $eachAttr['code'];
+            preg_match('/'. $regularEx . '/', $origAttributeCode, $matchArray);
             if (count($matchArray) >= 1) {
                 $count++;
-                $origAttributeValue = $product->getData($eachAttr['code']);
+                $origAttributeValue = $product->getData($origAttributeCode);
             }
         }
 
@@ -50,7 +51,8 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
                 }
             }
             else{
-                echo $eachAttr['code'] . ": " . $origAttributeValue . PHP_EOL;
+                echo "Prodcut ID: " . $productId . PHP_EOL;
+                echo "    " . $origAttributeCode . ": " . $origAttributeValue . PHP_EOL;
             }
         }
 
