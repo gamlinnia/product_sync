@@ -11,7 +11,7 @@ if (in_array('debug', $argv)) {
 }
 
 // regular expression => new attribute code
-$attributesNeedToAssign = array('_feature' => 'features');
+$attributesNeedToAssign = array('_feature[s]?$' => 'features');
 
 foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
 
@@ -38,53 +38,52 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
         }
 
         var_dump($attributeCode);
-
+/*
         $attribute_label = null;
         if ($attributeCode) {
-            var_dump($attributeCode);
-            if ($attributeCode['type'] == 'select') {
+            $product_attribute_value = $product->getData($attributeCode['code']);
+            if ($attributeCode['type'] == 'text' || $attributeCode['type'] == 'textarea') {
                 $product_attribute_value = $product->getData($attributeCode['code']);
-                if ($attributeCode['type'] == 'text' || $attributeCode['type'] == 'textarea') {
-                    $product_attribute_value = $product->getData($attributeCode['code']);
-                    if(!empty ($product_attribute_value)) {
+                if(!empty ($product_attribute_value)) {
 
-                    }
-                } else {
-                    echo "    "  . $attributeCode['type'] . PHP_EOL;
                 }
+            } else {
+                echo "    "  . $attributeCode['type'] . PHP_EOL;
+            }
 
-                if(!empty($attribute_label)) {
-                    echo "Attribute Label: " . $attribute_label;
+            if(!empty($attribute_label)) {
+                echo "Attribute Label: " . $attribute_label;
 
-                    if($attributeCode['type'] == 'select'){
-                        $new_attribute_options = getAttributeOptions('attributeName', $eachNeedToAssign);
-                        foreach($new_attribute_options['options'] as $option){
-                            if(strtolower($option['label']) == strtolower($attribute_label)){
-                                $new_attribute_value = $option['value'];
-                            }
+                if($attributeCode['type'] == 'select'){
+                    $new_attribute_options = getAttributeOptions('attributeName', $eachNeedToAssign);
+                    foreach($new_attribute_options['options'] as $option){
+                        if(strtolower($option['label']) == strtolower($attribute_label)){
+                            $new_attribute_value = $option['value'];
                         }
-                    }
-                    else{
-                        echo "    "  . $attributeCode['type'] . PHP_EOL;
-                    }
-                    echo '    New warranty attribute value: ' . $new_attribute_value . PHP_EOL;
-
-                    if(!$debug) {
-                        try {
-                            $product->setData($eachNeedToAssign, $new_attribute_value);
-                            $product->setUrlKey(false);
-                            $product->save();
-                        } catch (exception $e) {
-                            echo $e->getMessage() . PHP_EOL;
-                        }
-                    }
-                    else{
-                        echo $eachNeedToAssign . ": " . $new_attribute_value . PHP_EOL;
                     }
                 }
                 else{
-                    echo "    No warranty attribute value." . PHP_EOL;
+                    echo "    "  . $attributeCode['type'] . PHP_EOL;
+                }
+                echo '    New warranty attribute value: ' . $new_attribute_value . PHP_EOL;
+
+                if(!$debug) {
+                    try {
+                        $product->setData($eachNeedToAssign, $new_attribute_value);
+                        $product->setUrlKey(false);
+                        $product->save();
+                    } catch (exception $e) {
+                        echo $e->getMessage() . PHP_EOL;
+                    }
+                }
+                else{
+                    echo $eachNeedToAssign . ": " . $new_attribute_value . PHP_EOL;
                 }
             }
+            else{
+                echo "    No features attribute value." . PHP_EOL;
+            }
         }
+*/
     }
+}
