@@ -19,10 +19,10 @@ $attributeCollection = Mage::getResourceModel('eav/entity_attribute_collection')
 
 $prepareToRemove = array();
 foreach($attributeCollection as $eachAttr) {
-    foreach($attributesNeedToRemove as $eachAttrNeedToRemove) {
+    foreach($attributesNeedToRemove as $regularEx => $eachAttrNeedToRemove) {
         $attributeCode  = $eachAttr->getAttributeCode();
         $attributeId = $eachAttr->getId();
-        preg_match('/' . $eachAttrNeedToRemove .'/', $attributeCode, $matchArray);
+        preg_match('/' . $regularEx .'/', $attributeCode, $matchArray);
         if (count($matchArray) >= 1) {
             $prepareToRemove[] = array(
                 'attribute_code' => $attributeCode,
