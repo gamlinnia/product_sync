@@ -16,7 +16,7 @@ if (in_array('debug', $argv)) {
 //$attributesNeedToRemove = array('_manufacturer_warranty_p', '_manufacturer_warranty_l');
 
 //exception case
-$attributesNeedToRemovearray = array(
+$attributesNeedToRemove = array(
     'a01470_case_manufacturer_warra',
     'a01460_case_manufacturer_warra',
     'b01470_case_manufacturer_warra',
