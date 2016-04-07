@@ -70,24 +70,28 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
                         if(strtolower($option['label']) == strtolower($attribute_label)){
                             $new_attribute_value = $option['value'];
                         }
+                        else{
+                            $new_attribute_value = null;
+                        }
                     }
                 }
                 else{
                     echo "    "  . $attributeCode['type'] . PHP_EOL;
                 }
-                echo '    New warranty attribute value: ' . $new_attribute_value . PHP_EOL;
-
-                if(!$debug) {
-                    try {
-                        $product->setData($eachNeedToAssign, $new_attribute_value);
-                        $product->setUrlKey(false);
-                        $product->save();
-                    } catch (exception $e) {
-                        echo $e->getMessage() . PHP_EOL;
+                if(!empty($new_attribute_value)){
+                    echo '    New warranty attribute value: ' . $new_attribute_value . PHP_EOL;
+                    if(!$debug) {
+                        try {
+                            $product->setData($eachNeedToAssign, $new_attribute_value);
+                            $product->setUrlKey(false);
+                            $product->save();
+                        } catch (exception $e) {
+                            echo $e->getMessage() . PHP_EOL;
+                        }
                     }
-                }
-                else{
-                    echo $eachNeedToAssign . ": " . $new_attribute_value . PHP_EOL;
+                    else{
+                        echo $eachNeedToAssign . ": " . $new_attribute_value . PHP_EOL;
+                    }
                 }
             }
             else{
