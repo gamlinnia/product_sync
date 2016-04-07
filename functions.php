@@ -2124,7 +2124,7 @@ function getCookieFromAws($channel, $channel_sku, $product_url){
 }
 
 function moveAttributeToGroup($attributeName, $attributeSetName, $groupName){
-    $attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_product', $attributeName);
+    $attributeId = Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $attributeName);
     $attributeSetId = Mage::getModel('eav/entity_attribute_set')->load($attributeSetName, 'attribute_set_name')->getAttributeSetId();
 
     $model=Mage::getModel('eav/entity_setup','core_setup');
