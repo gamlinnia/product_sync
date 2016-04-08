@@ -13,12 +13,7 @@ if (in_array('debug', $argv)) {
 $attributesNeedToAssign = array('_manufacturer_warranty_p' => 'manufacturer_warranty_parts', '_manufacturer_warranty_l' => 'manufacturer_warranty_labor');
 
 foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
-    if($debug) {
-        $productCollection = Mage::getModel('catalog/product')->getCollection()->addFieldToFilter('entity_id', array('gt'=>'1344'));
-    }
-    else{
-        $productCollection = Mage::getModel('catalog/product')->getCollection()->setOrder('entity_id', 'desc');
-    }
+    $productCollection = Mage::getModel('catalog/product')->getCollection()->setOrder('entity_id', 'desc');
     foreach($productCollection as $each) {
         $product = Mage::getModel('catalog/product')->load($each->getId());
         echo "Prodcut ID: " . $product->getId() . PHP_EOL;
