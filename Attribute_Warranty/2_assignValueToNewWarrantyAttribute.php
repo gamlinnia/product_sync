@@ -10,23 +10,15 @@ if (in_array('debug', $argv)) {
     $debug = true;
 }
 
-//$attributesNeedToAssign = array('_manufacturer_warranty_p' => 'manufacturer_warranty_parts', '_manufacturer_warranty_l' => 'manufacturer_warranty_labor');
-
-//exception case
-$attributesNeedToAssign = array(
-    'a01470_case_manufacturer_warra' => 'manufacturer_warranty_parts',
-    'a01460_case_manufacturer_warra' => 'manufacturer_warranty_labor',
-    'b01470_case_manufacturer_warra' => 'manufacturer_warranty_parts',
-    'b01460_case_manufacturer_warra' => 'manufacturer_warranty_labor'
-);
-
-$exceptionArray = array(
-    'a01_Gaming_Case',
-    'b01_Computer_Case'
-);
+$attributesNeedToAssign = array('_manufacturer_warranty_p' => 'manufacturer_warranty_parts', '_manufacturer_warranty_l' => 'manufacturer_warranty_labor');
 
 foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
-    $productCollection = Mage::getModel('catalog/product')->getCollection()->setOrder('entity_id', 'desc');
+    if($debug) {
+        $productCollection = Mage::getModel('catalog/product')->getCollection()->addFieldToFilter('entity_id', array('gt'=>'1344'));
+    }
+    else{
+        $productCollection = Mage::getModel('catalog/product')->getCollection()->setOrder('entity_id', 'desc');
+    }
     foreach($productCollection as $each) {
         $product = Mage::getModel('catalog/product')->load($each->getId());
         echo "Prodcut ID: " . $product->getId() . PHP_EOL;

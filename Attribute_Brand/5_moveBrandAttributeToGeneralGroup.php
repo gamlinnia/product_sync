@@ -27,7 +27,7 @@ foreach($attributeSetCollection as $each){
             echo "    " . $eachAttr['code'] . PHP_EOL;
             preg_match('/brand/', $eachAttr['code'], $matchBrand);
             if (count($matchBrand) >= 1) {
-                moveAttributeToGroup($attributeName, $attributeSetName, $groupName);
+                moveAttributeToGroupInAttrbiuteSet($attributeName, $attributeSetName, $groupName);
             }
         }
     }

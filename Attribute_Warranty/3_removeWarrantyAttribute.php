@@ -13,15 +13,7 @@ if (in_array('debug', $argv)) {
     $debug = true;
 }
 
-//$attributesNeedToRemove = array('_manufacturer_warranty_p', '_manufacturer_warranty_l');
-
-//exception case
-$attributesNeedToRemove = array(
-    'a01470_case_manufacturer_warra',
-    'a01460_case_manufacturer_warra',
-    'b01470_case_manufacturer_warra',
-    'b01460_case_manufacturer_warra'
-);
+$attributesNeedToRemove = array('_manufacturer_warranty_p', '_manufacturer_warranty_l');
 
 $attributeCollection = Mage::getResourceModel('eav/entity_attribute_collection');
 
