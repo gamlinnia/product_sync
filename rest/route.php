@@ -268,7 +268,6 @@ $app->post('/api/postProductJsonToLocal', function () {
     global $input;
     global $app;
     $headers = $app->request()->headers();
-    var_dump($headers);
     if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
         echo json_encode(array(
             'message' => 'auth error.'
@@ -276,9 +275,17 @@ $app->post('/api/postProductJsonToLocal', function () {
         return;
     }
 
+    /* save product json to local files in dev environment. */
+    if ($headers['Host'] == 'rwdev.buyabs.corp') {
+        if (!file_exists('./productJson')) {
+            if (!mkdir('./productJson', 0777, true)) {
+                echo 'Error creating Directory.' . PHP_EOL;
+                return;
+            }
+        }
+        file_put_contents('productJson/' . $input['ItemNumber'], json_encode($input));
+    }
 
-
-//    file_put_contents('productJson/' . $input['ItemNumber'], json_encode($input));
 });
 
 $app->run();
