@@ -276,14 +276,15 @@ $app->post('/api/postProductJsonToLocal', function () {
     }
 
     /* save product json to local files in dev environment. */
+    $dir = './productJson/';
     if ($headers['Host'] == 'rwdev.buyabs.corp') {
-        if (!file_exists('./productJson')) {
-            if (!mkdir('./productJson', 0777, true)) {
+        if (!file_exists($dir)) {
+            if (!mkdir($dir, 0777, true)) {
                 echo 'Error creating Directory.' . PHP_EOL;
                 return;
             }
         }
-        file_put_contents('productJson/' . $input['ItemNumber'], json_encode($input));
+        file_put_contents($dir . $input['ItemNumber'], json_encode($input));
     }
 
 });
