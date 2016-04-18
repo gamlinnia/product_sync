@@ -165,7 +165,9 @@ function classifyProductAttributes ($productInfo) {
             "group_price_changed",
             "ne_product_specifications",
             "ewra",
-            "msds_sheet"
+            "msds_sheet",
+            "has_options",
+            "required_options"
         )
     );
 

@@ -264,4 +264,21 @@ $app->post('/api/getCookies', function  () {
     ));
 });
 
+$app->post('/api/postProductJsonToLocal', function () {
+    global $input;
+    global $app;
+    $headers = $app->request()->headers();
+    var_dump($headers);
+    if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
+        echo json_encode(array(
+            'message' => 'auth error.'
+        ));
+        return;
+    }
+
+
+
+//    file_put_contents('productJson/' . $input['ItemNumber'], json_encode($input));
+});
+
 $app->run();
