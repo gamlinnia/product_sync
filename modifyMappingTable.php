@@ -48,7 +48,7 @@ do {
     fwrite(STDOUT, 'Enter target to modify [general | property]: ');
 // 抓取 標準輸入 的 內容
     $target = trim(fgets(STDIN));
-} while (empty($propertyCode));
+} while (empty($target));
 echo $target . PHP_EOL;
 
 switch (strtolower($target)) {
