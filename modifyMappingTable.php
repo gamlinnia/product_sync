@@ -9,6 +9,15 @@ require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
 Mage::app('admin');
 
+// 透過 標準輸出 印出要詢問的內容
+fwrite(STDOUT, 'To edit or to delete: ');
+// 抓取 標準輸入 的 內容
+$action = trim(fgets(STDIN));
+echo $action . PHP_EOL;
+
+
+die();
+
 if (!isset($argv[1])) {
     preg_match('/[\d]{2}-[\d]{3}-[\d]{3}/', $argv[1] , $match);
     if (count($match) < 1) {
