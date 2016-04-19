@@ -10,12 +10,12 @@ require_once 'functions.php';
 Mage::app('admin');
 
 do {
-    $acceptInput = array('edit', 'delete', 'e', 'd');
+    $acceptInput = array('edit', 'delete', 'quit', 'e', 'd', 'q');
 // 透過 標準輸出 印出要詢問的內容
     fwrite(STDOUT, 'To edit or to delete: ');
 // 抓取 標準輸入 的 內容
     $action = trim(fgets(STDIN));
-} while (!in_array($action, $acceptInput));
+} while (!in_array(strtolower($action), $acceptInput));
 echo $action . PHP_EOL;
 
 
