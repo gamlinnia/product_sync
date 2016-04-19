@@ -65,13 +65,21 @@ $attrSetInfo = attributeSetNameAndId('attributeSetName', $mappedAttrSet);
 echo $mappedAttrSet . 'map to attr set id: ' . $attrSetInfo['id'] . PHP_EOL;
 
 $model = Mage::getModel('catalog/product')
-    ->setAttributeSetId($attrSetInfo['id']);
+    ->setAttributeSetId($attrSetInfo['id'])
+->setData('type_id', 'simple')
+->setData('Model', $productJson['Model'])
+->setData('status', '1')
+->setData('tax_class_id', '0')
+->setData('enable_rma', '0')
+->setData('visibility', '4');
 
 foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
     $specialBigItems = array('property');
     if (!in_array($bigProductInfoItem, $specialBigItems)) {
         foreach ($bigItemObject as $toBeMappedKey => $mapToAttr) {
-            $model->setData($mapToAttr, $productJson[$bigProductInfoItem][$toBeMappedKey]);
+            if ( !empty($productJson[$bigProductInfoItem][$toBeMappedKey]) ) {
+                $model->setData($mapToAttr, $productJson[$bigProductInfoItem][$toBeMappedKey]);
+            }
         }
     }
 }
