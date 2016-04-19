@@ -45,7 +45,7 @@ if ($action[0] == 'q') {
 
 do {
 // 透過 標準輸出 印出要詢問的內容
-    fwrite(STDOUT, 'Enter target to modify [general | property]: ');
+    fwrite(STDOUT, 'Enter target to modify [ general | property | price | intelligence | description | baseinfo | dimension | ProductInfos | inventory ]: ');
 // 抓取 標準輸入 的 內容
     $target = trim(fgets(STDIN));
 } while (empty($target));
@@ -109,7 +109,7 @@ switch (strtolower($target)) {
 
         break;
     default :
-        $acceptInput = array('general', 'description', 'price');
+        $acceptInput = array('general', 'description', 'price', 'intelligence', 'dimension', 'baseinfo', 'ProductInfos', 'inventory');
         if (!in_array(strtolower($target), $acceptInput)) {
             exit(0);
         }
