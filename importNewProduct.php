@@ -43,7 +43,7 @@ var_dump($categoryMapToAttributeSet);
 $subcategoryName = $productJson['baseinfo']['SubcategoryName'];
 echo 'SubcategoryName: ' . $subcategoryName . PHP_EOL;
 $mappedAttrSets = $categoryMapToAttributeSet[$subcategoryName];
-echo 'map to ' . $mappedAttrSets . PHP_EOL;
+echo 'map to attribute set names: ' . $mappedAttrSets . PHP_EOL;
 
 $mappedAttrSetsArray = explode(',', $mappedAttrSets);
 if ( count($mappedAttrSetsArray) > 1 ) {
@@ -60,3 +60,4 @@ if ( count($mappedAttrSetsArray) > 1 ) {
     echo 'no attribute set name map to subcategory: ' . $subcategoryName . PHP_EOL;
     return;
 }
+echo 'map to attribute set name: ' . $mappedAttrSet . PHP_EOL;
