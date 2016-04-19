@@ -67,5 +67,14 @@ echo $mappedAttrSet . 'map to attr set id: ' . $attrSetInfo['id'] . PHP_EOL;
 $model = Mage::getModel('catalog/product')
     ->setAttributeSetId($attrSetInfo['id']);
 
+foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
+    $specialBigItems = array('property');
+    if (!in_array($bigProductInfoItem, $specialBigItems)) {
+        foreach ($bigItemObject as $toBeMappedKey => $mapToAttr) {
+            $model->setData($mapToAttr, $productJson[$bigProductInfoItem][$toBeMappedKey]);
+        }
+    }
+}
+
 Zend_Debug::dump($model->getData());
 
