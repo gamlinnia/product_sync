@@ -18,6 +18,7 @@ if (!file_exists($dir)) {
         return;
     }
     if (!file_exists($dir . 'mappingAttrs.json')) {
+        echo 'create new mapping table file, content: ' .  json_encode(array()) .PHP_EOL;
         file_put_contents($dir . 'mappingAttrs.json', json_encode(array()));
     }
 }
