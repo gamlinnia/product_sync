@@ -27,8 +27,8 @@ if (!$mappingAttrs = file_get_contents($dir . 'mappingAttrs.json')) {
     return;
 }
 
-$mapTable = json_encode($mappingAttrs);
-echo $mapTable . PHP_EOL;
+echo $mappingAttrs . PHP_EOL;
+$mapTableArray = json_decode($mappingAttrs, true);
 
 do {
     $acceptInput = array('edit', 'delete', 'quit', 'e', 'd', 'q');
@@ -45,25 +45,75 @@ if ($action[0] == 'q') {
 
 do {
 // 透過 標準輸出 印出要詢問的內容
-    fwrite(STDOUT, 'Enter PropertyCode: ');
+    fwrite(STDOUT, 'Enter target to modify [general | property]: ');
 // 抓取 標準輸入 的 內容
-    $propertyCode = trim(fgets(STDIN));
-} while (!is_numeric($propertyCode));
-echo $propertyCode . PHP_EOL;
-
-do {
-// 透過 標準輸出 印出要詢問的內容
-    fwrite(STDOUT, 'Enter PropertyName: ');
-// 抓取 標準輸入 的 內容
-    $propertyName = trim(fgets(STDIN));
+    $target = trim(fgets(STDIN));
 } while (empty($propertyCode));
-echo $propertyName . PHP_EOL;
+echo $target . PHP_EOL;
 
-do {
+switch (strtolower($target)) {
+    case 'general' :
+
+        break;
+    case 'property' :
+
+        do {
+            /*透過 標準輸出 印出要詢問的內容*/
+            fwrite(STDOUT, 'Enter PropertyCode: ');
+ /*抓取 標準輸入 的 內容*/
+            $propertyCode = trim(fgets(STDIN));
+        } while (!is_numeric($propertyCode));
+        echo $propertyCode . PHP_EOL;
+
+        do {
 // 透過 標準輸出 印出要詢問的內容
-    fwrite(STDOUT, 'Enter mapping attribute: ');
+            fwrite(STDOUT, 'Enter PropertyName: ');
 // 抓取 標準輸入 的 內容
-    $propertyName = trim(fgets(STDIN));
-} while (empty($propertyCode));
-echo $propertyName . PHP_EOL;
+            $propertyName = trim(fgets(STDIN));
+        } while (empty($propertyCode));
+        echo $propertyName . PHP_EOL;
 
+        do {
+// 透過 標準輸出 印出要詢問的內容
+            fwrite(STDOUT, 'Enter mapping attribute: ');
+// 抓取 標準輸入 的 內容
+            $attrToMap = trim(fgets(STDIN));
+        } while (empty($propertyCode));
+        echo $attrToMap . PHP_EOL;
+
+        if (!isset($mapTableArray['property'])) {
+            $mapTableArray['property'][] = array(
+                'PropertyCode' => $propertyCode,
+                'PropertyName' => $propertyName,
+                'AttrToMap' => array($attrToMap)
+            ) ;
+        } else {
+            $exist = false;
+            foreach ($mapTableArray['property'] as $index => $property) {
+                if ($property['PropertyCode'] == $propertyCode) {
+                    if ($property['PropertyName'] != $propertyName) {
+                        echo 'different code and name' . PHP_EOL;
+                        die();
+                    }
+                    if (!in_array($attrToMap, $property['AttrToMap'])) {
+                        $mapTableArray['property'][$index]['AttrToMap'][] = $attrToMap;
+                    }
+                    $exist = true;
+                }
+            }
+            if (!$exist) {
+                $mapTableArray['property'][] = array(
+                    'PropertyCode' => $propertyCode,
+                    'PropertyName' => $propertyName,
+                    'AttrToMap' => array($attrToMap)
+                ) ;
+            }
+        }
+
+
+        break;
+    default :
+        exit(0);
+}
+
+file_put_contents($dir . 'mappingAttrs.json', json_encode($mapTableArray));
