@@ -109,7 +109,7 @@ switch (strtolower($target)) {
 
         break;
     default :
-        $acceptInput = array('general', 'description');
+        $acceptInput = array('general', 'description', 'price');
         if (!in_array(strtolower($target), $acceptInput)) {
             exit(0);
         }
