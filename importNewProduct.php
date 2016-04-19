@@ -23,9 +23,6 @@ if (!file_get_contents($dir . 'mappingAttrs.json')) {
     echo 'Error getting mapping table file.' . PHP_EOL;
     return;
 }
-if (!file_get_contents($dir . 'mappingAttrs.json')) {
-    echo 'Error getting mapping table file.' . PHP_EOL;
-    return;
-}
+
 
 $mapTable = json_encode(file_get_contents($dir . 'mappingAttrs.json'));

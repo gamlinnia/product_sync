@@ -9,6 +9,26 @@ require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
 Mage::app('admin');
 
+
+/* save product json to local files in dev environment. */
+$dir = './rest/productJson/';
+if (!file_exists($dir)) {
+    if (!mkdir($dir)) {
+        echo 'Error create directory.' . PHP_EOL;
+        return;
+    }
+    if (!file_exists($dir . 'mappingAttrs.json')) {
+        file_put_contents($dir . 'mappingAttrs.json', json_encode(array()));
+    }
+}
+if (!$mappingAttrs = file_get_contents($dir . 'mappingAttrs.json')) {
+    echo 'Error getting mapping table file.' . PHP_EOL;
+    return;
+}
+
+$mapTable = json_encode($mappingAttrs);
+echo $mapTable . PHP_EOL;
+
 do {
     $acceptInput = array('edit', 'delete', 'quit', 'e', 'd', 'q');
 // 透過 標準輸出 印出要詢問的內容
@@ -23,34 +43,26 @@ if ($action[0] == 'q') {
 }
 
 do {
-    $acceptInput = array('edit', 'delete', 'quit', 'e', 'd', 'q');
 // 透過 標準輸出 印出要詢問的內容
     fwrite(STDOUT, 'Enter PropertyCode: ');
 // 抓取 標準輸入 的 內容
     $propertyCode = trim(fgets(STDIN));
-} while (!in_array(strtolower($action), $acceptInput));
+} while (!is_numeric($propertyCode));
 echo $propertyCode . PHP_EOL;
 
+do {
+// 透過 標準輸出 印出要詢問的內容
+    fwrite(STDOUT, 'Enter PropertyName: ');
+// 抓取 標準輸入 的 內容
+    $propertyName = trim(fgets(STDIN));
+} while (empty($propertyCode));
+echo $propertyName . PHP_EOL;
 
-die();
+do {
+// 透過 標準輸出 印出要詢問的內容
+    fwrite(STDOUT, 'Enter mapping attribute: ');
+// 抓取 標準輸入 的 內容
+    $propertyName = trim(fgets(STDIN));
+} while (empty($propertyCode));
+echo $propertyName . PHP_EOL;
 
-if (!isset($argv[1])) {
-    preg_match('/[\d]{2}-[\d]{3}-[\d]{3}/', $argv[1] , $match);
-    if (count($match) < 1) {
-        echo 'Model number is not specified.' . PHP_EOL;
-        return;
-    }
-}
-
-/* save product json to local files in dev environment. */
-$dir = './rest/productJson/';
-if (!file_get_contents($dir . 'mappingAttrs.json')) {
-    echo 'Error getting mapping table file.' . PHP_EOL;
-    return;
-}
-if (!file_get_contents($dir . 'mappingAttrs.json')) {
-    echo 'Error getting mapping table file.' . PHP_EOL;
-    return;
-}
-
-$mapTable = json_encode(file_get_contents($dir . 'mappingAttrs.json'));
