@@ -18,6 +18,19 @@ do {
 } while (!in_array(strtolower($action), $acceptInput));
 echo $action . PHP_EOL;
 
+if ($action[0] = 'q') {
+    exit(0);
+}
+
+do {
+    $acceptInput = array('edit', 'delete', 'quit', 'e', 'd', 'q');
+// 透過 標準輸出 印出要詢問的內容
+    fwrite(STDOUT, 'Enter PropertyCode: ');
+// 抓取 標準輸入 的 內容
+    $propertyCode = trim(fgets(STDIN));
+} while (!in_array(strtolower($action), $acceptInput));
+echo $propertyCode . PHP_EOL;
+
 
 die();
 
