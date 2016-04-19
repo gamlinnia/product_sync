@@ -9,10 +9,13 @@ require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
 Mage::app('admin');
 
+do {
+    $acceptInput = array('edit', 'delete', 'e', 'd');
 // 透過 標準輸出 印出要詢問的內容
-fwrite(STDOUT, 'To edit or to delete: ');
+    fwrite(STDOUT, 'To edit or to delete: ');
 // 抓取 標準輸入 的 內容
-$action = trim(fgets(STDIN));
+    $action = trim(fgets(STDIN));
+} while (!in_array($action, $acceptInput));
 echo $action . PHP_EOL;
 
 
