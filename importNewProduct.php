@@ -45,6 +45,17 @@ echo 'SubcategoryName: ' . $subcategoryName . PHP_EOL;
 $mappedAttrSets = $categoryMapToAttributeSet[$subcategoryName];
 echo 'map to attribute set names: ' . $mappedAttrSets . PHP_EOL;
 
+/* check existence */
+$collection = Mage::getModel('catalog/product')->getCollection()->addFieldToFilter('sku', $sku);
+if ($collection->count() < 1) {
+    echo 'whole new product' . PHP_EOL;
+    $model = Mage::getModel('catalog/product');
+} else {
+    $productId = $collection->getFirstItem()->getId();
+    $model = Mage::getModel('catalog/product')->load($productId);
+    echo 'product exists' . PHP_EOL;
+}
+
 $mappedAttrSetsArray = explode(',', $mappedAttrSets);
 if ( count($mappedAttrSetsArray) > 1 ) {
     do {
@@ -64,14 +75,13 @@ echo 'map to attribute set name: ' . $mappedAttrSet . PHP_EOL;
 $attrSetInfo = attributeSetNameAndId('attributeSetName', $mappedAttrSet);
 echo $mappedAttrSet . 'map to attr set id: ' . $attrSetInfo['id'] . PHP_EOL;
 
-$model = Mage::getModel('catalog/product')
-    ->setAttributeSetId($attrSetInfo['id'])
-->setData('type_id', 'simple')
-->setData('Model', $productJson['Model'])
-->setData('status', '1')
-->setData('tax_class_id', '0')
-->setData('enable_rma', '0')
-->setData('visibility', '4');
+    $model->setAttributeSetId($attrSetInfo['id'])
+        ->setData('type_id', 'simple')
+        ->setData('Model', $productJson['Model'])
+        ->setData('status', '1')
+        ->setData('tax_class_id', '0')
+        ->setData('enable_rma', '0')
+        ->setData('visibility', '4');
 
 foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
     $specialBigItems = array('property');
