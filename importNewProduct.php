@@ -64,3 +64,8 @@ echo 'map to attribute set name: ' . $mappedAttrSet . PHP_EOL;
 $attrSetInfo = attributeSetNameAndId('attributeSetName', $mappedAttrSet);
 echo $mappedAttrSet . 'map to attr set id: ' . $attrSetInfo['id'] . PHP_EOL;
 
+$model = Mage::getModel('catalog/product')
+    ->setAttributeSetId($attrSetInfo['id']);
+
+Zend_Debug::dump($model->getData());
+
