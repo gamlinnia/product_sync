@@ -37,6 +37,7 @@ $productJson = json_decode(file_get_contents($dir . $sku), true);
 $mapTable = json_decode(file_get_contents($dir . 'mappingAttrs.json'), true);
 $categoryMapToAttributeSet = json_decode(file_get_contents($dir . 'categoryMapToAttributeSet.json'), true);
 var_dump($mapTable);
+var_dump($categoryMapToAttributeSet);
 
 /*get SubcategoryName in baseinfo*/
 $subcategoryName = $productJson['baseinfo']['SubcategoryName'];
