@@ -29,7 +29,7 @@ if (!file_get_contents($dir . 'mappingAttrs.json')) {
 }
 
 
-$mapTable = json_decode(file_get_contents($dir . 'mappingAttrs.json'));
-var_dump($mapTable);
-$productJson = json_decode(file_get_contents($dir . $sku));
+$productJson = json_decode(file_get_contents($dir . $sku), true);
 var_dump($productJson);
+$mapTable = json_decode(file_get_contents($dir . 'mappingAttrs.json'), true);
+var_dump($mapTable);
