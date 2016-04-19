@@ -30,6 +30,9 @@ if (!file_get_contents($dir . 'mappingAttrs.json')) {
 
 
 $productJson = json_decode(file_get_contents($dir . $sku), true);
-var_dump($productJson);
 $mapTable = json_decode(file_get_contents($dir . 'mappingAttrs.json'), true);
 var_dump($mapTable);
+
+// get SubcategoryName in baseinfo
+$subcategoryName = $productJson['baseinfo']['SubcategoryName'];
+echo 'SubcategoryName: ' . $subcategoryName . PHP_EOL;
