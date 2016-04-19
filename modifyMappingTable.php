@@ -107,7 +107,6 @@ switch (strtolower($target)) {
             }
         }
 
-
         break;
     default :
         $acceptInput = array('general', 'description');
@@ -130,6 +129,8 @@ switch (strtolower($target)) {
             $mapToAttribute = trim(fgets(STDIN));
         } while (empty($mapToAttribute));
         echo $mapToAttribute . PHP_EOL;
+
+        $mapTableArray[$target][$toBeMapped] = $mapToAttribute;
 
 }
 
