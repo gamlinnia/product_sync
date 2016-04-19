@@ -27,12 +27,35 @@ if (!file_get_contents($dir . 'mappingAttrs.json')) {
     echo 'Error getting mapping table file.' . PHP_EOL;
     return;
 }
+if (!file_get_contents($dir . 'categoryMapToAttributeSet.json')) {
+    echo 'Error getting category mapping table file.' . PHP_EOL;
+    return;
+}
 
 
 $productJson = json_decode(file_get_contents($dir . $sku), true);
 $mapTable = json_decode(file_get_contents($dir . 'mappingAttrs.json'), true);
+$categoryMapToAttributeSet = json_decode(file_get_contents($dir . 'categoryMapToAttributeSet.json'), true);
 var_dump($mapTable);
 
-// get SubcategoryName in baseinfo
+/*get SubcategoryName in baseinfo*/
 $subcategoryName = $productJson['baseinfo']['SubcategoryName'];
 echo 'SubcategoryName: ' . $subcategoryName . PHP_EOL;
+$mappedAttrSets = $categoryMapToAttributeSet[$subcategoryName];
+echo 'map to ' . $categoryMapToAttributeSet[$mappedAttrSets];
+
+$mappedAttrSetsArray = explode(',', $mappedAttrSets);
+if ( count($mappedAttrSetsArray) > 1 ) {
+    do {
+        /*透過 標準輸出 印出要詢問的內容*/
+        fwrite(STDOUT, 'Enter attribute set name to import new product: ');
+        /*抓取 標準輸入 的 內容*/
+        $mappedAttrSet = trim(fgets(STDIN));
+    } while (empty($mappedAttrSet));
+    echo $mappedAttrSet . PHP_EOL;
+} else if (count($mappedAttrSetsArray) == 1) {
+    $mappedAttrSet = $mappedAttrSetsArray[0];
+} else {
+    echo 'no attribute set name map to subcategory: ' . $subcategoryName . PHP_EOL;
+    return;
+}
