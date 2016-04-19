@@ -18,7 +18,7 @@ do {
 } while (!in_array(strtolower($action), $acceptInput));
 echo $action . PHP_EOL;
 
-if ($action[0] = 'q') {
+if ($action[0] == 'q') {
     exit(0);
 }
 
