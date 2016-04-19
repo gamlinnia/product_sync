@@ -17,10 +17,10 @@ if (!file_exists($dir)) {
         echo 'Error create directory.' . PHP_EOL;
         return;
     }
-    if (!file_exists($dir . 'mappingAttrs.json')) {
-        echo 'create new mapping table file, content: ' .  json_encode(array()) .PHP_EOL;
-        file_put_contents($dir . 'mappingAttrs.json', json_encode(array()));
-    }
+}
+if (!file_exists($dir . 'mappingAttrs.json')) {
+    echo 'create new mapping table file, content: ' .  json_encode(array()) .PHP_EOL;
+    file_put_contents($dir . 'mappingAttrs.json', json_encode(array()));
 }
 if (!$mappingAttrs = file_get_contents($dir . 'mappingAttrs.json')) {
     echo 'Error getting mapping table file.' . PHP_EOL;
