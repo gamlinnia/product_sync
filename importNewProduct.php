@@ -43,7 +43,7 @@ var_dump($categoryMapToAttributeSet);
 $subcategoryName = $productJson['baseinfo']['SubcategoryName'];
 echo 'SubcategoryName: ' . $subcategoryName . PHP_EOL;
 $mappedAttrSets = $categoryMapToAttributeSet[$subcategoryName];
-echo 'map to ' . $categoryMapToAttributeSet[$mappedAttrSets];
+echo 'map to ' . $mappedAttrSets . PHP_EOL;
 
 $mappedAttrSetsArray = explode(',', $mappedAttrSets);
 if ( count($mappedAttrSetsArray) > 1 ) {
