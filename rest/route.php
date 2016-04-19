@@ -287,7 +287,9 @@ $app->post('/api/postProductJsonToLocal', function () {
         file_put_contents($dir . $input['ItemNumber'], json_encode($input));
     }
 
-    echo "Success !";
+    echo json_encode(array(
+        'message' => 'Success'
+    ));
 
 });
 
