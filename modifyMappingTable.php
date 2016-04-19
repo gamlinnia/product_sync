@@ -51,7 +51,7 @@ do {
 } while (empty($target));
 echo $target . PHP_EOL;
 
-switch (strtolower($target)) {
+switch ($target) {
     case 'property' :
 
         do {
@@ -110,7 +110,7 @@ switch (strtolower($target)) {
         break;
     default :
         $acceptInput = array('general', 'description', 'price', 'intelligence', 'dimension', 'baseinfo', 'ProductInfos', 'inventory');
-        if (!in_array(strtolower($target), $acceptInput)) {
+        if (!in_array($target, $acceptInput)) {
             exit(0);
         }
 
@@ -124,7 +124,7 @@ switch (strtolower($target)) {
 
         do {
             /*透過 標準輸出 印出要詢問的內容*/
-            fwrite(STDOUT, 'Enter product info to be mapped: ');
+            fwrite(STDOUT, 'Enter product info map to: ');
             /*抓取 標準輸入 的 內容*/
             $mapToAttribute = trim(fgets(STDIN));
         } while (empty($mapToAttribute));
