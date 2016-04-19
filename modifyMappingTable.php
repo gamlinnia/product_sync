@@ -52,15 +52,12 @@ do {
 echo $target . PHP_EOL;
 
 switch (strtolower($target)) {
-    case 'general' :
-
-        break;
     case 'property' :
 
         do {
             /*透過 標準輸出 印出要詢問的內容*/
             fwrite(STDOUT, 'Enter PropertyCode: ');
- /*抓取 標準輸入 的 內容*/
+            /*抓取 標準輸入 的 內容*/
             $propertyCode = trim(fgets(STDIN));
         } while (!is_numeric($propertyCode));
         echo $propertyCode . PHP_EOL;
@@ -113,7 +110,27 @@ switch (strtolower($target)) {
 
         break;
     default :
-        exit(0);
+        $acceptInput = array('general', 'description');
+        if (!in_array(strtolower($target), $acceptInput)) {
+            exit(0);
+        }
+
+        do {
+            /*透過 標準輸出 印出要詢問的內容*/
+            fwrite(STDOUT, 'Enter product info to be mapped: ');
+            /*抓取 標準輸入 的 內容*/
+            $toBeMapped = trim(fgets(STDIN));
+        } while (empty($toBeMapped));
+        echo $toBeMapped . PHP_EOL;
+
+        do {
+            /*透過 標準輸出 印出要詢問的內容*/
+            fwrite(STDOUT, 'Enter product info to be mapped: ');
+            /*抓取 標準輸入 的 內容*/
+            $mapToAttribute = trim(fgets(STDIN));
+        } while (empty($mapToAttribute));
+        echo $mapToAttribute . PHP_EOL;
+
 }
 
 file_put_contents($dir . 'mappingAttrs.json', json_encode($mapTableArray));
