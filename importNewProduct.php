@@ -60,7 +60,6 @@ if ($collection->count() < 1) {
 } else {
     $productId = $collection->getFirstItem()->getId();
     $model = Mage::getModel('catalog/product')->load($productId);
-    echo 'attr set id: ' . $model->getAttributeSetid() . PHP_EOL;
     $attrSetInfo = attributeSetNameAndId('attributeSetId', $model->getAttributeSetId());
     echo $mappedAttrSet . 'map to attr set id: ' . $attrSetInfo['id'] . PHP_EOL;
 //    $model = Mage::getModel('catalog/product');
@@ -106,13 +105,22 @@ foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
                     if ($eachProductPropertyObject['PropertyCode'] == $propertyObject['PropertyCode']) {
                         echo 'find property code match' . $propertyObject['PropertyCode'] . ' ' . $propertyObject['PropertyName'] . PHP_EOL;
                         foreach ($attributes as $eachAttrObject) {
-                            echo 'compare ' . $eachAttrObject['code'] . 'to array: ' . json_encode($propertyObject['AttrToMap']) . PHP_EOL;
+                            echo 'compare ' . $eachAttrObject['code'] . ' to array: ' . json_encode($propertyObject['AttrToMap']) . PHP_EOL;
                             if (in_array($eachAttrObject['code'], $propertyObject['AttrToMap'])) {
                                 echo 'find code: ' . $eachAttrObject['code'] . PHP_EOL;
                                 if (isset($eachProductPropertyObject['UserInputted']) && !empty($eachProductPropertyObject['UserInputted'])) {
-                                    $model->setData($eachAttrObject['code'], $eachProductPropertyObject['UserInputted']);
+                                    $value = $eachProductPropertyObject['UserInputted'];
                                 } else {
-                                    $model->setData($eachAttrObject['code'], $eachProductPropertyObject['ValueName']);
+                                    $value = $eachProductPropertyObject['ValueName'];
+                                }
+                                switch ($eachAttrObject['type']) {
+                                    case 'text' :
+                                    case 'textarea' :
+                                        $model->setData($eachAttrObject['code'], $eachProductPropertyObject['UserInputted']);
+                                        break;
+                                    default :
+                                        echo 'type problem, type: ' . $eachAttrObject['type'] . PHP_EOL;
+                                        die();
                                 }
                                 break;
                             }
