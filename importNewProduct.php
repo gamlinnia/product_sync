@@ -60,6 +60,7 @@ if ($collection->count() < 1) {
 } else {
     $productId = $collection->getFirstItem()->getId();
     $model = Mage::getModel('catalog/product')->load($productId);
+    $attrSetInfo = attributeSetNameAndId('attributeSetId', $model->getAttributeSetid());
 //    $model = Mage::getModel('catalog/product');
     $productExists = true;
     echo 'product exists' . PHP_EOL;
