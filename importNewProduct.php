@@ -31,7 +31,10 @@ if (!file_get_contents($dir . 'categoryMapToAttributeSet.json')) {
     echo 'Error getting category mapping table file.' . PHP_EOL;
     return;
 }
-
+if (!file_get_contents($dir . $sku)) {
+    echo 'Error getting product json file.' . PHP_EOL;
+    return;
+}
 
 $productJson = json_decode(file_get_contents($dir . $sku), true);
 $mapTable = json_decode(file_get_contents($dir . 'mappingAttrs.json'), true);
