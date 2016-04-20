@@ -56,8 +56,8 @@ if ($collection->count() < 1) {
     $model = Mage::getModel('catalog/product');
 } else {
     $productId = $collection->getFirstItem()->getId();
-    $model = Mage::getModel('catalog/product')->load($productId);
-//    $model = Mage::getModel('catalog/product');
+//    $model = Mage::getModel('catalog/product')->load($productId);
+    $model = Mage::getModel('catalog/product');
     $productExists = true;
     echo 'product exists' . PHP_EOL;
 }
