@@ -56,8 +56,8 @@ if ($collection->count() < 1) {
     $model = Mage::getModel('catalog/product');
 } else {
     $productId = $collection->getFirstItem()->getId();
-//    $model = Mage::getModel('catalog/product')->load($productId);
-    $model = Mage::getModel('catalog/product');
+    $model = Mage::getModel('catalog/product')->load($productId);
+//    $model = Mage::getModel('catalog/product');
     $productExists = true;
     echo 'product exists' . PHP_EOL;
 }
@@ -104,3 +104,11 @@ foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
 
 Zend_Debug::dump($model->getData());
 
+/*透過 標準輸出 印出要詢問的內容*/
+fwrite(STDOUT, 'Are you sure to save this product information?');
+/*抓取 標準輸入 的 內容*/
+$sureToAction = trim(fgets(STDIN));
+
+if (strtolower($sureToAction) == 'y') {
+    $model->save();
+}
