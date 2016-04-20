@@ -61,6 +61,7 @@ if ($collection->count() < 1) {
     $productId = $collection->getFirstItem()->getId();
     $model = Mage::getModel('catalog/product')->load($productId);
     $attrSetInfo = attributeSetNameAndId('attributeSetId', $model->getAttributeSetid());
+    echo $mappedAttrSet . 'map to attr set id: ' . $attrSetInfo['id'] . PHP_EOL;
 //    $model = Mage::getModel('catalog/product');
     $productExists = true;
     echo 'product exists' . PHP_EOL;
