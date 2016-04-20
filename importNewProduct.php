@@ -153,5 +153,27 @@ if (strtolower($sureToAction) == 'y') {
 
 /* deal with image part */
 $mediaGallery = $model->getMediaGallery();
-$imageCount = count($mediaGallery['images']);
-var_dump($mediaGallery);
+$dbImageCount = count($mediaGallery['images']);
+var_dump($mediaGallery['images']);
+switch ($dbImageCount) {
+    case 1 :
+        preg_match('/cs/', $mediaGallery['images'][0]['file'], $match);
+        if ($match) {
+            if (count($productJson['images']) == 1 && strtolower(substr($productJson['images'][0]['ImageName'], 0, 2)) == 'cs') {
+                echo 'no new images' . PHP_EOL;
+            } else {
+                echo 'This product has new images to upload.' . PHP_EOL;
+                echo 'code not finished yet.' . PHP_EOL;
+            }
+            break;
+        }
+    case 0 :
+        echo 'no image exists, need to upload new images.' . PHP_EOL;
+    default :
+        if ($dbImageCount == count($productJson['images'])) {
+            echo 'no need to upload new images.' . PHP_EOL;
+        } else {
+            echo 'need to compare images to upload.' . PHP_EOL;
+            echo 'code not finished yet.' . PHP_EOL;
+        }
+}
