@@ -54,17 +54,17 @@ $productExists = false;
 if ($collection->count() < 1) {
     echo 'whole new product' . PHP_EOL;
     $model = Mage::getModel('catalog/product');
+
+    echo 'map to attribute set name: ' . $mappedAttrSet . PHP_EOL;
+    $attrSetInfo = attributeSetNameAndId('attributeSetName', $mappedAttrSet);
+    echo $mappedAttrSet . 'map to attr set id: ' . $attrSetInfo['id'] . PHP_EOL;
 } else {
     $productId = $collection->getFirstItem()->getId();
-//    $model = Mage::getModel('catalog/product')->load($productId);
-    $model = Mage::getModel('catalog/product');
+    $model = Mage::getModel('catalog/product')->load($productId);
+//    $model = Mage::getModel('catalog/product');
     $productExists = true;
     echo 'product exists' . PHP_EOL;
 }
-
-echo 'map to attribute set name: ' . $mappedAttrSet . PHP_EOL;
-$attrSetInfo = attributeSetNameAndId('attributeSetName', $mappedAttrSet);
-echo $mappedAttrSet . 'map to attr set id: ' . $attrSetInfo['id'] . PHP_EOL;
 
 if (!$productExists) {
     /* map attribute set */
