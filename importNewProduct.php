@@ -62,26 +62,28 @@ if ($collection->count() < 1) {
     echo 'product exists' . PHP_EOL;
 }
 
-$mappedAttrSetsArray = explode(',', $mappedAttrSets);
-if ( count($mappedAttrSetsArray) > 1 ) {
-    do {
-        /*透過 標準輸出 印出要詢問的內容*/
-        fwrite(STDOUT, 'Enter attribute set name to import new product: ');
-        /*抓取 標準輸入 的 內容*/
-        $mappedAttrSet = trim(fgets(STDIN));
-    } while (empty($mappedAttrSet));
-    echo $mappedAttrSet . PHP_EOL;
-} else if (count($mappedAttrSetsArray) == 1) {
-    $mappedAttrSet = $mappedAttrSetsArray[0];
-} else {
-    echo 'no attribute set name map to subcategory: ' . $subcategoryName . PHP_EOL;
-    return;
-}
 echo 'map to attribute set name: ' . $mappedAttrSet . PHP_EOL;
 $attrSetInfo = attributeSetNameAndId('attributeSetName', $mappedAttrSet);
 echo $mappedAttrSet . 'map to attr set id: ' . $attrSetInfo['id'] . PHP_EOL;
 
 if (!$productExists) {
+    /* map attribute set */
+    $mappedAttrSetsArray = explode(',', $mappedAttrSets);
+    if ( count($mappedAttrSetsArray) > 1 ) {
+        do {
+            /*透過 標準輸出 印出要詢問的內容*/
+            fwrite(STDOUT, 'Enter attribute set name to import new product: ');
+            /*抓取 標準輸入 的 內容*/
+            $mappedAttrSet = trim(fgets(STDIN));
+        } while (empty($mappedAttrSet));
+        echo $mappedAttrSet . PHP_EOL;
+    } else if (count($mappedAttrSetsArray) == 1) {
+        $mappedAttrSet = $mappedAttrSetsArray[0];
+    } else {
+        echo 'no attribute set name map to subcategory: ' . $subcategoryName . PHP_EOL;
+        return;
+    }
+
     $model->setAttributeSetId($attrSetInfo['id'])
         ->setData('type_id', 'simple')
         ->setData('Model', $productJson['Model'])
