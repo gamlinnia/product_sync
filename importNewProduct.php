@@ -40,7 +40,6 @@ $productJson = json_decode(file_get_contents($dir . $sku), true);
 $mapTable = json_decode(file_get_contents($dir . 'mappingAttrs.json'), true);
 $categoryMapToAttributeSet = json_decode(file_get_contents($dir . 'categoryMapToAttributeSet.json'), true);
 var_dump($mapTable);
-var_dump($categoryMapToAttributeSet);
 
 /*get SubcategoryName in baseinfo*/
 $subcategoryName = $productJson['baseinfo']['SubcategoryName'];
@@ -102,13 +101,14 @@ foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
                 foreach ($bigItemObject as $propertyObject) {
                     /* search if $propertyObject['AttrToMap'] exist in $attributes[]['code'] */
                     if ($eachProductPropertyObject['PropertyCode'] == $propertyObject['PropertyCode']) {
-                        echo 'find property code match' . $propertyObject['PropertyCode'] . PHP_EOL;
+                        echo 'find property code match' . $propertyObject['PropertyCode'] . ' ' . $propertyObject['PropertyName'] . PHP_EOL;
                         foreach ($attributes as $eachAttrObject) {
                             if (in_array($eachAttrObject['code'], $propertyObject['AttrToMap'])) {
+                                echo 'find code: ' . $eachAttrObject['code'] . PHP_EOL;
                                 if (isset($eachProductPropertyObject['UserInputted']) && !empty($eachProductPropertyObject['UserInputted'])) {
-                                    $model->setData($propertyObject['AttrToMap'], $eachProductPropertyObject['UserInputted']);
+                                    $model->setData($eachAttrObject['code'], $eachProductPropertyObject['UserInputted']);
                                 } else {
-                                    $model->setData($propertyObject['AttrToMap'], $eachProductPropertyObject['ValueName']);
+                                    $model->setData($eachAttrObject['code'], $eachProductPropertyObject['ValueName']);
                                 }
                                 break;
                             }
