@@ -94,14 +94,38 @@ if (!$productExists) {
 }
 
 foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
-    $specialBigItems = array('property');
-    if (!in_array($bigProductInfoItem, $specialBigItems)) {
-        foreach ($bigItemObject as $toBeMappedKey => $mapToAttr) {
-            if ( !empty($productJson[$bigProductInfoItem][$toBeMappedKey]) ) {
-                $model->setData($mapToAttr, $productJson[$bigProductInfoItem][$toBeMappedKey]);
+    switch ($bigProductInfoItem) {
+        case 'property' :
+            /* get all attributes belong to a attribute set id */
+            $attributes = Mage::getModel('catalog/product_attribute_api')->items($attrSetInfo['id']);
+            foreach ($productJson['property'] as $eachProductPropertyObject) {
+                foreach ($bigItemObject as $propertyObject) {
+                    /* search if $propertyObject['AttrToMap'] exist in $attributes[]['code'] */
+                    if ($eachProductPropertyObject['PropertyCode'] == $propertyObject['PropertyCode']) {
+                        echo 'find property code match' . $propertyObject['PropertyCode'] . PHP_EOL;
+                        foreach ($attributes as $eachAttrObject) {
+                            if (in_array($eachAttrObject['code'], $propertyObject['AttrToMap'])) {
+                                if (isset($eachProductPropertyObject['UserInputted']) && !empty($eachProductPropertyObject['UserInputted'])) {
+                                    $model->setData($propertyObject['AttrToMap'], $eachProductPropertyObject['UserInputted']);
+                                } else {
+                                    $model->setData($propertyObject['AttrToMap'], $eachProductPropertyObject['ValueName']);
+                                }
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
             }
-        }
+            break;
+        default :
+            foreach ($bigItemObject as $toBeMappedKey => $mapToAttr) {
+                if ( !empty($productJson[$bigProductInfoItem][$toBeMappedKey]) ) {
+                    $model->setData($mapToAttr, $productJson[$bigProductInfoItem][$toBeMappedKey]);
+                }
+            }
     }
+    $specialBigItems = array('property');
 }
 
 Zend_Debug::dump($model->getData());
