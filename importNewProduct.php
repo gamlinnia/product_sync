@@ -103,6 +103,7 @@ foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
                     if ($eachProductPropertyObject['PropertyCode'] == $propertyObject['PropertyCode']) {
                         echo 'find property code match' . $propertyObject['PropertyCode'] . ' ' . $propertyObject['PropertyName'] . PHP_EOL;
                         foreach ($attributes as $eachAttrObject) {
+                            echo 'compare ' . $eachAttrObject['code'] . 'to array: ' . json_encode($propertyObject['AttrToMap']) . PHP_EOL;
                             if (in_array($eachAttrObject['code'], $propertyObject['AttrToMap'])) {
                                 echo 'find code: ' . $eachAttrObject['code'] . PHP_EOL;
                                 if (isset($eachProductPropertyObject['UserInputted']) && !empty($eachProductPropertyObject['UserInputted'])) {
