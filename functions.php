@@ -2139,3 +2139,57 @@ function moveAttributeToGroupInAttrbiuteSet($attributeName, $attributeSetName, $
     //re-add attribute to specific group in same attribute set
     $model->addAttributeToSet('catalog_product',$attributeSetId, $groupId, $attributeId);
 }
+
+function existDifferentImages($jsonImageArray, $dbImageArray){
+    /*
+     * input(json format):
+     * $jsonImageArray = [
+     *     {"ImageName":"48-023-268-08.jpg","Priority":1,"IsActive":true,"IsReceive":true,"IsRMA":false},
+     *     {"ImageName":"48-023-268-09.jpg","Priority":2,"IsActive":true,"IsReceive":true,"IsRMA":false},
+     *     {"ImageName":"48-023-268-10.jpg","Priority":3,"IsActive":true,"IsReceive":true,"IsRMA":false},
+     *     {"ImageName":"48-023-268-11.jpg","Priority":4,"IsActive":true,"IsReceive":true,"IsRMA":false},
+     *     {"ImageName":"48-023-268-12.jpg","Priority":5,"IsActive":true,"IsReceive":true,"IsRMA":false},
+     *     {"ImageName":"48-023-268-13.jpg","Priority":6,"IsActive":true,"IsReceive":true,"IsRMA":false},
+     *     {"ImageName":"48-023-268-14.jpg","Priority":7,"IsActive":true,"IsReceive":true,"IsRMA":false}
+     * ]
+     *
+     * $dbImageArray = [
+     *     {"value_id":"8682","file":"/4/8/48-023-268-08.jpg","label":"","position":"1","disabled":"0","label_default":null,"position_default":"1","disabled_default":"0"},
+     *     {"value_id":"8683","file":"/4/8/48-023-268-09.jpg","label":"","position":"2","disabled":"0","label_default":null,"position_default":"2","disabled_default":"0"},
+     *     {"value_id":"8684","file":"/4/8/48-023-268-10.jpg","label":"","position":"3","disabled":"0","label_default":null,"position_default":"3","disabled_default":"0"},
+     *     {"value_id":"8685","file":"/4/8/48-023-268-11.jpg","label":"","position":"4","disabled":"0","label_default":null,"position_default":"4","disabled_default":"0"},
+     *     {"value_id":"8686","file":"/4/8/48-023-268-12.jpg","label":"","position":"5","disabled":"0","label_default":null,"position_default":"5","disabled_default":"0"},
+     *     {"value_id":"8687","file":"/4/8/48-023-268-13.jpg","label":"","position":"6","disabled":"0","label_default":null,"position_default":"6","disabled_default":"0"},
+     *     {"value_id":"8688","file":"/4/8/48-023-268-14.jpg","label":"","position":"7","disabled":"0","label_default":null,"position_default":"7","disabled_default":"0"}]
+     *
+     *  output:
+     * array("48-023-268-15.jpg");
+
+     * */
+    $json_image_file_list = array();
+    $db_image_file_list = array();
+
+    foreach($jsonImageArray as $each){
+        $json_image_file_list[] = trim($each["ImageName"]);
+    }
+
+    foreach($dbImageArray as $each){
+        $file_name = trim($each['file']);
+        preg_match('/([^\/]+).jpg/', $file_name, $match);
+        $db_image_file_list[] = $match[0];
+    }
+
+    $needAdd = array_diff($json_image_file_list, $db_image_file_list);
+    $needRemove = array_diff($db_image_file_list, $json_image_file_list);
+
+    if(!empty($needAdd) || !empty($needRemove)){
+        $result['massage'] = 'true';
+        $result['add'] = $needAdd;
+        $result['remove'] = $needRemove;
+    }
+    else{
+        $result['message'] = 'false';
+    }
+    return $result;
+
+}

@@ -170,10 +170,26 @@ switch ($dbImageCount) {
     case 0 :
         echo 'no image exists, need to upload new images.' . PHP_EOL;
     default :
-        if ($dbImageCount == count($productJson['images'])) {
-            echo 'no need to upload new images.' . PHP_EOL;
-        } else {
-            echo 'need to compare images to upload.' . PHP_EOL;
-            echo 'code not finished yet.' . PHP_EOL;
+        $compareResult = existDifferentImages($productInfo['images'], $mediaGallery['images']);
+        $message = $compareResult['message'];
+        if($message){
+            echo "need add or remove images" . PHP_EOL;
+            $addList = $compareResult['add'];
+            $removeList = $compareResult['remove'];
+            if(!empty($addList)){
+                echo "add new images" . PHP_EOL;
+            }
+            if(!empty($removeList)){
+                echo "remove exist images" . PHP_EOL;
+            }
         }
+        else{
+            echo 'no need to upload new images.' . PHP_EOL;
+        }
+//        if ($dbImageCount == count($productJson['images'])) {
+//            echo 'no need to upload new images.' . PHP_EOL;
+//        } else {
+//            echo 'need to compare images to upload.' . PHP_EOL;
+//            echo 'code not finished yet.' . PHP_EOL;
+//        }
 }
