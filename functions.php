@@ -442,11 +442,11 @@ function getImagesUrlOfProduct ($valueToFilter, $type='entity_id') {
     $product = getProductObject($valueToFilter, $type);
     $mediaType = array(
         'image' => Mage::getModel('catalog/product_media_config')
-            ->getMediaUrl( $product->getImage() ),
+                ->getMediaUrl( $product->getImage() ),
         'small_image' => Mage::getModel('catalog/product_media_config')
-            ->getMediaUrl( $product->getSmallImage() ),
+                ->getMediaUrl( $product->getSmallImage() ),
         'thumbnail' => Mage::getModel('catalog/product_media_config')
-            ->getMediaUrl( $product->getThumbnail() )
+                ->getMediaUrl( $product->getThumbnail() )
     );
 
     $response = array();
@@ -2059,9 +2059,7 @@ function sendMailWithDownloadUrl ($action, $fileList, $recipient_array) {
 function templateReplace ($action) {
     $contentTitle = array(
         'Crawler Report' => 'NE.com and Amazon.com Daily Crawling Report',
-        'Channel Reviews' => 'Channel Reviews Notification',
-        'Bad product review alert - No Bad Product Reviews' => 'No Product Bad Reviews',
-        'Bad product review alert' => 'Bad product review alert'
+        'Channel Reviews' => 'Channel Reviews Notification'
     );
 
     /*use ganon.php to parse html file*/
@@ -2072,12 +2070,7 @@ function templateReplace ($action) {
 
     (isset($contentTitle[$action])) ? $doc('.descriptionTitle p', 0)->setPlainText($contentTitle[$action]) : $doc('.descriptionTitle p', 0)->setPlainText($action);
 
-    if($action == 'Bad product review alert - No Bad Product Reviews'){
-        $description = 'Hi All: No Product bad reviews.';
-    }
-    else{
-        $description = "Hi All: Data as attachments";
-    }
+    $description = "Hi All: Data as attachments";
     $doc('.description p', 0)->parent->setInnerText($description);
     $doc('.logoImage', 0)->setAttribute('src', 'images/rosewilllogo.png');
     return $doc;
