@@ -178,11 +178,9 @@ switch ($dbImageCount) {
             $removeList = $compareResult['remove'];
             if(!empty($addList)){
                 echo "add new images" . PHP_EOL;
-                echo 'code not finished yet.' . PHP_EOL;
             }
             if(!empty($removeList)){
                 echo "remove exist images" . PHP_EOL;
-                echo 'code not finished yet.' . PHP_EOL;
             }
         }
         else{
