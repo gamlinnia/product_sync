@@ -83,13 +83,17 @@ if (!$productExists) {
         return;
     }
 
+    /* detect websites and select all */
+
+
     $model->setAttributeSetId($attrSetInfo['id'])
         ->setData('type_id', 'simple')
         ->setData('model_number', $productJson['Model'])
         ->setData('status', '1')
         ->setData('tax_class_id', '0')
         ->setData('enable_rma', '0')
-        ->setData('visibility', '4');
+        ->setData('visibility', '4')
+    ->setWebsiteIds(getAllWebisteIds());
 }
 
 foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
