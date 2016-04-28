@@ -121,7 +121,6 @@ foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
                                         echo 'type problem, type: ' . $eachAttrObject['type'] . PHP_EOL;
                                         die();
                                 }
-                                break;
                             }
                         }
                         break;
