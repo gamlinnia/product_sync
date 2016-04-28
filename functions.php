@@ -805,8 +805,6 @@ function getDownloadableUrls ($valueToFilter, $filterType='entity_id') {
     $response = array();
     if ($collection->count() > 0) {
         foreach ($collection as $eachAssociated) {
-            Zend_Debug::dump($eachAssociated->getData());
-
             $url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $eachAssociated->getFile();
             $parseUrl = parse_url($url);
             preg_match('/(.+[\/]{1})([^\/]+)/', $eachAssociated->getFile(), $match);
