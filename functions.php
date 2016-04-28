@@ -790,31 +790,36 @@ function getAttributeSetCollection () {
 function getDownloadableUrls ($valueToFilter, $filterType='entity_id') {
     $product = getProductObject($valueToFilter, $filterType);
 
-    $downloadables = array(
-        'user_manual' => 'usermanuals/usermanuals',
-        'Drivers' => 'drivers/drivers',
-        'Firmware' => 'firmware/firmware'
-    );
+    $collection = Mage::getModel('downloadablefile/associatedproduct')
+        ->getCollection();
+
+    $collection->getSelect()
+        ->join(
+            array('file' => 'downloadablefile_file_list'),
+            'main_table.file_list_id = file.id',
+            array('file' => 'file.file', 'type' => 'file.type')
+        );
+
+    $collection->addFieldToFilter('product_id', $product->getId());
 
     $response = array();
-    foreach ($downloadables as $downloadType => $relativeModel) {
-        $objectArray = Mage::getModel($relativeModel)->getCollection()->addFieldToFilter('product_id',$product->getId());
-        if(count($objectArray) > 0) {
-            foreach($objectArray as $object) {
-                $url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $object->getFile();
-                $parseUrl = parse_url($url);
-                preg_match('/(.+[\/]{1})([^\/]+)/', $object->getFile(), $match);
+    if ($collection->count() > 0) {
+        foreach ($collection as $eachAssociated) {
+            Zend_Debug::dump($eachAssociated->getData());
 
-                $response[] = array(
-                    'id' => $object->getId(),
-                    'type' => $downloadType,
-                    'baseUrl' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
-                    'dir' => $match[1],
-                    'basename' => $match[2],
-                    'host' => $parseUrl['host'],
-                    'model' => $relativeModel
-                );
-            }
+            $url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $eachAssociated->getFile();
+            $parseUrl = parse_url($url);
+            preg_match('/(.+[\/]{1})([^\/]+)/', $eachAssociated->getFile(), $match);
+
+            $response[] = array(
+                'id' => $eachAssociated->getId(),
+                'type' => $eachAssociated->getType(),
+                'baseUrl' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
+                'dir' => $match[1],
+                'basename' => $match[2],
+                'host' => $parseUrl['host']
+            );
+
         }
     }
 
