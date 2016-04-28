@@ -93,7 +93,7 @@ try{
 
         $imagesToBeUploadOrDelete = compareImageWithRemoteIncludeDelete($localImages, $imagesInfoArray);
 //        $imagesToBeUpload = compareImageWithRemote($localImages, $imagesInfoArray);
-        echo 'sku: ' . $sku . PHP_EOL;
+        echo 'sku: ' . $sku . 'processing images now' . PHP_EOL;
         var_dump($imagesToBeUploadOrDelete);
 
         $uploadStatus = uploadAndDeleteImagesWithPositionAndLabel($imagesToBeUploadOrDelete, $sku, 'sku', $config);
@@ -106,24 +106,25 @@ try{
     /* deal with downloadable files */
     foreach ($productInfoArray['downloadables'] as $downloadableObject) {
         $sku = $downloadableObject['sku'];
+        echo 'sku: ' . $sku . 'processing downloadable files now' . PHP_EOL;
         $downloadableInfoArray = $downloadableObject['files'];
         $localDownloadables = getDownloadableUrls($sku, 'sku');
         $downloadableToBeUploadOrDelete = compareDownloadableWithRemoteIncludeDelete($localDownloadables, $downloadableInfoArray);
-        if (isset($config['debug']) && $config['debug']) {
-            $count = count($localDownloadables);
-            echo "$count local downloadable files $sku" . PHP_EOL;
-            foreach ($localDownloadables as $each) {
-                echo $each['basename'] . PHP_EOL;
-            }
-            $count = count($downloadableInfoArray);
-            echo "$count remote downloadable files $sku" . PHP_EOL;
-            foreach ($downloadableInfoArray as $each) {
-                echo $each['basename'] . PHP_EOL;
-            }
-            $count = count($downloadableToBeUploadOrDelete['add']) + count($downloadableToBeUploadOrDelete['delete']);
-            echo "$count to be uploaded downloadable files $sku" . PHP_EOL;
-            var_dump($downloadableToBeUploadOrDelete);
+
+        $count = count($localDownloadables);
+        echo "$count local downloadable files $sku" . PHP_EOL;
+        foreach ($localDownloadables as $each) {
+            echo $each['basename'] . PHP_EOL;
         }
+        $count = count($downloadableInfoArray);
+        echo "$count remote downloadable files $sku" . PHP_EOL;
+        foreach ($downloadableInfoArray as $each) {
+            echo $each['basename'] . PHP_EOL;
+        }
+        $count = count($downloadableToBeUploadOrDelete['add']) + count($downloadableToBeUploadOrDelete['delete']);
+        echo "$count to be uploaded downloadable files $sku" . PHP_EOL;
+
+        var_dump($downloadableToBeUploadOrDelete);
         $uploadDownloadableStatus = uploadAndDeleteDownloadFiles($downloadableToBeUploadOrDelete, $sku, 'sku', $config);
         if (!$uploadDownloadableStatus) {
             echo json_encode(array('message' => 'something wrong'));
