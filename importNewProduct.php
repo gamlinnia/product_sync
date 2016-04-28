@@ -85,7 +85,7 @@ if (!$productExists) {
 
     $model->setAttributeSetId($attrSetInfo['id'])
         ->setData('type_id', 'simple')
-        ->setData('Model', $productJson['Model'])
+        ->setData('model_number', $productJson['Model'])
         ->setData('status', '1')
         ->setData('tax_class_id', '0')
         ->setData('enable_rma', '0')
@@ -114,6 +114,7 @@ foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
                                 switch ($eachAttrObject['type']) {
                                     case 'text' :
                                     case 'textarea' :
+                                    case 'weight' :
                                         $model->setData($eachAttrObject['code'], $eachProductPropertyObject['UserInputted']);
                                         break;
                                     default :
@@ -152,6 +153,7 @@ if (strtolower($sureToAction) == 'y') {
 /* deal with image part */
 $mediaGallery = $model->getMediaGallery();
 $dbImageCount = count($mediaGallery['images']);
+echo 'image gallery content' . PHP_EOL;
 var_dump($mediaGallery['images']);
 switch ($dbImageCount) {
     case 1 :
