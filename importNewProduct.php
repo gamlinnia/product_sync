@@ -83,7 +83,6 @@ if (!$productExists) {
         return;
     }
 
-    var_dump($productJson['Model']);
     $model->setAttributeSetId($attrSetInfo['id'])
         ->setData('type_id', 'simple')
         ->setData('model_number', $productJson['Model'])
@@ -116,7 +115,7 @@ foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
                                     case 'text' :
                                     case 'textarea' :
                                     case 'weight' :
-                                        $model->setData($eachAttrObject['code'], $eachProductPropertyObject['UserInputted']);
+                                        $model->setData($eachAttrObject['code'], $value);
                                         break;
                                     default :
                                         echo 'type problem, type: ' . $eachAttrObject['type'] . PHP_EOL;
