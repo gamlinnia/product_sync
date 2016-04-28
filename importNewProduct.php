@@ -53,10 +53,6 @@ $productExists = false;
 if ($collection->count() < 1) {
     echo 'whole new product' . PHP_EOL;
     $model = Mage::getModel('catalog/product');
-
-    echo 'map to attribute set name: ' . $mappedAttrSet . PHP_EOL;
-    $attrSetInfo = attributeSetNameAndId('attributeSetName', $mappedAttrSet);
-    echo $mappedAttrSet . 'map to attr set id: ' . $attrSetInfo['id'] . PHP_EOL;
 } else {
     $productId = $collection->getFirstItem()->getId();
     $model = Mage::getModel('catalog/product')->load($productId);
@@ -77,7 +73,9 @@ if (!$productExists) {
             /*抓取 標準輸入 的 內容*/
             $mappedAttrSet = trim(fgets(STDIN));
         } while (empty($mappedAttrSet));
-        echo $mappedAttrSet . PHP_EOL;
+        echo 'map to attribute set name: ' . $mappedAttrSet . PHP_EOL;
+        $attrSetInfo = attributeSetNameAndId('attributeSetName', $mappedAttrSet);
+        echo $mappedAttrSet . 'map to attr set id: ' . $attrSetInfo['id'] . PHP_EOL;
     } else if (count($mappedAttrSetsArray) == 1) {
         $mappedAttrSet = $mappedAttrSetsArray[0];
     } else {
