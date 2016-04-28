@@ -83,6 +83,7 @@ if (!$productExists) {
         return;
     }
 
+    var_dump($productJson['Model']);
     $model->setAttributeSetId($attrSetInfo['id'])
         ->setData('type_id', 'simple')
         ->setData('model_number', $productJson['Model'])
