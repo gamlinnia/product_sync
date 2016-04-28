@@ -837,9 +837,9 @@ function uploadAndDeleteDownloadFiles ($downloadableObjectList, $valueToFilter, 
     ));
     foreach ($downloadableObjectList['delete'] as $downloadableObject) {
         var_dump($downloadableObject);
-        unlink(Mage::getBaseDir('media') . DS . $downloadableObject['dir'] . $downloadableObject['basename']);
-        echo Mage::getBaseDir('media') . DS . $downloadableObject['dir'] . $downloadableObject['basename'];
-        Mage::getModel($downloadableObject['model'])
+//        unlink(Mage::getBaseDir('media') . DS . $downloadableObject['dir'] . $downloadableObject['basename']);
+        echo Mage::getBaseDir('media') . DS . $downloadableObject['dir'] . $downloadableObject['basename'] . ' will be removed from db.' . PHP_EOL;
+        Mage::getModel('downloadablefile/associatedproduct')
             ->load($downloadableObject['id'])
             ->delete();
 //        echo "$filterType: $valueToFilter deleted $filePath" . PHP_EOL;
@@ -852,17 +852,29 @@ function uploadAndDeleteDownloadFiles ($downloadableObjectList, $valueToFilter, 
         $tmpFile = file_get_contents($url, false, $context);    // get file with base auth
         $filePath = $downloadableObject['dir'] . $downloadableObject['basename'];
         file_put_contents(Mage::getBaseDir('media') . DS . $filePath, $tmpFile);
-        Mage::getModel($downloadableObject['model'])
-            ->setFile($filePath)
+        $file_list_collection = Mage::getModel('downloadablefile/filelist')->getCollection()
+            ->addFieldToFilter('file', $filePath)
+            ->addFieldToFilter('type', $downloadableObject['type']);
+        if ($file_list_collection->count() < 1) {
+            $model = Mage::getModel('downloadablefile/filelist')
+                ->setData('file', $filePath)
+                ->setData('type', $downloadableObject['type'])
+                ->save();
+            $file_list_id = $model->getId();
+        } else {
+            $file_list_id = $file_list_collection->getFirstItem()->getId();
+        }
+
+        Mage::getModel('downloadablefile/associatedproduct')
+            ->setData('file_list_id', $file_list_id)
             ->setProductId($productId)
-            ->setId(null)
             ->save();
         echo "$filterType: $valueToFilter uploaded $filePath" . PHP_EOL;
     }
     return true;
 }
 
-function uploadDownloadFiles ($downloadableObjectList, $valueToFilter, $filterType='entity_id', $config) {
+/*function uploadDownloadFiles ($downloadableObjectList, $valueToFilter, $filterType='entity_id', $config) {
     $product = getProductObject($valueToFilter, $filterType);
     $productId = $product->getId();
 
@@ -889,7 +901,7 @@ function uploadDownloadFiles ($downloadableObjectList, $valueToFilter, $filterTy
         echo "$filterType: $valueToFilter uploaded $filePath" . PHP_EOL;
     }
     return true;
-}
+}*/
 
 function compareDownloadableWithRemoteIncludeDelete ($localDownloadable, $remoteDownloadable) {
     $response = array(
