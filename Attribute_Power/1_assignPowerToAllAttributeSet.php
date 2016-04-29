@@ -41,11 +41,11 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
                 'power_watts' => array('a04320_power_supply_over_power')
             );
 
-            if (isset($excludeArray[$eachNeedToAssign]) && in_array($eachAttr['code'], $excludeArray[$eachNeedToAssign])) {
-                echo 'excluded the following attribute' . $eachAttr['code'] . PHP_EOL;
-            } else {
-                preg_match('/' . $regularEx . '/', $eachAttr['code'], $matchArray);
-                if (count($matchArray) >= 1) {
+            preg_match('/' . $regularEx . '/', $eachAttr['code'], $matchArray);
+            if (count($matchArray) >= 1) {
+                if (isset($excludeArray[$eachNeedToAssign]) && in_array($eachAttr['code'], $excludeArray[$eachNeedToAssign])) {
+                    echo 'excluded the following attribute' . $eachAttr['code'] . PHP_EOL;
+                } else {
                     $count++;
                     echo $attributeSetName. PHP_EOL;
                     echo "    " . $eachAttr['code'] . PHP_EOL;
