@@ -84,24 +84,28 @@ function setAttributeValueToOptions ($product, $nameOrId, $attrCodeOrId, $valueT
     switch ($optionsArray['frontend_input']) {
         case 'select' :
             $options = getAttributeOptions($nameOrId, $attrCodeOrId);
+            $valueToInput = null;
             foreach ($options['options'] as $eachOption) {
                 if ($eachOption['label'] == $valueToBeMapped) {
-                    echo 'mapped label: ' . $valueToBeMapped . ' value: ' . $eachOption['label'];
-                    return $eachOption['label'];
+                    echo 'mapped label: ' . $valueToBeMapped . ' value: ' . $eachOption['value'];
+                    $valueToInput = $eachOption['value'];
                     continue;
                 }
             }
-            echo $valueToBeMapped . ' mapped to nothing';
-            var_dump($options);
-            die();
+            if (!$valueToInput) {
+                echo $valueToBeMapped . ' mapped to nothing';
+                var_dump($options);
+                die();
+            }
             break;
         default :
             echo '******** no mapping TYPE ********' . PHP_EOL;
-            return $optionsArray['frontend_input'];
+            var_dump($optionsArray['frontend_input']);
+            die();
     }
     if (!$debug) {
         if ($nameOrId == 'attributeName') {
-            $product->setData($attrCodeOrId, $eachOption['label'])
+            $product->setData($attrCodeOrId, $valueToInput)
                 ->save();
             echo 'attribute value saved.' . PHP_EOL;
         } else {
