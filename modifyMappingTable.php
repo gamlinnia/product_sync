@@ -9,49 +9,49 @@ require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
 Mage::app('admin');
 
+
+/* save product json to local files in dev environment. */
+$dir = './rest/productJson/';
+if (!file_exists($dir)) {
+    if (!mkdir($dir)) {
+        echo 'Error create directory.' . PHP_EOL;
+        return;
+    }
+}
+if (!file_exists($dir . 'mappingAttrs.json')) {
+    echo 'create new mapping table file, content: ' .  json_encode(array()) .PHP_EOL;
+    file_put_contents($dir . 'mappingAttrs.json', json_encode(array()));
+}
+if (!$mappingAttrs = file_get_contents($dir . 'mappingAttrs.json')) {
+    echo 'Error getting mapping table file.' . PHP_EOL;
+    return;
+}
+
+echo $mappingAttrs . PHP_EOL;
+$mapTableArray = json_decode($mappingAttrs, true);
+
 $continueStrings = array('y', 'yes');
 do {
 
-    /* save product json to local files in dev environment. */
-    $dir = './rest/productJson/';
-    if (!file_exists($dir)) {
-        if (!mkdir($dir)) {
-            echo 'Error create directory.' . PHP_EOL;
-            return;
+    /*
+        do {
+            $acceptInput = array('edit', 'delete', 'quit', 'e', 'd', 'q');
+            fwrite(STDOUT, 'To edit or to delete: ');
+            $action = trim(fgets(STDIN));
+        } while (!in_array(strtolower($action), $acceptInput));
+    
+        if ($action[0] == 'q') {
+            exit(0);
         }
-    }
-    if (!file_exists($dir . 'mappingAttrs.json')) {
-        echo 'create new mapping table file, content: ' .  json_encode(array()) .PHP_EOL;
-        file_put_contents($dir . 'mappingAttrs.json', json_encode(array()));
-    }
-    if (!$mappingAttrs = file_get_contents($dir . 'mappingAttrs.json')) {
-        echo 'Error getting mapping table file.' . PHP_EOL;
-        return;
-    }
+    */
 
-    echo $mappingAttrs . PHP_EOL;
-    $mapTableArray = json_decode($mappingAttrs, true);
-
+    $targetArray = array('general' , 'property' , 'price' , 'intelligence' , 'description' , 'baseinfo' , 'dimension' , 'ProductInfos' , 'inventory');
     do {
-        $acceptInput = array('edit', 'delete', 'quit', 'e', 'd', 'q');
-// 透過 標準輸出 印出要詢問的內容
-        fwrite(STDOUT, 'To edit or to delete: ');
-// 抓取 標準輸入 的 內容
-        $action = trim(fgets(STDIN));
-    } while (!in_array(strtolower($action), $acceptInput));
-    echo $action . PHP_EOL;
-
-    if ($action[0] == 'q') {
-        exit(0);
-    }
-
-    do {
-// 透過 標準輸出 印出要詢問的內容
-        fwrite(STDOUT, 'Enter target to modify [ general | property | price | intelligence | description | baseinfo | dimension | ProductInfos | inventory ]: ');
-// 抓取 標準輸入 的 內容
+        /* 透過 標準輸出 印出要詢問的內容 */
+        fwrite(STDOUT, 'Enter target to modify [ ' . explode(' ', $targetArray) . ' ]: ');
+        /* 抓取 標準輸入 的 內容 */
         $target = trim(fgets(STDIN));
-    } while (empty($target));
-    echo $target . PHP_EOL;
+    } while (empty($target) || !in_array(trim($target), $targetArray));
 
     switch ($target) {
         case 'property' :
