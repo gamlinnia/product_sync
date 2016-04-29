@@ -93,7 +93,7 @@ if (!$productExists) {
         ->setData('tax_class_id', '0')
         ->setData('enable_rma', '0')
         ->setData('visibility', '4')
-    ->setWebsiteIds(getAllWebisteIds());
+        ->setWebsiteIds(getAllWebisteIds());
 }
 
 foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {

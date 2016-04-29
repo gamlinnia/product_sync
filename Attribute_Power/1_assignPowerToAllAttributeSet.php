@@ -24,7 +24,6 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
     //new attribute data and id
     $attributeDataArray = $model->getAttribute('catalog_product', $eachNeedToAssign);
     Zend_Debug::dump($attributeDataArray);
-    die();
     $attributeId = $attributeDataArray['attribute_id'];
 
     // attribute set collection
@@ -36,7 +35,6 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
         //get all attributes for this attribute set
         $attributes = Mage::getModel('catalog/product_attribute_api')->items($each->getId());
         foreach ($attributes as $eachAttr) {
-//            echo "    " . $eachAttr['code'] . PHP_EOL;
             preg_match('/' . $regularEx . '/', $eachAttr['code'], $matchArray);
             if (count($matchArray) >= 1) {
                 $count++;
