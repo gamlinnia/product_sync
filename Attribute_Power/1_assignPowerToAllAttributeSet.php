@@ -37,7 +37,7 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
         foreach ($attributes as $eachAttr) {
             /* exclude lists */
             $excludeArray = array(
-                'power_watts' => array('a04320_power_supply_over_power', 'b68320_power_supply_over_power'),
+                'power_watts' => array('pspec_power', 'a04320_power_supply_over_power', 'b68320_power_supply_over_power'),
                 'power_voltage' => array('a01360_case_with_power_supply', 'c29190_dvr_power_supply', 'b01360_case_with_power_supply')
             );
 
