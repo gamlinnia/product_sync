@@ -48,7 +48,7 @@ do {
     $targetArray = array('general' , 'property' , 'price' , 'intelligence' , 'description' , 'baseinfo' , 'dimension' , 'ProductInfos' , 'inventory');
     do {
         /* 透過 標準輸出 印出要詢問的內容 */
-        fwrite(STDOUT, 'Enter target to modify [ ' . explode(' ', $targetArray) . ' ]: ');
+        fwrite(STDOUT, 'Enter target to modify [ ' . implode(' ', $targetArray) . ' ]: ');
         /* 抓取 標準輸入 的 內容 */
         $target = trim(fgets(STDIN));
     } while (empty($target) || !in_array(trim($target), $targetArray));
