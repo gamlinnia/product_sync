@@ -17,7 +17,8 @@ $attributesNeedToAssign = array(
     '_power$' => 'power_watts',
     'power_consumption$' => 'power_watts',
     '_power_supply$' => 'power_voltage',
-    '_over_volta' => 'psu_ovp'
+    '_over_volta' => 'psu_ovp',
+    '_over_power' => 'psu_ovp'
 );
 
 $count = 0;
@@ -41,6 +42,10 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
                 'power_watts' => array('a04320_power_supply_over_power')
             );
 
+            if ($eachAttr['type'] != 'select') {
+                continue;
+            }
+
             preg_match('/' . $regularEx . '/', $eachAttr['code'], $matchArray);
             if (count($matchArray) >= 1) {
                 if (isset($excludeArray[$eachNeedToAssign]) && in_array($eachAttr['code'], $excludeArray[$eachNeedToAssign])) {
@@ -48,7 +53,7 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
                 } else {
                     $count++;
                     echo $attributeSetName. PHP_EOL;
-                    echo "    " . $eachAttr['code'] . PHP_EOL;
+                    echo "    " . $eachAttr['code'] . 'type: ' . $eachAttr['type'] . PHP_EOL;
                     $attributeGroupDataArray = $model->getAttributeGroup('catalog_product', $attributeSetId, $attributeSetName);
                     if(!$debug){
                         $model->addAttributeToSet('catalog_product', $attributeSetId, $attributeGroupDataArray["attribute_group_id"], $attributeId);
