@@ -75,7 +75,7 @@ function getAttributeOptions ($nameOrId, $value) {
     return null;
 }
 
-function setAttributeValueToOptions ($product, $nameOrId, $attrCodeOrId, $valueToBeMapped) {
+function setAttributeValueToOptions ($product, $nameOrId, $attrCodeOrId, $valueToBeMapped, $debug) {
     /*$nameOrId = 'attributeName' or 'attributeId'*/
     $optionsArray = getAttributeOptions($nameOrId, $attrCodeOrId);
     if (!isset($optionsArray['frontend_input'])) {
@@ -98,6 +98,15 @@ function setAttributeValueToOptions ($product, $nameOrId, $attrCodeOrId, $valueT
         default :
             echo '******** no mapping TYPE ********' . PHP_EOL;
             return $optionsArray['frontend_input'];
+    }
+    if (!$debug) {
+        if ($nameOrId == 'attributeName') {
+            $product->setData($attrCodeOrId, $eachOption['label'])
+                ->save();
+            echo 'attribute value saved.' . PHP_EOL;
+        } else {
+            echo 'code no finished yet.' . PHP_EOL;
+        }
     }
     return null;
 }

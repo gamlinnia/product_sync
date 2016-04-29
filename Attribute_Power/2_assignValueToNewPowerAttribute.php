@@ -18,10 +18,9 @@ $proceedArray = array(
 $count = 0;
 foreach ($proceedArray as $newAttrCode => $matchedAttributeCode) {
     $productCollection = Mage::getModel('catalog/product')->getCollection()->setOrder('entity_id', 'desc');
-    foreach($productCollection as $each) {
-        $product = Mage::getModel('catalog/product')->load($each->getId());
-        $productId = $product->getId();
-        echo "Prodcut ID: " . $productId . PHP_EOL;
+    foreach($productCollection as $eachProduct) {
+        $product = Mage::getModel('catalog/product')->load($eachProduct->getId());
+        echo "Prodcut ID: " . $product->getId() . PHP_EOL;
         $existPowerAttribute = $product->getData($newAttrCode);
         if(!empty($existFeaturesAttribute)) {
             continue;
@@ -44,16 +43,7 @@ foreach ($proceedArray as $newAttrCode => $matchedAttributeCode) {
 
         if ($origAttributeValue) {
             echo "    " . $origAttributeCode . PHP_EOL;
-            setAttributeValueToOptions($product, 'attributeName', $newAttrCode, $origAttributeValueFromOption);
-            if(!$debug) {
-                try {
-                    $product->setData($newAttrCode, $origAttributeValue);
-                    $product->setUrlKey(false);
-                    $product->save();
-                } catch (exception $e) {
-                    echo $e->getMessage() . PHP_EOL;
-                }
-            }
+            setAttributeValueToOptions($eachProduct, 'attributeName', $newAttrCode, $origAttributeValueFromOption, $debug);
         }
 
     }
