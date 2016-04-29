@@ -42,7 +42,7 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
             );
 
             if (isset($excludeArray[$eachNeedToAssign]) && in_array($eachAttr['code'], $excludeArray[$eachNeedToAssign])) {
-                echo 'excluded the following attribute' . PHP_EOL;
+                echo 'excluded the following attribute' . $eachAttr['code'] . PHP_EOL;
             } else {
                 preg_match('/' . $regularEx . '/', $eachAttr['code'], $matchArray);
                 if (count($matchArray) >= 1) {
