@@ -75,6 +75,46 @@ function getAttributeOptions ($nameOrId, $value) {
     return null;
 }
 
+function setAttributeValueToOptions ($product, $nameOrId, $attrCodeOrId, $valueToBeMapped, $debug) {
+    /*$nameOrId = 'attributeName' or 'attributeId'*/
+    $optionsArray = getAttributeOptions($nameOrId, $attrCodeOrId);
+    if (!isset($optionsArray['frontend_input'])) {
+        return $valueToBeMapped;
+    }
+    switch ($optionsArray['frontend_input']) {
+        case 'select' :
+            $options = getAttributeOptions($nameOrId, $attrCodeOrId);
+            $valueToInput = null;
+            foreach ($options['options'] as $eachOption) {
+                if ($eachOption['label'] == $valueToBeMapped) {
+                    echo 'mapped label: ' . $valueToBeMapped . ' value: ' . $eachOption['value'];
+                    $valueToInput = $eachOption['value'];
+                    continue;
+                }
+            }
+            if (!$valueToInput) {
+                echo $valueToBeMapped . ' mapped to nothing';
+                var_dump($options);
+                die();
+            }
+            break;
+        default :
+            echo '******** no mapping TYPE ********' . PHP_EOL;
+            var_dump($optionsArray['frontend_input']);
+            die();
+    }
+    if (!$debug) {
+        if ($nameOrId == 'attributeName') {
+            $product->setData($attrCodeOrId, $valueToInput)
+                ->save();
+            echo 'attribute value saved.' . PHP_EOL;
+        } else {
+            echo 'code no finished yet.' . PHP_EOL;
+        }
+    }
+    return null;
+}
+
 function getAttributeValueFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMapped) {
 
     /*$nameOrId = 'attributeName' or 'attributeId'*/

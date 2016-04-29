@@ -16,9 +16,7 @@ if (in_array('debug', $argv)) {
 $attributesNeedToAssign = array(
     '_power$' => 'power_watts',
     'power_consumption$' => 'power_watts',
-    '_power_supply$' => 'power_voltage',
-    '_over_volta' => 'psu_ovp',
-    '_over_power' => 'psu_ovp'
+    '_power_supply$' => 'power_voltage'
 );
 
 $count = 0;
@@ -39,7 +37,8 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
         foreach ($attributes as $eachAttr) {
             /* exclude lists */
             $excludeArray = array(
-                'power_watts' => array('a04320_power_supply_over_power')
+                'power_watts' => array('pspec_power', 'a04320_power_supply_over_power', 'b68320_power_supply_over_power'),
+                'power_voltage' => array('a01360_case_with_power_supply', 'c29190_dvr_power_supply', 'b01360_case_with_power_supply')
             );
 
             if ($eachAttr['type'] != 'select') {
@@ -53,7 +52,7 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
                 } else {
                     $count++;
                     echo $attributeSetName. PHP_EOL;
-                    echo "    " . $eachAttr['code'] . 'type: ' . $eachAttr['type'] . PHP_EOL;
+                    echo "    " . $eachAttr['code'] . ' type: ' . $eachAttr['type'] . PHP_EOL;
                     $attributeGroupDataArray = $model->getAttributeGroup('catalog_product', $attributeSetId, $attributeSetName);
                     if(!$debug){
                         $model->addAttributeToSet('catalog_product', $attributeSetId, $attributeGroupDataArray["attribute_group_id"], $attributeId);
