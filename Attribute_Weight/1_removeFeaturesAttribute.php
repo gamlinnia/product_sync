@@ -13,7 +13,7 @@ if (in_array('debug', $argv)) {
     $debug = true;
 }
 
-$attributesNeedToRemove = array('[^\d][\d]{4}.+_weight');
+$attributesNeedToRemove = array('[^\d][\d]{4}.+_weight$');
 
 $attributeCollection = Mage::getResourceModel('eav/entity_attribute_collection');
 
