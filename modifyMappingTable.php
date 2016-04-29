@@ -9,13 +9,14 @@ require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
 Mage::app('admin');
 
+$continueStrings = array('y', 'yes');
 do {
     /*透過 標準輸出 印出要詢問的內容*/
     fwrite(STDOUT, 'To continue next mapping?: ');
     /*抓取 標準輸入 的 內容*/
     $continue = trim(fgets(STDIN));
 
-} while (strtolower($continue) != 'y');
+} while (in_array(strtolower($continue), $continueStrings));
 
 /* save product json to local files in dev environment. */
 $dir = './rest/productJson/';
