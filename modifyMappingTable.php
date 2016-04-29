@@ -31,6 +31,7 @@ echo $mappingAttrs . PHP_EOL;
 $mapTableArray = json_decode($mappingAttrs, true);
 
 $continueStrings = array('y', 'yes');
+$exitStrings = array('q', 'quit');
 do {
 
     /*
@@ -51,6 +52,9 @@ do {
         fwrite(STDOUT, 'Enter target to modify [ ' . implode(' | ', $targetArray) . ' ]: ');
         /* 抓取 標準輸入 的 內容 */
         $target = trim(fgets(STDIN));
+        if (in_array(strtolower($target), $exitStrings)) {
+            exit(0);
+        }
     } while (empty($target) || !in_array(trim($target), $targetArray));
 
     switch ($target) {
@@ -60,6 +64,9 @@ do {
                 fwrite(STDOUT, 'Enter PropertyCode: ');
                 /*抓取 標準輸入 的 內容*/
                 $propertyCode = trim(fgets(STDIN));
+                if (in_array(strtolower($propertyCode), $exitStrings)) {
+                    exit(0);
+                }
             } while (!is_numeric($propertyCode));
             echo $propertyCode . PHP_EOL;
 
@@ -76,6 +83,11 @@ do {
             if ($exist) {
                 fwrite(STDOUT, 'Press Enter to keep the same PropertyName: ' . $expectPropertyName);
                 $tempInput = trim(fgets(STDIN));
+
+                if (in_array(strtolower($tempInput), $exitStrings)) {
+                    exit(0);
+                }
+
                 if (empty($tempInput)) {
                     $propertyName = $expectPropertyName;
                 } else {
@@ -86,6 +98,10 @@ do {
                 do {
                     fwrite(STDOUT, 'Enter PropertyName: ');
                     $propertyName = trim(fgets(STDIN));
+
+                    if (in_array(strtolower($propertyName), $exitStrings)) {
+                        exit(0);
+                    }
                 } while (empty($propertyCode));
             }
             echo $propertyName . PHP_EOL;
