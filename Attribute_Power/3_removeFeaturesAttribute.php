@@ -13,33 +13,12 @@ if (in_array('debug', $argv)) {
     $debug = true;
 }
 
-$attributesNeedToRemove =  array('_feature[s]?$' => 'features');
+$proceedArray = array('c09140_fryers_power', 'c27150_rice_cookers_power', 'c30150_thermo_pot_power', 'c31230_toaster_oven_power', 'c03290_led_power_consumption','c11090_power_supply', 'c13100_power_supply');
 
-$attributeCollection = Mage::getResourceModel('eav/entity_attribute_collection');
-
-$prepareToRemove = array();
-foreach($attributeCollection as $eachAttr) {
-    foreach($attributesNeedToRemove as $regularEx => $eachAttrNeedToRemove) {
-        $attributeCode  = $eachAttr->getAttributeCode();
-        $attributeId = $eachAttr->getId();
-        preg_match('/' . $regularEx .'/', $attributeCode, $matchArray);
-        if (count($matchArray) >= 1) {
-            $prepareToRemove[] = array(
-                'attribute_code' => $attributeCode,
-                'attribute_id' => $attributeId
-            );
-            echo "=============================================================================" . PHP_EOL;
-            echo "    Attrbiute name: " . $attributeCode . PHP_EOL;
-            echo "    Attrbiute ID: " . $attributeId . PHP_EOL;
+foreach ($proceedArray as $eachDelete) {
             if(!$debug) {
                 //delete attribute from database
                 $setup = Mage::getResourceModel('catalog/setup', 'catalog_setup');
-                $setup->removeAttribute('catalog_product', $attributeCode);
+                $setup->removeAttribute('catalog_product', $eachDelete);
             }
-        }
-    }
-
 }
-
-var_dump($prepareToRemove);
-//file_put_contents('remove_warranty_attribute.txt', json_encode($prepareToRemove));
