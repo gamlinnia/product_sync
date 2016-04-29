@@ -38,17 +38,21 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
         foreach ($attributes as $eachAttr) {
             /* exclude lists */
             $excludeArray = array(
-                'power_watts' => array('')
+                'power_watts' => array('a04320_power_supply_over_power')
             );
 
-            preg_match('/' . $regularEx . '/', $eachAttr['code'], $matchArray);
-            if (count($matchArray) >= 1) {
-                $count++;
-                echo $attributeSetName. PHP_EOL;
-                echo "    " . $eachAttr['code'] . PHP_EOL;
-                $attributeGroupDataArray = $model->getAttributeGroup('catalog_product', $attributeSetId, $attributeSetName);
-                if(!$debug){
-                    $model->addAttributeToSet('catalog_product', $attributeSetId, $attributeGroupDataArray["attribute_group_id"], $attributeId);
+            if (isset($excludeArray[$eachNeedToAssign]) && in_array($eachAttr['code'], $excludeArray[$eachNeedToAssign])) {
+                echo 'excluded the following attribute' . PHP_EOL;
+            } else {
+                preg_match('/' . $regularEx . '/', $eachAttr['code'], $matchArray);
+                if (count($matchArray) >= 1) {
+                    $count++;
+                    echo $attributeSetName. PHP_EOL;
+                    echo "    " . $eachAttr['code'] . PHP_EOL;
+                    $attributeGroupDataArray = $model->getAttributeGroup('catalog_product', $attributeSetId, $attributeSetName);
+                    if(!$debug){
+                        $model->addAttributeToSet('catalog_product', $attributeSetId, $attributeGroupDataArray["attribute_group_id"], $attributeId);
+                    }
                 }
             }
         }
