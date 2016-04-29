@@ -11,135 +11,135 @@ Mage::app('admin');
 
 $continueStrings = array('y', 'yes');
 do {
-    /*透過 標準輸出 印出要詢問的內容*/
-    fwrite(STDOUT, 'To continue next mapping?: ');
-    /*抓取 標準輸入 的 內容*/
-    $continue = trim(fgets(STDIN));
 
-} while (in_array(strtolower($continue), $continueStrings));
-
-/* save product json to local files in dev environment. */
-$dir = './rest/productJson/';
-if (!file_exists($dir)) {
-    if (!mkdir($dir)) {
-        echo 'Error create directory.' . PHP_EOL;
+    /* save product json to local files in dev environment. */
+    $dir = './rest/productJson/';
+    if (!file_exists($dir)) {
+        if (!mkdir($dir)) {
+            echo 'Error create directory.' . PHP_EOL;
+            return;
+        }
+    }
+    if (!file_exists($dir . 'mappingAttrs.json')) {
+        echo 'create new mapping table file, content: ' .  json_encode(array()) .PHP_EOL;
+        file_put_contents($dir . 'mappingAttrs.json', json_encode(array()));
+    }
+    if (!$mappingAttrs = file_get_contents($dir . 'mappingAttrs.json')) {
+        echo 'Error getting mapping table file.' . PHP_EOL;
         return;
     }
-}
-if (!file_exists($dir . 'mappingAttrs.json')) {
-    echo 'create new mapping table file, content: ' .  json_encode(array()) .PHP_EOL;
-    file_put_contents($dir . 'mappingAttrs.json', json_encode(array()));
-}
-if (!$mappingAttrs = file_get_contents($dir . 'mappingAttrs.json')) {
-    echo 'Error getting mapping table file.' . PHP_EOL;
-    return;
-}
 
-echo $mappingAttrs . PHP_EOL;
-$mapTableArray = json_decode($mappingAttrs, true);
+    echo $mappingAttrs . PHP_EOL;
+    $mapTableArray = json_decode($mappingAttrs, true);
 
-do {
-    $acceptInput = array('edit', 'delete', 'quit', 'e', 'd', 'q');
+    do {
+        $acceptInput = array('edit', 'delete', 'quit', 'e', 'd', 'q');
 // 透過 標準輸出 印出要詢問的內容
-    fwrite(STDOUT, 'To edit or to delete: ');
+        fwrite(STDOUT, 'To edit or to delete: ');
 // 抓取 標準輸入 的 內容
-    $action = trim(fgets(STDIN));
-} while (!in_array(strtolower($action), $acceptInput));
-echo $action . PHP_EOL;
+        $action = trim(fgets(STDIN));
+    } while (!in_array(strtolower($action), $acceptInput));
+    echo $action . PHP_EOL;
 
-if ($action[0] == 'q') {
-    exit(0);
-}
+    if ($action[0] == 'q') {
+        exit(0);
+    }
 
-do {
+    do {
 // 透過 標準輸出 印出要詢問的內容
-    fwrite(STDOUT, 'Enter target to modify [ general | property | price | intelligence | description | baseinfo | dimension | ProductInfos | inventory ]: ');
+        fwrite(STDOUT, 'Enter target to modify [ general | property | price | intelligence | description | baseinfo | dimension | ProductInfos | inventory ]: ');
 // 抓取 標準輸入 的 內容
-    $target = trim(fgets(STDIN));
-} while (empty($target));
-echo $target . PHP_EOL;
+        $target = trim(fgets(STDIN));
+    } while (empty($target));
+    echo $target . PHP_EOL;
 
-switch ($target) {
-    case 'property' :
+    switch ($target) {
+        case 'property' :
 
-        do {
-            /*透過 標準輸出 印出要詢問的內容*/
-            fwrite(STDOUT, 'Enter PropertyCode: ');
-            /*抓取 標準輸入 的 內容*/
-            $propertyCode = trim(fgets(STDIN));
-        } while (!is_numeric($propertyCode));
-        echo $propertyCode . PHP_EOL;
+            do {
+                /*透過 標準輸出 印出要詢問的內容*/
+                fwrite(STDOUT, 'Enter PropertyCode: ');
+                /*抓取 標準輸入 的 內容*/
+                $propertyCode = trim(fgets(STDIN));
+            } while (!is_numeric($propertyCode));
+            echo $propertyCode . PHP_EOL;
 
-        do {
+            do {
 // 透過 標準輸出 印出要詢問的內容
-            fwrite(STDOUT, 'Enter PropertyName: ');
+                fwrite(STDOUT, 'Enter PropertyName: ');
 // 抓取 標準輸入 的 內容
-            $propertyName = trim(fgets(STDIN));
-        } while (empty($propertyCode));
-        echo $propertyName . PHP_EOL;
+                $propertyName = trim(fgets(STDIN));
+            } while (empty($propertyCode));
+            echo $propertyName . PHP_EOL;
 
-        do {
+            do {
 // 透過 標準輸出 印出要詢問的內容
-            fwrite(STDOUT, 'Enter mapping attribute: ');
+                fwrite(STDOUT, 'Enter mapping attribute: ');
 // 抓取 標準輸入 的 內容
-            $attrToMap = trim(fgets(STDIN));
-        } while (empty($propertyCode));
-        echo $attrToMap . PHP_EOL;
+                $attrToMap = trim(fgets(STDIN));
+            } while (empty($propertyCode));
+            echo $attrToMap . PHP_EOL;
 
-        if (!isset($mapTableArray['property'])) {
-            $mapTableArray['property'][] = array(
-                'PropertyCode' => $propertyCode,
-                'PropertyName' => $propertyName,
-                'AttrToMap' => array($attrToMap)
-            ) ;
-        } else {
-            $exist = false;
-            foreach ($mapTableArray['property'] as $index => $property) {
-                if ($property['PropertyCode'] == $propertyCode) {
-                    if ($property['PropertyName'] != $propertyName) {
-                        echo 'different code and name' . PHP_EOL;
-                        die();
-                    }
-                    if (!in_array($attrToMap, $property['AttrToMap'])) {
-                        $mapTableArray['property'][$index]['AttrToMap'][] = $attrToMap;
-                    }
-                    $exist = true;
-                }
-            }
-            if (!$exist) {
+            if (!isset($mapTableArray['property'])) {
                 $mapTableArray['property'][] = array(
                     'PropertyCode' => $propertyCode,
                     'PropertyName' => $propertyName,
                     'AttrToMap' => array($attrToMap)
                 ) ;
+            } else {
+                $exist = false;
+                foreach ($mapTableArray['property'] as $index => $property) {
+                    if ($property['PropertyCode'] == $propertyCode) {
+                        if ($property['PropertyName'] != $propertyName) {
+                            echo 'different code and name' . PHP_EOL;
+                            die();
+                        }
+                        if (!in_array($attrToMap, $property['AttrToMap'])) {
+                            $mapTableArray['property'][$index]['AttrToMap'][] = $attrToMap;
+                        }
+                        $exist = true;
+                    }
+                }
+                if (!$exist) {
+                    $mapTableArray['property'][] = array(
+                        'PropertyCode' => $propertyCode,
+                        'PropertyName' => $propertyName,
+                        'AttrToMap' => array($attrToMap)
+                    ) ;
+                }
             }
-        }
 
-        break;
-    default :
-        $acceptInput = array('general', 'description', 'price', 'intelligence', 'dimension', 'baseinfo', 'ProductInfos', 'inventory');
-        if (!in_array($target, $acceptInput)) {
-            exit(0);
-        }
+            break;
+        default :
+            $acceptInput = array('general', 'description', 'price', 'intelligence', 'dimension', 'baseinfo', 'ProductInfos', 'inventory');
+            if (!in_array($target, $acceptInput)) {
+                exit(0);
+            }
 
-        do {
-            /*透過 標準輸出 印出要詢問的內容*/
-            fwrite(STDOUT, 'Enter product info to be mapped: ');
-            /*抓取 標準輸入 的 內容*/
-            $toBeMapped = trim(fgets(STDIN));
-        } while (empty($toBeMapped));
-        echo $toBeMapped . PHP_EOL;
+            do {
+                /*透過 標準輸出 印出要詢問的內容*/
+                fwrite(STDOUT, 'Enter product info to be mapped: ');
+                /*抓取 標準輸入 的 內容*/
+                $toBeMapped = trim(fgets(STDIN));
+            } while (empty($toBeMapped));
+            echo $toBeMapped . PHP_EOL;
 
-        do {
-            /*透過 標準輸出 印出要詢問的內容*/
-            fwrite(STDOUT, 'Enter product info map to: ');
-            /*抓取 標準輸入 的 內容*/
-            $mapToAttribute = trim(fgets(STDIN));
-        } while (empty($mapToAttribute));
-        echo $mapToAttribute . PHP_EOL;
+            do {
+                /*透過 標準輸出 印出要詢問的內容*/
+                fwrite(STDOUT, 'Enter product info map to: ');
+                /*抓取 標準輸入 的 內容*/
+                $mapToAttribute = trim(fgets(STDIN));
+            } while (empty($mapToAttribute));
+            echo $mapToAttribute . PHP_EOL;
 
-        $mapTableArray[$target][$toBeMapped] = $mapToAttribute;
+            $mapTableArray[$target][$toBeMapped] = $mapToAttribute;
 
-}
+    }
 
-file_put_contents($dir . 'mappingAttrs.json', json_encode($mapTableArray));
+    file_put_contents($dir . 'mappingAttrs.json', json_encode($mapTableArray));
+
+    /*透過 標準輸出 印出要詢問的內容*/
+    fwrite(STDOUT, 'To continue next mapping?: ');
+    /*抓取 標準輸入 的 內容*/
+    $continue = trim(fgets(STDIN));
+} while (in_array(strtolower($continue), $continueStrings));
