@@ -67,7 +67,7 @@ do {
             $expectPropertyName = null;
             foreach ($mapTableArray[$target] as $eachProperty) {
                 if ($eachProperty['PropertyCode'] == $propertyCode) {
-                    $expectPropertyName = $eachProperty['PropertyCode'];
+                    $expectPropertyName = $eachProperty['PropertyName'];
                     $exist = true;
                     break;
                 }
