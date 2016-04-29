@@ -75,6 +75,25 @@ function getAttributeOptions ($nameOrId, $value) {
     return null;
 }
 
+function setAttributeValueToOptions ($product, $nameOrId, $attrCodeOrId, $valueToBeMapped) {
+    /*$nameOrId = 'attributeName' or 'attributeId'*/
+    $optionsArray = getAttributeOptions($nameOrId, $attrCodeOrId);
+    if (!isset($optionsArray['frontend_input'])) {
+        return $valueToBeMapped;
+    }
+    switch ($optionsArray['frontend_input']) {
+        case 'select' :
+            $options = getAttributeOptions($nameOrId, $attrCodeOrId);
+            var_dump($options);
+            die();
+            break;
+        default :
+            echo '******** no mapping TYPE ********' . PHP_EOL;
+            return $optionsArray['frontend_input'];
+    }
+    return null;
+}
+
 function getAttributeValueFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMapped) {
 
     /*$nameOrId = 'attributeName' or 'attributeId'*/

@@ -37,11 +37,14 @@ foreach ($proceedArray as $newAttrCode => $matchedAttributeCode) {
                 $count++;
                 $origAttributeCode = $eachAttr['code'];
                 $origAttributeValue = $product->getData($origAttributeCode);
+                $origAttributeValueFromOption = getAttributeValueFromOptions('attributeName', $origAttributeCode, $product->getData($origAttributeCode));
+                echo $origAttributeValueFromOption . PHP_EOL;
             }
         }
 
         if ($origAttributeValue) {
             echo "    " . $origAttributeCode . PHP_EOL;
+            setAttributeValueToOptions($product, 'attributeName', $newAttrCode, $origAttributeValueFromOption);
             if(!$debug) {
                 try {
                     $product->setData($newAttrCode, $origAttributeValue);
