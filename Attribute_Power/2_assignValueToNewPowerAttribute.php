@@ -37,7 +37,9 @@ foreach ($proceedArray as $newAttrCode => $matchedAttributeCode) {
                 $origAttributeCode = $eachAttr['code'];
                 $origAttributeValue = $product->getData($origAttributeCode);
                 $origAttributeValueFromOption = getAttributeValueFromOptions('attributeName', $origAttributeCode, $product->getData($origAttributeCode));
-                echo $origAttributeValueFromOption . PHP_EOL;
+                if ($origAttributeValueFromOption) {
+                    echo $origAttributeValueFromOption . PHP_EOL;
+                }
             }
         }
 
