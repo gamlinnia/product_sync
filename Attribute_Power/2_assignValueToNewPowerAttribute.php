@@ -10,19 +10,19 @@ if (in_array('debug', $argv)) {
     $debug = true;
 }
 
-// regular expression => new attribute code
-$attributesNeedToAssign = array('_feature[s]?$' => 'features');
+$proceedArray = array(
+    'power_watts' => array('c09140_fryers_power', 'c27150_rice_cookers_power', 'c30150_thermo_pot_power', 'c31230_toaster_oven_power', 'c03290_led_power_consumption'),
+    'power_voltage' => array('c11090_power_supply', 'c13100_power_supply')
+);
 
 $count = 0;
-foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
-
+foreach ($proceedArray as $newAttrCode => $matchedAttributeCode) {
     $productCollection = Mage::getModel('catalog/product')->getCollection()->setOrder('entity_id', 'desc');
-
     foreach($productCollection as $each) {
         $product = Mage::getModel('catalog/product')->load($each->getId());
         $productId = $product->getId();
         echo "Prodcut ID: " . $productId . PHP_EOL;
-        $existFeaturesAttribute = $product->getData($eachNeedToAssign);
+        $existPowerAttribute = $product->getData($newAttrCode);
         if(!empty($existFeaturesAttribute)) {
             continue;
         }
@@ -33,8 +33,7 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
         $origAttributeValue = '';
         $origAttributeCode = '';
         foreach ($attributes as $eachAttr) {
-            preg_match('/'. $regularEx . '/', $eachAttr['code'], $matchArray);
-            if (count($matchArray) >= 1) {
+            if (in_array($eachAttr['code'], $proceedArray[$newAttrCode])) {
                 $count++;
                 $origAttributeCode = $eachAttr['code'];
                 $origAttributeValue = $product->getData($origAttributeCode);
@@ -45,7 +44,7 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
             echo "    " . $origAttributeCode . PHP_EOL;
             if(!$debug) {
                 try {
-                    $product->setData($eachNeedToAssign, $origAttributeValue);
+                    $product->setData($newAttrCode, $origAttributeValue);
                     $product->setUrlKey(false);
                     $product->save();
                 } catch (exception $e) {
@@ -55,6 +54,8 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign){
         }
 
     }
+
 }
+
 
 echo "Total: " . $count . " records.". PHP_EOL;
