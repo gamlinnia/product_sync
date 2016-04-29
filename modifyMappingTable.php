@@ -11,7 +11,7 @@ Mage::app('admin');
 
 do {
     /*透過 標準輸出 印出要詢問的內容*/
-    fwrite(STDOUT, 'To edit or to delete: ');
+    fwrite(STDOUT, 'To continue next mapping?: ');
     /*抓取 標準輸入 的 內容*/
     $continue = trim(fgets(STDIN));
 
