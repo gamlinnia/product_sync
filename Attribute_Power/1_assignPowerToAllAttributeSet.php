@@ -22,6 +22,7 @@ $attributesNeedToAssign = array(
 
 $count = 0;
 foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
+    echo 'ATTRIBUTE: ' . $eachNeedToAssign . PHP_EOL;
     //new attribute data and id
     $attributeDataArray = $model->getAttribute('catalog_product', $eachNeedToAssign);
     $attributeId = $attributeDataArray['attribute_id'];
