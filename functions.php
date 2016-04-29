@@ -442,11 +442,11 @@ function getImagesUrlOfProduct ($valueToFilter, $type='entity_id') {
     $product = getProductObject($valueToFilter, $type);
     $mediaType = array(
         'image' => Mage::getModel('catalog/product_media_config')
-                ->getMediaUrl( $product->getImage() ),
+            ->getMediaUrl( $product->getImage() ),
         'small_image' => Mage::getModel('catalog/product_media_config')
-                ->getMediaUrl( $product->getSmallImage() ),
+            ->getMediaUrl( $product->getSmallImage() ),
         'thumbnail' => Mage::getModel('catalog/product_media_config')
-                ->getMediaUrl( $product->getThumbnail() )
+            ->getMediaUrl( $product->getThumbnail() )
     );
 
     $response = array();
@@ -1008,9 +1008,10 @@ function importVideoToVideoGallery ($videoGalleryObject) {
     $tmpFile = file_get_contents($imageUrl);
     file_put_contents(Mage::getBaseDir('media').DS."videogallery".DS.'videogallery_'.$videoImage.'.jpg', $tmpFile);
 
-    $model = Mage::getModel('videogallery/videogallery');
-    $model -> setData($videoGalleryObject);
-    $model -> save();
+    Mage::getModel('videogallery/videogallery')
+        ->setData($videoGalleryObject)
+        ->setCreated(strtotime('now'))
+        ->save();
     return true;
 }
 
