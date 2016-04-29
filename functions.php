@@ -84,6 +84,14 @@ function setAttributeValueToOptions ($product, $nameOrId, $attrCodeOrId, $valueT
     switch ($optionsArray['frontend_input']) {
         case 'select' :
             $options = getAttributeOptions($nameOrId, $attrCodeOrId);
+            foreach ($options['options'] as $eachOption) {
+                if ($eachOption['label'] == $valueToBeMapped) {
+                    echo 'mapped label: ' . $valueToBeMapped . ' value: ' . $eachOption['label'];
+                    return $eachOption['label'];
+                    continue;
+                }
+            }
+            echo $valueToBeMapped . ' mapped to nothing';
             var_dump($options);
             die();
             break;
