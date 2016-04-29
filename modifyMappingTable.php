@@ -48,14 +48,13 @@ do {
     $targetArray = array('general' , 'property' , 'price' , 'intelligence' , 'description' , 'baseinfo' , 'dimension' , 'ProductInfos' , 'inventory');
     do {
         /* 透過 標準輸出 印出要詢問的內容 */
-        fwrite(STDOUT, 'Enter target to modify [ ' . implode(' ', $targetArray) . ' ]: ');
+        fwrite(STDOUT, 'Enter target to modify [ ' . implode(' | ', $targetArray) . ' ]: ');
         /* 抓取 標準輸入 的 內容 */
         $target = trim(fgets(STDIN));
     } while (empty($target) || !in_array(trim($target), $targetArray));
 
     switch ($target) {
         case 'property' :
-
             do {
                 /*透過 標準輸出 印出要詢問的內容*/
                 fwrite(STDOUT, 'Enter PropertyCode: ');
@@ -64,18 +63,34 @@ do {
             } while (!is_numeric($propertyCode));
             echo $propertyCode . PHP_EOL;
 
-            do {
-// 透過 標準輸出 印出要詢問的內容
-                fwrite(STDOUT, 'Enter PropertyName: ');
-// 抓取 標準輸入 的 內容
-                $propertyName = trim(fgets(STDIN));
-            } while (empty($propertyCode));
+            $exist = false;
+            $expectPropertyName = null;
+            foreach ($mapTableArray[$target] as $eachProperty) {
+                if ($eachProperty['PropertyCode'] == $propertyCode) {
+                    $expectPropertyName = $eachProperty['PropertyCode'];
+                    $exist = true;
+                    break;
+                }
+            }
+
+            if ($exist) {
+                fwrite(STDOUT, 'Press Enter to keep the same PropertyName: ' . $expectPropertyName);
+                $tempInput = trim(fgets(STDIN));
+                if (empty($tempInput)) {
+                    $propertyName = $expectPropertyName;
+                } else {
+                    $propertyName = trim(fgets(STDIN));
+                }
+            } else {
+                do {
+                    fwrite(STDOUT, 'Enter PropertyName: ');
+                    $propertyName = trim(fgets(STDIN));
+                } while (empty($propertyCode));
+            }
             echo $propertyName . PHP_EOL;
 
             do {
-// 透過 標準輸出 印出要詢問的內容
                 fwrite(STDOUT, 'Enter mapping attribute: ');
-// 抓取 標準輸入 的 內容
                 $attrToMap = trim(fgets(STDIN));
             } while (empty($propertyCode));
             echo $attrToMap . PHP_EOL;
