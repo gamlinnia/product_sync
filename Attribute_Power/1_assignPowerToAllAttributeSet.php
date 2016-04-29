@@ -16,14 +16,14 @@ if (in_array('debug', $argv)) {
 $attributesNeedToAssign = array(
     '_power$' => 'power_watts',
     'power_consumption$' => 'power_watts',
-    '_power_supply$' => 'power_watts',
+    '_power_supply$' => 'power_voltage',
+    '_over_volta' => 'psu_ovp'
 );
 
 $count = 0;
 foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
     //new attribute data and id
     $attributeDataArray = $model->getAttribute('catalog_product', $eachNeedToAssign);
-    Zend_Debug::dump($attributeDataArray);
     $attributeId = $attributeDataArray['attribute_id'];
 
     // attribute set collection
@@ -35,6 +35,11 @@ foreach($attributesNeedToAssign as $regularEx => $eachNeedToAssign) {
         //get all attributes for this attribute set
         $attributes = Mage::getModel('catalog/product_attribute_api')->items($each->getId());
         foreach ($attributes as $eachAttr) {
+            /* exclude lists */
+            $excludeArray = array(
+                'power_watts' => array('')
+            );
+
             preg_match('/' . $regularEx . '/', $eachAttr['code'], $matchArray);
             if (count($matchArray) >= 1) {
                 $count++;
