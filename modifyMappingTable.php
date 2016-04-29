@@ -82,6 +82,7 @@ do {
                     $propertyName = trim(fgets(STDIN));
                 }
             } else {
+                echo '***** code map to different property name *****' . PHP_EOL;
                 do {
                     fwrite(STDOUT, 'Enter PropertyName: ');
                     $propertyName = trim(fgets(STDIN));
