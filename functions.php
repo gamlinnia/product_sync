@@ -2024,8 +2024,11 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                     $detail =  substr($detail, strpos($detail, 'Pros:'), strlen($detail));
                     $detail = str_replace('Cons:', '<br /><br />Cons:', $detail);
                     $detail = str_replace('Other Thoughts:', '<br /><br />Other Thoughts:', $detail);
-                    $detail = str_replace('Manufacturer Response:', '<br /><br />Manufacturer Response:', $detail);
                     $detail = trim($detail);
+
+                    if(strpos($detail, 'Manufacturer Response:')){
+                        continue;
+                    }
 
                     $response[] = array(
                         'detail' => $detail,
