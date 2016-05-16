@@ -2026,7 +2026,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                     $detail = str_replace('Other Thoughts:', '<br /><br />Other Thoughts:', $detail);
                     $detail = trim($detail);
 
-                    if(strpos($detail, 'Manufacturer Response:')){
+                    if(stripos($detail, 'Manufacturer Response:') !== false){
                         continue;
                     }
 
