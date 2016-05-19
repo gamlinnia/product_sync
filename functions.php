@@ -2090,7 +2090,8 @@ function sendMailWithDownloadUrl ($action, $fileList, $recipient_array) {
     require_once 'rest/tools.php';
 
     /* SMTP server name, port, user/passwd */
-    $smtpInfo = array("host" => "127.0.0.1",
+    $smtpInfo = array("host" => "118.163.91.154",
+//    $smtpInfo = array("host" => "127.0.0.1",
         "port" => "25",
         "auth" => false);
     $emailFactory = EmailFactory::getEmailFactory($smtpInfo);

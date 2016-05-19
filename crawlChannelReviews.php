@@ -182,6 +182,7 @@ foreach($channels as $channel => $url) {
     }
     /*export all reviews with 1 or 2 rate to excel by channel*/
     if(!empty($arrayToExcel)) {
+        file_put_contents('crawlChannelReviews.log', "Number of Records Need To Export To Excel: " . count($arrayToExcel));
         $now = date('Y-m-d');
         $fileName = $channel . '_' . $now . '.xls';
         $sheetName = 'Sheet 1';
