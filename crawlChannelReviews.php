@@ -184,7 +184,7 @@ foreach($channels as $channel => $url) {
     if(!empty($arrayToExcel)) {
         file_put_contents('crawlChannelReviews.log', "Number of Records Need To Export To Excel: " . count($arrayToExcel));
         $now = date('Y-m-d');
-        $fileName = $channel . '_' . $now . '.xls';
+        $fileName = 'bad_review/' . $channel . '_' . $now . '.xls';
         $sheetName = 'Sheet 1';
         /*push file into fileList*/
         $fileList[] = $fileName;

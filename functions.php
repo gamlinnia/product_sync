@@ -2097,22 +2097,20 @@ function sendMailWithDownloadUrl ($action, $fileList, $recipient_array) {
     $emailFactory = EmailFactory::getEmailFactory($smtpInfo);
 
     $attachments = array();
-    foreach($fileList as $each){
-        $fileName = $each;
-        $excelFileType =  'application/vnd.ms-excel';
-        $attachments[$fileName] = $excelFileType;
+    if(!empty($fileList)) {
+        foreach ($fileList as $each) {
+            $fileName = $each;
+            $excelFileType = 'application/vnd.ms-excel';
+            $attachments[$fileName] = $excelFileType;
+        }
     }
+
     /* $email = class Email */
     $email = $emailFactory->getEmail($action, $recipient_array);
     $content = templateReplace($action);
     $email->setContent($content);
     $email->setAttachments($attachments);
     $email->sendMail();
-
-    foreach($fileList as $each){
-        unlink($each);
-    }
-
     return true;
 }
 
@@ -2251,5 +2249,4 @@ function existDifferentImages($jsonImageArray, $dbImageArray){
         $result['message'] = 'false';
     }
     return $result;
-
 }
