@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: th98
- * Date: 2016/5/23
- * Time: 下午 03:17
- */
 
 $config = json_decode(file_get_contents('config.json'), true);
 require_once '../' . $config['magentoDir'] . 'app/Mage.php';
@@ -49,10 +43,7 @@ do {
     $debug = trim(fgets(STDIN));
 } while(empty($debug));
 
-var_dump(array($from, $to, $debug));
-
 if ($debug) {
-//    $productCollection->setPageSize(1);
     $recipient_array = array(
         'to' => array('Li.L.Liu@newegg.com', 'Tim.H.Huang@newegg.com')
     );
