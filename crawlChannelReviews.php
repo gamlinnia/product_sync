@@ -204,25 +204,3 @@ if(!empty($fileList)) {
 /*log ending time*/
 $now = new DateTime(null, new DateTimeZone('UTC'));
 file_put_contents('crawlChannelReviews.log', "Process end at: " . $now->format('Y-m-d H:i:s') . PHP_EOL, FILE_APPEND);
-
-function morethanDays ($dateTimeString, $locale = 'America/Los_Angeles', $daysMoreThan = 2) {
-    // new Date with datetime string in UTC, and get timestamp
-    $date = new DateTime('now', new DateTimeZone('UTC'));
-    $date->setTimestamp(strtotime($dateTimeString));
-    // get datetime string from UTC DateTime object.
-    $newDateTimeString = $date->format('Y-m-d H:i:s');
-    // Generate a DateTime object with the new dateTime string with new locale
-    $newDate = new DateTime($newDateTimeString, new DateTimeZone($locale));
-    $reviewTimeStamp = (int)$newDate->format('U');
-    // Generate a now DateTime object with new locale
-    $nowLATimeStamp = new DateTime('now', new DateTimeZone($locale));
-    $nowLATimeStamp = (int)$nowLATimeStamp->format('U');
-
-    $diff =  $nowLATimeStamp - $reviewTimeStamp;
-    $days = $diff / 86400;
-    if ($days > $daysMoreThan) {
-        echo "More than $daysMoreThan days" . PHP_EOL;
-        return true;
-    }
-    return false;
-}
