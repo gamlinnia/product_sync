@@ -2279,7 +2279,7 @@ function moreThanSpecificDays ($date_string_1, $date_string_2, $specific_days = 
 
     $interval = $date_1->diff($date_2);
     $days = $interval->days;
-    if ($days > $specific_days) {
+    if ($days >= $specific_days) {
         echo "More than $specific_days days" . PHP_EOL;
         return true;
     }
