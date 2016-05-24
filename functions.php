@@ -2300,7 +2300,7 @@ function writeReviewCommentToLocal($data) {
     $product = getProductObject($review_data['product_sku'], 'sku');
     $entity_id = $product->getId();
     $review_title = $review_data['title'];
-    $review_detail = $review_data['detail'];
+    $review_detail = stripslashes($review_data['detail']); // remove the escape slashes
     $review_nickname = $review_data['nickname'];
     $review_created_at = $review_data['created_at'];
     $review_customer_email = $review_data['customer_email'];
