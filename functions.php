@@ -2285,3 +2285,7 @@ function moreThanSpecificDays ($date_string_1, $date_string_2, $specific_days = 
     }
     return false;
 }
+
+function writeReviewCommentToLocal($data) {
+    return $data;
+}
