@@ -2310,10 +2310,10 @@ function writeReviewCommentToLocal($data) {
     $review_collection = Mage::getModel('review/review')->getCollection();
     $review_collection->addFieldToFilter('title', $review_title)
         ->addFieldToFilter('nickname', $review_nickname)
-        ->addFieldToFilter('detail', $review_detail)
+//        ->addFieldToFilter('detail', $review_detail)
         ->addFieldToFilter('entity_pk_value', $entity_id)
-        ->addFieldToFilter('created_at', $review_created_at);
-//        ->addFieldToFilter('customer_id', $customer_id);
+        ->addFieldToFilter('created_at', $review_created_at)
+        ->addFieldToFilter('customer_id', $customer_id);
 
     $review_id = $review_collection->getFirstItem()->getReviewId();
 
