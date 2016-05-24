@@ -2301,7 +2301,6 @@ function writeReviewCommentToLocal($data) {
     $entity_id = $product->getId();
     $review_title = $review_data['title'];
     $review_detail = stripslashes($review_data['detail']); // remove the escape slashes
-    Mage::log($review_detail, null, 'customreview.log');
     $review_nickname = $review_data['nickname'];
     $review_customer_email = $review_data['customer_email'];
     $customer_collection = Mage::getSingleton('customer/customer')->getCollection()->addFieldToFilter('email', $review_customer_email);
