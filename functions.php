@@ -2427,7 +2427,7 @@ function removeReviewCommentFromLocal($data) {
 
     try {
         Mage::getSingleton('customreview/comment')->load($comment_id)->delete();
-        return array('message' => 'success');
+        return array('comment_id' => $comment_id, 'message' => 'success');
     }
     catch (Exception $e) {
         return array('message' => 'failed');
