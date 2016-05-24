@@ -2359,3 +2359,78 @@ function writeReviewCommentToLocal($data) {
     }
     //return $comment_data;
 }
+
+function removeReviewCommentFromLocal($data) {
+//    const SUBMITTER_ADMIN = 1;
+//    const SUBMITTER_CUSTOMER = 2;
+//    const SUBMITTER_VISITOR = 3;
+//    const STATUS_PENDING = 4;
+//    const STATUS_APPROVED = 5;
+//    const STATUS_NOT_APPROVED = 6;
+//
+    $review_data = $data['review'];
+    $comment_data = $data['comment'];
+
+    $product = getProductObject($review_data['product_sku'], 'sku');
+    $entity_id = $product->getId();
+    $review_title = $review_data['title'];
+    $review_detail = stripslashes($review_data['detail']); // remove the escape slashes
+    $review_nickname = $review_data['nickname'];
+    $review_customer_email = $review_data['customer_email'];
+    $customer_collection = Mage::getSingleton('customer/customer')->getCollection()->addFieldToFilter('email', $review_customer_email);
+    $customer_id = $customer_collection->getFirstItem()->getId();
+
+    $review_collection = Mage::getModel('review/review')->getCollection();
+    $review_collection->addFieldToFilter('title', $review_title)
+        ->addFieldToFilter('nickname', $review_nickname)
+        ->addFieldToFilter('detail', $review_detail)
+        ->addFieldToFilter('entity_pk_value', $entity_id)
+        ->addFieldToFilter('customer_id', $customer_id);
+
+    $review_id = $review_collection->getFirstItem()->getReviewId();
+
+    $comment_review_id = $review_id;
+    $comment_status = $comment_data['status'];
+    $comment_nickname = $comment_data['nickname'];
+    $comment_content = $comment_data['content'];
+    $comment_submitter_type = $comment_data['submitter_type'];
+    $comment_customer_email = $comment_data['customer_email'];
+    switch($comment_submitter_type) {
+        case 1:
+            //admin
+            $user_model = Mage::getSingleton('admin/user');
+            break;
+        case 2:
+            //customer
+            $user_model = Mage::getSingleton('customer/customer');
+            break;
+        case 3:
+            //visitor
+            break;
+    }
+    $user_collection = $user_model->getCollection()->addFieldToFilter('email', $comment_customer_email);
+    $comment_customer_id = $user_collection->getFirstItem()->getId();
+
+    $comment_collection = Mage::getSingleton('customreview/comment')->getCollection();
+    $comment_collection->addFieldToFilter('r_id', $comment_review_id)
+        ->addFieldToFilter('status', $comment_status)
+        ->addFieldToFilter('nickname', $comment_nickname)
+        ->addFieldToFilter('content', $comment_content)
+        ->addFieldToFilter('submitter_type', $comment_submitter_type)
+        ->addFieldToFilter('customer_id', $comment_customer_id);
+
+    if($comment_collection->count() > 1 ) {
+        return array('message' => 'failed');
+    }
+
+    $comment_id = $comment_collection->getFirstItem()->getId();
+
+    try {
+        Mage::getSingleton('customreview/comment')->load($comment_id)->delete();
+        return array('message' => 'success');
+    }
+    catch (Exception $e) {
+        return array('message' => 'failed');
+    }
+    //return $comment_data;
+}
