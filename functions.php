@@ -2297,23 +2297,7 @@ function writeReviewCommentToLocal($data) {
     $review_data = $data['review'];
     $comment_data = $data['comment'];
 
-    $product = getProductObject($review_data['product_sku'], 'sku');
-    $entity_id = $product->getId();
-    $review_title = $review_data['title'];
-    $review_detail = stripslashes($review_data['detail']); // remove the escape slashes
-    $review_nickname = $review_data['nickname'];
-    $review_customer_email = $review_data['customer_email'];
-    $customer_collection = Mage::getSingleton('customer/customer')->getCollection()->addFieldToFilter('email', $review_customer_email);
-    $customer_id = $customer_collection->getFirstItem()->getId();
-
-    $review_collection = Mage::getModel('review/review')->getCollection();
-    $review_collection->addFieldToFilter('title', $review_title)
-        ->addFieldToFilter('nickname', $review_nickname)
-        ->addFieldToFilter('detail', $review_detail)
-        ->addFieldToFilter('entity_pk_value', $entity_id)
-        ->addFieldToFilter('customer_id', $customer_id);
-
-    $review_id = $review_collection->getFirstItem()->getReviewId();
+    $review_id = getReviewIdFromGivenReviewData($review_data);
 
     $comment_review_id = $review_id;
     $comment_status = $comment_data['status'];
@@ -2371,23 +2355,7 @@ function removeReviewCommentFromLocal($data) {
     $review_data = $data['review'];
     $comment_data = $data['comment'];
 
-    $product = getProductObject($review_data['product_sku'], 'sku');
-    $entity_id = $product->getId();
-    $review_title = $review_data['title'];
-    $review_detail = stripslashes($review_data['detail']); // remove the escape slashes
-    $review_nickname = $review_data['nickname'];
-    $review_customer_email = $review_data['customer_email'];
-    $customer_collection = Mage::getSingleton('customer/customer')->getCollection()->addFieldToFilter('email', $review_customer_email);
-    $customer_id = $customer_collection->getFirstItem()->getId();
-
-    $review_collection = Mage::getModel('review/review')->getCollection();
-    $review_collection->addFieldToFilter('title', $review_title)
-        ->addFieldToFilter('nickname', $review_nickname)
-        ->addFieldToFilter('detail', $review_detail)
-        ->addFieldToFilter('entity_pk_value', $entity_id)
-        ->addFieldToFilter('customer_id', $customer_id);
-
-    $review_id = $review_collection->getFirstItem()->getReviewId();
+    $review_id = getReviewIdFromGivenReviewData($review_data);
 
     $comment_review_id = $review_id;
     $comment_status = $comment_data['status'];
@@ -2420,17 +2388,41 @@ function removeReviewCommentFromLocal($data) {
         ->addFieldToFilter('customer_id', $comment_customer_id);
 
     if($comment_collection->count() > 1 ) {
-        return array('message' => 'failed');
+        return array('status' => 'failed', 'message' => 'more than one record');
     }
 
     $comment_id = $comment_collection->getFirstItem()->getId();
 
-    try {
-        Mage::getSingleton('customreview/comment')->load($comment_id)->delete();
-        return array('comment_id' => $comment_id, 'message' => 'success');
+    if($comment_id) {
+        try {
+            Mage::getSingleton('customreview/comment')->load($comment_id)->delete();
+            return array('status' => 'success', 'message' => '');
+        } catch (Exception $e) {
+            return array('status' => 'failed', 'message' => 'Exception');
+        }
+        //return $comment_data;
     }
-    catch (Exception $e) {
-        return array('message' => 'failed');
+    else {
+        return array('status' => 'failed', 'message' => 'comment not found');
     }
-    //return $comment_data;
+}
+
+function getReviewIdFromGivenReviewData($review_data) {
+    $product = getProductObject($review_data['product_sku'], 'sku');
+    $entity_id = $product->getId();
+    $review_title = $review_data['title'];
+    $review_detail = stripslashes($review_data['detail']); // remove the escape slashes
+    $review_nickname = $review_data['nickname'];
+    $review_customer_email = $review_data['customer_email'];
+    $customer_collection = Mage::getSingleton('customer/customer')->getCollection()->addFieldToFilter('email', $review_customer_email);
+    $customer_id = $customer_collection->getFirstItem()->getId();
+
+    $review_collection = Mage::getModel('review/review')->getCollection();
+    $review_collection->addFieldToFilter('title', $review_title)
+        ->addFieldToFilter('nickname', $review_nickname)
+        ->addFieldToFilter('detail', $review_detail)
+        ->addFieldToFilter('entity_pk_value', $entity_id)
+        ->addFieldToFilter('customer_id', $customer_id);
+    $review_id = $review_collection->getFirstItem()->getReviewId();
+    return $review_id;
 }
