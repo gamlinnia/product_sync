@@ -305,7 +305,7 @@ $app->post('/api/writeReviewCommentToLocal', function () {
     }
 
     $data = json_decode($input['data'], true);
-    echo json_encode($data);
+    echo json_encode($input);
 });
 
 $app->run();
