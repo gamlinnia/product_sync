@@ -293,4 +293,19 @@ $app->post('/api/postProductJsonToLocal', function () {
 
 });
 
+$app->post('/api/writeReviewCommentToLocal', function () {
+    global $input;
+    global $app;
+    $headers = $app->request()->headers();
+    if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
+        echo json_encode(array(
+            'message' => 'auth error.'
+        ));
+        return;
+    }
+
+    $data = json_decode($input['data'], true);
+    echo json_encode($data);
+});
+
 $app->run();
