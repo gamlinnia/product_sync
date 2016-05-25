@@ -2337,10 +2337,13 @@ function writeReviewCommentToLocal($data) {
         $model->setData($comment_data);
         try {
             $model->save();
-            return array('message' => 'success');
+            return array('status' => 'success', 'message' => $model->getData());
         } catch (Exception $e) {
-            return array('message' => 'failed');
+            return array('status' => 'failed', 'message' => 'Exception occur.');
         }
+    }
+    else {
+        return array('status' => 'failed', 'message' => 'Review not found.');
     }
 }
 
@@ -2351,7 +2354,7 @@ function removeReviewCommentFromLocal($data) {
 //    const STATUS_PENDING = 4;
 //    const STATUS_APPROVED = 5;
 //    const STATUS_NOT_APPROVED = 6;
-//
+
     $review_data = $data['review'];
     $comment_data = $data['comment'];
 
@@ -2359,19 +2362,22 @@ function removeReviewCommentFromLocal($data) {
     if($review_id) {
         $comment_collection = getCommentCollectionFromGivenCommentData($review_id, $comment_data);
         if ($comment_collection->count() > 1) {
-            return array('status' => 'failed', 'message' => 'more than one record');
+            return array('status' => 'failed', 'message' => 'more than one comment record');
         }
         $comment_id = $comment_collection->getFirstItem()->getId();
         if ($comment_id) {
             try {
                 Mage::getSingleton('customreview/comment')->load($comment_id)->delete();
-                return array('status' => 'success', 'message' => '');
+                return array('status' => 'success', 'message' => $comment_id . 'has been deleted.');
             } catch (Exception $e) {
-                return array('status' => 'failed', 'message' => 'Exception');
+                return array('status' => 'failed', 'message' => 'Exception occur.');
             }
         } else {
-            return array('status' => 'failed', 'message' => 'comment not found');
+            return array('status' => 'failed', 'message' => 'Comment not found.');
         }
+    }
+    else {
+        return array('status' => 'failed', 'message' => 'Review not found.');
     }
 }
 
@@ -2394,13 +2400,16 @@ function modifyReviewCommentFromLocal($data) {
                 $comment->setContent($after_modify_comment_data['content'])
                         ->setStatus($after_modify_comment_data['status'])
                         ->save();
-                return array('status' => 'success', 'message' => '');
+                return array('status' => 'success', 'message' => $comment->getData());
             } catch (Exception $e) {
-                return array('status' => 'failed', 'message' => 'Exception');
+                return array('status' => 'failed', 'message' => 'Exception occur.');
             }
         } else {
-            return array('status' => 'failed', 'message' => 'comment not found');
+            return array('status' => 'failed', 'message' => 'Comment not found.');
         }
+    }
+    else {
+        return array('status' => 'failed', 'message' => 'Review not found.');
     }
 }
 
