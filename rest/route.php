@@ -325,4 +325,19 @@ $app->post('/api/removeReviewCommentFromLocal', function () {
     echo json_encode($result);
 });
 
+$app->post('/api/modifyReviewCommentFromLocal', function () {
+    global $input;
+    global $app;
+    $headers = $app->request()->headers();
+    if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
+        echo json_encode(array(
+            'message' => 'auth error.'
+        ));
+        return;
+    }
+
+    $data = $input['data'];
+    $result = modifyReviewCommentFromLocal($data);
+    echo json_encode($result);
+});
 $app->run();
