@@ -2303,7 +2303,6 @@ function writeReviewCommentToLocal($data) {
         $comment_review_id = $review_id;
         $comment_status = $comment_data['status'];
         $comment_nickname = $comment_data['nickname'];
-        $comment_created_at = $comment_data['created_at'];
         $comment_content = $comment_data['content'];
         $comment_submitter_type = $comment_data['submitter_type'];
         $comment_customer_email = $comment_data['customer_email'];
@@ -2323,14 +2322,18 @@ function writeReviewCommentToLocal($data) {
         $user_collection = $user_model->getCollection()->addFieldToFilter('email', $comment_customer_email);
         $comment_customer_id = $user_collection->getFirstItem()->getId();
 
+        $locale = Mage::app()->getLocale()->getLocaleCode();
+        $now = new Zend_Date(strtotime('now'), Zend_Date::TIMESTAMP, $locale);
+        $now = $now->get('yyyy-MM-dd HH:mm:ss');
+
         $comment_data = array(
-            'r_id' => $comment_review_id,
-            'status' => $comment_status,
-            'nickname' => $comment_nickname,
-            'created_at' => $comment_created_at,
-            'content' => $comment_content,
+            'r_id'           => $comment_review_id,
+            'status'         => $comment_status,
+            'nickname'       => $comment_nickname,
+            'content'        => $comment_content,
             'submitter_type' => $comment_submitter_type,
-            'customer_id' => $comment_customer_id
+            'customer_id'    => $comment_customer_id,
+            'created_at'     => $now
         );
 
         $model = Mage::getModel('customreview/comment');
