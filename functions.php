@@ -2369,12 +2369,11 @@ function removeReviewCommentFromLocal($data) {
         }
         $comment_id = $comment_collection->getFirstItem()->getId();
         if ($comment_id) {
-            try {
-                Mage::getSingleton('customreview/comment')->load($comment_id)->delete();
-                return array('status' => 'success', 'message' => $comment_id . 'has been deleted.');
-            } catch (Exception $e) {
-                return array('status' => 'failed', 'message' => 'Exception occur.');
+            $comment_ids = getRelatedCommentIds($comment_id);
+            foreach($comment_ids as $each_comment_id) {
+                Mage::getSingleton('customreview/comment')->load($each_comment_id)->delete();
             }
+            return array('status' => 'success', 'message' => count($comment_ids) . ' records has been deleted.');
         } else {
             return array('status' => 'failed', 'message' => 'Comment not found.');
         }
@@ -2401,8 +2400,8 @@ function modifyReviewCommentFromLocal($data) {
             try {
                 $comment = Mage::getModel('customreview/comment')->load($comment_id);
                 $comment->setContent($after_modify_comment_data['content'])
-                        ->setStatus($after_modify_comment_data['status'])
-                        ->save();
+                    ->setStatus($after_modify_comment_data['status'])
+                    ->save();
                 return array('status' => 'success', 'message' => $comment->getData());
             } catch (Exception $e) {
                 return array('status' => 'failed', 'message' => 'Exception occur.');
@@ -2472,7 +2471,7 @@ function getCommentCollectionFromGivenCommentData($review_id, $comment_data) {
             break;
         case 3:
             //visitor
-            break;
+            return false;
     }
     $user_collection = $user_model->getCollection()->addFieldToFilter('email', $comment_customer_email);
     $comment_customer_id = $user_collection->getFirstItem()->getId();
@@ -2486,4 +2485,23 @@ function getCommentCollectionFromGivenCommentData($review_id, $comment_data) {
         ->addFieldToFilter('customer_id', $comment_customer_id);
 
     return $comment_collection;
+}
+
+//include own id and ids of all children
+function getRelatedCommentIds($comment_id) {
+    if($comment_id === false || $comment_id === null) {
+        return null;
+    }
+    $result = array();
+    $result[] = (string)$comment_id;
+    $comment = Mage::getSingleton('customreview/comment')->load($comment_id);
+    $child_list = $comment->getChildList();
+    if(!empty($child_list)) {
+        $child_list = explode(',', $child_list);
+        foreach($child_list as $each_child_id) {
+            $child_ids = getRelatedCommentIds($each_child_id);
+            $result = array_merge($result, $child_ids);
+        }
+    }
+    return $result;
 }
