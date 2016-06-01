@@ -2135,7 +2135,7 @@ function templateReplace ($action) {
             break;
         default:
             $title = $action;
-            $description = 'Hi: This';
+            $description = 'Hi: This is default description';
             break;
     }
     /*use ganon.php to parse html file*/
