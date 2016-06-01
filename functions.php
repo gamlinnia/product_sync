@@ -2084,7 +2084,7 @@ function getInformationFromIntelligence ($itemNumber, $returnResponse = false) {
     ));
 }
 
-function sendMailWithDownloadUrl ($subject, $fileList, $recipient_array) {
+function sendMailWithDownloadUrl ($subject, $file_list, $recipient_array) {
     require_once 'class/Email.class.php';
     require_once 'class/EmailFactory.class.php';
     require_once 'rest/tools.php';
@@ -2097,8 +2097,8 @@ function sendMailWithDownloadUrl ($subject, $fileList, $recipient_array) {
     $emailFactory = EmailFactory::getEmailFactory($smtpInfo);
 
     $attachments = array();
-    if(!empty($fileList)) {
-        foreach ($fileList as $each) {
+    if(!empty($file_list)) {
+        foreach ($file_list as $each) {
             $fileName = $each;
             $excelFileType = 'application/vnd.ms-excel';
             $attachments[$fileName] = $excelFileType;
