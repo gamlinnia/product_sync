@@ -201,6 +201,9 @@ if(!empty($fileList)) {
     /*sendEmail*/
     sendMailWithDownloadUrl('Bad product review alert', $fileList, $recipient_array);
 }
+else {
+    sendMailWithDownloadUrl('Bad product review alert - no bad review submitted', null, $recipient_array);
+}
 
 /*log ending time*/
 $now = new DateTime(null, new DateTimeZone('UTC'));

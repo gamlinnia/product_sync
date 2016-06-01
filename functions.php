@@ -2115,22 +2115,44 @@ function sendMailWithDownloadUrl ($action, $fileList, $recipient_array) {
 }
 
 function templateReplace ($action) {
-    $contentTitle = array(
-        'Crawler Report' => 'NE.com and Amazon.com Daily Crawling Report',
-        'Channel Reviews' => 'Channel Reviews Notification'
-    );
+//    $contentTitle = array(
+//        'Crawler Report' => 'NE.com and Amazon.com Daily Crawling Report',
+//        'Channel Reviews' => 'Channel Reviews Notification',
+//    );
 
+    switch ($action) {
+        case 'Crawler Report':
+            $title = 'NE.com and Amazon.com Daily Crawling Report';
+            $description = 'Hi All: Data as attachments';
+            break;
+        case 'Bad product review alert - no bad review submitted':
+            $title = 'Bad product review alert';
+            $description = 'Hi All: No bad review submitted';
+            break;
+        case 'Bad product review alert':
+            $title = 'Bad product review alert';
+            $description = 'Hi All: Data as attachments';
+            break;
+        default:
+            $title = $action;
+            $description = 'Hi: This';
+            break;
+    }
     /*use ganon.php to parse html file*/
     $doc = file_get_dom('email/content/template.html');
 
-    $doc('.description p', 0)->setPlainText($contentTitle[$action]);
-    $doc('.descriptionTitle p', 0)->setPlainText($contentTitle[$action]);
+//    $doc('.description p', 0)->setPlainText($contentTitle[$action]);
+//    $doc('.descriptionTitle p', 0)->setPlainText($contentTitle[$action]);
 
-    (isset($contentTitle[$action])) ? $doc('.descriptionTitle p', 0)->setPlainText($contentTitle[$action]) : $doc('.descriptionTitle p', 0)->setPlainText($action);
+//    (isset($contentTitle[$action])) ? $doc('.descriptionTitle p', 0)->setPlainText($contentTitle[$action]) : $doc('.descriptionTitle p', 0)->setPlainText($action);
 
-    $description = "Hi All: Data as attachments";
+    //set title
+    $doc('.descriptionTitle p', 0)->setPlainText($title);
+    //set description
     $doc('.description p', 0)->parent->setInnerText($description);
+    //set logo image
     $doc('.logoImage', 0)->setAttribute('src', 'images/rosewilllogo.png');
+
     return $doc;
 }
 
