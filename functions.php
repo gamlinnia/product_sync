@@ -2084,7 +2084,7 @@ function getInformationFromIntelligence ($itemNumber, $returnResponse = false) {
     ));
 }
 
-function sendMailWithDownloadUrl ($action, $fileList, $recipient_array) {
+function sendMailWithDownloadUrl ($subject, $fileList, $recipient_array) {
     require_once 'class/Email.class.php';
     require_once 'class/EmailFactory.class.php';
     require_once 'rest/tools.php';
@@ -2105,47 +2105,41 @@ function sendMailWithDownloadUrl ($action, $fileList, $recipient_array) {
         }
     }
 
+    switch ($subject) {
+        case 'Crawler Report':
+            $subject = 'NE.com and Amazon.com Daily Crawling Report';
+            $title = 'NE.com and Amazon.com Daily Crawling Report';
+            $description = 'Hi All: Data as attachments';
+            break;
+        case 'Bad product review alert - no bad review submitted':
+            $subject = 'Bad product review alert';
+            $title = 'Bad product review alert';
+            $description = 'Hi All: No bad review submitted';
+            break;
+        case 'Bad product review alert':
+            $subject = 'Bad product review alert';
+            $title = 'Bad product review alert';
+            $description = 'Hi All: Data as attachments';
+            break;
+        default:
+            $subject = 'Default Subject';
+            $title = 'Default Title';
+            $description = 'Hi: This is default description.';
+            break;
+    }
+
     /* $email = class Email */
-    $email = $emailFactory->getEmail($action, $recipient_array);
-    $content = templateReplace($action);
+    $email = $emailFactory->getEmail($subject, $recipient_array);
+    $content = templateReplace($title, $description);
     $email->setContent($content);
     $email->setAttachments($attachments);
     $email->sendMail();
     return true;
 }
 
-function templateReplace ($action) {
-//    $contentTitle = array(
-//        'Crawler Report' => 'NE.com and Amazon.com Daily Crawling Report',
-//        'Channel Reviews' => 'Channel Reviews Notification',
-//    );
-
-    switch ($action) {
-        case 'Crawler Report':
-            $title = 'NE.com and Amazon.com Daily Crawling Report';
-            $description = 'Hi All: Data as attachments';
-            break;
-        case 'Bad product review alert - no bad review submitted':
-            $title = 'Bad product review alert';
-            $description = 'Hi All: No bad review submitted';
-            break;
-        case 'Bad product review alert':
-            $title = 'Bad product review alert';
-            $description = 'Hi All: Data as attachments';
-            break;
-        default:
-            $title = $action;
-            $description = 'Hi: This is default description';
-            break;
-    }
+function templateReplace ($title, $description) {
     /*use ganon.php to parse html file*/
     $doc = file_get_dom('email/content/template.html');
-
-//    $doc('.description p', 0)->setPlainText($contentTitle[$action]);
-//    $doc('.descriptionTitle p', 0)->setPlainText($contentTitle[$action]);
-
-//    (isset($contentTitle[$action])) ? $doc('.descriptionTitle p', 0)->setPlainText($contentTitle[$action]) : $doc('.descriptionTitle p', 0)->setPlainText($action);
-
     //set title
     $doc('.descriptionTitle p', 0)->setPlainText($title);
     //set description
