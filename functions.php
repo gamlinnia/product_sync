@@ -2327,6 +2327,7 @@ function writeReviewCommentToLocal($data) {
         $content = $comment_data['content'];
         $submitter_type = $comment_data['submitter_type'];
         $customer_email = $comment_data['customer_email'];
+        $created_at = $comment_data['created_at'];
         $layer = 1;
         $path = $review_id;
         $child_list = null;
@@ -2348,9 +2349,9 @@ function writeReviewCommentToLocal($data) {
         $user_collection = $user_model->getCollection()->addFieldToFilter('email', $customer_email);
         $customer_id = $user_collection->getFirstItem()->getId();
 
-        $locale = Mage::app()->getLocale()->getLocaleCode();
-        $now = new Zend_Date(strtotime('now'), Zend_Date::TIMESTAMP, $locale);
-        $now = $now->get('yyyy-MM-dd HH:mm:ss');
+//        $locale = Mage::app()->getLocale()->getLocaleCode();
+//        $now = new Zend_Date(strtotime('now'), Zend_Date::TIMESTAMP, $locale);
+//        $now = $now->get('yyyy-MM-dd HH:mm:ss');
 
         //if has parent
         if($parent_comment_data) {
@@ -2372,7 +2373,7 @@ function writeReviewCommentToLocal($data) {
             'content'        => $content,
             'submitter_type' => $submitter_type,
             'customer_id'    => $customer_id,
-            'created_at'     => $now,
+            'created_at'     => $created_at,
             'path'           => $path,
             'layer'          => $layer,
             'parent_id'      => $parent_id,
@@ -2385,10 +2386,7 @@ function writeReviewCommentToLocal($data) {
             $model->save();
             //update own path
             $own_comment_id = $model->getId();
-            $path = $model->getPath();
-            $path = $path . DS . $own_comment_id;
-            $model->setPath($path)
-                  ->save();
+            updateOwnPath($own_comment_id);
             //update child list of parent if exist
             if($parent_id) {
                 updateParentCommentChildList($parent_id, $own_comment_id);
@@ -2455,15 +2453,15 @@ function modifyReviewCommentFromLocal($data) {
     if($review_id) {
         $comment_collection = getCommentCollectionFromGivenCommentData($review_id, $comment_data);
         if ($comment_collection->count() > 1) {
-            return array('status' => 'failed', 'message' => 'more than one record');
+            return array('status' => 'failed', 'message' => 'more than one comment record');
         }
         $comment_id = $comment_collection->getFirstItem()->getId();
         if ($comment_id) {
             try {
                 $comment = Mage::getModel('customreview/comment')->load($comment_id);
                 $comment->setContent($after_modify_comment_data['content'])
-                    ->setStatus($after_modify_comment_data['status'])
-                    ->save();
+                        ->setStatus($after_modify_comment_data['status'])
+                        ->save();
                 return array('status' => 'success', 'message' => $comment->getData());
             } catch (Exception $e) {
                 return array('status' => 'failed', 'message' => 'Exception occur.');
@@ -2523,6 +2521,7 @@ function getCommentCollectionFromGivenCommentData($review_id, $comment_data) {
     $submitter_type = $comment_data['submitter_type'];
     $customer_email = $comment_data['customer_email'];
     $layer = $comment_data['layer'];
+    $created_at = $comment_data['created_at'];
     switch ($submitter_type) {
         case 1:
             //admin
@@ -2546,7 +2545,8 @@ function getCommentCollectionFromGivenCommentData($review_id, $comment_data) {
         ->addFieldToFilter('content', $content)
         ->addFieldToFilter('submitter_type', $submitter_type)
         ->addFieldToFilter('customer_id', $customer_id)
-        ->addFieldToFilter('layer', $layer);
+        ->addFieldToFilter('layer', $layer)
+        ->addFieldToFilter('created_at', $layer);
 
     return $comment_collection;
 }
@@ -2568,6 +2568,14 @@ function getRelatedCommentIds($comment_id) {
         }
     }
     return $result;
+}
+
+function updateOwnPath($comment_id){
+    $comment = Mage::getSingleton('customreview/comment')->load($comment_id);
+    $path = $comment->getPath();
+    $path = $path . DS . $comment_id;
+    $comment->setPath($path)
+            ->save();
 }
 
 function updateParentCommentChildList($parent_id, $child_id) {
