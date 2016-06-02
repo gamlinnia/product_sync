@@ -2358,11 +2358,10 @@ function writeReviewCommentToLocal($data) {
             if ($collection->count() > 1) {
                 return array('status' => 'failed', 'message' => 'more than one paretn comment record');
             }
-            $parent_comment_id = $collection->getFirstItem()->getId();
-            $parent_comment = Mage::getSingleton('customreview/comment')->load($parent_comment_id);
-            $layer = (int)$parent_comment->getLayer() + 1;
-            $path = $parent_comment->getPath();
-            $parent_id = $parent_comment_id;
+            $parent_id = $collection->getFirstItem()->getId();
+            $parent = Mage::getSingleton('customreview/comment')->load($parent_id);
+            $layer = (int)$parent->getLayer() + 1;
+            $path = $parent->getPath();
             $child_list = null;
         }
 
@@ -2389,10 +2388,10 @@ function writeReviewCommentToLocal($data) {
             $path = $model->getPath();
             $path = $path . DS . $own_comment_id;
             $model->setPath($path)
-                ->save();
+                  ->save();
             //update child list of parent if exist
-            if($parent_comment_id) {
-                updateParentCommentChildList($parent_comment_id, $own_comment_id);
+            if($parent_id) {
+                updateParentCommentChildList($parent_id, $own_comment_id);
             }
             return array('status' => 'success', 'message' => $model->getData());
         } catch (Exception $e) {
