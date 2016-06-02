@@ -2348,10 +2348,6 @@ function writeReviewCommentToLocal($data) {
         $user_collection = $user_model->getCollection()->addFieldToFilter('email', $customer_email);
         $customer_id = $user_collection->getFirstItem()->getId();
 
-//        $locale = Mage::app()->getLocale()->getLocaleCode();
-//        $now = new Zend_Date(strtotime('now'), Zend_Date::TIMESTAMP, $locale);
-//        $now = $now->get('yyyy-MM-dd HH:mm:ss');
-
         //if has parent
         if($parent_comment_data) {
             $collection = getCommentCollectionFromGivenCommentData($review_id, $parent_comment_data);
@@ -2388,7 +2384,7 @@ function writeReviewCommentToLocal($data) {
             updateOwnPath($own_comment_id);
             //update child list of parent if exist
             if($parent_id) {
-                updateParentCommentChildList($parent_id, $own_comment_id);
+                updateParentCommentChildList($parent_id, $own_comment_id, 'add');
             }
             return array('status' => 'success', 'message' => $model->getData());
         } catch (Exception $e) {
@@ -2415,8 +2411,16 @@ function removeReviewCommentFromLocal($data) {
         return array('status' => 'failed', 'message' => 'input invalidate data');
     }
 
-
     $review_id = getReviewIdFromGivenReviewData($review_data);
+
+    if($parent_comment_data) {
+        $collection = getCommentCollectionFromGivenCommentData($review_id, $parent_comment_data);
+        if ($collection->count() > 1) {
+            return array('status' => 'failed', 'message' => 'more than one parent comment record');
+        }
+        $parent_id = $collection->getFirstItem()->getId();
+    }
+
     if($review_id) {
         $comment_collection = getCommentCollectionFromGivenCommentData($review_id, $comment_data);
         if ($comment_collection->count() > 1) {
@@ -2427,6 +2431,9 @@ function removeReviewCommentFromLocal($data) {
             $comment_ids = getRelatedCommentIds($comment_id);
             foreach($comment_ids as $each_comment_id) {
                 Mage::getSingleton('customreview/comment')->load($each_comment_id)->delete();
+            }
+            if($parent_id) {
+                updateParentCommentChildList($parent_id, $comment_id, 'delete');
             }
             return array('status' => 'success', 'message' => count($comment_ids) . ' records has been deleted.');
         } else {
@@ -2577,15 +2584,28 @@ function updateOwnPath($comment_id){
             ->save();
 }
 
-function updateParentCommentChildList($parent_id, $child_id) {
+function updateParentCommentChildList($parent_id, $child_id, $action) {
     $model = Mage::getSingleton('customreview/comment')->load($parent_id);
     $child_list = $model->getChildList();
-    if($child_list) {
-        $child_list = $child_list . ',' . $child_id;
+    if($action == 'add') {
+        if ($child_list) {
+            $child_list = explode(',', $child_list);
+            $child_list[] = $child_id;
+            $child_list = implode(',', $child_list);
+        } else {
+            $child_list = $child_id;
+        }
+        $model->setChildList($child_list)
+               ->save();
     }
-    else {
-        $child_list = $child_id;
+    elseif($action == 'delete') {
+        if ($child_list) {
+            $child_list = explode(',', $child_list);
+            $child_key = array_search($child_id, $child_list);
+            unset($child_list[$child_key]);
+            $child_list = implode(',', $child_list);
+        }
+        $model->setChildList($child_list)
+            ->save();
     }
-    $model->setChildList($child_list)
-          ->save();
 }
