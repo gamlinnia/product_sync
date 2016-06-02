@@ -2312,17 +2312,23 @@ function writeReviewCommentToLocal($data) {
 //
     $review_data = $data['review'];
     $comment_data = $data['comment'];
+    $parent_comment_data = $data['parent'];
 
     $review_id = getReviewIdFromGivenReviewData($review_data);
 
     if($review_id) {
-        $comment_review_id = $review_id;
-        $comment_status = $comment_data['status'];
-        $comment_nickname = $comment_data['nickname'];
-        $comment_content = $comment_data['content'];
-        $comment_submitter_type = $comment_data['submitter_type'];
-        $comment_customer_email = $comment_data['customer_email'];
-        switch ($comment_submitter_type) {
+        $review_id = $review_id;
+        $status = $comment_data['status'];
+        $nickname = $comment_data['nickname'];
+        $content = $comment_data['content'];
+        $submitter_type = $comment_data['submitter_type'];
+        $customer_email = $comment_data['customer_email'];
+        $layer = 1;
+        $path = $review_id;
+        $child_list = null;
+        $parent_id = 0;
+
+        switch ($submitter_type) {
             case 1:
                 //admin
                 $user_model = Mage::getSingleton('admin/user');
@@ -2335,27 +2341,53 @@ function writeReviewCommentToLocal($data) {
                 //visitor
                 break;
         }
-        $user_collection = $user_model->getCollection()->addFieldToFilter('email', $comment_customer_email);
-        $comment_customer_id = $user_collection->getFirstItem()->getId();
+        $user_collection = $user_model->getCollection()->addFieldToFilter('email', $customer_email);
+        $customer_id = $user_collection->getFirstItem()->getId();
 
         $locale = Mage::app()->getLocale()->getLocaleCode();
         $now = new Zend_Date(strtotime('now'), Zend_Date::TIMESTAMP, $locale);
         $now = $now->get('yyyy-MM-dd HH:mm:ss');
 
+        //if has parent
+        if($parent_comment_data) {
+            $collection = getCommentCollectionFromGivenCommentData($review_id, $parent_comment_data)->getFirstItem()->getId();
+            if ($collection->count() > 1) {
+                return array('status' => 'failed', 'message' => 'more than one paretn comment record');
+            }
+            $parent_comment_id = $collection->getFirstItem()->getId();
+            $parent_comment = Mage::getSingleton('customreview/comment')->load($parent_comment_id);
+            $layer = (int)$parent_comment->getLayer() + 1;
+            $path = $parent_comment->getPath();
+            $parent_id = $parent_comment_id;
+            $child_list = null;
+        }
+
         $comment_data = array(
-            'r_id'           => $comment_review_id,
-            'status'         => $comment_status,
-            'nickname'       => $comment_nickname,
-            'content'        => $comment_content,
-            'submitter_type' => $comment_submitter_type,
-            'customer_id'    => $comment_customer_id,
-            'created_at'     => $now
+            'r_id'           => $review_id,
+            'status'         => $status,
+            'nickname'       => $nickname,
+            'content'        => $content,
+            'submitter_type' => $submitter_type,
+            'customer_id'    => $customer_id,
+            'created_at'     => $now,
+            'path'           => $path,
+            'layer'          => $layer,
+            'parent_id'      => $parent_id,
+            'child_list'     => $child_list
         );
 
         $model = Mage::getModel('customreview/comment');
         $model->setData($comment_data);
         try {
             $model->save();
+            //update own path
+            $own_comment_id = $model->getId();
+            $path = $model->getPath();
+            $path = $path . DS . $own_comment_id;
+            $model->setPath($path)
+                ->save();
+            //update child list of parent if exist
+            $this->updateParentCommentChildList($parent_comment_id, $own_comment_id);
             return array('status' => 'success', 'message' => $model->getData());
         } catch (Exception $e) {
             return array('status' => 'failed', 'message' => 'Exception occur.');
@@ -2470,13 +2502,14 @@ function getReviewIdFromGivenReviewData($review_data) {
 }
 
 function getCommentCollectionFromGivenCommentData($review_id, $comment_data) {
-    $comment_review_id = $review_id;
-    $comment_status = $comment_data['status'];
-    $comment_nickname = $comment_data['nickname'];
-    $comment_content = $comment_data['content'];
-    $comment_submitter_type = $comment_data['submitter_type'];
-    $comment_customer_email = $comment_data['customer_email'];
-    switch ($comment_submitter_type) {
+    $review_id = $review_id;
+    $status = $comment_data['status'];
+    $nickname = $comment_data['nickname'];
+    $content = $comment_data['content'];
+    $submitter_type = $comment_data['submitter_type'];
+    $customer_email = $comment_data['customer_email'];
+    $layer = $comment_data['layer'];
+    switch ($submitter_type) {
         case 1:
             //admin
             $user_model = Mage::getSingleton('admin/user');
@@ -2489,16 +2522,17 @@ function getCommentCollectionFromGivenCommentData($review_id, $comment_data) {
             //visitor
             return false;
     }
-    $user_collection = $user_model->getCollection()->addFieldToFilter('email', $comment_customer_email);
-    $comment_customer_id = $user_collection->getFirstItem()->getId();
+    $user_collection = $user_model->getCollection()->addFieldToFilter('email', $customer_email);
+    $customer_id = $user_collection->getFirstItem()->getId();
 
     $comment_collection = Mage::getSingleton('customreview/comment')->getCollection();
-    $comment_collection->addFieldToFilter('r_id', $comment_review_id)
-        ->addFieldToFilter('status', $comment_status)
-        ->addFieldToFilter('nickname', $comment_nickname)
-        ->addFieldToFilter('content', $comment_content)
-        ->addFieldToFilter('submitter_type', $comment_submitter_type)
-        ->addFieldToFilter('customer_id', $comment_customer_id);
+    $comment_collection->addFieldToFilter('r_id', $review_id)
+        ->addFieldToFilter('status', $status)
+        ->addFieldToFilter('nickname', $nickname)
+        ->addFieldToFilter('content', $content)
+        ->addFieldToFilter('submitter_type', $submitter_type)
+        ->addFieldToFilter('customer_id', $customer_id)
+        ->addFieldToFilter('layer', $layer);
 
     return $comment_collection;
 }
@@ -2520,4 +2554,17 @@ function getRelatedCommentIds($comment_id) {
         }
     }
     return $result;
+}
+
+function updateParentCommentChildList($parent_id, $child_id) {
+    $model = Mage::getSingleton('customreview/comment')->load($parent_id);
+    $child_list = $model->getChildList();
+    if($child_list) {
+        $child_list = $child_list . ',' . $child_id;
+    }
+    else {
+        $child_list = $child_id;
+    }
+    $model->setChildList($child_list)
+          ->save();
 }
