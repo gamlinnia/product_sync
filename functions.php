@@ -2310,9 +2310,13 @@ function writeReviewCommentToLocal($data) {
 //    const STATUS_APPROVED = 5;
 //    const STATUS_NOT_APPROVED = 6;
 //
-    $review_data = $data['review'];
-    $comment_data = $data['comment'];
-    $parent_comment_data = $data['parent'];
+    $review_data = (isset($data['review']) && !empty($data['review'])) ? $data['review'] : null;
+    $comment_data = (isset($data['comment']) && !empty($data['comment'])) ? $data['comment'] : null;
+    $parent_comment_data = (isset($data['parent']) && !empty($data['parent'])) ? $data['parent'] : null;
+
+    if(empty($review_data) || empty($comment_data)){
+        return array('status' => 'failed', 'message' => 'input invalidate data');
+    }
 
     $review_id = getReviewIdFromGivenReviewData($review_data);
 
@@ -2405,9 +2409,14 @@ function removeReviewCommentFromLocal($data) {
 //    const STATUS_PENDING = 4;
 //    const STATUS_APPROVED = 5;
 //    const STATUS_NOT_APPROVED = 6;
+    $review_data = (isset($data['review']) && !empty($data['review'])) ? $data['review'] : null;
+    $comment_data = (isset($data['comment']) && !empty($data['comment'])) ? $data['comment'] : null;
+    $parent_comment_data = (isset($data['parent']) && !empty($data['parent'])) ? $data['parent'] : null;
 
-    $review_data = $data['review'];
-    $comment_data = $data['comment'];
+    if(empty($review_data) || empty($comment_data)){
+        return array('status' => 'failed', 'message' => 'input invalidate data');
+    }
+
 
     $review_id = getReviewIdFromGivenReviewData($review_data);
     if($review_id) {
@@ -2432,10 +2441,14 @@ function removeReviewCommentFromLocal($data) {
 }
 
 function modifyReviewCommentFromLocal($data) {
-    $review_data = $data['review'];
-    $comment_data = $data['comment'];
-    //$data['after_modify_comment'] = array('status' => '', 'content'=>'')
-    $after_modify_comment_data = $data['after_modify_comment'];
+
+    $review_data = (isset($data['review']) && !empty($data['review'])) ? $data['review'] : null;
+    $comment_data = (isset($data['comment']) && !empty($data['comment'])) ? $data['comment'] : null;
+    $after_modify_comment_data = (isset($data['after_modify_comment']) && !empty($data['after_modify_comment'])) ? $data['after_modify_comment'] : null;
+
+    if(empty($review_data) || empty($comment_data)){
+        return array('status' => 'failed', 'message' => 'input invalidate data');
+    }
 
     $review_id = getReviewIdFromGivenReviewData($review_data);
     if($review_id) {
