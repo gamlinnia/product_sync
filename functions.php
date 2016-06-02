@@ -2387,7 +2387,7 @@ function writeReviewCommentToLocal($data) {
             $model->setPath($path)
                 ->save();
             //update child list of parent if exist
-            $this->updateParentCommentChildList($parent_comment_id, $own_comment_id);
+            updateParentCommentChildList($parent_comment_id, $own_comment_id);
             return array('status' => 'success', 'message' => $model->getData());
         } catch (Exception $e) {
             return array('status' => 'failed', 'message' => 'Exception occur.');
