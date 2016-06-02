@@ -2350,7 +2350,7 @@ function writeReviewCommentToLocal($data) {
 
         //if has parent
         if($parent_comment_data) {
-            $collection = getCommentCollectionFromGivenCommentData($review_id, $parent_comment_data)->getFirstItem()->getId();
+            $collection = getCommentCollectionFromGivenCommentData($review_id, $parent_comment_data);
             if ($collection->count() > 1) {
                 return array('status' => 'failed', 'message' => 'more than one paretn comment record');
             }
