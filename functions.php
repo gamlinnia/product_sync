@@ -2315,7 +2315,7 @@ function writeReviewCommentToLocal($data) {
     $parent_comment_data = (isset($data['parent']) && !empty($data['parent'])) ? $data['parent'] : null;
 
     if(empty($review_data) || empty($comment_data)){
-        return array('status' => 'failed', 'message' => 'input invalidate data');
+        return array('status' => 'failed', 'message' => 'Invalidate input data');
     }
 
     $review_id = getReviewIdFromGivenReviewData($review_data);
@@ -2408,7 +2408,7 @@ function removeReviewCommentFromLocal($data) {
     $parent_comment_data = (isset($data['parent']) && !empty($data['parent'])) ? $data['parent'] : null;
 
     if(empty($review_data) || empty($comment_data)){
-        return array('status' => 'failed', 'message' => 'input invalidate data');
+        return array('status' => 'failed', 'message' => 'Invalidate input data');
     }
 
     $review_id = getReviewIdFromGivenReviewData($review_data);
@@ -2452,7 +2452,7 @@ function modifyReviewCommentFromLocal($data) {
     $after_modify_comment_data = (isset($data['after_modify_comment']) && !empty($data['after_modify_comment'])) ? $data['after_modify_comment'] : null;
 
     if(empty($review_data) || empty($comment_data)){
-        return array('status' => 'failed', 'message' => 'input invalidate data');
+        return array('status' => 'failed', 'message' => 'Invalidate input data');
     }
 
     $review_id = getReviewIdFromGivenReviewData($review_data);
@@ -2606,6 +2606,6 @@ function updateParentCommentChildList($parent_id, $child_id, $action) {
             $child_list = implode(',', $child_list);
         }
         $model->setChildList($child_list)
-            ->save();
+              ->save();
     }
 }
