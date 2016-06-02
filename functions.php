@@ -2321,7 +2321,6 @@ function writeReviewCommentToLocal($data) {
     $review_id = getReviewIdFromGivenReviewData($review_data);
 
     if($review_id) {
-        $review_id = $review_id;
         $status = $comment_data['status'];
         $nickname = $comment_data['nickname'];
         $content = $comment_data['content'];
@@ -2546,7 +2545,7 @@ function getCommentCollectionFromGivenCommentData($review_id, $comment_data) {
         ->addFieldToFilter('submitter_type', $submitter_type)
         ->addFieldToFilter('customer_id', $customer_id)
         ->addFieldToFilter('layer', $layer)
-        ->addFieldToFilter('created_at', $layer);
+        ->addFieldToFilter('created_at', $created_at);
 
     return $comment_collection;
 }
