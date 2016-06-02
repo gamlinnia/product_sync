@@ -2356,7 +2356,7 @@ function writeReviewCommentToLocal($data) {
         if($parent_comment_data) {
             $collection = getCommentCollectionFromGivenCommentData($review_id, $parent_comment_data);
             if ($collection->count() > 1) {
-                return array('status' => 'failed', 'message' => 'more than one paretn comment record');
+                return array('status' => 'failed', 'message' => 'more than one parent comment record');
             }
             $parent_id = $collection->getFirstItem()->getId();
             $parent = Mage::getSingleton('customreview/comment')->load($parent_id);
