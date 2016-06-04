@@ -2492,7 +2492,6 @@ function getReviewIdFromGivenReviewData($review_data) {
     $review_customer_email = $review_data['customer_email'];
     $review_rating_value = $review_data['rating_value'];
 
-
     $customer_collection = Mage::getSingleton('customer/customer')->getCollection()->addFieldToFilter('email', $review_customer_email);
     $customer_id = $customer_collection->getFirstItem()->getId();
 
