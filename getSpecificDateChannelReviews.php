@@ -43,6 +43,10 @@ do {
     }
 } while(empty($input_to) || $keep_going);
 
+echo "Start....." . PHP_EOL;
+echo "From: " . $from . PHP_EOL;
+echo "To: " . $to . PHP_EOL;
+
 if ($debug) {
     $recipient_array = array(
         'to' => array('Li.L.Liu@newegg.com', 'Tim.H.Huang@newegg.com')
@@ -97,6 +101,8 @@ $reviewCollection = $channelReviewModel
     )
     ->addFieldToFilter('rating', array('lteq'=>'2'))
     ->setOrder('created_at', 'asc');
+
+echo "Collection count: " . $reviewCollection->count() . PHP_EOL;
 
 $arrayToExcel = [];
 foreach($reviewCollection as $each) {
