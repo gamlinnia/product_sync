@@ -2006,9 +2006,9 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                                         . 'VideoOnlyMark=false&VendorMark=false&IsFeedbackTab=true&ItemGroupId=0&Type=Newegg&ItemOnlyMark=true&'
                                         . 'chkItemOnlyMark=on&Keywords=(keywords)&SortField=0&DisplaySpecificReview=0';
 //            $html = file_get_dom($review_url);
-            $response = file_get_contents($review_url);
-            $response = preg_replace('/\\\u[\d]{3}[\w]{1}/', '', $response);
-            preg_match('/{.+}/', $response, $match);
+            $html = file_get_contents($review_url);
+            $html = preg_replace('/\\\u[\d]{3}[\w]{1}/', '', $html);
+            preg_match('/{.+}/', $html, $match);
 
             $data = $match[0];
             $data = json_decode(trim($data), true);
