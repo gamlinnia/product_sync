@@ -2000,8 +2000,10 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             break;
         case 'newegg' :
             $review_url = $product_url = 'http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=' . $review_limit;
+            echo "Review Url: $review_url" . PHP_EOL;
             $html = file_get_dom($review_url);
             if(!empty($html)) {
+                echo "Start process review.." . PHP_EOL;
                 foreach ($html('#Community_Content .grpReviews tr td .details') as $element) {
                     $nickname = $element->parent->parent->getChild(1)->getChild(1)->getChild(1)->getPlainText();
                     $created = $element->parent->parent->getChild(1)->getChild(1)->getChild(3)->getPlainText();
@@ -2041,6 +2043,9 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                     var_dump($data);
                     $response[] = $data;
                 }
+            }
+            else {
+                echo "Empty html...." . PHP_EOL;
             }
             break;
     }
