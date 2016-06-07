@@ -47,7 +47,7 @@ echo "Start....." . PHP_EOL;
 echo "From: " . $from . PHP_EOL;
 echo "To: " . $to . PHP_EOL;
 
-if ($debug) {
+if ($debug=='Y' && $debug=='y') {
     $recipient_array = array(
         'to' => array('Li.L.Liu@newegg.com', 'Tim.H.Huang@newegg.com')
     );
