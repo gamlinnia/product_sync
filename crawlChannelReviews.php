@@ -108,6 +108,8 @@ foreach($channels as $channel => $url) {
         echo 'Channel: ' . $channel . PHP_EOL;
 
         $channelReviews = getLatestChannelsProductReviews($channel, $sku, $channelsinfo);
+        $review_count = count($channelReviews);
+        echo "Total $review_count record(s) found." . PHP_EOL;
         //var_dump($channelReviews);
         /*foreach review*/
         foreach($channelReviews as $eachReview) {
