@@ -10,6 +10,13 @@ Mage::app('admin');
 $question = array('from' => 'From specific date(yyyy/mm/dd): ', 'to' => 'To specific date(yyyy/mm/dd): ', 'debug' => 'debug mode(Y/n): ');
 $input = array();
 
+do {
+    /*透過 標準輸出 印出要詢問的內容*/
+    fwrite(STDOUT, $question['debug']);
+    /*抓取 標準輸入 的 內容*/
+    $debug = trim(fgets(STDIN));
+} while(empty($debug));
+
 // input from date
 do {
     /*透過 標準輸出 印出要詢問的內容*/
@@ -35,13 +42,6 @@ do {
         $keep_going = false;
     }
 } while(empty($input_to) || $keep_going);
-
-do {
-    /*透過 標準輸出 印出要詢問的內容*/
-    fwrite(STDOUT, $question['debug']);
-    /*抓取 標準輸入 的 內容*/
-    $debug = trim(fgets(STDIN));
-} while(empty($debug));
 
 if ($debug) {
     $recipient_array = array(
