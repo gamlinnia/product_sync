@@ -2030,7 +2030,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                         continue;
                     }
 
-                    $response[] = array(
+                    $data = array(
                         'detail' => $detail,
                         'nickname' => htmlentities($nickname),
                         'subject' => htmlentities($subject),
@@ -2038,6 +2038,8 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                         'rating' => $rating,
                         'product_url' => $product_url
                     );
+                    var_dump($data);
+                    $response[] = $data;
                 }
             }
             break;
