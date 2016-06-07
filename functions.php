@@ -1999,28 +1999,35 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             echo json_encode($response) . PHP_EOL;
             break;
         case 'newegg' :
-            $review_url = $product_url = 'http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=' . $review_limit;
-            echo "Review Url: $review_url" . PHP_EOL;
-            $html = file_get_dom($review_url);
-            if(!empty($html)) {
-                echo "Start process review.." . PHP_EOL;
-                foreach ($html('#Community_Content .grpReviews tr td .details') as $element) {
-                    $nickname = $element->parent->parent->getChild(1)->getChild(1)->getChild(1)->getPlainText();
-                    $created = $element->parent->parent->getChild(1)->getChild(1)->getChild(3)->getPlainText();
+            //$review_url = $product_url = 'http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=' . $review_limit;
+            $review_url = $product_url = 'http://content.newegg.com/Common/Ajax/ProductReview2016.aspx?'
+                                        +'action=Biz.Product.ProductReview.switchReviewTabCallBack&callback=Biz.Product.ProductReview.switchReviewTabCallBack&&'
+                                        + 'Item='. $sku.'&review=0&SummaryType=0&Pagesize='. $review_limit .'&PurchaseMark=false&SelectedRating=-1&'
+                                        + 'VideoOnlyMark=false&VendorMark=false&IsFeedbackTab=true&ItemGroupId=0&Type=Newegg&ItemOnlyMark=true&'
+                                        + 'chkItemOnlyMark=on&Keywords=(keywords)&SortField=0&DisplaySpecificReview=0';
+//            $html = file_get_dom($review_url);
+            $response = file_get_contents($review_url);
+            $response = preg_replace('/\\\u[\d]{3}[\w]{1}/', '', $response);
+            preg_match('/{.+}/', $response, $match);
 
-                    /* ratingText => 'Rating: 4/5' */
-                    $ratingText = $element->parent->parent->getChild(3)->getChild(3)->getChild(0)->getPlainText();
+            $data = $match[0];
+            $data = json_decode(trim($data), true);
+            $review_list = $data['ReviewList'];
+            $html = str_get_dom($review_list);
+            if(!empty($html)) {
+                foreach ($html('.grpReviews tr td .details') as $element) {
+                    $nickname = $element->parent->parent->getChild(0)->getChild(0)->getChild(0)->getPlainText();
+                    $created = $element->parent->parent->getChild(0)->getChild(0)->getChild(1)->getPlainText();
+                    $ratingText = $element->parent->parent->getChild(1)->getChild(2)->getChild(0)->getPlainText();
                     preg_match('/(\d).?\/.?\d/', $ratingText, $match);
                     if (count($match) == 2) {
                         $rating = $match[1];
                     }
-
-                    if ($element->parent->parent->getChild(3)->getChild(3)->getChild(1)) {
-                        $subject = $element->parent->parent->getChild(3)->getChild(3)->getChild(1)->getPlainText();
+                    if ($element->parent->parent->getChild(1)->getChild(2)->getChild(1)) {
+                        $subject = $element->parent->parent->getChild(1)->getChild(2)->getChild(1)->getPlainText();
                     } else {
                         $subject = null;
                     }
-
                     $detail = trim($element->getPlainText());
                     /*remove string before "Pros: " and add <br /> in front of "Crons:" and "Other Thoughts:"*/
                     $detail =  substr($detail, strpos($detail, 'Pros:'), strlen($detail));
@@ -2040,7 +2047,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                         'rating' => $rating,
                         'product_url' => $product_url
                     );
-                    var_dump($data);
+//                    var_dump($data);
                     $response[] = $data;
                 }
             }
