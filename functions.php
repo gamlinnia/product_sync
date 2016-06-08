@@ -1234,7 +1234,7 @@ function exportArrayToXlsx ($exportArray, $exportParam) {
     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
     $objWriter->save($exportParam['filename']); // Excel2007 : '.xlsx'   Excel5 : '.xls'
 
-    echo json_encode(array('message' => 'success'));
+    echo json_encode(array('message' => 'success')) . PHP_EOL;
 }
 
 /*

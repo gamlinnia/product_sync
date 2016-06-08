@@ -47,7 +47,7 @@ echo "Start....." . PHP_EOL;
 echo "From: " . $from . PHP_EOL;
 echo "To: " . $to . PHP_EOL;
 
-if ($debug=='Y' && $debug=='y') {
+if ($debug=='Y' || $debug=='y') {
     $recipient_array = array(
         'to' => array('Li.L.Liu@newegg.com', 'Tim.H.Huang@newegg.com')
     );
@@ -137,8 +137,8 @@ if(!empty($arrayToExcel)) {
         "filename" => $fileName,
         "title" => $sheetName
     ));
-}
-
-if(!empty($fileList)) {
     sendMailWithDownloadUrl('Bad product review alert', $fileList, $recipient_array);
+}
+else {
+    echo "No bad review found." . PHP_EOL;
 }

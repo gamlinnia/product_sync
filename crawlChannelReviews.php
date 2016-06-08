@@ -195,16 +195,12 @@ foreach($channels as $channel => $url) {
             "filename" => $fileName,
             "title" => $sheetName
         ));
+        /*send email notification*/
+        sendMailWithDownloadUrl('Bad product review alert', $fileList, $recipient_array);
     }
-}
-
-/*send email notification*/
-if(!empty($fileList)) {
-    /*sendEmail*/
-    sendMailWithDownloadUrl('Bad product review alert', $fileList, $recipient_array);
-}
-else {
-    sendMailWithDownloadUrl('Bad product review alert - no bad review submitted', null, $recipient_array);
+    else {
+        sendMailWithDownloadUrl('Bad product review alert - no bad review submitted', null, $recipient_array);
+    }
 }
 
 /*log ending time*/
