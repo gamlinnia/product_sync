@@ -101,8 +101,10 @@ if (!$productExists) {
     }
 
     if (isset($productJson['intelligence']['Introduction']) && !empty($productJson['intelligence']['Introduction'])) {
+        echo 'set product description' . $productJson['intelligence']['Introduction'] . PHP_EOL;
         $model->setData('description', $productJson['intelligence']['Introduction']);
     } elseif ( isset($productJson['description']['WebDescription']) && !empty($productJson['description']['WebDescription']) ) {
+        echo 'set product description' . $productJson['description']['WebDescription'] . PHP_EOL;
         $model->setData('description', $productJson['description']['WebDescription']);
     }
 
@@ -153,8 +155,6 @@ foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
     }
     $specialBigItems = array('property');
 }
-
-Zend_Debug::dump($model->getData());
 
 /*透過 標準輸出 印出要詢問的內容*/
 fwrite(STDOUT, 'Are you sure to save this product information?');
