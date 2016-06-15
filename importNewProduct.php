@@ -292,11 +292,11 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
             $mediaArray = array();
         }
 
-        $productModel->addImageToMediaGallery('tmp.' . $eachFileInfo['extension'],
+        $productModel->addImageToMediaGallery('/tmp/' . $eachFileInfo['basename'],
             $mediaArray
             ,true,false);
         $attributes = $productModel->getTypeInstance(true)->getSetAttributes($productModel);
-        $attributes['media_gallery']->getBackend()->updateImage($productModel, 'tmp.' . $eachFileInfo['extension'], $data=array(
+        $attributes['media_gallery']->getBackend()->updateImage($productModel, '/tmp/' . $eachFileInfo['basename'], $data=array(
                 'postion' => (int)$eachFileInfo['Priority'] * 10,
                 'label' => $pathInfo['filename']
             )
