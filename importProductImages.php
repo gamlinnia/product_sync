@@ -28,10 +28,7 @@ $restPostfix = '/content/v1/item/' . $itemNumber . '/image';
 
             /*curl https 會出現問題*/
             $response = CallAPI('GET', $IMBaseUrl . $restPostfix, $header);
-            if ($returnResponse) {
-                return $response['Images'];
-            }
-            echo json_encode($response['Images']);
+            var_dump($response);
 
 die();
 
