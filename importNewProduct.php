@@ -278,7 +278,7 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
             default:
                 return false;
         }
-        $tmpFile = file_get_contents($imageBase . $productModel->getSku());
+        $tmpFile = file_get_contents($imageBase . $eachFileInfo['ImageName']);
         echo 'image url: ' . $imageBase . $productModel->getSku() . PHP_EOL;
         file_put_contents('imageTmp', $tmpFile);
 
@@ -298,7 +298,7 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
                 'mime' => $mimeType,
                 'name' => $pathInfo['filename'],
             ),
-            'label' => 'whatever', // change this.
+            'label' => $pathInfo['filename'],
             'position' => (int)$eachFileInfo['Priority'] * 10,
             'types' => $mediaArray,
             'exclude' => 0,
