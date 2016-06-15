@@ -109,7 +109,7 @@ if (isset($productJson['intelligence']['Introduction']) && !empty($productJson['
     echo 'set product description' . $productJson['description']['WebDescription'] . PHP_EOL;
     $model->setData('description', $productJson['description']['WebDescription']);
 } else {
-    echo json_encode($productJson['description'], JSON_PRETTY_PRINT) . PHP_EOL;
+    echo json_encode($productJson, JSON_PRETTY_PRINT) . PHP_EOL;
 }
 
 
@@ -136,6 +136,7 @@ foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
                                     case 'text' :
                                     case 'textarea' :
                                     case 'weight' :
+                                        echo 'set attribute: ' . $eachAttrObject['code'] . ' value: ' . $value . PHP_EOL;
                                         $model->setData($eachAttrObject['code'], $value);
                                         break;
                                     default :
