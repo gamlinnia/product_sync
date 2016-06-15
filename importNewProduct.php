@@ -279,7 +279,7 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
                 return false;
         }
         $tmpFile = file_get_contents($imageBase . $eachFileInfo['ImageName']);
-        $fileUrl = '/tmp/' . $eachFileInfo['basename'];
+        $fileUrl = '/tmp/' . $pathInfo['basename'];
         file_put_contents($fileUrl, $tmpFile);
         echo 'file dir: ' . $fileUrl . PHP_EOL;
 
