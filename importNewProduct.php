@@ -156,6 +156,33 @@ $sureToAction = trim(fgets(STDIN));
 
 if ( strtolower($sureToAction) == 'y' || strtolower($sureToAction) == 'yes' ) {
     $model->save();
+
+    /* set inventory */
+    $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($model);
+    echo "processing id: " . $model->getId() . PHP_EOL;
+    echo json_encode($stockItem->getData(), JSON_PRETTY_PRINT);
+
+    if (!$stockItem->getData('manage_stock')) {
+        echo 'not managed by stock' . PHP_EOL;
+        $stockItem->setData('product_id', $model->getId());
+        $stockItem->setData('stock_id', 1);
+        $stockItem->save();
+
+        $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($model);
+        echo json_encode($stockItem->getData(), JSON_PRETTY_PRINT);
+        $stockItem->setData('manage_stock', 1);
+        $stockItem->setData('is_in_stock', 1);
+        $stockItem->setData('qty', 100);
+        $stockItem->save();
+    } else {
+        if ((string)$stockItem->getData('qty') != '100') {
+            $stockItem->setData('manage_stock', 1);
+            $stockItem->setData('is_in_stock', 1);
+            $stockItem->setData('qty', 100);
+            $stockItem->save();
+        }
+    }
+
 }
 
 /* deal with image part */
