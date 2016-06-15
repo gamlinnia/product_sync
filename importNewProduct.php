@@ -278,6 +278,7 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
                 return false;
         }
         $tmpFile = file_get_contents($imageBase . $productModel->getSku());
+        echo 'image count: ' . count(base64_encode($tmpFile)) . PHP_EOL;
 
         if ((int)$eachFileInfo['Priority'] < 2) {
             $mediaArray = array(
