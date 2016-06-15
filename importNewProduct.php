@@ -99,17 +99,19 @@ if (!$productExists) {
         $model->setData('model_number', $productJson['Model']);
     }
 
-    if (isset($productJson['intelligence']['Introduction']) && !empty($productJson['intelligence']['Introduction'])) {
-        echo 'set product description' . $productJson['intelligence']['Introduction'] . PHP_EOL;
-        $model->setData('description', $productJson['intelligence']['Introduction']);
-    } elseif ( isset($productJson['description']['WebDescription']) && !empty($productJson['description']['WebDescription']) ) {
-        echo 'set product description' . $productJson['description']['WebDescription'] . PHP_EOL;
-        $model->setData('description', $productJson['description']['WebDescription']);
-    } else {
-        echo json_encode($productJson['description'], JSON_PRETTY_PRINT);
-    }
-
 }
+
+/* set product description */
+if (isset($productJson['intelligence']['Introduction']) && !empty($productJson['intelligence']['Introduction'])) {
+    echo 'set product description' . $productJson['intelligence']['Introduction'] . PHP_EOL;
+    $model->setData('description', $productJson['intelligence']['Introduction']);
+} elseif ( isset($productJson['description']['WebDescription']) && !empty($productJson['description']['WebDescription']) ) {
+    echo 'set product description' . $productJson['description']['WebDescription'] . PHP_EOL;
+    $model->setData('description', $productJson['description']['WebDescription']);
+} else {
+    echo json_encode($productJson['description'], JSON_PRETTY_PRINT) . PHP_EOL;
+}
+
 
 foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
     switch ($bigProductInfoItem) {
