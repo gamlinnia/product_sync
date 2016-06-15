@@ -264,6 +264,7 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
     foreach ($imageFileInfoArray as $index => $eachFileInfo) {
         // get array of dirname, basename, extension, filename
         $pathInfo = pathinfo($eachFileInfo['ImageName']);
+        var_dump($pathInfo);
         switch($pathInfo['extension']){
             case 'png':
                 $mimeType = 'image/png';
