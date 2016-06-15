@@ -230,6 +230,8 @@ switch ($dbImageCount) {
             if ($imageUploadResopnse) {
                 echo 'image upload success' . PHP_EOL;
             }
+        } else {
+            echo 'no image information to upload' . PHP_EOL;
         }
         break;
     default :
