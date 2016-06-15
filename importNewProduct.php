@@ -207,7 +207,7 @@ var_dump($mediaGallery['images']);
 if (count($mediaGallery['images']) < 1) {
     echo 'no image, set status to disable product id: ' . $productId . PHP_EOL;
     $model = Mage::getSingleton('catalog/product')->load($productId);
-    $model->setData('status', '0')->save();
+    $model->setData('status', '2')->save();
 }
 
 switch ($dbImageCount) {
