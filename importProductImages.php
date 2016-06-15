@@ -29,7 +29,7 @@ $restPostfix = '/content/v1/item/' . $itemNumber . '/image';
 $restUrl = $IMBaseUrl . $restPostfix;
 echo 'Rest Url: ' . $restUrl . PHP_EOL;
 
-            $response = CallAPI('GET', $IMBaseUrl . $restPostfix, $header);
+            $response = CallAPI('GET', $restUrl, $header);
             var_dump($response);
 
 die();

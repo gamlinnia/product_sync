@@ -285,6 +285,7 @@ $app->post('/api/postProductJsonToLocal', function () {
             }
         }
         file_put_contents($dir . $input['ItemNumber'], json_encode($input));
+        chmod($dir . $input['ItemNumber'], 0777);
     }
 
     echo json_encode(array(
