@@ -225,7 +225,12 @@ switch ($dbImageCount) {
         break;
     case 0 :
         echo 'no image exists, need to upload new images.' . PHP_EOL;
-
+        if (isset($productJson['Images']) && count($productJson['Images'])) {
+            $imageUploadResopnse = importProductImageByImageFileName($model, $productJson['Images']);
+            if ($imageUploadResopnse) {
+                echo 'image upload success' . PHP_EOL;
+            }
+        }
         break;
     default :
         $compareResult = existDifferentImages($productInfo['images'], $mediaGallery['images']);
@@ -239,23 +244,11 @@ switch ($dbImageCount) {
             }
             if(!empty($removeList)){
                 echo "remove exist images" . PHP_EOL;
-                if (isset($productJson['Images']) && count($productJson['Images'])) {
-                    $imageUploadResopnse = importProductImageByImageFileName($model, $productJson['Images']);
-                    if ($imageUploadResopnse) {
-                        echo 'image upload success' . PHP_EOL;
-                    }
-                }
             }
         }
         else{
             echo 'no need to upload new images.' . PHP_EOL;
         }
-//        if ($dbImageCount == count($productJson['images'])) {
-//            echo 'no need to upload new images.' . PHP_EOL;
-//        } else {
-//            echo 'need to compare images to upload.' . PHP_EOL;
-//            echo 'code not finished yet.' . PHP_EOL;
-//        }
 }
 
 
