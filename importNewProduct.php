@@ -296,7 +296,8 @@ function importProductImageByImageFileName ($productId, $imageFileInfoArray) {
         $productModel = Mage::getSingleton('catalog/product')->load($productId);
         $productModel->addImageToMediaGallery($fileUrl,
             $mediaArray
-            ,false,false);
+            ,true,false);
+        $productModel->save();
         $attributes = $productModel->getTypeInstance(true)->getSetAttributes($productModel);
         $attributes['media_gallery']->getBackend()->updateImage(
             $productModel,
@@ -306,7 +307,6 @@ function importProductImageByImageFileName ($productId, $imageFileInfoArray) {
                 'label' => $pathInfo['filename']
             )
         );
-        $productModel->save();
 
 
 //        $newImage = array(
