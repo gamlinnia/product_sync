@@ -279,8 +279,8 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
                 return false;
         }
         $tmpFile = file_get_contents($imageBase . $eachFileInfo['ImageName']);
+        file_put_contents('tmp.' . $eachFileInfo['extension'], $tmpFile);
         echo 'image url: ' . $imageBase . $eachFileInfo['ImageName'] . PHP_EOL;
-        file_put_contents('imageTmp', $tmpFile);
 
         if ((int)$eachFileInfo['Priority'] < 2) {
             $mediaArray = array(
@@ -292,19 +292,31 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
             $mediaArray = array();
         }
 
-        $newImage = array(
-            'file' => array(
-                'content' => base64_encode($tmpFile),
-                'mime' => $mimeType,
-                'name' => $pathInfo['basename'],
-            ),
-            'label' => $pathInfo['filename'],
-            'position' => (int)$eachFileInfo['Priority'] * 10,
-            'types' => array(),
-            'exclude' => 0,
+        $productModel->addImageToMediaGallery('tmp.' . $eachFileInfo['extension'],
+            $mediaArray
+            ,true,false);
+        $attributes = $productModel->getTypeInstance(true)->getSetAttributes($productModel);
+        $attributes['media_gallery']->getBackend()->updateImage($productModel, 'tmp.' . $eachFileInfo['extension'], $data=array(
+                'postion' => (int)$eachFileInfo['Priority'] * 10,
+                'label' => $pathInfo['filename']
+            )
         );
-        var_dump($newImage);
-        $media->create($productModel->getSku(), $newImage);
+        $productModel->save();
+
+
+//        $newImage = array(
+//            'file' => array(
+//                'content' => base64_encode($tmpFile),
+//                'mime' => $mimeType,
+//                'name' => $pathInfo['basename'],
+//            ),
+//            'label' => $pathInfo['filename'],
+//            'position' => (int)$eachFileInfo['Priority'] * 10,
+//            'types' => array(),
+//            'exclude' => 0,
+//        );
+//        var_dump($newImage);
+//        $media->create($productModel->getSku(), $newImage);
     }
     return true;
 }
