@@ -296,11 +296,11 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
             'file' => array(
                 'content' => base64_encode($tmpFile),
                 'mime' => $mimeType,
-                'name' => $pathInfo['filename'],
+                'name' => $pathInfo['basename'],
             ),
             'label' => $pathInfo['filename'],
             'position' => (int)$eachFileInfo['Priority'] * 10,
-            'types' => $mediaArray,
+            'types' => array(),
             'exclude' => 0,
         );
         var_dump($newImage);
