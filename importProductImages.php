@@ -27,6 +27,9 @@ $restPostfix = '/content/v1/item/' . $itemNumber . '/image';
     );
 
             /*curl https 會出現問題*/
+$restUrl = $IMBaseUrl . $restPostfix;
+echo 'Rest Url: ' . $restUrl . PHP_EOL;
+
             $response = CallAPI('GET', $IMBaseUrl . $restPostfix, $header);
             var_dump($response);
 
