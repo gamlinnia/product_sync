@@ -53,6 +53,8 @@ $productExists = false;
 if ($collection->count() < 1) {
     echo 'whole new product' . PHP_EOL;
     $model = Mage::getModel('catalog/product');
+    $attrSetInfo = attributeSetNameAndId('attributeSetName', $mappedAttrSets);
+    echo $mappedAttrSet . 'map to attr set id: ' . $attrSetInfo['id'] . PHP_EOL;
 } else {
     $productId = $collection->getFirstItem()->getId();
     $model = Mage::getModel('catalog/product')->load($productId);
