@@ -39,7 +39,6 @@ if (!file_get_contents($dir . $sku)) {
 $productJson = json_decode(file_get_contents($dir . $sku), true);
 $mapTable = json_decode(file_get_contents($dir . 'mappingAttrs.json'), true);
 $categoryMapToAttributeSet = json_decode(file_get_contents($dir . 'categoryMapToAttributeSet.json'), true);
-var_dump($mapTable);
 
 /*get SubcategoryName in baseinfo*/
 $subcategoryName = $productJson['baseinfo']['SubcategoryName'];
@@ -106,6 +105,8 @@ if (!$productExists) {
     } elseif ( isset($productJson['description']['WebDescription']) && !empty($productJson['description']['WebDescription']) ) {
         echo 'set product description' . $productJson['description']['WebDescription'] . PHP_EOL;
         $model->setData('description', $productJson['description']['WebDescription']);
+    } else {
+        echo json_encode($productJson['description'], JSON_PRETTY_PRINT);
     }
 
 }
