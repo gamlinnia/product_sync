@@ -99,6 +99,13 @@ if (!$productExists) {
     if (isset($productJson['Model'])) {
         $model->setData('model_number', $productJson['Model']);
     }
+
+    if (isset($productJson['intelligence']['Introduction']) && !empty($productJson['intelligence']['Introduction'])) {
+        $model->setData('description', $productJson['intelligence']['Introduction']);
+    } elseif ( isset($productJson['description']['WebDescription']) && !empty($productJson['description']['WebDescription']) ) {
+        $model->setData('description', $productJson['description']['WebDescription']);
+    }
+
 }
 
 foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
@@ -159,8 +166,7 @@ if ( strtolower($sureToAction) == 'y' || strtolower($sureToAction) == 'yes' ) {
 
     /* set inventory */
     $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($model);
-    echo "processing id: " . $model->getId() . PHP_EOL;
-    echo json_encode($stockItem->getData(), JSON_PRETTY_PRINT);
+    echo "processing inventory id: " . $model->getId() . PHP_EOL;
 
     if (!$stockItem->getData('manage_stock')) {
         echo 'not managed by stock' . PHP_EOL;
@@ -169,7 +175,6 @@ if ( strtolower($sureToAction) == 'y' || strtolower($sureToAction) == 'yes' ) {
         $stockItem->save();
 
         $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($model);
-        echo json_encode($stockItem->getData(), JSON_PRETTY_PRINT);
         $stockItem->setData('manage_stock', 1);
         $stockItem->setData('is_in_stock', 1);
         $stockItem->setData('qty', 100);
