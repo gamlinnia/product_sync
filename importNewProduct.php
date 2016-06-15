@@ -199,6 +199,12 @@ $mediaGallery = $model->getMediaGallery();
 $dbImageCount = count($mediaGallery['images']);
 echo 'image gallery content' . PHP_EOL;
 var_dump($mediaGallery['images']);
+
+/* if need to upload or delete images, set status to disable */
+if (count($mediaGallery['images']) < 1) {
+    $model->setData('status', '0')->save();
+}
+
 switch ($dbImageCount) {
     case 1 :
         preg_match('/cs/', $mediaGallery['images'][0]['file'], $match);
@@ -211,8 +217,10 @@ switch ($dbImageCount) {
             }
             break;
         }
+        break;
     case 0 :
         echo 'no image exists, need to upload new images.' . PHP_EOL;
+        break;
     default :
         $compareResult = existDifferentImages($productInfo['images'], $mediaGallery['images']);
         $message = $compareResult['message'];
