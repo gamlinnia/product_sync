@@ -15,7 +15,7 @@ if (!isset($argv[1])) {
 }
 $itemNumber = $argv[1];
 
-$IMBaseUrl = 'http://apis.newegg.org';
+$IMBaseUrl = 'https://apis.newegg.org';
 $imageBase = 'http://images10.newegg.com/productimage';
 //$imageBase = 'http://10.1.39.209/productimage';
 $restPostfix = '/content/v1/item/' . $itemNumber . '/image';
@@ -26,7 +26,6 @@ $restPostfix = '/content/v1/item/' . $itemNumber . '/image';
         'Authorization: b90ecb77fe00ee07f61c22dca5036b93&2d977e9513aaf4df876c3c4b9e1874ac'
     );
 
-            /*curl https 會出現問題*/
 $restUrl = $IMBaseUrl . $restPostfix;
 echo 'Rest Url: ' . $restUrl . PHP_EOL;
 
