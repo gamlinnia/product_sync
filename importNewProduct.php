@@ -90,12 +90,15 @@ if (!$productExists) {
 
     $model->setAttributeSetId($attrSetInfo['id'])
         ->setData('type_id', 'simple')
-        ->setData('model_number', $productJson['Model'])
         ->setData('status', '1')
         ->setData('tax_class_id', '0')
         ->setData('enable_rma', '0')
         ->setData('visibility', '4')
         ->setWebsiteIds(getAllWebisteIds());
+
+    if (isset($productJson['Model'])) {
+        $model->setData('model_number', $productJson['Model']);
+    }
 }
 
 foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
