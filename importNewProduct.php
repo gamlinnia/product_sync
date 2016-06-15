@@ -279,8 +279,9 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
                 return false;
         }
         $tmpFile = file_get_contents($imageBase . $eachFileInfo['ImageName']);
-        file_put_contents('/tmp/' . $eachFileInfo['basename'], $tmpFile);
-        echo 'image url: ' . $imageBase . $eachFileInfo['ImageName'] . PHP_EOL;
+        $fileUrl = '/tmp/' . $eachFileInfo['basename'];
+        file_put_contents($fileUrl, $tmpFile);
+        echo 'file dir: ' . $fileUrl . PHP_EOL;
 
         if ((int)$eachFileInfo['Priority'] < 2) {
             $mediaArray = array(
@@ -292,11 +293,14 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
             $mediaArray = array();
         }
 
-        $productModel->addImageToMediaGallery('/tmp/' . $eachFileInfo['basename'],
+        $productModel->addImageToMediaGallery($fileUrl,
             $mediaArray
             ,true,false);
         $attributes = $productModel->getTypeInstance(true)->getSetAttributes($productModel);
-        $attributes['media_gallery']->getBackend()->updateImage($productModel, '/tmp/' . $eachFileInfo['basename'], $data=array(
+        $attributes['media_gallery']->getBackend()->updateImage(
+            $productModel,
+            $fileUrl,
+            $data=array(
                 'postion' => (int)$eachFileInfo['Priority'] * 10,
                 'label' => $pathInfo['filename']
             )
