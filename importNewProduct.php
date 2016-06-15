@@ -296,6 +296,7 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
         $productModel->addImageToMediaGallery($fileUrl,
             $mediaArray
             ,false,false);
+        $productModel->save();
         $attributes = $productModel->getTypeInstance(true)->getSetAttributes($productModel);
         $attributes['media_gallery']->getBackend()->updateImage(
             $productModel,
@@ -305,7 +306,6 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
                 'label' => $pathInfo['filename']
             )
         );
-        $productModel->save();
 
 
 //        $newImage = array(
