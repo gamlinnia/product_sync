@@ -220,6 +220,7 @@ switch ($dbImageCount) {
         break;
     case 0 :
         echo 'no image exists, need to upload new images.' . PHP_EOL;
+
         break;
     default :
         $compareResult = existDifferentImages($productInfo['images'], $mediaGallery['images']);
@@ -233,6 +234,12 @@ switch ($dbImageCount) {
             }
             if(!empty($removeList)){
                 echo "remove exist images" . PHP_EOL;
+                if (isset($productJson['Images'])) {
+                    $imageUploadResopnse = importProductImageByImageFileName($model, $productJson['Images']);
+                    if ($imageUploadResopnse) {
+                        echo 'image upload success' . PHP_EOL;
+                    }
+                }
             }
         }
         else{
@@ -244,4 +251,54 @@ switch ($dbImageCount) {
 //            echo 'need to compare images to upload.' . PHP_EOL;
 //            echo 'code not finished yet.' . PHP_EOL;
 //        }
+}
+
+
+function importProductImageByImageFileName ($productModel, $imageFileInfoArray) {
+
+    $imageBase = 'http://images10.newegg.com/productimage/';
+    $media = Mage::getModel('catalog/product_attribute_media_api');
+
+    foreach ($imageFileInfoArray as $index => $eachFileInfo) {
+        // get array of dirname, basename, extension, filename
+        $pathInfo = pathinfo($eachFileInfo['ImageName']);
+        switch($pathInfo['extension']){
+            case 'png':
+                $mimeType = 'image/png';
+                break;
+            case 'jpg':
+                $mimeType = 'image/jpeg';
+                break;
+            case 'gif':
+                $mimeType = 'image/gif';
+                break;
+            default:
+                return false;
+        }
+        $tmpFile = file_get_contents($imageBase . $productModel->getSku());
+
+        if ((int)$eachFileInfo['Priority'] < 2) {
+            $mediaArray = array(
+                'thumbnail',
+                'small_image',
+                'image'
+            );
+        } else {
+            $mediaArray = array();
+        }
+
+        $newImage = array(
+            'file' => array(
+                'content' => base64_encode($tmpFile),
+                'mime' => $mimeType,
+                'name' => $pathInfo['filename'],
+            ),
+            'label' => 'whatever', // change this.
+            'position' => (int)$eachFileInfo['Priority'] * 10,
+            'types' => $mediaArray,
+            'exclude' => 0,
+        );
+        $media->create($productModel->getSku(), $newImage);
+    }
+    return true;
 }

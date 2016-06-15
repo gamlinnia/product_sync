@@ -20,19 +20,6 @@ $imageBase = 'http://images10.newegg.com/productimage';
 //$imageBase = 'http://10.1.39.209/productimage';
 $restPostfix = '/content/v1/item/' . $itemNumber . '/image';
 
-    $header = array(
-        'Content-Type: application/json',
-        'Accept: application/json',
-        'Authorization: b90ecb77fe00ee07f61c22dca5036b93&2d977e9513aaf4df876c3c4b9e1874ac'
-    );
-
-$restUrl = $IMBaseUrl . $restPostfix;
-echo 'Rest Url: ' . $restUrl . PHP_EOL;
-
-            $response = CallAPI('GET', $restUrl, $header);
-            var_dump($response);
-
-die();
 
 
 //$product = Mage::getModel('catalog/product')->getCollection()->addFieldToFilter('sku','12-132-132');
