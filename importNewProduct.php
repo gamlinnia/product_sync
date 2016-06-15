@@ -293,35 +293,35 @@ function importProductImageByImageFileName ($productId, $imageFileInfoArray) {
         }
 
         $productModel = Mage::getSingleton('catalog/product')->load($productId);
-        $productModel->addImageToMediaGallery($fileUrl,
-            $mediaArray
-            ,false,false);
-        $attributes = $productModel->getTypeInstance(true)->getSetAttributes($productModel);
-        $attributes['media_gallery']->getBackend()->updateImage(
-            $productModel,
-            $fileUrl,
-            $data=array(
-                'postion' => (int)$eachFileInfo['Priority'] * 10,
-                'label' => $pathInfo['filename']
-            )
-        );
-        $productModel->save();
-
-        echo 'position: ' . (int)$eachFileInfo['Priority'] * 10 . ' label: ' . $pathInfo['filename'] . PHP_EOL;
-
-//        $newImage = array(
-//            'file' => array(
-//                'content' => base64_encode($tmpFile),
-//                'mime' => $mimeType,
-//                'name' => $pathInfo['basename'],
-//            ),
-//            'label' => $pathInfo['filename'],
-//            'position' => (int)$eachFileInfo['Priority'] * 10,
-//            'types' => array(),
-//            'exclude' => 0,
+//        $productModel->addImageToMediaGallery($fileUrl,
+//            $mediaArray
+//            ,false,false);
+//        $attributes = $productModel->getTypeInstance(true)->getSetAttributes($productModel);
+//        $attributes['media_gallery']->getBackend()->updateImage(
+//            $productModel,
+//            $fileUrl,
+//            $data=array(
+//                'postion' => (int)$eachFileInfo['Priority'] * 10,
+//                'label' => $pathInfo['filename']
+//            )
 //        );
-//        var_dump($newImage);
-//        $media->create($productModel->getSku(), $newImage);
+//        $productModel->save();
+//
+//        echo 'position: ' . (int)$eachFileInfo['Priority'] * 10 . ' label: ' . $pathInfo['filename'] . PHP_EOL;
+
+        $newImage = array(
+            'file' => array(
+                'content' => base64_encode($fileUrl),
+                'mime' => $mimeType,
+                'name' => $pathInfo['basename'],
+            ),
+            'label' => $pathInfo['filename'],
+            'position' => (int)$eachFileInfo['Priority'] * 10,
+            'types' => array(),
+            'exclude' => 0,
+        );
+        var_dump($newImage);
+        $media->create($productModel->getSku(), $newImage);
     }
     return true;
 }
