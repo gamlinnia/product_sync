@@ -341,4 +341,9 @@ $app->post('/api/modifyReviewCommentFromLocal', function () {
     $result = modifyReviewCommentFromLocal($data);
     echo json_encode($result);
 });
+
+$app->get('/api/test', function () {
+    echo json_encode(array('message' => 'test'));
+});
+
 $app->run();
