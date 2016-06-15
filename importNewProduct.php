@@ -205,7 +205,7 @@ var_dump($mediaGallery['images']);
 
 /* if need to upload or delete images, set status to disable */
 if (count($mediaGallery['images']) < 1) {
-    echo 'no image, set status to disable' . PHP_EOL;
+    echo 'no image, set status to disable product id: ' . $productId . PHP_EOL;
     $model = Mage::getSingleton('catalog/product')->load($productId);
     $model->setData('status', '0')->save();
 }
