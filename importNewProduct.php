@@ -295,7 +295,7 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
 
         $productModel->addImageToMediaGallery($fileUrl,
             $mediaArray
-            ,true,false);
+            ,false,false);
         $attributes = $productModel->getTypeInstance(true)->getSetAttributes($productModel);
         $attributes['media_gallery']->getBackend()->updateImage(
             $productModel,
