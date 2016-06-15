@@ -234,7 +234,7 @@ switch ($dbImageCount) {
             }
             if(!empty($removeList)){
                 echo "remove exist images" . PHP_EOL;
-                if (isset($productJson['Images'])) {
+                if (isset($productJson['Images']) && count($productJson['Images'])) {
                     $imageUploadResopnse = importProductImageByImageFileName($model, $productJson['Images']);
                     if ($imageUploadResopnse) {
                         echo 'image upload success' . PHP_EOL;
