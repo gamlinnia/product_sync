@@ -229,6 +229,8 @@ switch ($dbImageCount) {
             $imageUploadResopnse = importProductImageByImageFileName($model, $productJson['Images']);
             if ($imageUploadResopnse) {
                 echo 'image upload success' . PHP_EOL;
+                $model = Mage::getSingleton('catalog/product')->load($productId);
+                $model->setData('status', '1')->save();
             }
         } else {
             echo 'no image information to upload' . PHP_EOL;
