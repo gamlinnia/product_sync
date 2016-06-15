@@ -279,7 +279,7 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
                 return false;
         }
         $tmpFile = file_get_contents($imageBase . $eachFileInfo['ImageName']);
-        echo 'image url: ' . $imageBase . $productModel->getSku() . PHP_EOL;
+        echo 'image url: ' . $imageBase . $eachFileInfo['ImageName'] . PHP_EOL;
         file_put_contents('imageTmp', $tmpFile);
 
         if ((int)$eachFileInfo['Priority'] < 2) {
