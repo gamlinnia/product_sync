@@ -279,6 +279,8 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
                 return false;
         }
         $tmpFile = file_get_contents($imageBase . $productModel->getSku());
+        file_put_contents('imageTmp', $tmpFile);
+
         echo 'image count: ' . count(base64_encode($tmpFile)) . PHP_EOL;
 
         if ((int)$eachFileInfo['Priority'] < 2) {
@@ -293,7 +295,7 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
 
         $newImage = array(
             'file' => array(
-                'content' => base64_encode($tmpFile),
+                'content' => base64_encode('imageTmp'),
                 'mime' => $mimeType,
                 'name' => $pathInfo['filename'],
             ),
