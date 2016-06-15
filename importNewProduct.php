@@ -226,7 +226,7 @@ switch ($dbImageCount) {
     case 0 :
         echo 'no image exists, need to upload new images.' . PHP_EOL;
         if (isset($productJson['Images']) && count($productJson['Images'])) {
-            $imageUploadResopnse = importProductImageByImageFileName($model, $productJson['Images']);
+            $imageUploadResopnse = importProductImageByImageFileName($model->getId(), $productJson['Images']);
             if ($imageUploadResopnse) {
                 echo 'image upload success' . PHP_EOL;
                 $model = Mage::getSingleton('catalog/product')->load($productId);
@@ -256,7 +256,7 @@ switch ($dbImageCount) {
 }
 
 
-function importProductImageByImageFileName ($productModel, $imageFileInfoArray) {
+function importProductImageByImageFileName ($productId, $imageFileInfoArray) {
 
     $imageBase = 'http://images10.newegg.com/productimage/';
     $media = Mage::getModel('catalog/product_attribute_media_api');
@@ -293,10 +293,10 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
             $mediaArray = array();
         }
 
+        $productModel = Mage::getSingleton('catalog/product')->load($productId);
         $productModel->addImageToMediaGallery($fileUrl,
             $mediaArray
             ,false,false);
-        $productModel->save();
         $attributes = $productModel->getTypeInstance(true)->getSetAttributes($productModel);
         $attributes['media_gallery']->getBackend()->updateImage(
             $productModel,
@@ -306,6 +306,7 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
                 'label' => $pathInfo['filename']
             )
         );
+        $productModel->save();
 
 
 //        $newImage = array(
