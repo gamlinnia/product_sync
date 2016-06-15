@@ -149,7 +149,7 @@ fwrite(STDOUT, 'Are you sure to save this product information?');
 /*抓取 標準輸入 的 內容*/
 $sureToAction = trim(fgets(STDIN));
 
-if (strtolower($sureToAction) == 'y') {
+if ( strtolower($sureToAction) == 'y' || strtolower($sureToAction) == 'yes' ) {
     $model->save();
 }
 
