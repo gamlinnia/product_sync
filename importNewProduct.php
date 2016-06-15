@@ -167,6 +167,7 @@ $sureToAction = trim(fgets(STDIN));
 
 if ( strtolower($sureToAction) == 'y' || strtolower($sureToAction) == 'yes' ) {
     $model->save();
+    $productId = $model->getId();
 
     /* set inventory */
     $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($model);
@@ -192,6 +193,8 @@ if ( strtolower($sureToAction) == 'y' || strtolower($sureToAction) == 'yes' ) {
         }
     }
 
+} else {
+    exit();
 }
 
 /* deal with image part */
@@ -202,6 +205,8 @@ var_dump($mediaGallery['images']);
 
 /* if need to upload or delete images, set status to disable */
 if (count($mediaGallery['images']) < 1) {
+    echo 'no image, set status to disable' . PHP_EOL;
+    $model = Mage::getSingleton('catalog/product')->load($productId);
     $model->setData('status', '0')->save();
 }
 
