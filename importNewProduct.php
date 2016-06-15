@@ -264,7 +264,6 @@ function importProductImageByImageFileName ($productId, $imageFileInfoArray) {
     foreach ($imageFileInfoArray as $index => $eachFileInfo) {
         // get array of dirname, basename, extension, filename
         $pathInfo = pathinfo($eachFileInfo['ImageName']);
-        var_dump($pathInfo);
         switch($pathInfo['extension']){
             case 'png':
                 $mimeType = 'image/png';
@@ -301,7 +300,7 @@ function importProductImageByImageFileName ($productId, $imageFileInfoArray) {
         $attributes['media_gallery']->getBackend()->updateImage(
             $productModel,
             $fileUrl,
-            array(
+            $data=array(
                 'postion' => (int)$eachFileInfo['Priority'] * 10,
                 'label' => $pathInfo['filename']
             )
