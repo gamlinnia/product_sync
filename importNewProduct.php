@@ -279,9 +279,8 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
                 return false;
         }
         $tmpFile = file_get_contents($imageBase . $productModel->getSku());
+        echo 'image url: ' . $imageBase . $productModel->getSku() . PHP_EOL;
         file_put_contents('imageTmp', $tmpFile);
-
-        echo 'image count: ' . count(base64_encode($tmpFile)) . PHP_EOL;
 
         if ((int)$eachFileInfo['Priority'] < 2) {
             $mediaArray = array(
@@ -304,6 +303,7 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
             'types' => $mediaArray,
             'exclude' => 0,
         );
+        var_dump($newImage);
         $media->create($productModel->getSku(), $newImage);
     }
     return true;
