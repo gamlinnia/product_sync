@@ -296,18 +296,19 @@ function importProductImageByImageFileName ($productId, $imageFileInfoArray) {
         $productModel = Mage::getSingleton('catalog/product')->load($productId);
         $productModel->addImageToMediaGallery($fileUrl,
             $mediaArray
-            ,true,false);
-        $productModel->save();
+            ,false,false);
         $attributes = $productModel->getTypeInstance(true)->getSetAttributes($productModel);
         $attributes['media_gallery']->getBackend()->updateImage(
             $productModel,
             $fileUrl,
-            $data=array(
+            array(
                 'postion' => (int)$eachFileInfo['Priority'] * 10,
                 'label' => $pathInfo['filename']
             )
         );
+        $productModel->save();
 
+        echo 'position: ' . (int)$eachFileInfo['Priority'] * 10 . ' label: ' . $pathInfo['filename'] . PHP_EOL;
 
 //        $newImage = array(
 //            'file' => array(
