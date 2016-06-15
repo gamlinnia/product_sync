@@ -294,7 +294,7 @@ function importProductImageByImageFileName ($productModel, $imageFileInfoArray) 
 
         $newImage = array(
             'file' => array(
-                'content' => base64_encode('imageTmp'),
+                'content' => base64_encode($tmpFile),
                 'mime' => $mimeType,
                 'name' => $pathInfo['filename'],
             ),
