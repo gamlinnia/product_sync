@@ -230,7 +230,9 @@ switch ($dbImageCount) {
             if ($imageUploadResopnse) {
                 echo 'image upload success' . PHP_EOL;
                 $model = Mage::getSingleton('catalog/product')->load($productId);
-                $model->setData('status', '1')->save();
+                if ($model->getStatus() != '1') {
+                    $model->setData('status', '1')->save();
+                }
             }
         } else {
             echo 'no image information to upload' . PHP_EOL;
@@ -252,6 +254,10 @@ switch ($dbImageCount) {
         }
         else{
             echo 'no need to upload new images.' . PHP_EOL;
+            $model = Mage::getSingleton('catalog/product')->load($productId);
+            if ($model->getStatus() != '1') {
+                $model->setData('status', '1')->save();
+            }
         }
 }
 
