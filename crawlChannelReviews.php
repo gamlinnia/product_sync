@@ -88,12 +88,13 @@ $now = new DateTime(null, new DateTimeZone('UTC'));
 file_put_contents('crawlChannelReviews.log', "Process start at: " . $now->format('Y-m-d H:i:s') . PHP_EOL, FILE_APPEND);
 
 /*foreach channel*/
+$response = array();
 foreach($channels as $channel => $url) {
-    if ($debug) {
-        if (!in_array($channel, $argv)) {
-            continue;
-        }
-    }
+//    if ($debug) {
+//        if (!in_array($channel, $argv)) {
+//            continue;
+//        }
+//    }
     /*each excel for each channel */
     $arrayToExcel = array();
     /*foreach product*/
@@ -183,24 +184,27 @@ foreach($channels as $channel => $url) {
             }
         }
     }
-    /*export all reviews with 1 or 2 rate to excel by channel*/
-    if(!empty($arrayToExcel)) {
-        file_put_contents('crawlChannelReviews.log', "Number of Records Need To Export To Excel: " . count($arrayToExcel));
-        $now = date('Y-m-d');
-        $fileName = 'bad_review/' . $channel . '_' . $now . '.xls';
-        $sheetName = 'Sheet 1';
-        /*push file into fileList*/
-        $fileList[] = $fileName;
-        exportArrayToXlsx($arrayToExcel, array(
-            "filename" => $fileName,
-            "title" => $sheetName
-        ));
-        /*send email notification*/
-        sendMailWithDownloadUrl('Bad product review alert', $fileList, $recipient_array);
-    }
-    else {
-        sendMailWithDownloadUrl('Bad product review alert - no bad review submitted', null, $recipient_array);
-    }
+
+    $response = array_merge($response, $arrayToExcel);
+}
+
+/*export all reviews with 1 or 2 rate to excel by channel*/
+if(!empty($response)) {
+    file_put_contents('crawlChannelReviews.log', "Number of Records Need To Export To Excel: " . count($response));
+    $now = date('Y-m-d');
+    $fileName = 'bad_review/' . $channel . '_' . $now . '.xls';
+    $sheetName = 'Sheet 1';
+    /*push file into fileList*/
+    $fileList[] = $fileName;
+    exportArrayToXlsx($response, array(
+        "filename" => $fileName,
+        "title" => $sheetName
+    ));
+    /*send email notification*/
+    sendMailWithDownloadUrl('Bad product review alert', $fileList, $recipient_array);
+} else {
+    /* no bad review found. */
+    sendMailWithDownloadUrl('Bad product review alert - no bad review submitted', null, $recipient_array);
 }
 
 /*log ending time*/
