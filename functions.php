@@ -2001,11 +2001,31 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             break;
         case 'newegg' :
             $product_url = 'http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=' . $review_limit;
-            $review_url  = 'http://content.newegg.com/Common/Ajax/ProductReview2016.aspx?'
-                         . 'action=Biz.Product.ProductReview.switchReviewTabCallBack&callback=Biz.Product.ProductReview.switchReviewTabCallBack&&'
-                         . 'Item='. $sku.'&review=0&SummaryType=0&Pagesize='. $review_limit .'&PurchaseMark=false&SelectedRating=-1&'
-                         . 'VideoOnlyMark=false&VendorMark=false&IsFeedbackTab=true&ItemGroupId=0&Type=Newegg&ItemOnlyMark=true&'
-                         . 'chkItemOnlyMark=on&Keywords=(keywords)&SortField=0&DisplaySpecificReview=0';
+            $review_url  = 'http://content.newegg.com/Common/Ajax/ProductReview2016.aspx?' .
+//                         . 'action=Biz.Product.ProductReview.switchReviewTabCallBack&callback=Biz.Product.ProductReview.switchReviewTabCallBack&&'
+//                         . 'Item='. $sku.'&review=0&SummaryType=0&Pagesize='. $review_limit .'&PurchaseMark=false&SelectedRating=-1&'
+//                         . 'VideoOnlyMark=false&VendorMark=false&IsFeedbackTab=true&ItemGroupId=0&Type=Newegg&ItemOnlyMark=true&'
+//                             . 'chkItemOnlyMark=on&Keywords=(keywords)&SortField=0&DisplaySpecificReview=0'
+            http_build_query(array(
+                'action' => 'Biz.Product.ProductReview.switchReviewTabCallBack',
+                'callback' => 'Biz.Product.ProductReview.switchReviewTabCallBack',
+                'Item' => $sku,
+                'review' => 0,
+                'SummaryType' => 0,
+                'Pagesize' => $review_limit,
+                'PurchaseMark' => false,
+                'SelectedRating' => -1,
+                'VideoOnlyMark' => false,
+                'VendorMark' => false,
+                'IsFeedbackTab' => true,
+                'ItemGroupId' => 0,
+                'Type' => 'Newegg',
+                'ItemOnlyMark' => true,
+                'chkItemOnlyMark' => 'on',
+                'Keywords' => '(keywords)',
+                'SortField' => 0,
+                'DisplaySpecificReview' => 0
+            ));
 //            $html = file_get_dom($review_url);
             $html = file_get_contents($review_url);
             $html = preg_replace('/\\\u[\d]{3}[\w]{1}/', '', $html);
