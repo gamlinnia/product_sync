@@ -185,21 +185,25 @@ foreach($channels as $channel => $url) {
         }
     }
 
-    $response = array_merge($response, $arrayToExcel);
+    /*export all reviews with 1 or 2 rate to excel by channel*/
+    if(!empty($arrayToExcel)) {
+        file_put_contents('crawlChannelReviews.log', "Number of Records Need To Export To Excel: " . count($arrayToExcel));
+        $now = date('Y-m-d');
+        $fileName = 'bad_review/' . $channel . '_' . $now . '.xls';
+        $sheetName = 'Sheet 1';
+        /*push file into fileList*/
+        $fileList[] = $fileName;
+        exportArrayToXlsx($arrayToExcel, array(
+            "filename" => $fileName,
+            "title" => $sheetName
+        ));
+        $response = array_merge($response, $arrayToExcel);
+    }
+
 }
 
 /*export all reviews with 1 or 2 rate to excel by channel*/
 if(!empty($response)) {
-    file_put_contents('crawlChannelReviews.log', "Number of Records Need To Export To Excel: " . count($response));
-    $now = date('Y-m-d');
-    $fileName = 'bad_review/' . $channel . '_' . $now . '.xls';
-    $sheetName = 'Sheet 1';
-    /*push file into fileList*/
-    $fileList[] = $fileName;
-    exportArrayToXlsx($response, array(
-        "filename" => $fileName,
-        "title" => $sheetName
-    ));
     /*send email notification*/
     sendMailWithDownloadUrl('Bad product review alert', $fileList, $recipient_array);
 } else {
