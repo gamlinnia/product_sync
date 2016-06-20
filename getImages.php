@@ -21,7 +21,7 @@ foreach ($mediaGallery as $image) {
     $image->setLabel($pathinfo['filename']);
 }
 
-$mediaGallery->save();
+$product->setMediaGallery($mediaGallery)->save();
 // var_dump($product->getMediaGalleryImages());
 
 // echo Mage::getModel('catalog/product_media_config')
