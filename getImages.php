@@ -9,12 +9,13 @@ require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
 Mage::app();
 
-$product=Mage::getModel('catalog/product')->load(3);
+$product=Mage::getModel('catalog/product')->load(2017);
 
 
 foreach ($product->getMediaGalleryImages() as $image) {
-    echo $image->getUrl();
     Zend_Debug::dump($image);
+    echo $image->getUrl() . PHP_EOL;
+    var_dump(pathinfo($image->getFile()));
 }
 // var_dump($product->getMediaGalleryImages());
 
