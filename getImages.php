@@ -14,6 +14,7 @@ $product=Mage::getModel('catalog/product')->load(3);
 
 foreach ($product->getMediaGalleryImages() as $image) {
 echo $image->getUrl();
+    Zend_Debug::dump($image);
 }
 // var_dump($product->getMediaGalleryImages());
 
