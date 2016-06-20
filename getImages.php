@@ -20,6 +20,8 @@ foreach ($product->getMediaGalleryImages() as $image) {
     $filename = $pathinfo['filename'];
     $image->setLabel($pathinfo['filename']);
 }
+
+$product->save();
 // var_dump($product->getMediaGalleryImages());
 
 // echo Mage::getModel('catalog/product_media_config')
