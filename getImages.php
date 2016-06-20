@@ -18,7 +18,7 @@ foreach ($product->getMediaGalleryImages() as $image) {
     $pathinfo = pathinfo($image->getFile());
     $basename = $pathinfo['basename'];
     $filename = $pathinfo['filename'];
-    $image->setLabel($pathinfo['filename'])->save();
+    $image->setLabel($pathinfo['filename']);
 }
 // var_dump($product->getMediaGalleryImages());
 
