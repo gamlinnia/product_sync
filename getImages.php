@@ -11,8 +11,8 @@ Mage::app();
 
 $product=Mage::getModel('catalog/product')->load(2017);
 
-
-foreach ($product->getMediaGalleryImages() as $image) {
+$mediaGallery = $product->getMediaGalleryImages();
+foreach ($mediaGallery as $image) {
     Zend_Debug::dump($image);
     echo $image->getUrl() . PHP_EOL;
     $pathinfo = pathinfo($image->getFile());
@@ -21,7 +21,7 @@ foreach ($product->getMediaGalleryImages() as $image) {
     $image->setLabel($pathinfo['filename']);
 }
 
-$product->save();
+$mediaGallery->save();
 // var_dump($product->getMediaGalleryImages());
 
 // echo Mage::getModel('catalog/product_media_config')
