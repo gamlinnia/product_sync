@@ -531,7 +531,7 @@ function getFileNameFromUrl ($url) {
     if (is_array($match) && count($match) > 1) {
         return $match[1];
     }
-    return null;
+    return false;
 }
 
 function getProductObject ($valueToFilter, $filterType='entity_id') {
@@ -2642,4 +2642,59 @@ function updateParentCommentChildList($parent_id, $child_id, $action) {
         $model->setChildList($child_list)
               ->save();
     }
+}
+
+function uploadProductImageByNewModule ($productId, $imgUrl, $position, $label) {
+    $pathInfo = pathinfo($imgUrl);     // get array of dirname, basename, extension, filename
+    $fileName = getFileNameFromUrl($imgUrl);
+
+    if (!$fileName) {
+        die('Can not get xx-xxx-xxx file name from url');
+    }
+
+    $tmpFile = file_get_contents($imgUrl);
+    $fileUrl = '/tmp/' . $pathInfo['basename'];
+    file_put_contents($fileUrl, $tmpFile);
+    echo 'file dir: ' . $fileUrl . PHP_EOL;
+
+    $mediaArray = ($position == 10 || $position == 1) ?
+        array(
+            'thumbnail',
+            'small_image',
+            'image'
+        ) : array();
+    echo 'this is main image.' . PHP_EOL;
+
+    $productModel = Mage::getModel('catalog/product')->load($productId);
+    /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
+    $productModel->addImageToMediaGallery(
+        $fileUrl,
+        $mediaArray,
+        true,
+        false
+    );
+
+//    $attributes = $product->getTypeInstance(true)->getSetAttributes($product);
+//    $attributes['media_gallery']->getBackend()->updateImage($product, $filePath, $data=array('postion'=>1,'label'=>'images'));
+    $productModel->save();
+
+    $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagallery')
+        ->getCollection()
+        ->addfieldToFilter('entity_id', $productId)
+        ->addfieldToFilter('value', array('like' => '%' . $pathInfo['filename'] . '%'));
+    foreach ($mediagalleryCollection as $eachMedia) {
+        $mediaId = $eachMedia->getValueId();
+        $fileValue = $eachMedia->getValue();
+        $mediagalleryvalue = Mage::getModel('coreproductmediagallery/mediagalleryvalue')
+            ->getCollection()
+            ->addFieldToFilter('value_id', $mediaId)
+            ->addFieldToFilter('store_id', 0);
+        foreach ($mediagalleryvalue as $eachMediaValue) {
+            $eachMediaValue->setData('label', $label)
+            ->setData('position', $position);
+            $eachMediaValue->save();
+        }
+
+    }
+
 }
