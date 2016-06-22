@@ -2670,7 +2670,7 @@ function uploadProductImageByNewModule ($productId, $imgUrl, $position, $label) 
     $productModel->addImageToMediaGallery(
         $fileUrl,
         $mediaArray,
-        true,
+        false,
         false
     );
 
