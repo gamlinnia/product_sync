@@ -664,6 +664,7 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
 function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFilter, $filterType='entity_id', $config) {
     $product = getProductObject($valueToFilter, $filterType);
     $sku = $product->getSku();
+    $productId = $product->getId();
     $media = Mage::getModel('catalog/product_attribute_media_api');
 
     $importDir = Mage::getBaseDir('media') . DS . 'import/';
@@ -696,10 +697,10 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
         if (isset($config['internalHost'])) {
             $imageObject['url'] = str_replace($imageObject['host'], $config['internalHost'], $imageObject['url']);
         }
-        $url = $imageObject['url'];
+//        $url = $imageObject['url'];
 
         // get array of dirname, basename, extension, filename
-        $pathInfo = pathinfo($url);
+/*        $pathInfo = pathinfo($url);
         switch($pathInfo['extension']){
             case 'png':
                 $mimeType = 'image/png';
@@ -729,11 +730,13 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
             'types' => $imageObject['mediaType'],
             'exclude' => 0,
         );
+*/
 
-        unlink(Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product' . DS . substr($imageObject['basename'], 0, 1) . DS . substr($imageObject['basename'], 1, 1) . DS . getFileNameWithoutExtension($imageObject['basename']) . '.' . $pathInfo['extension']);
-        echo 'delete file in ' . Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product' . DS . substr($imageObject['basename'], 0, 1) . DS . substr($imageObject['basename'], 1, 1) . DS . $imageObject['basename'] . PHP_EOL;
+//        unlink(Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product' . DS . substr($imageObject['basename'], 0, 1) . DS . substr($imageObject['basename'], 1, 1) . DS . getFileNameWithoutExtension($imageObject['basename']) . '.' . $pathInfo['extension']);
+//        echo 'delete file in ' . Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product' . DS . substr($imageObject['basename'], 0, 1) . DS . substr($imageObject['basename'], 1, 1) . DS . $imageObject['basename'] . PHP_EOL;
 
-        $media->create($sku, $newImage);
+//        $media->create($sku, $newImage);
+        uploadProductImageByNewModule($productId, $imageObject['url'], $imageObject['position'], getFileNameWithoutExtension($imageObject['basename']));
     }
     return true;
 }
