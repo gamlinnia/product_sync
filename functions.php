@@ -2664,7 +2664,6 @@ function uploadProductImageByNewModule ($productId, $imgUrl, $position, $label) 
             'image'
         ) : array();
     var_dump($mediaArray);
-    die();
 
     $productModel = Mage::getModel('catalog/product')->load($productId);
     /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
