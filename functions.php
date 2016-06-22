@@ -2646,11 +2646,11 @@ function updateParentCommentChildList($parent_id, $child_id, $action) {
 
 function uploadProductImageByNewModule ($productId, $imgUrl, $position, $label) {
     $pathInfo = pathinfo($imgUrl);     // get array of dirname, basename, extension, filename
-//    $fileName = getFileNameFromUrl($imgUrl);
-//
-//    if (!$fileName) {
-//        die('Can not get xx-xxx-xxx file name from url');
-//    }
+    $fileName = getFileNameFromUrl($imgUrl);
+
+    if (!$fileName) {
+        die('Can not get xx-xxx-xxx file name from url');
+    }
 
     $tmpFile = file_get_contents($imgUrl);
     $fileUrl = '/tmp/' . $pathInfo['basename'];
@@ -2662,11 +2662,6 @@ function uploadProductImageByNewModule ($productId, $imgUrl, $position, $label) 
     $productModel = Mage::getSingleton('catalog/product')->load($productId);
     /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
     $productModel->addImageToMediaGallery($fileUrl, $mediaArray, true, false);
-
-    echo 'addImageToMediaGallery done' . PHP_EOL;
-
-//    $attributes = $productModel->getTypeInstance(true)->getSetAttributes($productModel);
-//    $attributes['media_gallery']->getBackend()->updateImage($productModel, $fileUrl, $data=array('postion'=>$position,'label'=>$label));
     $productModel->save();
 
     $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagallery')
