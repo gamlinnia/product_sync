@@ -2646,11 +2646,11 @@ function updateParentCommentChildList($parent_id, $child_id, $action) {
 
 function uploadProductImageByNewModule ($productId, $imgUrl, $position, $label) {
     $pathInfo = pathinfo($imgUrl);     // get array of dirname, basename, extension, filename
-    $fileName = getFileNameFromUrl($imgUrl);
-
-    if (!$fileName) {
-        die('Can not get xx-xxx-xxx file name from url');
-    }
+//    $fileName = getFileNameFromUrl($imgUrl);
+//
+//    if (!$fileName) {
+//        die('Can not get xx-xxx-xxx file name from url');
+//    }
 
     $tmpFile = file_get_contents($imgUrl);
     $fileUrl = '/tmp/' . $pathInfo['basename'];
@@ -2663,7 +2663,8 @@ function uploadProductImageByNewModule ($productId, $imgUrl, $position, $label) 
             'small_image',
             'image'
         ) : array();
-    echo 'this is main image.' . PHP_EOL;
+    var_dump($mediaArray);
+    die();
 
     $productModel = Mage::getModel('catalog/product')->load($productId);
     /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
@@ -2684,7 +2685,9 @@ function uploadProductImageByNewModule ($productId, $imgUrl, $position, $label) 
         ->addfieldToFilter('value', array('like' => '%' . $pathInfo['filename'] . '%'));
     foreach ($mediagalleryCollection as $eachMedia) {
         $mediaId = $eachMedia->getValueId();
+        echo 'media id: ' . $mediaId . PHP_EOL;
         $fileValue = $eachMedia->getValue();
+        echo 'file value: ' . $fileValue . PHP_EOL;
         $mediagalleryvalue = Mage::getModel('coreproductmediagallery/mediagalleryvalue')
             ->getCollection()
             ->addFieldToFilter('value_id', $mediaId)
