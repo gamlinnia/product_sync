@@ -13,7 +13,6 @@ $product=Mage::getModel('catalog/product')->load(2017);
 
 $mediaGallery = $product->getMediaGalleryImages();
 foreach ($mediaGallery as $image) {
-    Zend_Debug::dump($image);
     echo $image->getUrl() . PHP_EOL;
     $pathinfo = pathinfo($image->getFile());
     $basename = $pathinfo['basename'];

@@ -2657,27 +2657,16 @@ function uploadProductImageByNewModule ($productId, $imgUrl, $position, $label) 
     file_put_contents($fileUrl, $tmpFile);
     echo 'file dir: ' . $fileUrl . PHP_EOL;
 
-    $mediaArray = ($position == 10 || $position == 1) ?
-        array(
-            'thumbnail',
-            'small_image',
-            'image'
-        ) : array();
-    var_dump($mediaArray);
+    $mediaArray = ($position == 10 || $position == 1) ? array('thumbnail', 'small_image', 'image') : null;
 
     $productModel = Mage::getSingleton('catalog/product')->load($productId);
     /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
-    $productModel->addImageToMediaGallery(
-        $fileUrl,
-        $mediaArray,
-        false,
-        false
-    );
+    $productModel->addImageToMediaGallery($fileUrl, $mediaArray, true, false);
 
     echo 'addImageToMediaGallery done' . PHP_EOL;
 
-    $attributes = $productModel->getTypeInstance(true)->getSetAttributes($productModel);
-    $attributes['media_gallery']->getBackend()->updateImage($productModel, $fileUrl, $data=array('postion'=>$position,'label'=>$label));
+//    $attributes = $productModel->getTypeInstance(true)->getSetAttributes($productModel);
+//    $attributes['media_gallery']->getBackend()->updateImage($productModel, $fileUrl, $data=array('postion'=>$position,'label'=>$label));
     $productModel->save();
 
     $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagallery')
