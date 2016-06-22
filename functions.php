@@ -2653,7 +2653,7 @@ function uploadProductImageByNewModule ($productId, $imgUrl, $position, $label) 
 //    }
 
     $tmpFile = file_get_contents($imgUrl);
-    $fileUrl = '/tmp/' . 'test.jpg';
+    $fileUrl = '/tmp/' . $pathInfo['basename'];
     file_put_contents($fileUrl, $tmpFile);
     echo 'file dir: ' . $fileUrl . PHP_EOL;
 
