@@ -678,6 +678,9 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
         case 'entity_id' :
             $product = Mage::getSingleton('catalog/product')->load($valueToFilter);
             break;
+        case 'sku' :
+            $product = Mage::getSingleton('catalog/product')->load(Mage::getModel('catalog/product')->getIdBySku($valueToFilter));
+            break;
         default :
             echo 'need to write code in uploadAndDeleteImagesWithPositionAndLabel';
             exit(0);
