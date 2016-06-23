@@ -487,6 +487,7 @@ function getImagesUrlOfProduct ($valueToFilter, $type='entity_id') {
         case 'sku' :
             $productModel = Mage::getModel('catalog/product');
             $product = $productModel->load($productModel->getIdBySku($valueToFilter));
+            break;
         default :
             echo 'need to write code in getImagesUrlOfProduct' . PHP_EOL;
             exit(0);
