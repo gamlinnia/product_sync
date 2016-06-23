@@ -2666,7 +2666,7 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
 
     $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagallery')
         ->getCollection()
-        ->addfieldToFilter('entity_id', $productId)
+        ->addfieldToFilter('entity_id', $productModel->getId())
         ->addfieldToFilter('value', array('like' => '%' . $pathInfo['filename'] . '%'));
     foreach ($mediagalleryCollection as $eachMedia) {
         $mediaId = $eachMedia->getValueId();
