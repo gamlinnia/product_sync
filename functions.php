@@ -537,12 +537,12 @@ function getFileNameFromUrl ($url) {
 function getProductObject ($valueToFilter, $filterType='entity_id') {
     switch ($filterType) {
         case 'sku' :
-            $product = Mage::getModel('catalog/product');
+            $product = Mage::getSingleton('catalog/product');
             $productObject = $product->load($product->getIdBySku($valueToFilter));
             break;
         default :
             /* filter by entity id */
-            $productObject = Mage::getModel('catalog/product')->load($valueToFilter);
+            $productObject = Mage::getSingleton('catalog/product')->load($valueToFilter);
     }
     return $productObject;
 }
@@ -678,6 +678,53 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
         )
     ));
 
+    /* upload images */
+    foreach ($imageObjectList['add'] as $key => $imageObject) {
+        if (isset($config['internalHost'])) {
+            $imageObject['url'] = str_replace($imageObject['host'], $config['internalHost'], $imageObject['url']);
+        }
+//        $url = $imageObject['url'];
+
+        // get array of dirname, basename, extension, filename
+        /*        $pathInfo = pathinfo($url);
+                switch($pathInfo['extension']){
+                    case 'png':
+                        $mimeType = 'image/png';
+                        break;
+                    case 'jpg':
+                        $mimeType = 'image/jpeg';
+                        break;
+                    case 'gif':
+                        $mimeType = 'image/gif';
+                        break;
+                    default :
+                        return false;
+                }
+                $fileName = $imageObject['basename'];
+                $tmpFile = file_get_contents($url, false, $context);    // get file with base auth
+                file_put_contents($importDir . $fileName, $tmpFile);
+                $filePath = $importDir . $fileName;
+
+                $newImage = array(
+                    'file' => array(
+                        'content' => base64_encode($filePath),
+                        'mime' => $mimeType,
+                        'name' => getFileNameWithoutExtension($imageObject['basename'])         // 不要給extension
+                    ),
+                    'label' => getFileNameWithoutExtension($imageObject['basename']),
+                    'position' => $imageObject['position'],
+                    'types' => $imageObject['mediaType'],
+                    'exclude' => 0,
+                );
+        */
+
+//        unlink(Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product' . DS . substr($imageObject['basename'], 0, 1) . DS . substr($imageObject['basename'], 1, 1) . DS . getFileNameWithoutExtension($imageObject['basename']) . '.' . $pathInfo['extension']);
+//        echo 'delete file in ' . Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product' . DS . substr($imageObject['basename'], 0, 1) . DS . substr($imageObject['basename'], 1, 1) . DS . $imageObject['basename'] . PHP_EOL;
+
+//        $media->create($sku, $newImage);
+        uploadProductImageByNewModule($product, $imageObject['url'], $imageObject['position'], getFileNameWithoutExtension($imageObject['basename']));
+    }
+
     /* delete images */
     $mediaGalleryAttribute = Mage::getModel('catalog/resource_eav_attribute')->loadByCode($product->getEntityTypeId(), 'media_gallery');
     foreach ($imageObjectList['delete'] as $key => $imageObject) {
@@ -690,52 +737,7 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
             }
         }
     }
-    /* upload images */
-    foreach ($imageObjectList['add'] as $key => $imageObject) {
-        if (isset($config['internalHost'])) {
-            $imageObject['url'] = str_replace($imageObject['host'], $config['internalHost'], $imageObject['url']);
-        }
-//        $url = $imageObject['url'];
 
-        // get array of dirname, basename, extension, filename
-/*        $pathInfo = pathinfo($url);
-        switch($pathInfo['extension']){
-            case 'png':
-                $mimeType = 'image/png';
-                break;
-            case 'jpg':
-                $mimeType = 'image/jpeg';
-                break;
-            case 'gif':
-                $mimeType = 'image/gif';
-                break;
-            default :
-                return false;
-        }
-        $fileName = $imageObject['basename'];
-        $tmpFile = file_get_contents($url, false, $context);    // get file with base auth
-        file_put_contents($importDir . $fileName, $tmpFile);
-        $filePath = $importDir . $fileName;
-
-        $newImage = array(
-            'file' => array(
-                'content' => base64_encode($filePath),
-                'mime' => $mimeType,
-                'name' => getFileNameWithoutExtension($imageObject['basename'])         // 不要給extension
-            ),
-            'label' => getFileNameWithoutExtension($imageObject['basename']),
-            'position' => $imageObject['position'],
-            'types' => $imageObject['mediaType'],
-            'exclude' => 0,
-        );
-*/
-
-//        unlink(Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product' . DS . substr($imageObject['basename'], 0, 1) . DS . substr($imageObject['basename'], 1, 1) . DS . getFileNameWithoutExtension($imageObject['basename']) . '.' . $pathInfo['extension']);
-//        echo 'delete file in ' . Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product' . DS . substr($imageObject['basename'], 0, 1) . DS . substr($imageObject['basename'], 1, 1) . DS . $imageObject['basename'] . PHP_EOL;
-
-//        $media->create($sku, $newImage);
-        uploadProductImageByNewModule($product, $imageObject['url'], $imageObject['position'], getFileNameWithoutExtension($imageObject['basename']));
-    }
     return true;
 }
 
