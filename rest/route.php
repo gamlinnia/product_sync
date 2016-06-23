@@ -126,12 +126,14 @@ $app->post('/api/getProductInfosToSync', function () {
         $imagesArray = getImagesUrlOfProduct($productInfo['entity_id']);
         $imgResponse[] = array(
             'sku' => $productInfo['sku'],
+            'entity_id' => $productInfo['entity_id'],
             'images' => $imagesArray
         );
 
         $downloadableInfo = getDownloadableUrls($productInfo['sku'], 'sku');
         $downloadableResponse[] = array(
             'sku' => $productInfo['sku'],
+            'entity_id' => $productInfo['entity_id'],
             'files' => $downloadableInfo
         );
     }
