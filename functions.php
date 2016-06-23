@@ -2696,16 +2696,18 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
         echo 'media id: ' . $mediaId . PHP_EOL;
         $fileValue = $eachMedia->getValue();
         echo 'file value: ' . $fileValue . PHP_EOL;
-        $mediagalleryvalue = Mage::getModel('coreproductmediagallery/mediagalleryvalue')
-            ->getCollection()
-            ->addFieldToFilter('value_id', $mediaId)
-            ->addFieldToFilter('store_id', 0);
-        foreach ($mediagalleryvalue as $eachMediaValue) {
-            $eachMediaValue->setData('label', $label)
-            ->setData('position', $position);
-            $eachMediaValue->save();
+        $storeIds = getAllStoreIds();
+        foreach ($storeIds as $eachStoreId) {
+            $mediagalleryvalue = Mage::getModel('coreproductmediagallery/mediagalleryvalue')
+                ->getCollection()
+                ->addFieldToFilter('value_id', $mediaId)
+                ->addFieldToFilter('store_id', $eachStoreId);
+            foreach ($mediagalleryvalue as $eachMediaValue) {
+                $eachMediaValue->setData('label', $label)
+                    ->setData('position', $position);
+                $eachMediaValue->save();
+            }
         }
-
     }
 
 }
