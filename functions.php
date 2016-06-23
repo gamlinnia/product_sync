@@ -2687,7 +2687,7 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
     $productModel->addImageToMediaGallery($fileUrl, $mediaArray, true, false);
     $productModel->save();
 
-    $storeIds = getAllStoreIds();
+    $storeIds = array_merge(array('0'), getAllStoreIds());  // admin store id + store ids
     foreach ($storeIds as $eachStoreId) {
         $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')->getCollection()
             ->addFieldToFilter('store_id', $eachStoreId)
@@ -2701,9 +2701,8 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
 
         foreach($mediagalleryCollection as $eachMediaValue) {
             $eachMediaValue->setData('label', $label)
-                ->setData('position', $position);
-            $eachMediaValue->save();
-
+                ->setData('position', $position)
+                ->save();
         }
     }
 
