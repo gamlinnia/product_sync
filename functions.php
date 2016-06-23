@@ -2658,7 +2658,7 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
     $tmpFile = file_get_contents($imgUrl);
     $fileUrl = '/tmp/' . $pathInfo['basename'];
     file_put_contents($fileUrl, $tmpFile);
-    echo 'file dir: ' . $fileUrl . PHP_EOL;
+    echo 'file dir: ' . $fileUrl . ' position: ' . $position . ' label: ' . $label . PHP_EOL;
 
     $mediaArray = ($position == 10 || $position == 1) ? array('thumbnail', 'small_image', 'image') : null;
 
