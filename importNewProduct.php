@@ -270,51 +270,53 @@ function importProductImageByImageFileName ($productId, $imageFileInfoArray) {
     foreach ($imageFileInfoArray as $index => $eachFileInfo) {
         // get array of dirname, basename, extension, filename
         $pathInfo = pathinfo($eachFileInfo['ImageName']);
-        switch($pathInfo['extension']){
-            case 'png':
-                $mimeType = 'image/png';
-                break;
-            case 'jpg':
-                $mimeType = 'image/jpeg';
-                break;
-            case 'gif':
-                $mimeType = 'image/gif';
-                break;
-            default:
-                return false;
-        }
-        $tmpFile = file_get_contents($imageBase . $eachFileInfo['ImageName']);
-        $fileUrl = '/tmp/' . $pathInfo['basename'];
-        file_put_contents($fileUrl, $tmpFile);
-        echo 'file dir: ' . $fileUrl . PHP_EOL;
-/*
-        if ((int)$eachFileInfo['Priority'] < 2) {
-            $mediaArray = array(
-                'thumbnail',
-                'small_image',
-                'image'
-            );
-        } else {
-            $mediaArray = array();
-        }
 
-        $productModel = Mage::getSingleton('catalog/product')->load($productId);
-        $productModel->addImageToMediaGallery($fileUrl,
-            $mediaArray
-            ,false,false);
-        $attributes = $productModel->getTypeInstance(true)->getSetAttributes($productModel);
-        $attributes['media_gallery']->getBackend()->updateImage(
-            $productModel,
-            $fileUrl,
-            $data=array(
-                'postion' => (int)$eachFileInfo['Priority'] * 10,
-                'label' => $pathInfo['filename']
-            )
-        );
-        $productModel->save();
-        */
+        /*
+                switch($pathInfo['extension']){
+                    case 'png':
+                        $mimeType = 'image/png';
+                        break;
+                    case 'jpg':
+                        $mimeType = 'image/jpeg';
+                        break;
+                    case 'gif':
+                        $mimeType = 'image/gif';
+                        break;
+                    default:
+                        return false;
+                }
+                $tmpFile = file_get_contents($imageBase . $eachFileInfo['ImageName']);
+                $fileUrl = '/tmp/' . $pathInfo['basename'];
+                file_put_contents($fileUrl, $tmpFile);
+                echo 'file dir: ' . $fileUrl . PHP_EOL;
 
-        uploadProductImageByNewModule($productId, $fileUrl, (int)$eachFileInfo['Priority'] * 10, $pathInfo['filename']);
+                if ((int)$eachFileInfo['Priority'] < 2) {
+                    $mediaArray = array(
+                        'thumbnail',
+                        'small_image',
+                        'image'
+                    );
+                } else {
+                    $mediaArray = array();
+                }
+
+                $productModel = Mage::getSingleton('catalog/product')->load($productId);
+                $productModel->addImageToMediaGallery($fileUrl,
+                    $mediaArray
+                    ,false,false);
+                $attributes = $productModel->getTypeInstance(true)->getSetAttributes($productModel);
+                $attributes['media_gallery']->getBackend()->updateImage(
+                    $productModel,
+                    $fileUrl,
+                    $data=array(
+                        'postion' => (int)$eachFileInfo['Priority'] * 10,
+                        'label' => $pathInfo['filename']
+                    )
+                );
+                $productModel->save();
+                */
+
+        uploadProductImageByNewModule($productId, $imageBase . $eachFileInfo['ImageName'], (int)$eachFileInfo['Priority'] * 10, $pathInfo['filename']);
 
         echo 'position: ' . (int)$eachFileInfo['Priority'] * 10 . ' label: ' . $pathInfo['filename'] . PHP_EOL;
 
