@@ -287,7 +287,7 @@ function importProductImageByImageFileName ($productId, $imageFileInfoArray) {
         $fileUrl = '/tmp/' . $pathInfo['basename'];
         file_put_contents($fileUrl, $tmpFile);
         echo 'file dir: ' . $fileUrl . PHP_EOL;
-
+/*
         if ((int)$eachFileInfo['Priority'] < 2) {
             $mediaArray = array(
                 'thumbnail',
@@ -312,6 +312,9 @@ function importProductImageByImageFileName ($productId, $imageFileInfoArray) {
             )
         );
         $productModel->save();
+        */
+
+        uploadProductImageByNewModule($productId, $fileUrl, (int)$eachFileInfo['Priority'] * 10, $pathInfo['filename']);
 
         echo 'position: ' . (int)$eachFileInfo['Priority'] * 10 . ' label: ' . $pathInfo['filename'] . PHP_EOL;
 
