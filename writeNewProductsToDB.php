@@ -111,6 +111,7 @@ try{
         $downloadableInfoArray = $downloadableObject['files'];
         $localDownloadables = getDownloadableUrls($sku, 'sku');
         $downloadableToBeUploadOrDelete = compareDownloadableWithRemoteIncludeDelete($localDownloadables, $downloadableInfoArray);
+        file_put_contents('downloadablesync.log', json_encode($downloadableToBeUploadOrDelete));
 
         $count = count($localDownloadables);
         echo "$count local downloadable files $sku" . PHP_EOL;
