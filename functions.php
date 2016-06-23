@@ -495,11 +495,11 @@ function getImagesUrlOfProduct ($valueToFilter, $type='entity_id') {
 
     $mediaType = array(
         'image' => Mage::getModel('catalog/product_media_config')
-            ->getMediaUrl( $product->getImage() ),
+                ->getMediaUrl( $product->getImage() ),
         'small_image' => Mage::getModel('catalog/product_media_config')
-            ->getMediaUrl( $product->getSmallImage() ),
+                ->getMediaUrl( $product->getSmallImage() ),
         'thumbnail' => Mage::getModel('catalog/product_media_config')
-            ->getMediaUrl( $product->getThumbnail() )
+                ->getMediaUrl( $product->getThumbnail() )
     );
 
     $response = array();
@@ -2030,26 +2030,26 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
 //                         . 'Item='. $sku.'&review=0&SummaryType=0&Pagesize='. $review_limit .'&PurchaseMark=false&SelectedRating=-1&'
 //                         . 'VideoOnlyMark=false&VendorMark=false&IsFeedbackTab=true&ItemGroupId=0&Type=Newegg&ItemOnlyMark=true&'
 //                             . 'chkItemOnlyMark=on&Keywords=(keywords)&SortField=0&DisplaySpecificReview=0'
-            http_build_query(array(
-                'action' => 'Biz.Product.ProductReview.switchReviewTabCallBack',
-                'callback' => 'Biz.Product.ProductReview.switchReviewTabCallBack',
-                'Item' => $sku,
-                'review' => 0,
-                'SummaryType' => 0,
-                'Pagesize' => $review_limit,
-                'PurchaseMark' => false,
-                'SelectedRating' => -1,
-                'VideoOnlyMark' => false,
-                'VendorMark' => false,
-                'IsFeedbackTab' => true,
-                'ItemGroupId' => 0,
-                'Type' => 'Newegg',
-                'ItemOnlyMark' => true,
-                'chkItemOnlyMark' => 'on',
-                'Keywords' => '(keywords)',
-                'SortField' => 0,
-                'DisplaySpecificReview' => 0
-            ));
+                http_build_query(array(
+                    'action' => 'Biz.Product.ProductReview.switchReviewTabCallBack',
+                    'callback' => 'Biz.Product.ProductReview.switchReviewTabCallBack',
+                    'Item' => $sku,
+                    'review' => 0,
+                    'SummaryType' => 0,
+                    'Pagesize' => $review_limit,
+                    'PurchaseMark' => false,
+                    'SelectedRating' => -1,
+                    'VideoOnlyMark' => false,
+                    'VendorMark' => false,
+                    'IsFeedbackTab' => true,
+                    'ItemGroupId' => 0,
+                    'Type' => 'Newegg',
+                    'ItemOnlyMark' => true,
+                    'chkItemOnlyMark' => 'on',
+                    'Keywords' => '(keywords)',
+                    'SortField' => 0,
+                    'DisplaySpecificReview' => 0
+                ));
 //            $html = file_get_dom($review_url);
             $html = file_get_contents($review_url);
             $html = preg_replace('/\\\u[\d]{3}[\w]{1}/', '', $html);
@@ -2525,8 +2525,8 @@ function modifyReviewCommentFromLocal($data) {
             try {
                 $comment = Mage::getModel('customreview/comment')->load($comment_id);
                 $comment->setContent($after_modify_comment_data['content'])
-                        ->setStatus($after_modify_comment_data['status'])
-                        ->save();
+                    ->setStatus($after_modify_comment_data['status'])
+                    ->save();
                 return array('status' => 'success', 'message' => $comment->getData());
             } catch (Exception $e) {
                 return array('status' => 'failed', 'message' => 'Exception occur.');
@@ -2639,7 +2639,7 @@ function updateOwnPath($comment_id){
     $path = $comment->getPath();
     $path = $path . DS . $comment_id;
     $comment->setPath($path)
-            ->save();
+        ->save();
 }
 
 function updateParentCommentChildList($parent_id, $child_id, $action) {
@@ -2654,7 +2654,7 @@ function updateParentCommentChildList($parent_id, $child_id, $action) {
             $child_list = $child_id;
         }
         $model->setChildList($child_list)
-               ->save();
+            ->save();
     }
     elseif($action == 'delete') {
         if ($child_list) {
@@ -2664,7 +2664,7 @@ function updateParentCommentChildList($parent_id, $child_id, $action) {
             $child_list = implode(',', $child_list);
         }
         $model->setChildList($child_list)
-              ->save();
+            ->save();
     }
 }
 
@@ -2692,12 +2692,11 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
         $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')->getCollection()
             ->addFieldToFilter('store_id', $eachStoreId)
             ->addFieldToFilter('value', array('like' => '%' . $pathInfo['filename'] . '%'))
-            ->setOrder('value_id', 'DESC');
-        $mediagalleryCollection->join(array(
-            'gallery' => 'coreproductmediagallery/mediagallery'),
-            'main_table.value_id = gallery.value_id',
-            array('gallery.value')
-        );
+            ->join(
+                array('gallery' => 'coreproductmediagallery/mediagallery'),
+                'main_table.value_id = gallery.value_id',
+                array('gallery.value')
+            );
 
         foreach($mediagalleryCollection as $eachMediaValue) {
             $eachMediaValue->setData('label', $label)
