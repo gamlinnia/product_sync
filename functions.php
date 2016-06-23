@@ -480,6 +480,15 @@ function CallAPI($method, $url, $header = null, $data = false) {
 }
 
 function getImagesUrlOfProduct ($valueToFilter, $type='entity_id') {
+    switch ($type) {
+        case 'entity_id' :
+            $product = Mage::getModel('catalog/product')->load($valueToFilter);
+            break;
+        default :
+            echo 'need to write code in getImagesUrlOfProduct' . PHP_EOL;
+            exit(0);
+    }
+
     $product = getProductObject($valueToFilter, $type);
     $mediaType = array(
         'image' => Mage::getModel('catalog/product_media_config')
