@@ -107,6 +107,7 @@ try{
     foreach ($productInfoArray['downloadables'] as $downloadableObject) {
         $sku = $downloadableObject['sku'];
         echo 'sku: ' . $sku . 'processing downloadable files now' . PHP_EOL;
+        error_log('sku: ' . $sku . 'processing downloadable files now', null, 'downloadablesync.log');
         $downloadableInfoArray = $downloadableObject['files'];
         $localDownloadables = getDownloadableUrls($sku, 'sku');
         $downloadableToBeUploadOrDelete = compareDownloadableWithRemoteIncludeDelete($localDownloadables, $downloadableInfoArray);
@@ -124,7 +125,10 @@ try{
         $count = count($downloadableToBeUploadOrDelete['add']) + count($downloadableToBeUploadOrDelete['delete']);
         echo "$count to be uploaded downloadable files $sku" . PHP_EOL;
 
-        var_dump($downloadableToBeUploadOrDelete);
+        if ($count > 0) {
+            var_dump($downloadableToBeUploadOrDelete);
+            error_log("$count to be uploaded downloadable files $sku", null, 'downloadablesync.log');
+        }
         $uploadDownloadableStatus = uploadAndDeleteDownloadFiles($downloadableToBeUploadOrDelete, $sku, 'sku', $config);
         if (!$uploadDownloadableStatus) {
             echo json_encode(array('message' => 'something wrong'));
