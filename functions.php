@@ -489,7 +489,6 @@ function getImagesUrlOfProduct ($valueToFilter, $type='entity_id') {
             exit(0);
     }
 
-    $product = getProductObject($valueToFilter, $type);
     $mediaType = array(
         'image' => Mage::getModel('catalog/product_media_config')
             ->getMediaUrl( $product->getImage() ),
