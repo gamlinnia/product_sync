@@ -664,8 +664,6 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
 function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFilter, $filterType='entity_id', $config) {
     $product = getProductObject($valueToFilter, $filterType);
     $sku = $product->getSku();
-    $productId = $product->getId();
-    $media = Mage::getModel('catalog/product_attribute_media_api');
 
     $importDir = Mage::getBaseDir('media') . DS . 'import/';
     if (!file_exists($importDir)) {
@@ -736,7 +734,7 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
 //        echo 'delete file in ' . Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product' . DS . substr($imageObject['basename'], 0, 1) . DS . substr($imageObject['basename'], 1, 1) . DS . $imageObject['basename'] . PHP_EOL;
 
 //        $media->create($sku, $newImage);
-        uploadProductImageByNewModule($productId, $imageObject['url'], $imageObject['position'], getFileNameWithoutExtension($imageObject['basename']));
+        uploadProductImageByNewModule($product, $imageObject['url'], $imageObject['position'], getFileNameWithoutExtension($imageObject['basename']));
     }
     return true;
 }
@@ -2647,7 +2645,7 @@ function updateParentCommentChildList($parent_id, $child_id, $action) {
     }
 }
 
-function uploadProductImageByNewModule ($productId, $imgUrl, $position, $label) {
+function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $label) {
     $pathInfo = pathinfo($imgUrl);     // get array of dirname, basename, extension, filename
     $fileName = getFileNameFromUrl($imgUrl);
 
@@ -2662,7 +2660,6 @@ function uploadProductImageByNewModule ($productId, $imgUrl, $position, $label) 
 
     $mediaArray = ($position == 10 || $position == 1) ? array('thumbnail', 'small_image', 'image') : null;
 
-    $productModel = Mage::getSingleton('catalog/product')->load($productId);
     /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
     $productModel->addImageToMediaGallery($fileUrl, $mediaArray, true, false);
     $productModel->save();
