@@ -670,8 +670,14 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
 }
 
 function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFilter, $filterType='entity_id', $config) {
-    $product = getProductObject($valueToFilter, $filterType);
-    $sku = $product->getSku();
+    switch ($filterType) {
+        case 'entity_id' :
+            $product = Mage::getSingleton('catalog/product')->load($valueToFilter);
+            break;
+        default :
+            echo 'need to write code in uploadAndDeleteImagesWithPositionAndLabel';
+            exit(0);
+    }
 
     $importDir = Mage::getBaseDir('media') . DS . 'import/';
     if (!file_exists($importDir)) {
