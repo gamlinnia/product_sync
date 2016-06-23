@@ -139,5 +139,8 @@ try{
     echo 'Last Product updated_at is ' . $productInfoArray['data'][count($productInfoArray['data'])-1]['dontCare']['updated_at'] . PHP_EOL;
 
 } catch (Exception $e) {
+    sendMailWithDownloadUrl('product sync exception', null,     $recipient_array = array(
+        'to' => array('Li.L.Liu@newegg.com', 'Tim.H.Huang@newegg.com')
+    ));
     var_dump($e->getMessage());
 }

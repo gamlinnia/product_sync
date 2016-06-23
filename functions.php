@@ -890,16 +890,19 @@ function getDownloadableUrls ($valueToFilter, $filterType='entity_id') {
 }
 
 function uploadAndDeleteDownloadFiles ($downloadableObjectList, $valueToFilter, $filterType='entity_id', $config) {
-    $product = getProductObject($valueToFilter, $filterType);
+    switch ($filterType) {
+        case 'entity_id' :
+            $product = Mage::getSingleton('catalog/product')->load($valueToFilter);
+            break;
+        case 'sku' :
+            $product = Mage::getSingleton('catalog/product')->load(Mage::getModel('catalog/product')->getIdBySku($valueToFilter));
+            break;
+        default :
+            echo 'need to write code in uploadAndDeleteImagesWithPositionAndLabel';
+            exit(0);
+    }
     $productId = $product->getId();
 
-    $username = 'rosewill';
-    $password = 'rosewillPIM';
-    $context = stream_context_create(array(
-        'http' => array(
-            'header'  => "Authorization: Basic " . base64_encode("$username:$password")
-        )
-    ));
     foreach ($downloadableObjectList['delete'] as $downloadableObject) {
         var_dump($downloadableObject);
 //        unlink(Mage::getBaseDir('media') . DS . $downloadableObject['dir'] . $downloadableObject['basename']);
@@ -909,12 +912,14 @@ function uploadAndDeleteDownloadFiles ($downloadableObjectList, $valueToFilter, 
             ->delete();
 //        echo "$filterType: $valueToFilter deleted $filePath" . PHP_EOL;
     }
+
+    /* downloadable files need to be added */
     foreach ($downloadableObjectList['add'] as $downloadableObject) {
         $url = $downloadableObject['baseUrl'] . $downloadableObject['dir'] . $downloadableObject['basename'];
         if (isset($config['internalHost'])) {
             $url = str_replace($downloadableObject['host'], $config['internalHost'], $url);
         }
-        $tmpFile = file_get_contents($url, false, $context);    // get file with base auth
+        $tmpFile = file_get_contents($url);
         $filePath = $downloadableObject['dir'] . $downloadableObject['basename'];
         file_put_contents(Mage::getBaseDir('media') . DS . $filePath, $tmpFile);
         $file_list_collection = Mage::getModel('downloadablefile/filelist')->getCollection()
