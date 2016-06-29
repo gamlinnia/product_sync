@@ -49,13 +49,16 @@ do {
     $targetArray = array('general' , 'property' , 'price' , 'intelligence' , 'description' , 'baseinfo' , 'dimension' , 'ProductInfos' , 'inventory');
     do {
         /* 透過 標準輸出 印出要詢問的內容 */
-        fwrite(STDOUT, 'Enter target to modify [ ' . implode(' | ', $targetArray) . ' ]: ');
+        fwrite(STDOUT, 'Enter target to modify [ ' . implode(' | ', $targetArray) . ' ]: press enter for property');
         /* 抓取 標準輸入 的 內容 */
         $target = trim(fgets(STDIN));
         if (in_array(strtolower($target), $exitStrings)) {
             exit(0);
         }
-    } while (empty($target) || !in_array(trim($target), $targetArray));
+        if (empty($target)) {
+            $target = 'property';
+        }
+    } while (!in_array(trim($target), $targetArray));
 
     switch ($target) {
         case 'property' :

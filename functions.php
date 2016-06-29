@@ -2373,7 +2373,7 @@ function writeReviewCommentToLocal($data) {
 //    const STATUS_PENDING = 4;
 //    const STATUS_APPROVED = 5;
 //    const STATUS_NOT_APPROVED = 6;
-//
+
     $review_data = (isset($data['review']) && !empty($data['review'])) ? $data['review'] : null;
     $comment_data = (isset($data['comment']) && !empty($data['comment'])) ? $data['comment'] : null;
     $parent_comment_data = (isset($data['parent']) && !empty($data['parent'])) ? $data['parent'] : null;
