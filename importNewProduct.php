@@ -82,6 +82,7 @@ if (!$productExists) {
         return;
     }
 
+    echo 'mapped attr set name: ' . $mappedAttrSet . PHP_EOL;
     $attrSetInfo = attributeSetNameAndId('attributeSetName', $mappedAttrSet);
     echo $mappedAttrSet . 'map to attr set id: ' . $attrSetInfo['id'] . PHP_EOL;
 
