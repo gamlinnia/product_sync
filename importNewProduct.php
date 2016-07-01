@@ -166,6 +166,7 @@ fwrite(STDOUT, 'Are you sure to save this product information?');
 $sureToAction = trim(fgets(STDIN));
 
 if ( strtolower($sureToAction) == 'y' || strtolower($sureToAction) == 'yes' ) {
+    Zend_Debug::dump($model->getData());
     $model->save();
     $productId = $model->getId();
 
