@@ -13,8 +13,8 @@ Mage::app('admin');
 $collection = Mage::getModel('eav/entity_attribute')->getCollection()->addFieldToFilter('entity_type_id', 4);
 foreach ($collection as $eachAttribute) {
     $attributeModel = Mage::getModel('eav/entity_attribute')->load($eachAttribute->getId());
-    Zend_Debug::dump($attributeModel->getData());
-    die();
-//    $attributeModel =
+    if ($attributeModel->getData('is_searchable') == 1) {
+        Zend_Debug::dump($attributeModel->getData());
+    }
 }
 
