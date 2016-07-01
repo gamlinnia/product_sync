@@ -15,6 +15,7 @@ foreach ($collection as $eachAttribute) {
     $attributeModel = Mage::getModel('eav/entity_attribute')->load($eachAttribute->getId());
     if ($attributeModel->getData('is_searchable') == 1) {
         Zend_Debug::dump($attributeModel->getData());
+        $attributeModel->setData('is_searchable', 0)->save();
     }
 }
 
