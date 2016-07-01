@@ -12,7 +12,8 @@ Mage::app('admin');
 
 $collection = Mage::getModel('eav/entity_attribute')->getCollection();
 foreach ($collection as $eachAttribute) {
-    Zend_Debug::dump($eachAttribute->getData());
+    $attributeModel = Mage::getModel('eav/entity_attribute')->load($eachAttribute->getId());
+    Zend_Debug::dump($attributeModel->getData());
     die();
 //    $attributeModel =
 }
