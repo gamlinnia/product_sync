@@ -84,7 +84,7 @@ if (!$productExists) {
 
     echo 'mapped attr set name: ' . $mappedAttrSet . PHP_EOL;
     $attrSetInfo = attributeSetNameAndId('attributeSetName', $mappedAttrSet);
-    echo $mappedAttrSet . 'map to attr set id: ' . $attrSetInfo['id'] . PHP_EOL;
+    echo $mappedAttrSet . ' map to attr set id: ' . $attrSetInfo['id'] . PHP_EOL;
 
     /* detect websites and select all */
 
