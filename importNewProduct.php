@@ -318,10 +318,12 @@ function importProductImageByImageFileName ($productId, $imageFileInfoArray) {
                 );
                 $productModel->save();
                 */
-
-        uploadProductImageByNewModule(Mage::getSingleton('catalog/product')->load($productId), $imageBase . $eachFileInfo['ImageName'], (int)$eachFileInfo['Priority'] * 10, $pathInfo['filename']);
-
-        echo 'position: ' . (int)$eachFileInfo['Priority'] * 10 . ' label: ' . $pathInfo['filename'] . PHP_EOL;
+        if ($pathInfo['filename'] != 'cs') {
+            uploadProductImageByNewModule(Mage::getSingleton('catalog/product')->load($productId), $imageBase . $eachFileInfo['ImageName'], (int)$eachFileInfo['Priority'] * 10, $pathInfo['filename']);
+            echo 'position: ' . (int)$eachFileInfo['Priority'] * 10 . ' label: ' . $pathInfo['filename'] . PHP_EOL;
+        } else {
+            echo 'only have cs image to upload' . PHP_EOL;
+        }
 
 //        $newImage = array(
 //            'file' => array(
