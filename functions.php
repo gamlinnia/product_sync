@@ -2673,7 +2673,7 @@ function updateParentCommentChildList($parent_id, $child_id, $action) {
     }
 }
 
-function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $label) {
+function uploadProductImageByNewModule ($productId, $imgUrl, $position, $label) {
     $pathInfo = pathinfo($imgUrl);     // get array of dirname, basename, extension, filename
     $fileName = getFileNameFromUrl($imgUrl);
 
@@ -2689,6 +2689,7 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
     $mediaArray = ($position == 10 || $position == 1) ? array('thumbnail', 'small_image', 'image') : null;
 
     /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
+    $productModel = Mage::getModel('catalog/product')->load($productId);
     $productModel->addImageToMediaGallery($fileUrl, $mediaArray, true, false);
     $productModel->save();
 
