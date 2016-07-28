@@ -319,7 +319,7 @@ function importProductImageByImageFileName ($productId, $imageFileInfoArray) {
                 $productModel->save();
                 */
 
-        uploadProductImageByNewModule($productId, $imageBase . $eachFileInfo['ImageName'], (int)$eachFileInfo['Priority'] * 10, $pathInfo['filename']);
+        uploadProductImageByNewModule(Mage::getSingleton('catalog/product')->load($productId), $imageBase . $eachFileInfo['ImageName'], (int)$eachFileInfo['Priority'] * 10, $pathInfo['filename']);
 
         echo 'position: ' . (int)$eachFileInfo['Priority'] * 10 . ' label: ' . $pathInfo['filename'] . PHP_EOL;
 
