@@ -754,15 +754,7 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
         foreach ($gallery as $each) {
             if ($each->getId() == $imageObject['id']) {
                 unlink( $each->getPath() );
-                foreach ($storeIds as $eachStoreId) {
-                    $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')->getCollection()
-                        ->addFieldToFilter('store_id', $eachStoreId)
-                        ->addFieldToFilter('value_id', $imageObject['id']);
-
-                    if ($mediagalleryCollection->count() > 0) {
-                        Mage::getModel('coreproductmediagallery/mediagallery')->load($imageObject['id'])->delete();
-                    }
-                }
+                Mage::getModel('coreproductmediagallery/mediagallery')->load($imageObject['id'])->delete();
             }
         }
     }
