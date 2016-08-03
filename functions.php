@@ -495,11 +495,11 @@ function getImagesUrlOfProduct ($valueToFilter, $type='entity_id') {
 
     $mediaType = array(
         'image' => Mage::getModel('catalog/product_media_config')
-                ->getMediaUrl( $product->getImage() ),
+            ->getMediaUrl( $product->getImage() ),
         'small_image' => Mage::getModel('catalog/product_media_config')
-                ->getMediaUrl( $product->getSmallImage() ),
+            ->getMediaUrl( $product->getSmallImage() ),
         'thumbnail' => Mage::getModel('catalog/product_media_config')
-                ->getMediaUrl( $product->getThumbnail() )
+            ->getMediaUrl( $product->getThumbnail() )
     );
 
     $response = array();
@@ -747,14 +747,22 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
     }
 
     /* delete images */
+    $storeIds = array_merge(array('0'), getAllStoreIds());  // admin store id + store ids
     $mediaGalleryAttribute = Mage::getModel('catalog/resource_eav_attribute')->loadByCode($product->getEntityTypeId(), 'media_gallery');
     foreach ($imageObjectList['delete'] as $key => $imageObject) {
         $gallery = $product->getMediaGalleryImages();
         foreach ($gallery as $each) {
             if ($each->getId() == $imageObject['id']) {
                 unlink( $each->getPath() );
-                $mediaGalleryAttribute->getBackend()->removeImage($product, $each->getFile());
-                $product->save();
+                foreach ($storeIds as $eachStoreId) {
+                    $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')->getCollection()
+                        ->addFieldToFilter('store_id', $eachStoreId)
+                        ->addFieldToFilter('value_id', $imageObject['id']);
+
+                    if ($mediagalleryCollection->count() > 0) {
+                        Mage::getModel('coreproductmediagallery/mediagallery')->load($imageObject['id'])->delete();
+                    }
+                }
             }
         }
     }
