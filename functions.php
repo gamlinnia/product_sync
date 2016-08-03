@@ -753,6 +753,7 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
         $gallery = $product->getMediaGalleryImages();
         foreach ($gallery as $each) {
             if ($each->getId() == $imageObject['id']) {
+                echo 'delete path: ' . $each->getPath() . ' ID: ' . $imageObject['id'] . PHP_EOL;
                 unlink( $each->getPath() );
                 Mage::getModel('coreproductmediagallery/mediagallery')->load($imageObject['id'])->delete();
             }
