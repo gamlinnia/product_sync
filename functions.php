@@ -2656,9 +2656,9 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
 
     foreach($mediagalleryCollection as $eachMediaValue) {
         Zend_Debug::dump($eachMediaValue->getData());
-//        $eachMediaValue->setData('label', $label)
-//            ->setData('position', $position)
-//            ->save();
+        $eachMediaValue->setData('label', $label)
+            ->setData('position', $position)
+            ->save();
     }
 
 }

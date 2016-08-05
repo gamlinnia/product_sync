@@ -103,6 +103,16 @@ try{
         }
         sleep(rand(2, 4));
     }
+    $collection = Mage::getModel('coreproductmediagallery/mediagallery')->getCollection()
+        ->addFieldToFilter('value', array(
+            'like' => '%' . $sku . '%'
+        ));
+    foreach ($collection as $each) {
+        echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $each->getValue() . PHP_EOL;
+        if (!file_exists( Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $each->getValue() )) {
+            echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $each->getValue() . ' not exist' . PHP_EOL;
+        }
+    }
 
     /* deal with downloadable files */
     foreach ($productInfoArray['downloadables'] as $downloadableObject) {
