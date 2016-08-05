@@ -676,10 +676,10 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
 function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFilter, $filterType='entity_id', $config) {
     switch ($filterType) {
         case 'entity_id' :
-            $product = Mage::getModel('catalog/product')->load($valueToFilter);
+            $product = Mage::getSingleton('catalog/product')->load($valueToFilter);
             break;
         case 'sku' :
-            $product = Mage::getModel('catalog/product')->load(Mage::getModel('catalog/product')->getIdBySku($valueToFilter));
+            $product = Mage::getSingleton('catalog/product')->load(Mage::getModel('catalog/product')->getIdBySku($valueToFilter));
             break;
         default :
             echo 'need to write code in uploadAndDeleteImagesWithPositionAndLabel';
@@ -2643,11 +2643,10 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
     $mediaArray = ($position == 10 || $position == 1) ? array('thumbnail', 'small_image', 'image') : null;
 
     /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
-    $productModel->addImageToMediaGallery($fileUrl, $mediaArray, true, false);
+    $productModel->addImageToMediaGallery($fileUrl, $mediaArray, false, false);
     $productModel->save();
 
     $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')->getCollection()
-        ->addFieldToFilter('store_id', 0)
         ->addFieldToFilter('value', array('like' => '%' . $label . '%'))
         ->join(
             array('gallery' => 'coreproductmediagallery/mediagallery'),
