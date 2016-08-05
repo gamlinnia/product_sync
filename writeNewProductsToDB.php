@@ -101,17 +101,19 @@ try{
         if (!$uploadStatus) {
             echo json_encode(array('message' => 'something wrong'));
         }
-        sleep(rand(2, 4));
-    }
-    $collection = Mage::getModel('coreproductmediagallery/mediagallery')->getCollection()
-        ->addFieldToFilter('value', array(
-            'like' => '%' . $sku . '%'
-        ));
-    foreach ($collection as $each) {
-        echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $each->getValue() . PHP_EOL;
-        if (!file_exists( Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $each->getValue() )) {
-            echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $each->getValue() . ' not exist' . PHP_EOL;
+
+        $galleryCollection = Mage::getModel('coreproductmediagallery/mediagallery')->getCollection()
+            ->addFieldToFilter('value', array(
+                'like' => '%' . $sku . '%'
+            ));
+        foreach ($galleryCollection as $each) {
+            echo Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $each->getValue() . PHP_EOL;
+            if (!file_exists( Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $each->getValue() )) {
+                echo Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $each->getValue() . ' not exist' . PHP_EOL;
+            }
         }
+
+        sleep(rand(2, 4));
     }
 
     /* deal with downloadable files */
