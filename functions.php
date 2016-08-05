@@ -2643,7 +2643,7 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
     $mediaArray = ($position == 10 || $position == 1) ? array('thumbnail', 'small_image', 'image') : null;
 
     /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
-    $productModel->addImageToMediaGallery($fileUrl, $mediaArray, false, false);
+    $productModel->addImageToMediaGallery($fileUrl, $mediaArray, true, false);
     $productModel->save();
 
     $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')->getCollection()
