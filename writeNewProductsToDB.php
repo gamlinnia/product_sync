@@ -107,9 +107,9 @@ try{
                 'like' => '%' . $sku . '%'
             ));
         foreach ($galleryCollection as $each) {
-            echo Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $each->getValue() . PHP_EOL;
-            if (!file_exists( Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $each->getValue() )) {
-                echo Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $each->getValue() . ' not exist' . PHP_EOL;
+            echo Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'catalog' . DS . 'product/' . $each->getValue() . PHP_EOL;
+            if (!file_exists( Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) .'catalog' . DS . 'product/' . $each->getValue() )) {
+                echo Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'catalog' . DS . 'product/' . $each->getValue() . ' not exist' . PHP_EOL;
             }
         }
 
