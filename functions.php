@@ -676,10 +676,10 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
 function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFilter, $filterType='entity_id', $config) {
     switch ($filterType) {
         case 'entity_id' :
-            $product = Mage::getSingleton('catalog/product')->load($valueToFilter);
+            $product = Mage::getModel('catalog/product')->load($valueToFilter);
             break;
         case 'sku' :
-            $product = Mage::getSingleton('catalog/product')->load(Mage::getModel('catalog/product')->getIdBySku($valueToFilter));
+            $product = Mage::getModel('catalog/product')->load(Mage::getModel('catalog/product')->getIdBySku($valueToFilter));
             break;
         default :
             echo 'need to write code in uploadAndDeleteImagesWithPositionAndLabel';
@@ -690,14 +690,6 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
     if (!file_exists($importDir)) {
         mkdir($importDir);
     }
-
-    $username = 'rosewill';
-    $password = 'rosewillPIM';
-    $context = stream_context_create(array(
-        'http' => array(
-            'header'  => "Authorization: Basic " . base64_encode("$username:$password")
-        )
-    ));
 
     /* upload images */
     foreach ($imageObjectList['add'] as $key => $imageObject) {
