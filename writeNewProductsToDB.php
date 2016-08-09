@@ -75,17 +75,6 @@ try{
         var_dump($productInfoArray);
     }
 
-    if ($count == count($productInfoArray['data']) && count($productInfoArray['data']) > 0) {
-        $response = array(
-            'message' => 'Product info sync success'
-        );
-        if (isset($config['debug']) && $config['debug']) {
-            $response['debug'] = true;
-        }
-        file_put_contents('setting.json', json_encode($setting));
-        echo json_encode($response) . PHP_EOL;
-    }
-
     /* deal with image uploading */
     foreach ($productInfoArray['imgs'] as $imageObject) {
         $sku = $imageObject['sku'];
@@ -159,6 +148,17 @@ try{
             echo json_encode(array('message' => 'something wrong'));
         }
     }
+
+
+    $response = array(
+        'message' => 'Product info sync success'
+    );
+    if (isset($config['debug']) && $config['debug']) {
+        $response['debug'] = true;
+    }
+    file_put_contents('setting.json', json_encode($setting));
+    echo json_encode($response) . PHP_EOL;
+
 
     echo 'Last Product updated_at is ' . $productInfoArray['data'][count($productInfoArray['data'])-1]['dontCare']['updated_at'] . PHP_EOL;
 
