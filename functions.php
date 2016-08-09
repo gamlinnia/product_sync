@@ -697,6 +697,7 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
             $imageObject['url'] = str_replace($imageObject['host'], $config['internalHost'], $imageObject['url']);
         }
         uploadProductImageByNewModule($product, $imageObject['url'], $imageObject['position'], getFileNameWithoutExtension($imageObject['basename']));
+        sleep(rand(1, 3));
     }
 
     /* delete images */
