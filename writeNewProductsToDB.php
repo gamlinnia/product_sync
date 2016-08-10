@@ -72,7 +72,6 @@ try{
         $productObject->setWebsiteIds(getAllWebisteIds())
             ->setCreatedAt(strtotime('now')) //product creation time
             ->setUpdatedAt(strtotime('now')); //product update time
-        Zend_Debug::dump($productObject->getData());
         $productObject->save();
         echo 'product saved' . PHP_EOL;
 
