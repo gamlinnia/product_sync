@@ -52,12 +52,15 @@ try{
                     $productObject->setData($attrKey, $attrValue);
                 }
             } else {
-                if (is_array($attrValue)) {
-                    var_dump($attrValue);
-                } else {
-                    echo "Set attr key: $attrKey to $attrValue" . PHP_EOL;
+                if (!empty($attrValue)) {
+                    if (is_array($attrValue)) {
+                        echo "array key: $attrKey" . PHP_EOL;
+                        var_dump($attrValue);
+                    } else {
+                        echo "Set attr key: $attrKey to $attrValue" . PHP_EOL;
+                    }
+                    $productObject->setData($attrKey, $attrValue);
                 }
-                $productObject->setData($attrKey, $attrValue);
             }
         }
         $productObject->setWebsiteIds(getAllWebisteIds())
