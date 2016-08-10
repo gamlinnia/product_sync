@@ -43,7 +43,6 @@ try{
         }
         $readyToImportProductInfo = parseBackClassifiedProductAttributes($productInfo);
 
-        $tmpCount = 0;
         foreach ($readyToImportProductInfo as $attrKey => $attrValue) {
             if ($attrKey == 'url_key') {
                 $urlKey = $productObject->getUrlKey();
@@ -53,20 +52,15 @@ try{
                     $productObject->setData($attrKey, $attrValue);
                 }
             } else {
-                if (!empty($attrValue)) {
-                    if (is_array($attrValue)) {
-                        echo "array key: $attrKey" . PHP_EOL;
-                        var_dump($attrValue);
-                    } else {
+                if (is_array($attrValue)) {
+                    echo "array key: $attrKey" . PHP_EOL;
+                    var_dump($attrValue);
+                } else {
+                    if (!empty($attrValue)) {
                         echo "Set attr key: $attrKey to $attrValue" . PHP_EOL;
                     }
-                    $productObject->setData($attrKey, $attrValue);
-/*                    if ($tmpCount > 29) {
-                        echo 'product saving...' . PHP_EOL;
-                        $productObject->save();
-                    }*/
-                    $tmpCount++;
                 }
+                $productObject->setData($attrKey, $attrValue);
             }
         }
 
