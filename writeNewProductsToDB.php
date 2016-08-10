@@ -43,6 +43,7 @@ try{
         }
         $readyToImportProductInfo = parseBackClassifiedProductAttributes($productInfo);
 
+        $tmpCount = 0;
         foreach ($readyToImportProductInfo as $attrKey => $attrValue) {
             if ($attrKey == 'url_key') {
                 $urlKey = $productObject->getUrlKey();
@@ -60,9 +61,12 @@ try{
                         echo "Set attr key: $attrKey to $attrValue" . PHP_EOL;
                     }
                     $productObject->setData($attrKey, $attrValue);
-                    $productObject->save();
+                    if ($tmpCount > 2) {
+                        $productObject->save();
+                    }
                 }
             }
+            $tmpCount++;
         }
         $productObject->setWebsiteIds(getAllWebisteIds())
             ->setCreatedAt(strtotime('now')) //product creation time
