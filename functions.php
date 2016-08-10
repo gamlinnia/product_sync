@@ -1417,7 +1417,6 @@ function setProductCategoryIds ($valueToFilter, $filterType='entity_id', $catego
         $product = getProductObject($valueToFilter, $filterType);
     }
 
-    $product_id = $product->getId();
     $categoryIds = array();
     foreach ($categoryArray as $category) {
         $categoryInfo = getSingleCategoryInfo($category['name'], 'name', $category['level']);
@@ -1427,7 +1426,6 @@ function setProductCategoryIds ($valueToFilter, $filterType='entity_id', $catego
         }
     }
     $product->setCategoryIds($categoryIds);
-    $product->setUrlKey(false);
     $product->save();
 }
 
