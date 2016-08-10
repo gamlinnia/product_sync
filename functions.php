@@ -2648,6 +2648,7 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
     $productModel->save();
 
     $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')->getCollection()
+        ->addFieldToFilter('store_id', 0)
         ->addFieldToFilter('value', array('like' => '%' . $label . '%'))
         ->join(
             array('gallery' => 'coreproductmediagallery/mediagallery'),
