@@ -61,16 +61,16 @@ try{
                         echo "Set attr key: $attrKey to $attrValue" . PHP_EOL;
                     }
                     $productObject->setData($attrKey, $attrValue);
-                    if ($tmpCount > 29) {
+/*                    if ($tmpCount > 29) {
                         echo 'product saving...' . PHP_EOL;
                         $productObject->save();
-                    }
+                    }*/
                     $tmpCount++;
                 }
             }
         }
 
-        echo 'product saving...' . PHP_EOL;
+        echo 'product saving...' . strtotime('now') . PHP_EOL;
 //        $productObject->setWebsiteIds(getAllWebisteIds())
 //            ->setCreatedAt(strtotime('now')) //product creation time
 //            ->setUpdatedAt(strtotime('now')) //product update time
