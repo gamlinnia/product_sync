@@ -1413,6 +1413,8 @@ function setProductCategoryIds ($valueToFilter, $filterType='entity_id', $catego
     if ($filterType == 'sku') {
         $product = Mage::getModel('catalog/product')->load(Mage::getModel('catalog/product')->getIdBySku($valueToFilter));
     } else {
+        echo 'check setProductCategoryIds' . PHP_EOL;
+        exit(0);
         /* getProductObject when filter type = sku will cause problem. */
         $product = getProductObject($valueToFilter, $filterType);
     }
