@@ -61,7 +61,7 @@ try{
                         echo "Set attr key: $attrKey to $attrValue" . PHP_EOL;
                     }
                     $productObject->setData($attrKey, $attrValue);
-                    if ($tmpCount > 8) {
+                    if ($tmpCount > 15) {
                         $productObject->save();
                     }
                 }
