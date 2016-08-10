@@ -68,11 +68,12 @@ try{
             }
             $tmpCount++;
         }
-        $productObject->save();
+
+        echo 'product saving...' . PHP_EOL;
         $productObject->setWebsiteIds(getAllWebisteIds())
             ->setCreatedAt(strtotime('now')) //product creation time
-            ->setUpdatedAt(strtotime('now')); //product update time
-        $productObject->save();
+            ->setUpdatedAt(strtotime('now')) //product update time
+            ->save();
         echo 'product saved' . PHP_EOL;
 
         changeToInStockAndSetQty($productInfo['direct']['sku'], 'sku');
