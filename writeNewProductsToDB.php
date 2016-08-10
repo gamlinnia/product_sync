@@ -62,12 +62,13 @@ try{
                     }
                     $productObject->setData($attrKey, $attrValue);
                     if ($tmpCount > 25) {
-                        $productObject->save();
+//                        $productObject->save();
                     }
                 }
             }
             $tmpCount++;
         }
+        $productObject->save();
         $productObject->setWebsiteIds(getAllWebisteIds())
             ->setCreatedAt(strtotime('now')) //product creation time
             ->setUpdatedAt(strtotime('now')); //product update time
