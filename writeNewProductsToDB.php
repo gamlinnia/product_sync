@@ -71,10 +71,11 @@ try{
         }
 
         echo 'product saving...' . PHP_EOL;
-        $productObject->setWebsiteIds(getAllWebisteIds())
-            ->setCreatedAt(strtotime('now')) //product creation time
-            ->setUpdatedAt(strtotime('now')) //product update time
-            ->save();
+//        $productObject->setWebsiteIds(getAllWebisteIds())
+//            ->setCreatedAt(strtotime('now')) //product creation time
+//            ->setUpdatedAt(strtotime('now')) //product update time
+//            ->save();
+        $productObject->save();
         echo 'product saved' . PHP_EOL;
 
         changeToInStockAndSetQty($productInfo['direct']['sku'], 'sku');
