@@ -47,7 +47,7 @@ try{
             if ($attrKey == 'url_key') {
                 $urlKey = $productObject->getUrlKey();
                 if ($productExists && !empty($urlKey)) {
-                    $productObject->setUrlKey(false);
+//                    $productObject->setUrlKey(false);
                 } else {
                     $productObject->setData($attrKey, $attrValue);
                 }
