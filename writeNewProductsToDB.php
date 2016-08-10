@@ -170,7 +170,7 @@ try{
 
 } catch (Exception $e) {
     sendMailWithDownloadUrl('product sync exception', null, array(
-        'to' => array('Li.L.Liu@newegg.com', 'Tim.H.Huang@newegg.com')
+        'to' => array('gamlinnia@hotmail.com', 'Tim.H.Huang@newegg.com')
     ));
     var_dump($e->getMessage());
 }
