@@ -1409,7 +1409,14 @@ function getSingleCategoryInfo ($valueToFilter, $filterType, $level) {
 
 function setProductCategoryIds ($valueToFilter, $filterType='entity_id', $categoryArray) {
     echo "set category for $filterType : $valueToFilter" . PHP_EOL;
-    $product = getProductObject($valueToFilter, $filterType);
+
+    if ($filterType == 'sku') {
+        $product = Mage::getModel('catalog/product')->load(Mage::getModel('catalog/product')->getIdBySku($valueToFilter));
+    } else {
+        /* getProductObject when filter type = sku will cause problem. */
+        $product = getProductObject($valueToFilter, $filterType);
+    }
+
     $product_id = $product->getId();
     $categoryIds = array();
     foreach ($categoryArray as $category) {

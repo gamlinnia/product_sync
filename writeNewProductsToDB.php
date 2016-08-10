@@ -64,12 +64,11 @@ try{
             }
         }
 
-        echo 'product saving...' . strtotime('now') . PHP_EOL;
-//        $productObject->setWebsiteIds(getAllWebisteIds())
-//            ->setCreatedAt(strtotime('now')) //product creation time
-//            ->setUpdatedAt(strtotime('now')) //product update time
-//            ->save();
-        $productObject->setWebsiteIds(getAllWebisteIds())->save();
+        echo 'product saving...' . $productInfo['direct']['sku'] . PHP_EOL;
+        $productObject->setWebsiteIds(getAllWebisteIds())
+            ->setCreatedAt(strtotime('now')) //product creation time
+            ->setUpdatedAt(strtotime('now')) //product update time
+            ->save();
         echo 'product saved' . PHP_EOL;
 
         changeToInStockAndSetQty($productInfo['direct']['sku'], 'sku');
