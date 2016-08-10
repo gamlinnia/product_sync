@@ -61,12 +61,13 @@ try{
                         echo "Set attr key: $attrKey to $attrValue" . PHP_EOL;
                     }
                     $productObject->setData($attrKey, $attrValue);
-                    if ($tmpCount > 25) {
-//                        $productObject->save();
+                    if ($tmpCount > 20) {
+                        echo 'product saving...' . PHP_EOL;
+                        $productObject->save();
                     }
+                    $tmpCount++;
                 }
             }
-            $tmpCount++;
         }
 
         echo 'product saving...' . PHP_EOL;
