@@ -68,6 +68,7 @@ try{
             ->setUpdatedAt(strtotime('now')); //product update time
         Zend_Debug::dump($productObject->getData());
         $productObject->save();
+        echo 'product saved' . PHP_EOL;
 
         changeToInStockAndSetQty($productInfo['direct']['sku'], 'sku');
         setProductCategoryIds($productInfo['direct']['sku'], 'sku', $productInfo['dontCare']['category']);
