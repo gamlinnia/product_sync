@@ -52,11 +52,11 @@ try{
                     $productObject->setData($attrKey, $attrValue);
                 }
             } else {
-                if (is_array($attrValue)) {
-                    echo "array key: $attrKey" . PHP_EOL;
-                    var_dump($attrValue);
-                } else {
-                    if (!empty($attrValue)) {
+                if (!empty($attrValue)) {
+                    if (is_array($attrValue)) {
+                        echo "array key: $attrKey" . PHP_EOL;
+                        var_dump($attrValue);
+                    } else {
                         echo "Set attr key: $attrKey to $attrValue" . PHP_EOL;
                     }
                 }
@@ -69,7 +69,7 @@ try{
 //            ->setCreatedAt(strtotime('now')) //product creation time
 //            ->setUpdatedAt(strtotime('now')) //product update time
 //            ->save();
-        $productObject->save();
+        $productObject->setWebsiteIds(getAllWebisteIds())->save();
         echo 'product saved' . PHP_EOL;
 
         changeToInStockAndSetQty($productInfo['direct']['sku'], 'sku');
