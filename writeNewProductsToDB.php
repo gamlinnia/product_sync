@@ -60,6 +60,7 @@ try{
                         echo "Set attr key: $attrKey to $attrValue" . PHP_EOL;
                     }
                     $productObject->setData($attrKey, $attrValue);
+                    $productObject->save();
                 }
             }
         }
