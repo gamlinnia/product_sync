@@ -133,6 +133,7 @@ try{
             $mediaArray = ($imageObj['position'] == 10 || $imageObj['position'] == 1) ? array('thumbnail', 'small_image', 'image') : null;
 
             /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
+            $product = Mage::getSingleton('catalog/product');
             $product->addImageToMediaGallery($fileUrl, $mediaArray, true, false);
             $product->save();
 
