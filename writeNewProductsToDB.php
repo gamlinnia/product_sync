@@ -91,6 +91,11 @@ try{
         $product = Mage::getModel('catalog/product')->load(
             Mage::getModel('catalog/product')->getIdBySku($sku)
         );
+        $productId = $product->getId();
+        if (!$productId) {
+            echo 'no product id get' . PHP_EOL;
+            exit(0);
+        }
         $imagesInfoArray = $imageObject['images'];
         $localImages = getImagesUrlOfProduct($sku, 'sku');
 
