@@ -139,12 +139,12 @@ try{
 
             /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
             $product = Mage::getModel('catalog/product')->load($productId);
-            $product->addImageToMediaGallery($fileUrl, $mediaArray, true, false);
+//            $product->addImageToMediaGallery($fileUrl, $mediaArray, true, false);
             $product->save();
 
 
-//            echo 'save finished' . PHP_EOL;
-//            exit(0);
+            echo 'save finished' . PHP_EOL;
+            exit(0);
 
             $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')->getCollection()
                 ->addFieldToFilter('store_id', 0)
