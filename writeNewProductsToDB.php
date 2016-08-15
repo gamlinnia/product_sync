@@ -88,6 +88,9 @@ try{
     /* deal with image uploading */
     foreach ($productInfoArray['imgs'] as $imageObject) {
         $sku = $imageObject['sku'];
+        $product = Mage::getModel('catalog/product')->load(
+            Mage::getModel('catalog/product')->getIdBySku($sku)
+        );
         $imagesInfoArray = $imageObject['images'];
         $localImages = getImagesUrlOfProduct($sku, 'sku');
 
@@ -96,10 +99,78 @@ try{
         echo 'sku: ' . $sku . 'processing images now' . PHP_EOL;
         var_dump($imagesToBeUploadOrDelete);
 
-        $uploadStatus = uploadAndDeleteImagesWithPositionAndLabel($imagesToBeUploadOrDelete, $sku, 'sku', $config);
-        if (!$uploadStatus) {
-            echo json_encode(array('message' => 'something wrong'));
+
+
+//        $uploadStatus = uploadAndDeleteImagesWithPositionAndLabel($imagesToBeUploadOrDelete, $sku, 'sku', $config);
+
+        /* begin of upload image files */
+        $importDir = Mage::getBaseDir('media') . DS . 'import/';
+        if (!file_exists($importDir)) {
+            mkdir($importDir);
         }
+
+        /* upload images */
+        foreach ($imagesToBeUploadOrDelete['add'] as $key => $imageObj) {
+            if (isset($config['internalHost'])) {
+                $imageObj['url'] = str_replace($imageObj['host'], $config['internalHost'], $imageObj['url']);
+            }
+
+            uploadProductImageByNewModule($product, $imageObj['url'], $imageObj['position'], getFileNameWithoutExtension($imageObj['basename']));
+
+            /* upload image part _ real process */
+            $pathInfo = pathinfo($imageObj['url']);     // get array of dirname, basename, extension, filename
+            $fileName = getFileNameFromUrl($imageObj['url']);
+
+            if (!$fileName) {
+                die('Can not get xx-xxx-xxx file name from url');
+            }
+
+            $tmpFile = file_get_contents($imageObj['url']);
+            $fileUrl = '/tmp/' . $pathInfo['basename'];
+            file_put_contents($fileUrl, $tmpFile);
+            echo 'file dir: ' . $fileUrl . ' position: ' . $imageObj['position'] . ' label: ' . getFileNameWithoutExtension($imageObj['basename']) . PHP_EOL;
+
+            $mediaArray = ($imageObj['position'] == 10 || $imageObj['position'] == 1) ? array('thumbnail', 'small_image', 'image') : null;
+
+            /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
+            $product->addImageToMediaGallery($fileUrl, $mediaArray, true, false);
+            $product->save();
+
+            $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')->getCollection()
+                ->addFieldToFilter('store_id', 0)
+                ->addFieldToFilter('value', array('like' => '%' . $label . '%'))
+                ->join(
+                    array('gallery' => 'coreproductmediagallery/mediagallery'),
+                    'main_table.value_id = gallery.value_id',
+                    array('gallery.value')
+                );
+
+            foreach($mediagalleryCollection as $eachMediaValue) {
+                Zend_Debug::dump($eachMediaValue->getData());
+                $eachMediaValue->setData('label', $label)
+                    ->setData('position', $position)
+                    ->save();
+            }
+            /* end upload image part _ real process */
+
+
+            sleep(rand(1, 3));
+        }
+
+        /* delete images */
+        $storeIds = array_merge(array('0'), getAllStoreIds());  // admin store id + store ids
+        $mediaGalleryAttribute = Mage::getModel('catalog/resource_eav_attribute')->loadByCode($product->getEntityTypeId(), 'media_gallery');
+        foreach ($imagesToBeUploadOrDelete['delete'] as $key => $imageObj) {
+            $gallery = $product->getMediaGalleryImages();
+            foreach ($gallery as $each) {
+                if ($each->getId() == $imageObj['id']) {
+                    echo 'delete path: ' . $each->getPath() . ' ID: ' . $imageObj['id'] . PHP_EOL;
+                    unlink( $each->getPath() );
+                    Mage::getModel('coreproductmediagallery/mediagallery')->load($imageObj['id'])->delete();
+                }
+            }
+        }
+        /* end upload image files */
 
         $galleryCollection = Mage::getModel('coreproductmediagallery/mediagallery')->getCollection()
             ->addFieldToFilter('value', array(
