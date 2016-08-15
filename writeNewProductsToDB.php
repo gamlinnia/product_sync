@@ -86,6 +86,7 @@ try{
     }
 
     /* deal with image uploading */
+    /*
     foreach ($productInfoArray['imgs'] as $imageObject) {
         $sku = $imageObject['sku'];
         $product = Mage::getModel('catalog/product')->load(
@@ -108,13 +109,13 @@ try{
 
 //        $uploadStatus = uploadAndDeleteImagesWithPositionAndLabel($imagesToBeUploadOrDelete, $sku, 'sku', $config);
 
-        /* begin of upload image files */
+        // begin of upload image files
         $importDir = Mage::getBaseDir('media') . DS . 'import/';
         if (!file_exists($importDir)) {
             mkdir($importDir);
         }
 
-        /* upload images */
+        // upload images
         foreach ($imagesToBeUploadOrDelete['add'] as $key => $imageObj) {
             if (isset($config['internalHost'])) {
                 $imageObj['url'] = str_replace($imageObj['host'], $config['internalHost'], $imageObj['url']);
@@ -122,7 +123,7 @@ try{
 
 //            uploadProductImageByNewModule($product, $imageObj['url'], $imageObj['position'], getFileNameWithoutExtension($imageObj['basename']));
 
-            /* upload image part _ real process */
+            // upload image part _ real process
             $pathInfo = pathinfo($imageObj['url']);     // get array of dirname, basename, extension, filename
             $fileName = getFileNameFromUrl($imageObj['url']);
 
@@ -137,7 +138,7 @@ try{
 
             $mediaArray = ($imageObj['position'] == 10 || $imageObj['position'] == 1) ? array('thumbnail', 'small_image', 'image') : null;
 
-            /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
+            // public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true)
             $product = Mage::getSingleton('catalog/product')->load();
             $product->addImageToMediaGallery($fileUrl, $mediaArray, true, false);
             $product->save();
@@ -161,13 +162,13 @@ try{
                     ->setData('position', $position)
                     ->save();
             }
-            /* end upload image part _ real process */
+            // end upload image part _ real process
 
 
             sleep(rand(1, 3));
         }
 
-        /* delete images */
+        // delete images
         $storeIds = array_merge(array('0'), getAllStoreIds());  // admin store id + store ids
         $mediaGalleryAttribute = Mage::getModel('catalog/resource_eav_attribute')->loadByCode($product->getEntityTypeId(), 'media_gallery');
         foreach ($imagesToBeUploadOrDelete['delete'] as $key => $imageObj) {
@@ -180,7 +181,7 @@ try{
                 }
             }
         }
-        /* end upload image files */
+        // end upload image files
 
         $galleryCollection = Mage::getModel('coreproductmediagallery/mediagallery')->getCollection()
             ->addFieldToFilter('value', array(
@@ -206,6 +207,7 @@ try{
 
         sleep(rand(2, 4));
     }
+*/
 
     /* deal with downloadable files */
     foreach ($productInfoArray['downloadables'] as $downloadableObject) {
