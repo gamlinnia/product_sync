@@ -139,7 +139,7 @@ try{
 
             /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
             $product = Mage::getModel('catalog/product')->load($productId);
-//            $product->addImageToMediaGallery($fileUrl, $mediaArray, true, false);
+            $product->addImageToMediaGallery($fileUrl, $mediaArray, true, false);
             $product->save();
 
 
