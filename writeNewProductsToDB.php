@@ -86,7 +86,6 @@ try{
     }
 
     /* deal with image uploading */
-    /*
     foreach ($productInfoArray['imgs'] as $imageObject) {
         $sku = $imageObject['sku'];
         $product = Mage::getModel('catalog/product')->load(
@@ -121,49 +120,8 @@ try{
                 $imageObj['url'] = str_replace($imageObj['host'], $config['internalHost'], $imageObj['url']);
             }
 
-//            uploadProductImageByNewModule($product, $imageObj['url'], $imageObj['position'], getFileNameWithoutExtension($imageObj['basename']));
-
-            // upload image part _ real process
-            $pathInfo = pathinfo($imageObj['url']);     // get array of dirname, basename, extension, filename
-            $fileName = getFileNameFromUrl($imageObj['url']);
-
-            if (!$fileName) {
-                die('Can not get xx-xxx-xxx file name from url');
-            }
-
-            $tmpFile = file_get_contents($imageObj['url']);
-            $fileUrl = '/tmp/' . $pathInfo['basename'];
-            file_put_contents($fileUrl, $tmpFile);
-            echo 'file dir: ' . $fileUrl . ' position: ' . $imageObj['position'] . ' label: ' . getFileNameWithoutExtension($imageObj['basename']) . PHP_EOL;
-
-            $mediaArray = ($imageObj['position'] == 10 || $imageObj['position'] == 1) ? array('thumbnail', 'small_image', 'image') : null;
-
-            // public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true)
-            $product = Mage::getSingleton('catalog/product')->load();
-            $product->addImageToMediaGallery($fileUrl, $mediaArray, true, false);
-            $product->save();
-
-
-            echo 'save finished' . PHP_EOL;
-            exit(0);
-
-            $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')->getCollection()
-                ->addFieldToFilter('store_id', 0)
-                ->addFieldToFilter('value', array('like' => '%' . $label . '%'))
-                ->join(
-                    array('gallery' => 'coreproductmediagallery/mediagallery'),
-                    'main_table.value_id = gallery.value_id',
-                    array('gallery.value')
-                );
-
-            foreach($mediagalleryCollection as $eachMediaValue) {
-                Zend_Debug::dump($eachMediaValue->getData());
-                $eachMediaValue->setData('label', $label)
-                    ->setData('position', $position)
-                    ->save();
-            }
-            // end upload image part _ real process
-
+            /* edting */
+            uploadProductImageByNewModule($product, $imageObj['url'], $imageObj['position'], getFileNameWithoutExtension($imageObj['basename']));
 
             sleep(rand(1, 3));
         }
@@ -207,7 +165,6 @@ try{
 
         sleep(rand(2, 4));
     }
-*/
 
     /* deal with downloadable files */
     foreach ($productInfoArray['downloadables'] as $downloadableObject) {

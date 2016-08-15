@@ -2643,31 +2643,59 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
         die('Can not get xx-xxx-xxx file name from url');
     }
 
+    $imgBaseDir = Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product';
+
     $tmpFile = file_get_contents($imgUrl);
-    $fileUrl = '/tmp/' . $pathInfo['basename'];
-    file_put_contents($fileUrl, $tmpFile);
-    echo 'file dir: ' . $fileUrl . ' position: ' . $position . ' label: ' . $label . PHP_EOL;
+    $fullfileDir = $imgBaseDir . DS . $pathInfo['basename'];
+    file_put_contents($fullfileDir, $tmpFile);
+    echo 'file dir: ' . $fullfileDir . ' position: ' . $position . ' label: ' . $label . PHP_EOL;
+
+    $galleryCollection = Mage::getModel('coreproductmediagallery/mediagallery')->getCollection()
+        ->addFieldToFilter('entity_id', $productModel->getId())
+        ->addFieldToFilter('value', array('like' => '%' . $pathInfo['basename'] . '%'));
+
+    if ($galleryCollection->count() > 0) {
+        return;
+    }
+
+    $mediaGalleryAttrId = Mage::getModel('eav/entity_attribute')->getCollection()
+        ->addFieldToFilter('attribute_code', 'media_gallery')
+        ->getFirstItem()
+        ->getData('attribute_id');
+
+    $gallery = Mage::getModel('coreproductmediagallery/mediagallery')
+        ->setData(array(
+            'attribute_id' => $mediaGalleryAttrId,
+            'entity_id' => $productModel->getId(),
+            'value' => DS . $pathInfo['basename']
+        ))
+        ->save();
+
+    if (!$gallery->getId()) {
+        echo 'media_gallery get no id' . PHP_EOL;
+        exit(0);
+    }
+
+    $backend = new Mage_Catalog_Model_Resource_Product_Attribute_Backend_Media;
+    $backend->insertGalleryValueInStore(array(
+        'value_id' => $gallery->getId(),
+        'label' => $label,
+        'position' => $position,
+        'disabled' => 0,
+        'store_id' => 0
+    ));
 
     $mediaArray = ($position == 10 || $position == 1) ? array('thumbnail', 'small_image', 'image') : null;
 
-    /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
-    $productModel->addImageToMediaGallery($fileUrl, $mediaArray, true, false);
-    $productModel->save();
-
-    $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')->getCollection()
-        ->addFieldToFilter('store_id', 0)
-        ->addFieldToFilter('value', array('like' => '%' . $label . '%'))
-        ->join(
-            array('gallery' => 'coreproductmediagallery/mediagallery'),
-            'main_table.value_id = gallery.value_id',
-            array('gallery.value')
-        );
-
-    foreach($mediagalleryCollection as $eachMediaValue) {
-        Zend_Debug::dump($eachMediaValue->getData());
-        $eachMediaValue->setData('label', $label)
-            ->setData('position', $position)
-            ->save();
+    if (in_array('thumbnail', $mediaArray)) {
+        $productModel->setThumbnail(DS . $pathInfo['basename']);
     }
+    if (in_array('small_image', $mediaArray)) {
+        $productModel->setSmallImage(DS . $pathInfo['basename']);
+    }
+    if (in_array('image', $mediaArray)) {
+        $productModel->setImage(DS . $pathInfo['basename']);
+    }
+    $productModel->save();
 
 }
