@@ -122,8 +122,6 @@ try{
 
             /* edting */
             uploadProductImageByNewModule($product, $imageObj['url'], $imageObj['position'], getFileNameWithoutExtension($imageObj['basename']));
-
-            sleep(rand(1, 3));
         }
 
         // delete images
@@ -141,7 +139,7 @@ try{
         }
         // end upload image files
 
-        $galleryCollection = Mage::getModel('coreproductmediagallery/mediagallery')->getCollection()
+/*        $galleryCollection = Mage::getModel('coreproductmediagallery/mediagallery')->getCollection()
             ->addFieldToFilter('value', array(
                 'like' => '%' . $sku . '%'
             ));
@@ -161,9 +159,8 @@ try{
                     $product->save();
                 }
             }
-        }
+        }*/
 
-        sleep(rand(2, 4));
     }
 
     /* deal with downloadable files */

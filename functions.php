@@ -2685,17 +2685,13 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
         'store_id' => 0
     ));
 
-    $mediaArray = ($position == 10 || $position == 1) ? array('thumbnail', 'small_image', 'image') : null;
-
-    if (in_array('thumbnail', $mediaArray)) {
+    if ($position == 10 || $position == 1) {
         $productModel->setThumbnail(DS . $pathInfo['basename']);
-    }
-    if (in_array('small_image', $mediaArray)) {
         $productModel->setSmallImage(DS . $pathInfo['basename']);
-    }
-    if (in_array('image', $mediaArray)) {
         $productModel->setImage(DS . $pathInfo['basename']);
+
+        $productModel->save();
     }
-    $productModel->save();
+
 
 }
