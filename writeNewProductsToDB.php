@@ -120,7 +120,7 @@ try{
                 $imageObj['url'] = str_replace($imageObj['host'], $config['internalHost'], $imageObj['url']);
             }
 
-            uploadProductImageByNewModule($product, $imageObj['url'], $imageObj['position'], getFileNameWithoutExtension($imageObj['basename']));
+//            uploadProductImageByNewModule($product, $imageObj['url'], $imageObj['position'], getFileNameWithoutExtension($imageObj['basename']));
 
             /* upload image part _ real process */
             $pathInfo = pathinfo($imageObj['url']);     // get array of dirname, basename, extension, filename
@@ -139,12 +139,12 @@ try{
 
             /* public function addImageToMediaGallery($file, $mediaAttribute=null, $move=false, $exclude=true) */
             $product = Mage::getModel('catalog/product')->load($productId);
-//            $product->addImageToMediaGallery($fileUrl, $mediaArray, true, false);
+            $product->addImageToMediaGallery($fileUrl, $mediaArray, true, false);
             $product->save();
 
 
-            echo 'save finished' . PHP_EOL;
-            exit(0);
+//            echo 'save finished' . PHP_EOL;
+//            exit(0);
 
             $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')->getCollection()
                 ->addFieldToFilter('store_id', 0)
