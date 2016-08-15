@@ -36,7 +36,11 @@ try{
     /* debug == false，才執行product sync  */
     $count = 0;
     foreach ($productInfoArray['data'] as $key => $productInfo) {
-        $productObject = getProductObject($productInfo['direct']['sku'], 'sku');
+
+        $productObject = Mage::getModel('catalog/product')->load(
+            Mage::getModel('catalog/product')->getIdBySku( $productInfo['direct']['sku'] )
+        );
+
         $productExists = true;
         if (!$productObject->getId()) {
             $productExists = false;
