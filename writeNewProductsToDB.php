@@ -104,40 +104,7 @@ try{
         echo 'sku: ' . $sku . 'processing images now' . PHP_EOL;
         var_dump($imagesToBeUploadOrDelete);
 
-
-
-//        $uploadStatus = uploadAndDeleteImagesWithPositionAndLabel($imagesToBeUploadOrDelete, $sku, 'sku', $config);
-
-        // begin of upload image files
-        $importDir = Mage::getBaseDir('media') . DS . 'import/';
-        if (!file_exists($importDir)) {
-            mkdir($importDir);
-        }
-
-        // upload images
-        foreach ($imagesToBeUploadOrDelete['add'] as $key => $imageObj) {
-            if (isset($config['internalHost'])) {
-                $imageObj['url'] = str_replace($imageObj['host'], $config['internalHost'], $imageObj['url']);
-            }
-
-            /* edting */
-            uploadProductImageByNewModule($product, $imageObj['url'], $imageObj['position'], getFileNameWithoutExtension($imageObj['basename']));
-        }
-
-        // delete images
-        $storeIds = array_merge(array('0'), getAllStoreIds());  // admin store id + store ids
-        $mediaGalleryAttribute = Mage::getModel('catalog/resource_eav_attribute')->loadByCode($product->getEntityTypeId(), 'media_gallery');
-        foreach ($imagesToBeUploadOrDelete['delete'] as $key => $imageObj) {
-            $gallery = $product->getMediaGalleryImages();
-            foreach ($gallery as $each) {
-                if ($each->getId() == $imageObj['id']) {
-                    echo 'delete path: ' . $each->getPath() . ' ID: ' . $imageObj['id'] . PHP_EOL;
-                    unlink( $each->getPath() );
-                    Mage::getModel('coreproductmediagallery/mediagallery')->load($imageObj['id'])->delete();
-                }
-            }
-        }
-        // end upload image files
+        $uploadStatus = uploadAndDeleteImagesWithPositionAndLabel($imagesToBeUploadOrDelete, $sku, 'sku', $config);
 
 /*        $galleryCollection = Mage::getModel('coreproductmediagallery/mediagallery')->getCollection()
             ->addFieldToFilter('value', array(

@@ -696,8 +696,7 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
         if (isset($config['internalHost'])) {
             $imageObject['url'] = str_replace($imageObject['host'], $config['internalHost'], $imageObject['url']);
         }
-        uploadProductImageByNewModule($product, $imageObject['url'], $imageObject['position'], getFileNameWithoutExtension($imageObject['basename']));
-        sleep(rand(1, 3));
+        uploadProductImageByNewModule($product, $imageObject['url'], $imageObject['position'], getFileNameWithoutExtension($imageObject['basename']), $imageObject['mediaType']);
     }
 
     /* delete images */
@@ -2635,7 +2634,7 @@ function updateParentCommentChildList($parent_id, $child_id, $action) {
     }
 }
 
-function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $label) {
+function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $label, $mediaType) {
     $pathInfo = pathinfo($imgUrl);     // get array of dirname, basename, extension, filename
     $fileName = getFileNameFromUrl($imgUrl);
 
@@ -2650,28 +2649,31 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
     file_put_contents($fullfileDir, $tmpFile);
     echo 'file dir: ' . $fullfileDir . ' position: ' . $position . ' label: ' . $label . PHP_EOL;
 
+    /* check if image file name exists */
     $galleryCollection = Mage::getModel('coreproductmediagallery/mediagallery')->getCollection()
         ->addFieldToFilter('entity_id', $productModel->getId())
         ->addFieldToFilter('value', array('like' => '%' . $pathInfo['basename'] . '%'));
 
+    /* if image file exists, then exit. */
     if ($galleryCollection->count() > 0) {
         return;
     }
 
-    $mediaGalleryAttrId = Mage::getModel('eav/entity_attribute')->getCollection()
-        ->addFieldToFilter('attribute_code', 'media_gallery')
-        ->getFirstItem()
-        ->getData('attribute_id');
-
     $gallery = Mage::getModel('coreproductmediagallery/mediagallery')
         ->setData(array(
-            'attribute_id' => $mediaGalleryAttrId,
+            'attribute_id' => Mage::getModel('eav/entity_attribute')->getCollection()
+                ->addFieldToFilter('attribute_code', 'media_gallery')
+                ->getFirstItem()
+                ->getData('attribute_id'),
             'entity_id' => $productModel->getId(),
             'value' => DS . $pathInfo['basename']
         ))
         ->save();
 
     if (!$gallery->getId()) {
+        sendMailWithDownloadUrl('product sync exception', null, array(
+            'to' => array('gamlinnia@hotmail.com', 'Tim.H.Huang@newegg.com')
+        ));
         echo 'media_gallery get no id' . PHP_EOL;
         exit(0);
     }
@@ -2685,13 +2687,17 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
         'store_id' => 0
     ));
 
-    if ($position == 10 || $position == 1) {
-        $productModel->setThumbnail(DS . $pathInfo['basename']);
-        $productModel->setSmallImage(DS . $pathInfo['basename']);
-        $productModel->setImage(DS . $pathInfo['basename']);
-
+    if (!empty($mediaType)) {
+        if (in_array('image', $mediaType)) {
+            $productModel->setImage(DS . $pathInfo['basename']);
+        }
+        if (in_array('small_image', $mediaType)) {
+            $productModel->setSmallImage(DS . $pathInfo['basename']);
+        }
+        if (in_array('thumbnail', $mediaType)) {
+            $productModel->setThumbnail(DS . $pathInfo['basename']);
+        }
         $productModel->save();
     }
-
 
 }
