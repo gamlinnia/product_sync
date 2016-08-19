@@ -10,7 +10,8 @@ require_once 'functions.php';
 /* set the store id to 0, to change the attr by default */
 Mage::app('admin');
 
-$collection = Mage::getModel('catalog/product')->getCollection();
+$collection = Mage::getModel('catalog/product')->getCollection()
+->setOrder('entity_id', 'DESC');
 
 foreach ($collection as $_product) {
 
