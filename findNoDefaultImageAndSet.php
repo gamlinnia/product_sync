@@ -25,6 +25,7 @@ foreach ($collection as $_product) {
             $product->setSmallImage($mainImage);
             $product->setThumbnail($mainImage);
             $product->save();
+            sleep(rand(1,4));
         } else {
             echo 'no image exists' . PHP_EOL;
         }
