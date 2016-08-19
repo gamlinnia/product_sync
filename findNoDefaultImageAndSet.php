@@ -18,9 +18,8 @@ foreach ($collection as $_product) {
 
     $mediaGalleryArray = $product->getMediaGallery();
 
-    if (empty($product->getImage()) || $product->getImage() == 'no_selection') {
-        Zend_Debug::dump($product->getSku());
         if (!empty($mediaGalleryArray['images'])) {
+            Zend_Debug::dump($product->getSku());
             var_dump($mainImage = $mediaGalleryArray['images'][0]['file']);
             $product->setImage($mainImage);
             $product->setSmallImage($mainImage);
@@ -29,26 +28,4 @@ foreach ($collection as $_product) {
         } else {
             echo 'no image exists' . PHP_EOL;
         }
-    } else {
-        /* set position 10 with base image to position 1 */
-        $first = null;
-        $ten = null;
-        foreach ($mediaGalleryArray['images'] as $_media) {
-
-            if ($_media['position'] == '1') {
-                $first = $_media['file'];
-            }
-            if ($_media['position'] == '10') {
-                $ten = $_media['file'];
-            }
-        }
-        if (!empty($first) && $ten == $product->getImage()) {
-            echo $product->getSku() . PHP_EOL;
-            $product->setImage($first);
-            $product->setSmallImage($first);
-            $product->setThumbnail($first);
-            $product->save();
-
-        }
-    }
 }
