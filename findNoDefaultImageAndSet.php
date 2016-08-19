@@ -11,7 +11,7 @@ require_once 'functions.php';
 Mage::app('admin');
 
 $collection = Mage::getModel('catalog/product')->getCollection()
-->setOrder('entity_id', 'DESC');
+    ->setOrder('entity_id', 'DESC');
 
 foreach ($collection as $_product) {
 
@@ -19,15 +19,17 @@ foreach ($collection as $_product) {
 
     $mediaGalleryArray = $product->getMediaGallery();
 
-        if (!empty($mediaGalleryArray['images'])) {
+    if (!empty($mediaGalleryArray['images'])) {
+        var_dump($mainImage = $mediaGalleryArray['images'][0]['file']);
+        if ($product->getImage() != $mainImage) {
             Zend_Debug::dump($product->getSku());
-            var_dump($mainImage = $mediaGalleryArray['images'][0]['file']);
             $product->setImage($mainImage);
             $product->setSmallImage($mainImage);
             $product->setThumbnail($mainImage);
             $product->save();
             sleep(rand(1,4));
-        } else {
-            echo 'no image exists' . PHP_EOL;
         }
+    } else {
+        echo 'no image exists' . PHP_EOL;
+    }
 }
