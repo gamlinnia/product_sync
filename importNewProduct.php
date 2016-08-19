@@ -271,73 +271,23 @@ function importProductImageByImageFileName ($productId, $imageFileInfoArray) {
     $media = Mage::getModel('catalog/product_attribute_media_api');
 
     foreach ($imageFileInfoArray as $index => $eachFileInfo) {
-        // get array of dirname, basename, extension, filename
-        $pathInfo = pathinfo($eachFileInfo['ImageName']);
+        if (isset($eachFileInfo['IsActive']) && $eachFileInfo['IsActive']) {
+            // get array of dirname, basename, extension, filename
+            $pathInfo = pathinfo($eachFileInfo['ImageName']);
 
-        /*
-                switch($pathInfo['extension']){
-                    case 'png':
-                        $mimeType = 'image/png';
-                        break;
-                    case 'jpg':
-                        $mimeType = 'image/jpeg';
-                        break;
-                    case 'gif':
-                        $mimeType = 'image/gif';
-                        break;
-                    default:
-                        return false;
-                }
-                $tmpFile = file_get_contents($imageBase . $eachFileInfo['ImageName']);
-                $fileUrl = '/tmp/' . $pathInfo['basename'];
-                file_put_contents($fileUrl, $tmpFile);
-                echo 'file dir: ' . $fileUrl . PHP_EOL;
+            if (isset($eachFileInfo['Priority']) && $eachFileInfo['Priority'] == 1) {
+                $mediaType = array('image', 'small_image', 'thumbnail');
+            } else {
+                $mediaType = array();
+            }
 
-                if ((int)$eachFileInfo['Priority'] < 2) {
-                    $mediaArray = array(
-                        'thumbnail',
-                        'small_image',
-                        'image'
-                    );
-                } else {
-                    $mediaArray = array();
-                }
-
-                $productModel = Mage::getSingleton('catalog/product')->load($productId);
-                $productModel->addImageToMediaGallery($fileUrl,
-                    $mediaArray
-                    ,false,false);
-                $attributes = $productModel->getTypeInstance(true)->getSetAttributes($productModel);
-                $attributes['media_gallery']->getBackend()->updateImage(
-                    $productModel,
-                    $fileUrl,
-                    $data=array(
-                        'postion' => (int)$eachFileInfo['Priority'] * 10,
-                        'label' => $pathInfo['filename']
-                    )
-                );
-                $productModel->save();
-                */
-        if ($pathInfo['filename'] != 'cs') {
-            uploadProductImageByNewModule(Mage::getSingleton('catalog/product')->load($productId), $imageBase . $eachFileInfo['ImageName'], (int)$eachFileInfo['Priority'] * 10, $pathInfo['filename']);
-            echo 'position: ' . (int)$eachFileInfo['Priority'] * 10 . ' label: ' . $pathInfo['filename'] . PHP_EOL;
-        } else {
-            echo 'only have cs image to upload' . PHP_EOL;
+            if ($pathInfo['filename'] != 'cs') {
+                uploadProductImageByNewModule(Mage::getSingleton('catalog/product')->load($productId), $imageBase . $eachFileInfo['ImageName'], (int)$eachFileInfo['Priority'] * 10, $pathInfo['filename'], $mediaType);
+                echo 'position: ' . (int)$eachFileInfo['Priority'] * 10 . ' label: ' . $pathInfo['filename'] . PHP_EOL;
+            } else {
+                echo 'only have cs image to upload' . PHP_EOL;
+            }
         }
-
-//        $newImage = array(
-//            'file' => array(
-//                'content' => base64_encode($fileUrl),
-//                'mime' => $mimeType,
-//                'name' => $pathInfo['basename'],
-//            ),
-//            'label' => $pathInfo['filename'],
-//            'position' => (int)$eachFileInfo['Priority'] * 10,
-//            'types' => array(),
-//            'exclude' => 0,
-//        );
-//        var_dump($newImage);
-//        $media->create($productModel->getSku(), $newImage);
     }
     return true;
 }

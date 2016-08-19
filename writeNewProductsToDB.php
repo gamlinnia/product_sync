@@ -48,24 +48,15 @@ try{
         $readyToImportProductInfo = parseBackClassifiedProductAttributes($productInfo);
 
         foreach ($readyToImportProductInfo as $attrKey => $attrValue) {
-            if ($attrKey == 'url_key') {
-                $urlKey = $productObject->getUrlKey();
-                if ($productExists && !empty($urlKey)) {
-//                    $productObject->setUrlKey(false);
+            if (!empty($attrValue)) {
+                if (is_array($attrValue)) {
+                    echo "array key: $attrKey" . PHP_EOL;
+                    var_dump($attrValue);
                 } else {
-                    $productObject->setData($attrKey, $attrValue);
+                    echo "Set attr key: $attrKey to $attrValue" . PHP_EOL;
                 }
-            } else {
-                if (!empty($attrValue)) {
-                    if (is_array($attrValue)) {
-                        echo "array key: $attrKey" . PHP_EOL;
-                        var_dump($attrValue);
-                    } else {
-                        echo "Set attr key: $attrKey to $attrValue" . PHP_EOL;
-                    }
-                }
-                $productObject->setData($attrKey, $attrValue);
             }
+            $productObject->setData($attrKey, $attrValue);
         }
 
         echo 'product saving...' . $productInfo['direct']['sku'] . PHP_EOL;
@@ -106,27 +97,27 @@ try{
 
         $uploadStatus = uploadAndDeleteImagesWithPositionAndLabel($imagesToBeUploadOrDelete, $sku, 'sku', $config);
 
-/*        $galleryCollection = Mage::getModel('coreproductmediagallery/mediagallery')->getCollection()
-            ->addFieldToFilter('value', array(
-                'like' => '%' . $sku . '%'
-            ));
-        foreach ($galleryCollection as $each) {
-            echo Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) . DS . 'catalog' . DS . 'product' . $each->getValue() . PHP_EOL;
-            if (!file_exists( Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) . DS .'catalog' . DS . 'product' . $each->getValue() )) {
-                echo Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) . DS . 'catalog' . DS . 'product' . $each->getValue() . ' not exist' . PHP_EOL;
-                $each->delete();
-            } else {
-                if ( (int)Mage::getModel('coreproductmediagallery/mediagalleryvalue')->load($each->getId())->getPosition() == 10 ) {
-                    $product = Mage::getModel('catalog/product')->load(
-                        Mage::getModel('catalog/product')->getIdBySku($sku)
-                    );
-                    $product->setImage($each->getValue());
-                    $product->setSmallImage($each->getValue());
-                    $product->setThumbnail($each->getValue());
-                    $product->save();
-                }
-            }
-        }*/
+        /*        $galleryCollection = Mage::getModel('coreproductmediagallery/mediagallery')->getCollection()
+                    ->addFieldToFilter('value', array(
+                        'like' => '%' . $sku . '%'
+                    ));
+                foreach ($galleryCollection as $each) {
+                    echo Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) . DS . 'catalog' . DS . 'product' . $each->getValue() . PHP_EOL;
+                    if (!file_exists( Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) . DS .'catalog' . DS . 'product' . $each->getValue() )) {
+                        echo Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) . DS . 'catalog' . DS . 'product' . $each->getValue() . ' not exist' . PHP_EOL;
+                        $each->delete();
+                    } else {
+                        if ( (int)Mage::getModel('coreproductmediagallery/mediagalleryvalue')->load($each->getId())->getPosition() == 10 ) {
+                            $product = Mage::getModel('catalog/product')->load(
+                                Mage::getModel('catalog/product')->getIdBySku($sku)
+                            );
+                            $product->setImage($each->getValue());
+                            $product->setSmallImage($each->getValue());
+                            $product->setThumbnail($each->getValue());
+                            $product->save();
+                        }
+                    }
+                }*/
 
     }
 
