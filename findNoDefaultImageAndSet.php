@@ -19,10 +19,10 @@ foreach ($collection as $_product) {
 
     $mediaGalleryArray = $product->getMediaGallery();
 
+    Zend_Debug::dump($product->getSku());
     if (!empty($mediaGalleryArray['images'])) {
         var_dump($mainImage = $mediaGalleryArray['images'][0]['file']);
         if ($product->getImage() != $mainImage) {
-            Zend_Debug::dump($product->getSku());
             $product->setImage($mainImage);
             $product->setSmallImage($mainImage);
             $product->setThumbnail($mainImage);
