@@ -869,7 +869,7 @@ function uploadAndDeleteDownloadFiles ($downloadableObjectList, $valueToFilter, 
     }
 
     foreach ($downloadableObjectList['edit']as $downloadableObject) {
-        Mage::log($downloadableObject, null, 'sync.log');
+        Mage::log($downloadableObject, null, 'sync.log', true);
 
     }
 
