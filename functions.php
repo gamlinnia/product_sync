@@ -868,7 +868,12 @@ function uploadAndDeleteDownloadFiles ($downloadableObjectList, $valueToFilter, 
 //        echo "$filterType: $valueToFilter deleted $filePath" . PHP_EOL;
     }
 
-    /* downloadable files need to be added */
+    foreach ($downloadableObjectList['edit']as $downloadableObject) {
+        Mage::log($downloadableObject, null, 'sync.log');
+
+    }
+
+        /* downloadable files need to be added */
     foreach ($downloadableObjectList['add'] as $downloadableObject) {
         $url = $downloadableObject['baseUrl'] . $downloadableObject['dir'] . $downloadableObject['basename'];
         if (isset($config['internalHost'])) {
