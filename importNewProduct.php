@@ -270,6 +270,8 @@ function importProductImageByImageFileName ($productId, $imageFileInfoArray) {
     $imageBase = 'http://images10.newegg.com/productimage/';
     $media = Mage::getModel('catalog/product_attribute_media_api');
 
+    echo 'Total image to upload' . PHP_EOL;
+
     foreach ($imageFileInfoArray as $index => $eachFileInfo) {
         if (isset($eachFileInfo['IsActive']) && $eachFileInfo['IsActive']) {
             // get array of dirname, basename, extension, filename

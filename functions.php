@@ -816,7 +816,7 @@ function getDownloadableUrls ($valueToFilter, $filterType='entity_id') {
         ->join(
             array('file' => 'downloadablefile_file_list'),
             'main_table.file_list_id = file.id',
-            array('file' => 'file.file', 'type' => 'file.type')
+            array('file' => 'file.file', 'type' => 'file.type', 'comment' => 'file.comment')
         );
 
     $collection->addFieldToFilter('product_id', $product->getId());
@@ -834,6 +834,7 @@ function getDownloadableUrls ($valueToFilter, $filterType='entity_id') {
                 'baseUrl' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
                 'dir' => $match[1],
                 'basename' => $match[2],
+                'comment' => $eachAssociated->getComment(),
                 'host' => $parseUrl['host']
             );
 
@@ -883,6 +884,7 @@ function uploadAndDeleteDownloadFiles ($downloadableObjectList, $valueToFilter, 
             $model = Mage::getModel('downloadablefile/filelist')
                 ->setData('file', $filePath)
                 ->setData('type', $downloadableObject['type'])
+                ->setData('comment', $downloadableObject['comment'])
                 ->save();
             $file_list_id = $model->getId();
         } else {
@@ -894,6 +896,10 @@ function uploadAndDeleteDownloadFiles ($downloadableObjectList, $valueToFilter, 
             ->setProductId($productId)
             ->save();
         echo "$filterType: $valueToFilter uploaded $filePath" . PHP_EOL;
+    }
+
+    foreach ($downloadableObjectList['edit'] as $downloadableObject) {
+
     }
     return true;
 }
@@ -930,6 +936,7 @@ function uploadAndDeleteDownloadFiles ($downloadableObjectList, $valueToFilter, 
 function compareDownloadableWithRemoteIncludeDelete ($localDownloadable, $remoteDownloadable) {
     $response = array(
         'add' => array(),
+        'edit' => array(),
         'delete' => array()
     );
 
@@ -938,6 +945,11 @@ function compareDownloadableWithRemoteIncludeDelete ($localDownloadable, $remote
         foreach ($localDownloadable as $local) {
             if ($remote['basename'] == $local['basename']) {
                 $match = true;
+
+                if ($remote['comment'] == $local['comment']) {
+                    $response['edit'][] = $remote;
+                }
+
                 break;
             }
         }
@@ -945,6 +957,7 @@ function compareDownloadableWithRemoteIncludeDelete ($localDownloadable, $remote
             $response['add'][] = $remote;
         }
     }
+
     foreach ($localDownloadable as $local) {
         $match = false;
         foreach ($remoteDownloadable as $remote) {
