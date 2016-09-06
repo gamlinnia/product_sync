@@ -879,6 +879,7 @@ function uploadAndDeleteDownloadFiles ($downloadableObjectList, $valueToFilter, 
                 ->setData('comment', $downloadableObject['comment'])
                 ->save();
         }
+        echo "edit comment: " . $downloadableObject['basename'] . " change comment to: " . $downloadableObject['comment'] . PHP_EOL;
     }
 
     /* downloadable files need to be added */
