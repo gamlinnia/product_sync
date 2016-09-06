@@ -951,7 +951,7 @@ function compareDownloadableWithRemoteIncludeDelete ($localDownloadable, $remote
             if ($remote['basename'] == $local['basename']) {
                 $match = true;
 
-                if ($remote['comment'] == $local['comment']) {
+                if ($remote['comment'] != $local['comment']) {
                     $response['edit'][] = $remote;
                 }
 
