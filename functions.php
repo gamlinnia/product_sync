@@ -878,6 +878,7 @@ function uploadAndDeleteDownloadFiles ($downloadableObjectList, $valueToFilter, 
             $file_list_collection->getFirstItem()
                 ->setData('comment', $downloadableObject['comment'])
                 ->save();
+            Mage::log($file_list_collection->getFirstItem()->getData(), null, 'sync.log', true);
         }
         echo "edit comment: " . $downloadableObject['basename'] . " change comment to: " . $downloadableObject['comment'] . PHP_EOL;
     }
