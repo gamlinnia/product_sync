@@ -141,7 +141,7 @@ try{
         foreach ($downloadableInfoArray as $each) {
             echo $each['basename'] . PHP_EOL;
         }
-        $count = count($downloadableToBeUploadOrDelete['add']) + count($downloadableToBeUploadOrDelete['delete']);
+        $count = count($downloadableToBeUploadOrDelete['add']) + count($downloadableToBeUploadOrDelete['edit']) + count($downloadableToBeUploadOrDelete['delete']);
         echo "$count to be uploaded downloadable files $sku" . PHP_EOL;
 
         if ($count > 0) {

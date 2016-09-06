@@ -870,10 +870,18 @@ function uploadAndDeleteDownloadFiles ($downloadableObjectList, $valueToFilter, 
 
     foreach ($downloadableObjectList['edit']as $downloadableObject) {
         Mage::log($downloadableObject, null, 'sync.log', true);
-
+        $filePath = $downloadableObject['dir'] . $downloadableObject['basename'];
+        $file_list_collection = Mage::getModel('downloadablefile/filelist')->getCollection()
+            ->addFieldToFilter('file', $filePath)
+            ->addFieldToFilter('type', $downloadableObject['type']);
+        if ($file_list_collection->count() > 0) {
+            $file_list_collection->getFirstItem()
+                ->setData('comment', $downloadableObject['comment'])
+                ->save();
+        }
     }
 
-        /* downloadable files need to be added */
+    /* downloadable files need to be added */
     foreach ($downloadableObjectList['add'] as $downloadableObject) {
         $url = $downloadableObject['baseUrl'] . $downloadableObject['dir'] . $downloadableObject['basename'];
         if (isset($config['internalHost'])) {
