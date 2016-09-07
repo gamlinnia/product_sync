@@ -529,6 +529,7 @@ function getImageResponse ($mediaTypesContent, $imageObject) {
     $response = array(
         'id' => $imageId,
         'position' => $imageObject->getPosition(),
+        'label' => $imageObject->getLabel(),
         'url' => $imageUrl,
         'basename' => $pathInfo['basename'],
         'host' => $parseUrl['host'],
