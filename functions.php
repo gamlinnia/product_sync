@@ -560,8 +560,13 @@ function getProductObject ($valueToFilter, $filterType='entity_id') {
 }
 
 function compareImageWithRemoteIncludeDelete ($localImages, $remoteImages) {
+    Mage::log('local image:', null, 'sync.log');
+    Mage::log($localImages, null, 'sync.log');
+    Mage::log('remote image:', null, 'sync.log');
+    Mage::log($remoteImages, null, 'sync.log');
     $response = array(
         'add' => array(),
+        'edit' => array(),
         'delete' => array()
     );
     foreach ($remoteImages as $remote) {
