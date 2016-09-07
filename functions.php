@@ -572,6 +572,7 @@ function compareImageWithRemoteIncludeDelete ($localImages, $remoteImages) {
     );
     foreach ($remoteImages as $remote) {
         $match = false;
+        $edit = false;
         foreach ($localImages as $local) {
             if (strtolower(substr($local['basename'], 0, 2)) == 'cs' && strtolower(substr($local['basename'], 0, 2)) == strtolower(substr($remote['basename'], 0, 2))) {
                 $match = true;
@@ -580,6 +581,19 @@ function compareImageWithRemoteIncludeDelete ($localImages, $remoteImages) {
                 preg_match('/[0-9\-]{13}/', $remote['basename'], $remoteMatch);
                 preg_match('/[0-9\-]{13}/', $local['basename'], $localMatch);
                 if ($remoteMatch[0] == $localMatch[0]) {
+
+                    if (count($local['mediaType']) > count($remote['mediaType'])) {
+                        $edit = true;
+                    }
+                    if ($local['position'] != $remote['position']) {
+                        $edit = true;
+                    }
+                    if ($edit) {
+                        $tmpArray = $remote;
+                        $tmpArray['id'] = $local['id'];
+                        $response['edit'][] = $tmpArray;
+                    }
+
                     $match = true;
                     break;
                 }
