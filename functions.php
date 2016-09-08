@@ -589,6 +589,9 @@ function compareImageWithRemoteIncludeDelete ($localImages, $remoteImages) {
                     if ($local['position'] != $remote['position']) {
                         $edit = true;
                     }
+                    if ($local['label'] != $remote['label']) {
+                        $edit = true;
+                    }
                     if ($edit) {
                         $response['edit'][] = $remote;
                     }
@@ -623,6 +626,7 @@ function compareImageWithRemoteIncludeDelete ($localImages, $remoteImages) {
         }
     }
 
+    Mage::log($response, null, 'sync.log', true);
     return $response;
 }
 
@@ -712,7 +716,7 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
         mkdir($importDir);
     }
 
-    Mage::log($imageObjectList, null, 'sync.log');
+    Mage::log($imageObjectList, null, 'sync.log', true);
 
     /* upload images */
     foreach ($imageObjectList['add'] as $key => $imageObject) {
@@ -727,7 +731,7 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
         if (!empty($imageObject['mediaType'])) {
             $url = $imageObject['url'];
             preg_match('/media\/catalog\/product(.+)/', $url, $match);
-            Mage::log($match, null, 'sync.log');
+            Mage::log($match, null, 'sync.log', true);
             if (isset($match[1])) {
                 if (isset($imageObject['mediaType']['image'])) {
                     $product->setImage($match[1]);
@@ -744,7 +748,7 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
         }
 
         preg_match('/[0-9\-]{13}/', $imageObject['basename'], $fileName);
-        Mage::log($fileName, null, 'sync.log');
+        Mage::log($fileName, null, 'sync.log', true);
 
         $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')
             ->getCollection()
