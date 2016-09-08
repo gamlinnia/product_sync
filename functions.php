@@ -733,13 +733,13 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
             preg_match('/media\/catalog\/product(.+)/', $url, $match);
             Mage::log($match, null, 'sync.log', true);
             if (isset($match[1])) {
-                if (isset($imageObject['mediaType']['image'])) {
+                if (in_array('image', $imageObject['mediaType'])) {
                     $product->setImage($match[1]);
                 }
-                if (isset($imageObject['mediaType']['small_image'])) {
+                if (in_array('image', $imageObject['small_image'])) {
                     $product->setSmallImage($match[1]);
                 }
-                if (isset($imageObject['mediaType']['thumbnail'])) {
+                if (in_array('image', $imageObject['thumbnail'])) {
                     $product->setThumbnail($match[1]);
                 }
                 $product->save();
