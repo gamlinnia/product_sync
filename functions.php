@@ -736,10 +736,10 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
                 if (in_array('image', $imageObject['mediaType'])) {
                     $product->setImage($match[1]);
                 }
-                if (in_array('small_image', $imageObject['small_image'])) {
+                if (in_array('small_image', $imageObject['mediaType'])) {
                     $product->setSmallImage($match[1]);
                 }
-                if (in_array('thumbnail', $imageObject['thumbnail'])) {
+                if (in_array('thumbnail', $imageObject['mediaType'])) {
                     $product->setThumbnail($match[1]);
                 }
                 $product->save();
