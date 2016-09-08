@@ -746,12 +746,13 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
             ->getCollection()
             ->addFieldToFilter('store_id', 0)
             ->addFieldToFilter('value', array('like' => '%' . $fileName[0] . '%'))
-            ->setOrder('value_id', 'DESC')
             ->join(array('gallery' => 'coreproductmediagallery/mediagallery'),'main_table.value_id = gallery.value_id',array('gallery.value'));
 
         if ((int)$mediagalleryCollection->count() == 1) {
-//            $mediagalleryCollection->getFirstItem()
-            }
+            $mediagalleryCollection->getFirstItem()
+                ->setcomment($imageObject['comment'])
+                ->save();
+        }
     }
 
     /* delete images */
