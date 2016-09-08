@@ -750,7 +750,8 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
 
         if ((int)$mediagalleryCollection->count() == 1) {
             $mediagalleryCollection->getFirstItem()
-                ->setcomment($imageObject['comment'])
+                ->setPosition($imageObject['position'])
+                ->setLabel($imageObject['label'])
                 ->save();
         }
     }
