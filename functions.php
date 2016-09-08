@@ -695,10 +695,12 @@ function uploadImages ($imageObjectList, $valueToFilter, $filterType='entity_id'
 function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFilter, $filterType='entity_id', $config) {
     switch ($filterType) {
         case 'entity_id' :
-            $product = Mage::getSingleton('catalog/product')->load($valueToFilter);
+            $product = Mage::getModel('catalog/product')->load($valueToFilter);
             break;
         case 'sku' :
-            $product = Mage::getSingleton('catalog/product')->load(Mage::getModel('catalog/product')->getIdBySku($valueToFilter));
+            $product = Mage::getModel('catalog/product')->load(
+                Mage::getModel('catalog/product')->getIdBySku($valueToFilter)
+            );
             break;
         default :
             echo 'need to write code in uploadAndDeleteImagesWithPositionAndLabel';
@@ -721,16 +723,35 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
     /* edit image, change priority and mediaType */
     foreach ($imageObjectList['edit'] as $imageObject) {
         if (!empty($imageObject['mediaType'])) {
-            preg_match('/[0-9\-]{13}/', $imageObject['basename'], $fileName);
-
-            $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')
-                ->getCollection()
-                ->addFieldToFilter('store_id', 0)
-                ->addFieldToFilter('value', array('like' => '%' . $fileName[0] . '%'))
-                ->setOrder('value_id', 'DESC')
-                ->join(array('gallery' => 'coreproductmediagallery/mediagallery'),'main_table.value_id = gallery.value_id',array('gallery.value'));
+            $url = $imageObject->getUrl();
+            preg_match('/media\/catalog\/product(.+)/', $url, $match);
+            if (isset($match[1])) {
+                if (isset($imageObject['mediaType']['image'])) {
+                    $product->setImage($match[1]);
+                }
+                if (isset($imageObject['mediaType']['small_image'])) {
+                    $product->setSmallImage($match[1]);
+                }
+                if (isset($imageObject['mediaType']['thumbnail'])) {
+                    $product->setThumbnail($match[1]);
+                }
+                $product->save();
+            }
 
         }
+
+        preg_match('/[0-9\-]{13}/', $imageObject['basename'], $fileName);
+
+        $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')
+            ->getCollection()
+            ->addFieldToFilter('store_id', 0)
+            ->addFieldToFilter('value', array('like' => '%' . $fileName[0] . '%'))
+            ->setOrder('value_id', 'DESC')
+            ->join(array('gallery' => 'coreproductmediagallery/mediagallery'),'main_table.value_id = gallery.value_id',array('gallery.value'));
+
+        if ((int)$mediagalleryCollection->count() == 1) {
+//            $mediagalleryCollection->getFirstItem()
+            }
     }
 
     /* delete images */
