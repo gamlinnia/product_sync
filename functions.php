@@ -712,6 +712,8 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
         mkdir($importDir);
     }
 
+    Mage::log($imageObjectList, null, 'sync.log');
+
     /* upload images */
     foreach ($imageObjectList['add'] as $key => $imageObject) {
         if (isset($config['internalHost'])) {
@@ -723,8 +725,9 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
     /* edit image, change priority and mediaType */
     foreach ($imageObjectList['edit'] as $imageObject) {
         if (!empty($imageObject['mediaType'])) {
-            $url = $imageObject->getUrl();
+            $url = $imageObject['url'];
             preg_match('/media\/catalog\/product(.+)/', $url, $match);
+            Mage::log($match, null, 'sync.log');
             if (isset($match[1])) {
                 if (isset($imageObject['mediaType']['image'])) {
                     $product->setImage($match[1]);
@@ -741,6 +744,7 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
         }
 
         preg_match('/[0-9\-]{13}/', $imageObject['basename'], $fileName);
+        Mage::log($fileName, null, 'sync.log');
 
         $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')
             ->getCollection()
