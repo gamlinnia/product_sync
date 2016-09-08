@@ -590,9 +590,7 @@ function compareImageWithRemoteIncludeDelete ($localImages, $remoteImages) {
                         $edit = true;
                     }
                     if ($edit) {
-                        $tmpArray = $remote;
-                        $tmpArray['id'] = $local['id'];
-                        $response['edit'][] = $tmpArray;
+                        $response['edit'][] = $remote;
                     }
 
                     $match = true;
@@ -718,6 +716,21 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
             $imageObject['url'] = str_replace($imageObject['host'], $config['internalHost'], $imageObject['url']);
         }
         uploadProductImageByNewModule($product, $imageObject['url'], $imageObject['position'], getFileNameWithoutExtension($imageObject['basename']), $imageObject['mediaType']);
+    }
+
+    /* edit image, change priority and mediaType */
+    foreach ($imageObjectList['edit'] as $imageObject) {
+        if (!empty($imageObject['mediaType'])) {
+            preg_match('/[0-9\-]{13}/', $imageObject['basename'], $fileName);
+
+            $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')
+                ->getCollection()
+                ->addFieldToFilter('store_id', 0)
+                ->addFieldToFilter('value', array('like' => '%' . $fileName[0] . '%'))
+                ->setOrder('value_id', 'DESC')
+                ->join(array('gallery' => 'coreproductmediagallery/mediagallery'),'main_table.value_id = gallery.value_id',array('gallery.value'));
+
+        }
     }
 
     /* delete images */
