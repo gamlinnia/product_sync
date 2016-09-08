@@ -583,7 +583,7 @@ function compareImageWithRemoteIncludeDelete ($localImages, $remoteImages) {
                 preg_match('/[0-9\-]{13}/', $local['basename'], $localMatch);
                 if ($remoteMatch[0] == $localMatch[0]) {
 
-                    if (count($local['mediaType']) > count($remote['mediaType'])) {
+                    if ( count($remote['mediaType']) > count($local['mediaType'])) {
                         $edit = true;
                     }
                     if ($local['position'] != $remote['position']) {
