@@ -97,28 +97,6 @@ try{
 
         $uploadStatus = uploadAndDeleteImagesWithPositionAndLabel($imagesToBeUploadOrDelete, $sku, 'sku', $config);
 
-        /*        $galleryCollection = Mage::getModel('coreproductmediagallery/mediagallery')->getCollection()
-                    ->addFieldToFilter('value', array(
-                        'like' => '%' . $sku . '%'
-                    ));
-                foreach ($galleryCollection as $each) {
-                    echo Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) . DS . 'catalog' . DS . 'product' . $each->getValue() . PHP_EOL;
-                    if (!file_exists( Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) . DS .'catalog' . DS . 'product' . $each->getValue() )) {
-                        echo Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) . DS . 'catalog' . DS . 'product' . $each->getValue() . ' not exist' . PHP_EOL;
-                        $each->delete();
-                    } else {
-                        if ( (int)Mage::getModel('coreproductmediagallery/mediagalleryvalue')->load($each->getId())->getPosition() == 10 ) {
-                            $product = Mage::getModel('catalog/product')->load(
-                                Mage::getModel('catalog/product')->getIdBySku($sku)
-                            );
-                            $product->setImage($each->getValue());
-                            $product->setSmallImage($each->getValue());
-                            $product->setThumbnail($each->getValue());
-                            $product->save();
-                        }
-                    }
-                }*/
-
     }
 
     /* deal with downloadable files */
