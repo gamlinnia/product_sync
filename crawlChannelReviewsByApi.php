@@ -540,23 +540,22 @@ function getLatestChannelsProductReviewsByApi ($channel, $sku, $channelsinfo) {
         case 'newegg' :
             $product_url = 'http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=' . $review_limit;
 
-            $review_url  = 'http://apis.newegg.org/api/bu/customerreview/list?' . http_build_query(array(
-                    'parameters' => json_encode(array(
-                        "Start" => 0,
-                        "Rows" => 10,
-                        "FilterQueries" => array(
-                            array(
-                                "Field" => "p_item_number",
-                                "Value" => "17-182-316",
-                                "Type" => 0
-                            ),
-                            array(
-                                "Field" => "p_indate",
-                                "Value" => "DESC",
-                                "Type" => 3
-                            )
+            $review_url  = 'http://apis.newegg.org/api/bu/customerreview/list?parameters=' .
+                json_encode(array(
+                    "Start" => 0,
+                    "Rows" => 10,
+                    "FilterQueries" => array(
+                        array(
+                            "Field" => "p_item_number",
+                            "Value" => "17-182-316",
+                            "Type" => 0
+                        ),
+                        array(
+                            "Field" => "p_indate",
+                            "Value" => "DESC",
+                            "Type" => 3
                         )
-                    ))
+                    )
                 ));
 
             die($review_url);
