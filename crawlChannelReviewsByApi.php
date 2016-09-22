@@ -558,6 +558,13 @@ function getLatestChannelsProductReviewsByApi ($channel, $sku, $channelsinfo) {
                     )
                 ));
 
+            $response = CallAPI('GET', $review_url, array(
+                'Content-Type: application/json',
+                'Accept: application/json'
+            ));
+
+            var_dump($response);
+
             die($review_url);
 
 //            $html = file_get_dom($review_url);
