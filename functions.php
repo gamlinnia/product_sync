@@ -473,8 +473,6 @@ function CallAPI($method, $url, $header = null, $data = false) {
 
     curl_close($curl);
 
-    var_dump($result);
-
     if (isJson($result)) {
         return json_decode($result, true);
     }

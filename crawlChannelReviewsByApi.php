@@ -558,65 +558,12 @@ function getLatestChannelsProductReviewsByApi ($channel, $sku, $channelsinfo) {
                     )
                 ));
 
-            $response = CallAPI('GET', $review_url, array(
+            $resp = CallAPI('GET', $review_url, array(
                 'Content-Type: application/json',
                 'Accept: application/json'
             ));
 
-            var_dump($response);
+            var_dump($resp);
 
-            die($review_url);
-
-//            $html = file_get_dom($review_url);
-            $html = file_get_contents($review_url);
-            $html = preg_replace('/\\\u[\d]{3}[\w]{1}/', '', $html);
-            preg_match('/{.+}/', $html, $match);
-
-            $data = $match[0];
-            $data = json_decode(trim($data), true);
-            $review_list = $data['ReviewList'];
-            $html = str_get_dom($review_list);
-            if(!empty($html)) {
-                foreach ($html('.grpReviews tr td .details') as $element) {
-                    $nickname = $element->parent->parent->getChild(0)->getChild(0)->getChild(0)->getPlainText();
-                    $created = $element->parent->parent->getChild(0)->getChild(0)->getChild(1)->getPlainText();
-                    $ratingText = $element->parent->parent->getChild(1)->getChild(2)->getChild(0)->getPlainText();
-                    preg_match('/(\d).?\/.?\d/', $ratingText, $match);
-                    if (count($match) == 2) {
-                        $rating = $match[1];
-                    }
-                    if ($element->parent->parent->getChild(1)->getChild(2)->getChild(1)) {
-                        $subject = $element->parent->parent->getChild(1)->getChild(2)->getChild(1)->getPlainText();
-                    } else {
-                        $subject = null;
-                    }
-                    $detail = trim($element->getPlainText());
-                    /*remove string before "Pros: " and add <br /> in front of "Crons:" and "Other Thoughts:"*/
-                    $detail =  substr($detail, strpos($detail, 'Pros:'), strlen($detail));
-                    $detail = str_replace('Cons:', '<br /><br />Cons:', $detail);
-                    $detail = str_replace('Other Thoughts:', '<br /><br />Other Thoughts:', $detail);
-                    $detail = trim($detail);
-
-                    if(stripos($detail, 'Manufacturer Response:') !== false){
-                        continue;
-                    }
-
-                    $data = array(
-                        'detail' => $detail,
-                        'nickname' => htmlentities($nickname),
-                        'subject' => htmlentities($subject),
-                        'created_at' => $created,
-                        'rating' => $rating,
-                        'product_url' => $product_url
-                    );
-//                    var_dump($data);
-                    $response[] = $data;
-                }
-            }
-            else {
-                echo "Empty html...." . PHP_EOL;
-            }
-            break;
-    }
     return $response;
 }
