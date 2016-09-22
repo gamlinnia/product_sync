@@ -224,7 +224,7 @@ function getLatestChannelsProductReviewsByApi ($channel, $sku, $channelsinfo) {
             $required_fields = array('product_url');
             $count = 0;
             foreach ($required_fields as $attr) {
-                if ( isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title]) ) {
+                if (isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title])) {
                     $count++;
                 }
             }
@@ -237,19 +237,19 @@ function getLatestChannelsProductReviewsByApi ($channel, $sku, $channelsinfo) {
 
             $html = file_get_dom($review_url);
 
-            if(!empty($html)){
-                foreach($html('ul.list-reviews li div.rating-block') as $element){
+            if (!empty($html)) {
+                foreach ($html('ul.list-reviews li div.rating-block') as $element) {
                     //nickname could be empty in rakuten.com
                     $nickname = "None";
                     //rating
                     $ratingStr = $element->parent->getChild(3)->getChild(1)->getChild(1)->getInnerText();
                     preg_match_all('/class="s(.+)">/', $ratingStr, $matchRating);
                     $rating = trim($matchRating[1][0]);
-                    if($rating > 10){
-                        $rating = $rating/10;
+                    if ($rating > 10) {
+                        $rating = $rating / 10;
                     }
                     $subjectAndCreatedatAndNicknameStr = $element->parent->getChild(5)->html();
-                    if(strpos($subjectAndCreatedatAndNicknameStr, "</span><span")){
+                    if (strpos($subjectAndCreatedatAndNicknameStr, "</span><span")) {
                         //if contain </span><span, means there has nickname
                         preg_match_all('/<b>(.+)<\/b>/', $subjectAndCreatedatAndNicknameStr, $matchSubjectAndCreatedatAndNickname);
                         $subjectAndCreatedatAndNicknameStr = $matchSubjectAndCreatedatAndNickname[1][0];
@@ -263,8 +263,7 @@ function getLatestChannelsProductReviewsByApi ($channel, $sku, $channelsinfo) {
                         //nickname
                         preg_match_all('/<b>(.+)/', $subjectAndCreatedatAndNicknameStr, $matchNickname);
                         $nickname = trim($matchNickname[1][0]);
-                    }
-                    else{
+                    } else {
                         //no nickname, process title and created only
                         //title
                         preg_match_all('/<b>(.+)<\/b>/', $subjectAndCreatedatAndNicknameStr, $matchSubject);
@@ -294,7 +293,7 @@ function getLatestChannelsProductReviewsByApi ($channel, $sku, $channelsinfo) {
             $required_fields = array('channel_sku');
             $count = 0;
             foreach ($required_fields as $attr) {
-                if ( isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title]) ) {
+                if (isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title])) {
                     $count++;
                 }
             }
@@ -336,7 +335,7 @@ function getLatestChannelsProductReviewsByApi ($channel, $sku, $channelsinfo) {
             $required_fields = array('channel_sku', 'product_url');
             $count = 0;
             foreach ($required_fields as $attr) {
-                if ( isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title]) ) {
+                if (isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title])) {
                     $count++;
                 }
             }
@@ -348,7 +347,7 @@ function getLatestChannelsProductReviewsByApi ($channel, $sku, $channelsinfo) {
             $product_url = $channelsinfo['product_url'][$channel_title];
             $channel_sku = $channelsinfo['channel_sku'][$channel_title];
 
-            $review_url = "http://www.wayfair.com/a/product_review_page/get_update_reviews_json?_format=json&page_number=1&sort_order=date_desc&filter_rating=&filter_tag=&item_per_page=" . $review_limit. "&product_sku=" . $channel_sku;
+            $review_url = "http://www.wayfair.com/a/product_review_page/get_update_reviews_json?_format=json&page_number=1&sort_order=date_desc&filter_rating=&filter_tag=&item_per_page=" . $review_limit . "&product_sku=" . $channel_sku;
 //            //vaildate
 //            $html = CallAPI('GET', $review_url);
 //
@@ -393,12 +392,12 @@ function getLatestChannelsProductReviewsByApi ($channel, $sku, $channelsinfo) {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             //curl_setopt($ch, CURLOPT_COOKIEJAR, "cookie.txt");
             curl_setopt($ch, CURLOPT_COOKIE, $cookie);
-            $agent= 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.0.3705; .NET CLR 1.1.4322)';
+            $agent = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.0.3705; .NET CLR 1.1.4322)';
             curl_setopt($ch, CURLOPT_USERAGENT, $agent);
             $html = curl_exec($ch);
             curl_close($ch);
             $content = json_decode(trim($html), true);
-            foreach($content['reviews'] as $each){
+            foreach ($content['reviews'] as $each) {
                 $detail = trim($each['product_comments']);
                 $subject = trim($each['headline']);
                 $nickname = trim($each['reviewer_name']);
@@ -423,7 +422,7 @@ function getLatestChannelsProductReviewsByApi ($channel, $sku, $channelsinfo) {
             $required_fields = array('channel_sku', 'product_url');
             $count = 0;
             foreach ($required_fields as $attr) {
-                if ( isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title]) ) {
+                if (isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title])) {
                     $count++;
                 }
             }
@@ -435,14 +434,14 @@ function getLatestChannelsProductReviewsByApi ($channel, $sku, $channelsinfo) {
             $channel_sku = $channelsinfo['channel_sku'][$channel_title];
             $product_url = $channelsinfo['product_url'][$channel_title];
 
-            $review_url = "http://www.sears.com/content/pdp/ratings/single/search/Sears/" . $channel_sku ."&targetType=product&limit=". $review_limit . "&offset=0";
+            $review_url = "http://www.sears.com/content/pdp/ratings/single/search/Sears/" . $channel_sku . "&targetType=product&limit=" . $review_limit . "&offset=0";
 
             $html = file_get_contents($review_url);
-            $html = json_decode($html,true);
+            $html = json_decode($html, true);
             $review_data = $html['data']['reviews'];
 
-            if(!empty($review_data)){
-                foreach($review_data as $each_review){
+            if (!empty($review_data)) {
+                foreach ($review_data as $each_review) {
                     $date = new Zend_Date(strtotime(trim($each_review['published_date'])));
                     $data = array(
                         'detail' => trim($each_review['content']),
@@ -463,7 +462,7 @@ function getLatestChannelsProductReviewsByApi ($channel, $sku, $channelsinfo) {
             $required_fields = array('channel_sku');
             $count = 0;
             foreach ($required_fields as $attr) {
-                if ( isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title]) ) {
+                if (isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title])) {
                     $count++;
                 }
             }
@@ -490,7 +489,7 @@ function getLatestChannelsProductReviewsByApi ($channel, $sku, $channelsinfo) {
                         'detail' => trim($matchReviewText[1][$index]),
                         'created_at' => trim($matchPostDate[1][$index]),
                         'subject' => trim($matchSubject[1][$index]),
-                        'rating' => trim($matchRating[1][$index +1]),       // first one is overall rating
+                        'rating' => trim($matchRating[1][$index + 1]),       // first one is overall rating
                         'product_url' => $product_url
                     );
                     $response[] = $data;
@@ -504,7 +503,7 @@ function getLatestChannelsProductReviewsByApi ($channel, $sku, $channelsinfo) {
             $required_fields = array('channel_sku');
             $count = 0;
             foreach ($required_fields as $attr) {
-                if ( isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title]) ) {
+                if (isset($channelsinfo[$attr][$channel_title]) && !empty($channelsinfo[$attr][$channel_title])) {
                     $count++;
                 }
             }
@@ -540,7 +539,7 @@ function getLatestChannelsProductReviewsByApi ($channel, $sku, $channelsinfo) {
         case 'newegg' :
             $product_url = 'http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=' . $review_limit;
 
-            $review_url  = 'http://apis.newegg.org/api/bu/customerreview/list?parameters=' .
+            $review_url = 'http://apis.newegg.org/api/bu/customerreview/list?parameters=' .
                 json_encode(array(
                     "Start" => 0,
                     "Rows" => 10,
@@ -564,6 +563,6 @@ function getLatestChannelsProductReviewsByApi ($channel, $sku, $channelsinfo) {
             ));
 
             var_dump($resp);
-
+    }
     return $response;
 }
