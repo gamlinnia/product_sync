@@ -6,6 +6,7 @@ if (!file_exists('config.json')) {
 $config = json_decode(file_get_contents('config.json'), true);
 require_once '../' . $config['magentoDir'] . 'app/Mage.php';
 require_once 'functions.php';
+require_once 'lib/ganon.php';
 require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
 
@@ -558,10 +559,12 @@ function getLatestChannelsProductReviewsByApi ($channel, $sku, $channelsinfo) {
                 ));
 
             $resp = CallAPI('GET', $review_url, array(
-                'Content-Type: application/json',
-                'Accept: application/json'
-            ));
+                    'Content-Type: application/json',
+                    'Accept: application/json'
+                )
+            );
 
+            var_dump($review_url);
             var_dump($resp);
     }
     return $response;
