@@ -417,6 +417,7 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
             $valueToBeMappedArray = explode(',', $valueToBeMapped);
 
             $mappedArray = array();
+            file_put_contents('multiselect.txt', '$optionsArray options:  ' . json_encode($optionsArray['options']) . PHP_EOL, FILE_APPEND);
             foreach ($optionsArray['options'] as $optionObject) {
                 file_put_contents('multiselect.txt', 'check ' . $optionObject['label'] . 'with array ' . json_encode($valueToBeMappedArray) . PHP_EOL, FILE_APPEND);
                 if (in_array($optionObject['label'], $valueToBeMappedArray)) {
