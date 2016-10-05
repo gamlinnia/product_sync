@@ -412,23 +412,21 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
         case 'multiselect' :
             /*multiselect : a02030_headsets_connector,
                        "a02030_headsets_connector": "147,148,149,150"*/
-            $valueToBeMappedArray = explode(',', $valueToBeMapped);
-            if (count($valueToBeMappedArray) < 2) {
-                foreach ($optionsArray['options'] as $optionObject) {
-                    if ($optionObject['label'] == $valueToBeMapped) {
-                        return join(',', $optionObject['value']);
-                    }
-                }
+            if ( is_array($valueToBeMapped) ) {
+                $valueToBeMappedArray = $valueToBeMapped;
             } else {
-                $mappedArray = array();
-                foreach ($optionsArray['options'] as $optionObject) {
-                    if (in_array((int)$optionObject['label'], $valueToBeMappedArray)) {
-                        file_put_contents('log.txt', 'mapped value' . ': ' . $optionObject['label'] . PHP_EOL, FILE_APPEND);
-                        $mappedArray[] = $optionObject['value'];
-                    }
-                }
-                return join(',', $mappedArray);
+                $valueToBeMappedArray = explode(',', $valueToBeMapped);
             }
+
+            $mappedArray = array();
+            foreach ($optionsArray['options'] as $optionObject) {
+                if (in_array((int)$optionObject['label'], $valueToBeMappedArray)) {
+                    file_put_contents('log.txt', 'mapped value' . ': ' . $optionObject['label'] . PHP_EOL, FILE_APPEND);
+                    $mappedArray[] = $optionObject['value'];
+                }
+            }
+            return join(',', $mappedArray);
+
             break;
         case 'text' :
         case 'textarea' :
