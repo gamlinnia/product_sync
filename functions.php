@@ -417,16 +417,22 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
             } else {
                 $valueToBeMappedArray = explode(',', $valueToBeMapped);
             }
-
-            $mappedArray = array();
-            foreach ($optionsArray['options'] as $optionObject) {
-                if (in_array((int)$optionObject['label'], $valueToBeMappedArray)) {
-                    file_put_contents('log.txt', 'mapped value' . ': ' . $optionObject['label'] . PHP_EOL, FILE_APPEND);
-                    $mappedArray[] = $optionObject['value'];
+            if (count($valueToBeMappedArray) < 2) {
+                foreach ($optionsArray['options'] as $optionObject) {
+                    if ($optionObject['label'] == $valueToBeMapped) {
+                        return join(',', $optionObject['value']);
+                    }
                 }
+            } else {
+                $mappedArray = array();
+                foreach ($optionsArray['options'] as $optionObject) {
+                    if (in_array((int)$optionObject['label'], $valueToBeMappedArray)) {
+                        file_put_contents('log.txt', 'mapped value' . ': ' . $optionObject['label'] . PHP_EOL, FILE_APPEND);
+                        $mappedArray[] = $optionObject['value'];
+                    }
+                }
+                return join(',', $mappedArray);
             }
-            return join(',', $mappedArray);
-
             break;
         case 'text' :
         case 'textarea' :
