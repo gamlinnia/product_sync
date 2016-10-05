@@ -398,7 +398,6 @@ function parseBackClassifiedProductAttributes ($parsedClassifiedProductInfo) {
 
 function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMapped) {
     /*$nameOrId = 'attributeName' or 'attributeId'*/
-    file_put_contents('log.txt', $attrCodeOrId . ': ' . $valueToBeMapped . PHP_EOL, FILE_APPEND);
     $optionsArray = getAttributeOptions($nameOrId, $attrCodeOrId);
     switch ($optionsArray['frontend_input']) {
         case 'select' :
@@ -412,6 +411,9 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
         case 'multiselect' :
             /*multiselect : a02030_headsets_connector,
                        "a02030_headsets_connector": "147,148,149,150"*/
+            file_put_contents('multiselect.txt', '$valueToBeMapped ' . $attrCodeOrId . ': ' . $valueToBeMapped . PHP_EOL, FILE_APPEND);
+            file_put_contents('multiselect.txt', '$optionsArray ' . json_encode($optionsArray) . PHP_EOL, FILE_APPEND);
+
             $valueToBeMappedArray = explode(',', $valueToBeMapped);
             if (count($valueToBeMappedArray) < 2) {
                 foreach ($optionsArray['options'] as $optionObject) {
