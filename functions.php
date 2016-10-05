@@ -418,6 +418,7 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
 
             $mappedArray = array();
             foreach ($optionsArray['options'] as $optionObject) {
+                file_put_contents('multiselect.txt', 'check ' . $optionObject['label'] . 'with array ' . json_encode($valueToBeMappedArray) . PHP_EOL, FILE_APPEND);
                 if (in_array($optionObject['label'], $valueToBeMappedArray)) {
                     file_put_contents('multiselect.txt', 'mapped value' . ': ' . $optionObject['label'] . PHP_EOL, FILE_APPEND);
                     $mappedArray[] = $optionObject['value'];
