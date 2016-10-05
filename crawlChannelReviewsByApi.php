@@ -50,7 +50,6 @@ if ($debug) {
             'Kenny.T.Chan@rosewill.com',
             'Wentao.W.Zhu@rosewill.com',
             'Thaid.C.Thor@rosewill.com',
-            'Audrey.X.Feng@rosewill.com',
             'Sam.T.Chou@rosewill.com',
             'Wayne.M.Chou@rosewill.com',
             'techsupport@rosewill.com'
@@ -68,9 +67,10 @@ if ($debug) {
             'Yama.M.Wu@rosewill.com',
             'Bruce.C.Lai@rosewill.com',
             'Stephanie.Y.Chang@rosewill.com',
-            'Vincent.W.Hsueh@newegg.com',
+            'Vincent.W.Hsueh@rosewill.com',
             'Shirley.Q.Pi@rosewill.com',
-            'Ruchen.R.Lin@rosewill.com'
+            'Ruchen.R.Lin@rosewill.com',
+            'Paul.H.Chou@rosewill.com'
         ),
         'bcc' => array(
             'Li.L.Liu@newegg.com',
