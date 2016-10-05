@@ -412,11 +412,7 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
         case 'multiselect' :
             /*multiselect : a02030_headsets_connector,
                        "a02030_headsets_connector": "147,148,149,150"*/
-            if ( is_array($valueToBeMapped) ) {
-                $valueToBeMappedArray = $valueToBeMapped;
-            } else {
-                $valueToBeMappedArray = explode(',', $valueToBeMapped);
-            }
+            $valueToBeMappedArray = explode(',', $valueToBeMapped);
             if (count($valueToBeMappedArray) < 2) {
                 foreach ($optionsArray['options'] as $optionObject) {
                     if ($optionObject['label'] == $valueToBeMapped) {
