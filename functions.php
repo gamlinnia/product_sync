@@ -411,14 +411,14 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
         case 'multiselect' :
             /*multiselect : a02030_headsets_connector,
                        "a02030_headsets_connector": "147,148,149,150"*/
-            file_put_contents('multiselect.txt', '$valueToBeMapped ' . $attrCodeOrId . ': ' . json_encode($valueToBeMapped) . PHP_EOL, FILE_APPEND);
-            var_dump($optionsArray);
-            die();
 
-            $valueToBeMappedArray = explode(',', $valueToBeMapped);
+            if (!is_array($valueToBeMapped)) {
+                $valueToBeMappedArray = explode(',', $valueToBeMapped);
+            } else {
+                $valueToBeMappedArray = $valueToBeMapped;
+            }
 
             $mappedArray = array();
-            file_put_contents('multiselect.txt', '$optionsArray options:  ' . json_encode($optionsArray['options']) . PHP_EOL, FILE_APPEND);
             foreach ($optionsArray['options'] as $optionObject) {
                 file_put_contents('multiselect.txt', 'check ' . $optionObject['label'] . 'with array ' . json_encode($valueToBeMappedArray) . PHP_EOL, FILE_APPEND);
                 if (in_array($optionObject['label'], $valueToBeMappedArray)) {
