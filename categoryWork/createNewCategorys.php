@@ -1,4 +1,12 @@
 <?php
+/*get config setting*/
+if (!file_exists('../config.json')) {
+    echo 'config.json is not exist.';
+}
+$config = json_decode(file_get_contents('../config.json'), true);
+require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
+require_once '../functions.php';
+Mage::app('admin');
 
 $categorysAddList = array(
     'Headsets & Speakers' => array(
