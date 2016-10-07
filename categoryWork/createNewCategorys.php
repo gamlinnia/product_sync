@@ -58,9 +58,13 @@ $categorysAddList = array(
 foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
     echo 'deal with main category: ' . $mainCategoryName . PHP_EOL;
     if ( $category = isCategoryExist($mainCategoryName) ) {
-        Zend_Debug::dump($category->getData());
-        die();
+        /* ["level"] => string(1) "3" */
+        if ( (int)$category->getLevel() != 3 ) {
+            Zend_Debug::dump($category->getData());
+        }
     }
+
+    die();
 
     $mainCategoryId = createCategory($mainCategoryName, null);
 
