@@ -57,11 +57,12 @@ $categorysAddList = array(
 
 foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
     echo 'deal with main category: ' . $mainCategoryName . PHP_EOL;
-    $mainCategoryId = createCategory($mainCategoryName, null);
-
-    if (!$mainCategoryId) {
-
+    if ( $category = isCategoryExist($mainCategoryName) ) {
+        Zend_Debug::dump($category->getData());
+        die();
     }
+
+    $mainCategoryId = createCategory($mainCategoryName, null);
 
     foreach ($subCategoryArray as $subCategoryName) {
         echo 'deal with sub category: ' . $subCategoryName . PHP_EOL;
@@ -80,7 +81,9 @@ function isCategoryExist ($name) {
         return false;
     }
     echo 'category ' . $name . ' exists' . PHP_EOL;
-    return true;
+    return Mage::getModel( 'catalog/category' )->load(
+        $categoryCollection->getFirstItem()->getId()
+    );
 }
 
 function createCategory ($name, $parentId = null, $enabled = 0) {
