@@ -60,7 +60,7 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
     $mainCategoryId = createCategory($mainCategoryName, null);
 
     if (!$mainCategoryId) {
-        echo 'category ' . $mainCategoryName . ' exists' . PHP_EOL;
+
     }
 
     foreach ($subCategoryArray as $subCategoryName) {
@@ -71,6 +71,16 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
             echo 'category ' . $subCategoryName . ' exists' . PHP_EOL;
         }
     }
+}
+
+function isCategoryExist ($name) {
+    $categoryCollection = Mage::getModel( 'catalog/category' )->getCollection()
+        ->addAttributeToFilter('name', $name);
+    if ($categoryCollection->count() < 1) {
+        return false;
+    }
+    echo 'category ' . $name . ' exists' . PHP_EOL;
+    return true;
 }
 
 function createCategory ($name, $parentId = null, $enabled = 0) {
@@ -102,6 +112,6 @@ function createCategory ($name, $parentId = null, $enabled = 0) {
 
         return $mainCategoryId;
     } else {
-        return null;
+        return $categoryCollection->getFirstItem()->getId();
     }
 }
