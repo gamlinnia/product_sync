@@ -94,13 +94,13 @@ function createCategory ($name, $parentId = null, $enabled = 0) {
 
         $mainCategoryId = $category->getId();
 
-        if ($parentId) {
+        if ($parentId == null) {
             Mage::getModel('catalog/category')->load($mainCategoryId)
-                ->setPath('1/2/' . $parentId . '/' . $mainCategoryId)
+                ->setPath('1/2/' . $mainCategoryId)
                 ->save();
         } else {
             Mage::getModel('catalog/category')->load($mainCategoryId)
-                ->setPath('1/2/' . $mainCategoryId)
+                ->setPath('1/2/' . $parentId . '/' . $mainCategoryId)
                 ->save();
         }
 
