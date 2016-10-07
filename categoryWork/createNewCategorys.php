@@ -71,7 +71,9 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
         $subCategoryId = createCategory($subCategoryName, $mainCategoryId);
 
         if ($subCategory = isCategoryExist($subCategoryName)) {
-            echo 'category ' . $subCategoryName . ' exists' . PHP_EOL;
+            if ( (int)$subCategory->getLevel() != 4 ) {
+                Zend_Debug::dump($subCategory->getData());
+            }
         }
     }
 }
