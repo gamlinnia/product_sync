@@ -57,11 +57,6 @@ $categorysAddList = array(
     )
 );
 
-$categorysAddList = array(
-    'Headsets & Speakers' => array(
-        'Headsets', 'Speakers'
-    )
-);
 
 
 foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
@@ -94,7 +89,7 @@ function createCategory ($name, $parentId = null, $enabled = 0) {
         $category->setIsAnchor(0);
         $category->setDisplayMode('PRODUCTS');
         $category->setPath('1/2/' . $parentId); // Important you get this right.
-        $category->setPageTitle($name);
+        $category->setMetaTitle($name);
         $category->save();
 
         $mainCategoryId = $category->getId();
