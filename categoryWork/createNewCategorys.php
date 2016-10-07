@@ -64,15 +64,13 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
         }
     }
 
-    die();
-
     $mainCategoryId = createCategory($mainCategoryName, null);
 
     foreach ($subCategoryArray as $subCategoryName) {
         echo 'deal with sub category: ' . $subCategoryName . PHP_EOL;
         $subCategoryId = createCategory($subCategoryName, $mainCategoryId);
 
-        if (!$subCategoryId) {
+        if ($subCategory = isCategoryExist($subCategoryName)) {
             echo 'category ' . $subCategoryName . ' exists' . PHP_EOL;
         }
     }
