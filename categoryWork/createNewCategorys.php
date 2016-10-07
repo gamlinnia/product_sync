@@ -68,11 +68,16 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
     echo 'deal with main category: ' . $mainCategoryName . PHP_EOL;
     $mainCategoryId = createCategory($mainCategoryName, null);
 
-    if ($mainCategoryId) {
-        foreach ($subCategoryArray as $subCategoryName) {
-            echo 'deal with sub category: ' . $subCategoryName . PHP_EOL;
-            $subCategoryId = createCategory($subCategoryName, $mainCategoryId);
+    if (!$mainCategoryId) {
+        echo 'category ' . $mainCategoryName . ' exists' . PHP_EOL;
+    }
 
+    foreach ($subCategoryArray as $subCategoryName) {
+        echo 'deal with sub category: ' . $subCategoryName . PHP_EOL;
+        $subCategoryId = createCategory($subCategoryName, $mainCategoryId);
+
+        if (!$subCategoryId) {
+            echo 'category ' . $subCategoryName . ' exists' . PHP_EOL;
         }
     }
 }
