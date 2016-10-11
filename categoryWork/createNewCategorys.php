@@ -65,9 +65,12 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
             $root_category_id = getCategoryIdByCategoryName('Default Category');
             echo 'root category id: ' . $root_category_id . PHP_EOL;
 
-            moveCategory($category->getId(), $root_category_id);
+            if ((int)$category->getChildrenCount() < 1) {
+                moveCategory($category->getId(), $root_category_id);
+            } else {
+                die('category ' . $category->getName() . ' has other children');
+            }
 
-            die('main category is not in the right level');
         }
     } else {
         echo 'create main category' . PHP_EOL;
@@ -160,8 +163,7 @@ function moveCategory ($category_id, $parentId) {
 
     $category = Mage::getModel('catalog/category')->load($category_id);
     $category->setPath(implode('/', $pathArray))
-        ->setLevel( count($pathArray) -1 );
-//        ->save();
-
-    Zend_Debug::dump($category->getData());
+        ->setLevel( count($pathArray) -1 )
+        ->save();
+    return true;
 }
