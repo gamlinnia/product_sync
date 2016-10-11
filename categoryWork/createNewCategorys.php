@@ -157,6 +157,8 @@ function moveCategory ($category_id, $parentId) {
 
     $category = Mage::getModel('catalog/category')->load($category_id);
     $category->setPath(implode('/', $pathArray))
-        ->setLevel( count($pathArray) -1 )
-        ->save();
+        ->setLevel( count($pathArray) -1 );
+//        ->save();
+
+    Zend_Debug::dump($category->getData());
 }
