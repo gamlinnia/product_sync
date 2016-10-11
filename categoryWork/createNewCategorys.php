@@ -65,11 +65,11 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
             $root_category_id = getCategoryIdByCategoryName('Default Category');
             echo 'root category id: ' . $root_category_id . PHP_EOL;
 
-            if ((int)$category->getChildrenCount() < 1) {
+//            if ((int)$category->getChildrenCount() < 1) {
                 moveCategory($category->getId(), $root_category_id);
-            } else {
-                die('category ' . $category->getName() . ' has other children');
-            }
+//            } else {
+//                die('category ' . $category->getName() . ' has other children');
+//            }
 
         }
     } else {
