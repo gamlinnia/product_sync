@@ -65,10 +65,12 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
             $root_category_id = getCategoryIdByCategoryName('Default Category');
             echo 'root category id: ' . $root_category_id . PHP_EOL;
 
-                moveCategory($mainCategoryId = $category->getId(), $root_category_id);
+            $mainCategoryId = $category->getId();
+            moveCategory($mainCategoryId, $root_category_id);
 
+        } else {
+            $mainCategoryId = $category->getId();
         }
-//        $category->setPosition($main_category_position)->save();
     } else {
         echo 'create main category' . PHP_EOL;
         $mainCategoryId = createCategory($mainCategoryName, null);
