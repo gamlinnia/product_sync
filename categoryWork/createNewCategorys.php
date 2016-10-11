@@ -59,7 +59,6 @@ $categorysAddList = array(
 foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
     echo 'deal with main category: ' . $mainCategoryName . PHP_EOL;
     if ( $category = isCategoryExist($mainCategoryName) ) {
-        echo 'level: ' . $category->getLevel() . PHP_EOL;
         /* ["level"] => string(1) "3" */
         if ( (int)$category->getLevel() != 2 ) {
             Zend_Debug::dump($category->getData());
@@ -75,7 +74,6 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
         echo 'deal with sub category: ' . $subCategoryName . PHP_EOL;
 
         if ($subCategory = isCategoryExist($subCategoryName)) {
-            echo 'level: ' . $subCategory->getLevel() . PHP_EOL;
             if ( (int)$subCategory->getLevel() != 3 ) {
                 Zend_Debug::dump($subCategory->getData());
 
@@ -95,7 +93,7 @@ function isCategoryExist ($name) {
     if ($categoryCollection->count() < 1) {
         return false;
     }
-    echo 'category ' . $name . ' exists' . PHP_EOL;
+    echo 'category ' . $name . ' exists, level: ' . $categoryCollection->getFirstItem()->getLevel() . PHP_EOL;
     return Mage::getModel( 'catalog/category' )->load(
         $categoryCollection->getFirstItem()->getId()
     );
