@@ -106,26 +106,29 @@ function createCategory ($name, $parentId = null, $enabled = 1) {
         ->addAttributeToFilter('name', $name);
     if ($categoryCollection->count() < 1) {
         /* category not exist, create a new one */
-        $category = Mage::getModel('catalog/category');
-        $category->setStoreId(0);
-        $category->setName($name); // The name of the category
-        $category->setUrlKey(strtolower(str_replace(' ', '-', $name))); // The category's URL identifier
-        $category->setIsActive($enabled); // Is it enabled?
-        $category->setIsAnchor(0);
-        $category->setDisplayMode('PRODUCTS');
-        $category->setPath('1/2'); // Important you get this right.
-        $category->setMetaTitle($name);
-        $category->save();
+        $category = Mage::getModel('catalog/category')
+            ->setStoreId(0)
+            ->setName($name) // The name of the category
+            ->setAttributeSetId(3)
+            ->setUrlKey(strtolower(str_replace(' ', '-', $name))) // The category's URL identifier
+            ->setIsActive($enabled) // Is it enabled?
+            ->setIsAnchor(0)
+            ->setDisplayMode('PRODUCTS')
+            ->setPath('1/2') // Important you get this right.
+            ->setMetaTitle($name)
+            ->save();
 
         $mainCategoryId = $category->getId();
 
         if ($parentId == null) {
             Mage::getModel('catalog/category')->load($mainCategoryId)
                 ->setPath('1/2/' . $mainCategoryId)
+                ->setLevel(2)
                 ->save();
         } else {
             Mage::getModel('catalog/category')->load($mainCategoryId)
                 ->setPath('1/2/' . $parentId . '/' . $mainCategoryId)
+                ->setLevel(3)
                 ->save();
         }
 
