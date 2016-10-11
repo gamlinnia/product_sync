@@ -65,13 +65,10 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
             $root_category_id = getCategoryIdByCategoryName('Default Category');
             echo 'root category id: ' . $root_category_id . PHP_EOL;
 
-//            if ((int)$category->getChildrenCount() < 1) {
                 moveCategory($category->getId(), $root_category_id);
-//            } else {
-//                die('category ' . $category->getName() . ' has other children');
-//            }
 
         }
+        $mainCategoryId = $category->getId();
     } else {
         echo 'create main category' . PHP_EOL;
         $mainCategoryId = createCategory($mainCategoryName, null);
@@ -85,6 +82,8 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
         if ($subCategory = isCategoryExist($subCategoryName)) {
             if ( (int)$subCategory->getLevel() != 3 ) {
                 Zend_Debug::dump($subCategory->getData());
+
+                moveCategory($subCategory->getId(), $mainCategoryId);
 
             }
         } else {
