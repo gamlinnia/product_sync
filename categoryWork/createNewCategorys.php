@@ -68,7 +68,7 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
                 moveCategory($category->getId(), $root_category_id);
 
         }
-        $category->setPosition($main_category_position)->save();
+//        $category->setPosition($main_category_position)->save();
         $mainCategoryId = $category->getId();
     } else {
         echo 'create main category' . PHP_EOL;
