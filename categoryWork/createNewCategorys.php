@@ -62,6 +62,7 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
         /* ["level"] => string(1) "3" */
         if ( (int)$category->getLevel() != 2 ) {
             Zend_Debug::dump($category->getData());
+            die('main category is not in the right level');
         }
     } else {
         echo 'create main category' . PHP_EOL;
@@ -134,4 +135,26 @@ function createCategory ($name, $parentId = null, $enabled = 1) {
     } else {
         return $categoryCollection->getFirstItem()->getId();
     }
+}
+
+function getCategoryIdByCategoryName ($category_name) {
+    $collection = Mage::getModel('catalog/category')->getCollection()
+        ->addAttributeToFilter('name', $category_name);
+    if ($collection->count() < 1) {
+        return null;
+    }
+    return $collection->getFirstItem()->getId();
+}
+
+function moveCategory ($category_id, $parentId) {
+    $parent_category = Mage::getModel('catalog/category')->load($parentId);
+    $parent_path = $parent_category->getPath();
+
+    $pathArray = explode('/', $parent_path);
+    $pathArray[] = $category_id;
+
+    $category = Mage::getModel('catalog/category')->load($category_id);
+    $category->setPath(implode('/', $pathArray))
+        ->setLevel( count($pathArray) -1 )
+        ->save();
 }
