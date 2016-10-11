@@ -54,7 +54,7 @@ $categorysAddList = array(
 );
 
 
-$main_category_position = 0;
+$main_category_position = 10;
 /* main category level À³¸Ó¬O2 */
 foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
     echo 'deal with main category: ' . $mainCategoryName . PHP_EOL;
