@@ -62,7 +62,7 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
         /* ["level"] => string(1) "3" */
         if ( (int)$category->getLevel() != 2 ) {
             Zend_Debug::dump($category->getData());
-            $root_category_id = getCategoryIdByCategoryName('getCategoryIdByCategoryName');
+            $root_category_id = getCategoryIdByCategoryName('Default Category');
             echo 'root category id: ' . $root_category_id . PHP_EOL;
             die('main category is not in the right level');
         }
