@@ -65,28 +65,33 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
             $root_category_id = getCategoryIdByCategoryName('Default Category');
             echo 'root category id: ' . $root_category_id . PHP_EOL;
 
-                moveCategory($category->getId(), $root_category_id);
+                moveCategory($mainCategoryId = $category->getId(), $root_category_id);
 
         }
 //        $category->setPosition($main_category_position)->save();
-        $mainCategoryId = $category->getId();
     } else {
         echo 'create main category' . PHP_EOL;
         $mainCategoryId = createCategory($mainCategoryName, null);
     }
 
+    echo 'main category is ' . $category->getName() . ' id is ' . $mainCategoryId . PHP_EOL;
 
     /* sub category level À³¸Ó¬O3 */
     foreach ($subCategoryArray as $subCategoryName) {
         echo 'deal with sub category: ' . $subCategoryName . PHP_EOL;
 
         if ($subCategory = isCategoryExist($subCategoryName)) {
-            if ( (int)$subCategory->getLevel() != 3 ) {
+//            if ( (int)$subCategory->getLevel() != 3 ) {
                 Zend_Debug::dump($subCategory->getData());
 
+            $sub_category_path = $subCategory->getPath();
+            $sub_category_path_array = explode('/', $sub_category_path);
+            if (!in_array($mainCategoryId, $subCategoryArray)) {
+                echo 'start moving category: ' . $subCategory->getName() . PHP_EOL;
                 moveCategory($subCategory->getId(), $mainCategoryId);
-
             }
+
+//            }
         } else {
             if (!empty($mainCategoryId)) {
                 echo 'create sub category' . PHP_EOL;
