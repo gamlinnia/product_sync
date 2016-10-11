@@ -54,8 +54,8 @@ $categorysAddList = array(
 );
 
 
-
-/* sub category level 應該是2 */
+$main_category_position = 0;
+/* main category level 應該是2 */
 foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
     echo 'deal with main category: ' . $mainCategoryName . PHP_EOL;
     if ( $category = isCategoryExist($mainCategoryName) ) {
@@ -68,6 +68,7 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
                 moveCategory($category->getId(), $root_category_id);
 
         }
+        $category->setPosition($main_category_position)->save();
         $mainCategoryId = $category->getId();
     } else {
         echo 'create main category' . PHP_EOL;
@@ -93,6 +94,7 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
             }
         }
     }
+    $main_category_position++;
 }
 
 function isCategoryExist ($name) {
