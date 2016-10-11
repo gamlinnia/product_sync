@@ -64,9 +64,11 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
         if ( (int)$category->getLevel() != 2 ) {
             Zend_Debug::dump($category->getData());
         }
+    } else {
+        echo 'create main category' . PHP_EOL;
+        $mainCategoryId = createCategory($mainCategoryName, null);
     }
 
-//    $mainCategoryId = createCategory($mainCategoryName, null);
 
     /* sub category level À³¸Ó¬O3 */
     foreach ($subCategoryArray as $subCategoryName) {
@@ -78,7 +80,11 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
                 Zend_Debug::dump($subCategory->getData());
 
             }
-//            $subCategoryId = createCategory($subCategoryName, $mainCategoryId);
+        } else {
+            if (!empty($mainCategoryId)) {
+                echo 'create sub category' . PHP_EOL;
+                $subCategoryId = createCategory($subCategoryName, $mainCategoryId);
+            }
         }
     }
 }
@@ -99,6 +105,7 @@ function createCategory ($name, $parentId = null, $enabled = 1) {
     $categoryCollection = Mage::getModel( 'catalog/category' )->getCollection()
         ->addAttributeToFilter('name', $name);
     if ($categoryCollection->count() < 1) {
+        /* category not exist, create a new one */
         $category = Mage::getModel('catalog/category');
         $category->setStoreId(0);
         $category->setName($name); // The name of the category
@@ -106,7 +113,7 @@ function createCategory ($name, $parentId = null, $enabled = 1) {
         $category->setIsActive($enabled); // Is it enabled?
         $category->setIsAnchor(0);
         $category->setDisplayMode('PRODUCTS');
-        $category->setPath('1/2/' . $parentId); // Important you get this right.
+        $category->setPath('1/2'); // Important you get this right.
         $category->setMetaTitle($name);
         $category->save();
 
