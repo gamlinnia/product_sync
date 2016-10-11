@@ -66,16 +66,17 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
         }
     }
 
-    $mainCategoryId = createCategory($mainCategoryName, null);
+//    $mainCategoryId = createCategory($mainCategoryName, null);
 
     /* sub category level À³¸Ó¬O3 */
     foreach ($subCategoryArray as $subCategoryName) {
         echo 'deal with sub category: ' . $subCategoryName . PHP_EOL;
 
         if ($subCategory = isCategoryExist($subCategoryName)) {
-            echo 'level: ' . $category->getLevel() . PHP_EOL;
+            echo 'level: ' . $subCategory->getLevel() . PHP_EOL;
             if ( (int)$subCategory->getLevel() != 3 ) {
                 Zend_Debug::dump($subCategory->getData());
+
             }
 //            $subCategoryId = createCategory($subCategoryName, $mainCategoryId);
         }
@@ -94,7 +95,7 @@ function isCategoryExist ($name) {
     );
 }
 
-function createCategory ($name, $parentId = null, $enabled = 0) {
+function createCategory ($name, $parentId = null, $enabled = 1) {
     $categoryCollection = Mage::getModel( 'catalog/category' )->getCollection()
         ->addAttributeToFilter('name', $name);
     if ($categoryCollection->count() < 1) {
