@@ -58,6 +58,7 @@ $categorysAddList = array(
 foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
     echo 'deal with main category: ' . $mainCategoryName . PHP_EOL;
     if ( $category = isCategoryExist($mainCategoryName) ) {
+        echo 'level: ' . $category->getLevel() . PHP_EOL;
         /* ["level"] => string(1) "3" */
         if ( (int)$category->getLevel() != 3 ) {
             Zend_Debug::dump($category->getData());
@@ -68,12 +69,13 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
 
     foreach ($subCategoryArray as $subCategoryName) {
         echo 'deal with sub category: ' . $subCategoryName . PHP_EOL;
-        $subCategoryId = createCategory($subCategoryName, $mainCategoryId);
 
         if ($subCategory = isCategoryExist($subCategoryName)) {
+            echo 'level: ' . $category->getLevel() . PHP_EOL;
             if ( (int)$subCategory->getLevel() != 4 ) {
                 Zend_Debug::dump($subCategory->getData());
             }
+//            $subCategoryId = createCategory($subCategoryName, $mainCategoryId);
         }
     }
 }
