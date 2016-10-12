@@ -1435,6 +1435,17 @@ function getProductCategoryNames ($valueToFilter, $filterType='entity_id') {
     return implode(PHP_EOL, $categoryNamesArray);
 }
 
+function getCategoryByName ($category_name) {
+    $category_collection = Mage::getModel('catalog/category')->getCollection()
+        ->addAttributeToFilter('name', $category_name);
+    if ($category_collection->count() < 1) {
+        return null;
+    }
+    return Mage::getModel('catalog/category')->load(
+        $category_collection->getFirstItem()->getId()
+    );
+}
+
 function getProductCategorysInfo ($valueToFilter, $filterType='entity_id') {
     $product = getProductObject($valueToFilter, $filterType);
     $categoryCollection = $product->getCategoryCollection()->addAttributeToSelect('name');
@@ -1501,7 +1512,9 @@ function setProductCategoryIds ($valueToFilter, $filterType='entity_id', $catego
     echo "set category for $filterType : $valueToFilter" . PHP_EOL;
 
     if ($filterType == 'sku') {
-        $product = Mage::getModel('catalog/product')->load(Mage::getModel('catalog/product')->getIdBySku($valueToFilter));
+        $product = Mage::getModel('catalog/product')->load(
+            Mage::getModel('catalog/product')->getIdBySku($valueToFilter)
+        );
     } else {
         echo 'check setProductCategoryIds' . PHP_EOL;
         exit(0);

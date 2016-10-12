@@ -83,17 +83,15 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
         echo 'deal with sub category: ' . $subCategoryName . PHP_EOL;
 
         if ($subCategory = isCategoryExist($subCategoryName)) {
-//            if ( (int)$subCategory->getLevel() != 3 ) {
-                Zend_Debug::dump($subCategory->getData());
 
             $sub_category_path = $subCategory->getPath();
             $sub_category_path_array = explode('/', $sub_category_path);
             if (!in_array($mainCategoryId, $subCategoryArray)) {
+                Zend_Debug::dump($subCategory->getData());
                 echo 'start moving category: ' . $subCategory->getName() . PHP_EOL;
                 moveCategory($subCategory->getId(), $mainCategoryId);
             }
 
-//            }
         } else {
             if (!empty($mainCategoryId)) {
                 echo 'create sub category' . PHP_EOL;
