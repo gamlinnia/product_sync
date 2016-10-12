@@ -1534,6 +1534,35 @@ function setProductCategoryIds ($valueToFilter, $filterType='entity_id', $catego
     $product->save();
 }
 
+function setProductCategoryIdsByCategoryNameArray ($valueToFilter, $filterType='entity_id', $categoryNameArray) {
+    echo "set category for $filterType : $valueToFilter" . PHP_EOL;
+
+    if ($filterType == 'sku') {
+        $product = Mage::getModel('catalog/product')->load(
+            Mage::getModel('catalog/product')->getIdBySku($valueToFilter)
+        );
+    } else {
+        echo 'check setProductCategoryIds' . PHP_EOL;
+        exit(0);
+    }
+
+    $categoryIds = array();
+    foreach ($categoryNameArray as $categoryName) {
+        $category = getCategoryByName($categoryName);
+        if (!$category->getId()) {
+            echo 'get no category id' . PHP_EOL;
+            exit(0);
+        }
+        $categoryIds[] = $category->getId();
+    }
+
+    var_dump($categoryIds);
+    exit(0);
+
+    $product->setCategoryIds($categoryIds);
+    $product->save();
+}
+
 function getAllWebisteIds () {
     $_websites = Mage::app()->getWebsites();
     $websiteIds = array();
