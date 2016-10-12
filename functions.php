@@ -1456,7 +1456,7 @@ function getCategoryIdArrayByCategoryName ($category_name) {
         $category_collection->getFirstItem()->getId()
     )->getPath();
     /* shift root category id away */
-    return array_shift(explode('/', $path));
+    return explode('/', $path);
 
 }
 
