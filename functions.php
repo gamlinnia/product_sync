@@ -1455,7 +1455,8 @@ function getCategoryIdArrayByCategoryName ($category_name) {
     $path = Mage::getModel('catalog/category')->load(
         $category_collection->getFirstItem()->getId()
     )->getPath();
-    return explode('/', $path);
+    /* shift root category id away */
+    return array_shift(explode('/', $path));
 
 }
 
