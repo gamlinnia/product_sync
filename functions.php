@@ -1534,17 +1534,8 @@ function setProductCategoryIds ($valueToFilter, $filterType='entity_id', $catego
     $product->save();
 }
 
-function setProductCategoryIdsByCategoryNameArray ($valueToFilter, $filterType='entity_id', $categoryNameArray) {
-    echo "set category for $filterType : $valueToFilter" . PHP_EOL;
-
-    if ($filterType == 'sku') {
-        $product = Mage::getModel('catalog/product')->load(
-            Mage::getModel('catalog/product')->getIdBySku($valueToFilter)
-        );
-    } else {
-        echo 'check setProductCategoryIds' . PHP_EOL;
-        exit(0);
-    }
+function setProductCategoryIdsByCategoryNameArray ($product, $categoryNameArray) {
+    echo "set category for product: " . $product->getName() . PHP_EOL;
 
     $categoryIds = array();
     foreach ($categoryNameArray as $categoryName) {
