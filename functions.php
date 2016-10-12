@@ -1446,6 +1446,19 @@ function getCategoryByName ($category_name) {
     );
 }
 
+function getCategoryIdArrayByCategoryName ($category_name) {
+    $category_collection = Mage::getModel('catalog/category')->getCollection()
+        ->addAttributeToFilter('name', $category_name);
+    if ($category_collection->count() < 1) {
+        return null;
+    }
+    $path = Mage::getModel('catalog/category')->load(
+        $category_collection->getFirstItem()->getId()
+    )->getPath();
+    return explode('/', $path);
+
+}
+
 function getProductCategorysInfo ($valueToFilter, $filterType='entity_id') {
     $product = getProductObject($valueToFilter, $filterType);
     $categoryCollection = $product->getCategoryCollection()->addAttributeToSelect('name');
