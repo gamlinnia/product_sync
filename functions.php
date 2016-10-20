@@ -1459,7 +1459,7 @@ function getCategoryIdArrayByCategoryName ($category_name) {
     /* shift root category id away */
     $pathArray =  explode('/', $path);
 
-    return array_shift(array_shift($pathArray));
+    return $pathArray;
 }
 
 function getProductCategorysInfo ($valueToFilter, $filterType='entity_id') {
