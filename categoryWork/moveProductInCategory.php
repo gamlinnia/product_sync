@@ -150,7 +150,9 @@ foreach ($new_category_mapping_table as $category_name_to_be_mapped => $map_to_c
 
     echo 'category product collection count: ' . $category_product_collection->count() . PHP_EOL;
 
-    var_dump(getCategoryIdArrayByCategoryName($map_to_category));
+    var_dump(
+        array_shift(getCategoryIdArrayByCategoryName($map_to_category))
+    );
 
     exit(0);
 
