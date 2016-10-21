@@ -177,7 +177,7 @@ function moveCategory ($category_id, $parentId) {
     return true;
 }
 
-function reCalChildrenCount() {
+function listCategories() {
     $cate = array();
     $sub = array();
     $categories = Mage::getModel('catalog/category')->getCollection();
@@ -193,6 +193,14 @@ function reCalChildrenCount() {
             $cate[$id] = $path;
         }
     }
+    return array('level 2' => $cate, 'other' => $sub);
+}
+
+function reCalChildrenCount() {
+    $in = listCategories();
+    $cate = $in['level 2'];
+    $sub = $in['other'];
+
     $result = array();
     foreach ($cate as $id => $path) {
         $result[$id] = 0;
@@ -216,4 +224,20 @@ function reCalChildrenCount() {
         //echo "    Actual Children Count: " . $count . PHP_EOL;
     }
 
+}
+
+
+function listCategoriesMoveToLevel2() {
+    $in = listCategories();
+    $cate = $in['level 2'];
+    $sub = $in['other'];
+    foreach($cate as $id => $path) {
+        echo "Level 2 Category: " . $id . PHP_EOL;
+        foreach ($sub as $subId => $subPath) {
+            $pos = strpos($subPath, '/' . $id . '/');
+            if($pos !== false && $pos !== 3) {
+                echo "    " . $subPath . PHP_EOL;
+            }
+        }
+    }
 }
