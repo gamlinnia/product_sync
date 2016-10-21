@@ -154,21 +154,14 @@ foreach ($new_category_mapping_table as $category_name_to_be_mapped => $map_to_c
     array_shift($categoryIdArray);
     array_shift($categoryIdArray);
 
-    var_dump(
-        $categoryIdArray
-    );
-
-    exit(0);
-
     foreach ($category_product_collection as $_product) {
         $product = Mage::getModel('catalog/product')->load(
             $_product->getId()
         );
         echo 'product name: ' . $product->getName() . PHP_EOL;
-//        setProductCategoryIdsByCategoryNameArray($product, );
+        setProductCategoryIdsByCategoryIdArray($product, $categoryIdArray);
+        die();
     }
-
-//    getNewCategoryName($map_to_category);
 
 }
 

@@ -1550,6 +1550,15 @@ function setProductCategoryIds ($valueToFilter, $filterType='entity_id', $catego
     $product->save();
 }
 
+function setProductCategoryIdsByCategoryIdArray ($product, $categoryIdArray) {
+    echo "set category for product: " . $product->getName() . ' sku: ' . $product->getSku() . PHP_EOL;
+
+    var_dump($categoryIdArray);
+
+    $product->setCategoryIds($categoryIdArray);
+    $product->save();
+}
+
 function setProductCategoryIdsByCategoryNameArray ($product, $categoryNameArray) {
     echo "set category for product: " . $product->getName() . PHP_EOL;
 
