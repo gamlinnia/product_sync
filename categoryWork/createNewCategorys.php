@@ -13,7 +13,7 @@ $categorysAddList = array(
         'Headsets', 'Speakers'
     ),
     'Case' => array(),
-    'Power Supply' => array(),
+    'Power Supplies' => array(),
     'Mice' => array(
         'Mice  & Accessories'
     ),
