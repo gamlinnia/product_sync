@@ -1457,8 +1457,9 @@ function getCategoryIdArrayByCategoryName ($category_name) {
         $category_collection->getFirstItem()->getId()
     )->getPath();
     /* shift root category id away */
-    return explode('/', $path);
+    $pathArray =  explode('/', $path);
 
+    return $pathArray;
 }
 
 function getProductCategorysInfo ($valueToFilter, $filterType='entity_id') {
@@ -1546,6 +1547,15 @@ function setProductCategoryIds ($valueToFilter, $filterType='entity_id', $catego
         }
     }
     $product->setCategoryIds($categoryIds);
+    $product->save();
+}
+
+function setProductCategoryIdsByCategoryIdArray ($product, $categoryIdArray) {
+    echo "set category for product: " . $product->getName() . ' sku: ' . $product->getSku() . PHP_EOL;
+
+    var_dump($categoryIdArray);
+
+    $product->setCategoryIds($categoryIdArray);
     $product->save();
 }
 

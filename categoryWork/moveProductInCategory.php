@@ -13,35 +13,31 @@ $new_category_mapping_table = array(
     'Gaming Headsets' => 'Headsets',
     'Gaming Speakers' => 'Speakers',
     'Gaming Cases' => 'Case',
-    'Gaming PSUs' => 'Gaming PSUs',
+    'Gaming PSUs' => 'Power Supplies',
     'Keyboard Accessories' => 'Keyboards & Accessories',
-    'Gaming Keyboard' => 'Keyboards & Accessories',
-    'Gaming Mouse' => 'Mice  & Accessories',
+    'Gaming Keyboards' => 'Keyboards & Accessories',
+    'Gaming Mouse / Mice' => 'Mice  & Accessories',
     'PC Tools' => 'PC Tools & Accessories',
-    'Computer Case' => 'Case',
-    'Power Supply' => 'Power Supplies',
+//    'Computer Case' => 'Case',
+//    'Power Supply' => 'Power Supplies',
     'Laptop Backpack & Case' => 'Laptop Backpack & Case',
-    'USB Air Humidifier' => 'USB Hubs & Accessories',
-    'USB LED Light' => 'USB Hubs & Accessories',
-    'Fan Filter' => 'Fans & Accessories',
-    'Fan Grill' => 'Fans & Accessories',
-    'Anti-Static (ESD) Wrist Strap' => 'PC Tools & Accessories',
-    'SSD & HDD Mounting Kit' => 'SSD & HDD Accessories',
-    'SSD / HDD Tray' => 'SSD & HDD Accessories',
-    'Hard Drive Docking Station' => 'Hard Drive Docking Stations & External Enclosures',
-    '8mm Computer Case Fan' => 'Fans & Accessories',
-    '12mm Computer Case Fan' => 'Fans & Accessories',
-    '14mm Computer Case Fan' => 'Fans & Accessories',
-    'PCI Slot Computer Case Fan' => 'Fans & Accessories',
-    'CPU Cooling Fan' => 'Coolers',
-    'Add On Card' => 'Add-on Cards',
-    'Card Reader' => 'Card Readers',                         // may be 'Internal Card Readers and Hubs'
-    'Hard Drive External Enclosure' => 'Hard Drive Docking Stations & External Enclosures',     // HDD Enclosures
-    'USB Hub' => 'USB Hubs & Accessories',                   // Internal Card Readers and Hubs
-    'Cable Tester' => 'PC Tools & Accessories',
+    'USB Air Humidifiers' => 'USB Hubs & Accessories',
+    'USB LED Lights' => 'USB Hubs & Accessories',
+
+    'Hard Drive Docking Stations' => 'Hard Drive Docking Stations & External Enclosures',
+    '80mm Computer Case Fans' => 'Fans & Accessories',
+    '120mm Computer Case Fans' => 'Fans & Accessories',
+    '140mm Computer Case Fans' => 'Fans & Accessories',
+    'PCI Slot Case Fans' => 'Fans & Accessories',
+    'CPU Cooling Fans' => 'Coolers',
+//    'Add On Card' => 'Add-on Cards',
+//    'Card Reader' => 'Card Readers',                         // may be 'Internal Card Readers and Hubs'
+    'External Hard Drive Enclosures' => 'Hard Drive Docking Stations & External Enclosures',     // HDD Enclosures
+    'USB Hubs' => 'USB Hubs & Accessories',                   // Internal Card Readers and Hubs
+    'Cable Testers' => 'PC Tools & Accessories',
     'PC Headsets' => 'Headsets',
     'PC Speakers' => 'Speakers',
-    'Laptop AC Adapter' => 'Laptop AC Adapter',
+    'Laptop AC Adapters' => 'Laptop AC Adapter',
     'Phone Cables' => 'Cables',
     'Lightning Cables' => 'Cables',
     'Audio Adapters' => 'Cables',
@@ -67,15 +63,15 @@ $new_category_mapping_table = array(
     'DisplayPort Cables' => 'Cables',
     'Cable Ties' => 'Cables',
     'Wireless Accessories' => 'Wireless Accessories',
-    'Network Interface Card' => 'Network Interface Cards',
-    'Network Switcher' => 'Network Switches',
-    'Modem' => 'Modems',
-    'Wireless Adapters' => 'Wireless Adapters',
+    'Network Interface Cards' => 'Network Interface Cards',
+//    'Network Switches' => 'Network Switches',
+//    'Modem' => 'Modems',
+//    'Wireless Adapters' => 'Wireless Adapters',
     'Wireless Routers' => 'Wireless Routers',
     'Network Antennas' => 'Network Antennas',
-    'Computer Keyboard' => 'Keyboards & Accessories',
-    'Computer Mouse' => 'Mice  & Accessories',
-    'Monitors Accessories' => array(
+    'Keyboards' => 'Keyboards & Accessories',
+    'Mouse' => 'Mice  & Accessories',
+    'Monitor Accessories' => array(
         array(
             'ne_subcategory' => 'Accessories - Monitors',
             'move_to' => 'Monitor Mounts'
@@ -137,7 +133,14 @@ $new_category_mapping_table = array(
     'Solar Spot Light' => 'Tool & Electrical Accessories',
     'Gauges' => 'Tool & Electrical Accessories',
     'Flashlights' => 'Tool & Electrical Accessories',
-    'LED Light Bulbs' => 'Tool & Electrical Accessories'
+    'LED Light Bulbs' => 'Tool & Electrical Accessories',
+
+    /* pre-prd沒看到的category */
+    'SSD & HDD Trays' => 'SSD & HDD Accessories',
+    'SSD & HDD Mounting Kits' => 'SSD & HDD Accessories',
+    'Anti-Static (ESD) Wrist Straps' => 'PC Tools & Accessories',
+    'Fan Grills' => 'Fans & Accessories',
+    'Fan Filters' => 'Fans & Accessories'
 );
 
 
@@ -145,22 +148,29 @@ foreach ($new_category_mapping_table as $category_name_to_be_mapped => $map_to_c
     $category = getCategoryByName($category_name_to_be_mapped);
     if (!$category) {
         echo 'category name: ' . $category_name_to_be_mapped . ' map to nothing' . PHP_EOL;
+        exit(0);
     }
     $category_product_collection = $category->getProductCollection();
 
     echo 'category product collection count: ' . $category_product_collection->count() . PHP_EOL;
 
-    var_dump(getCategoryIdArrayByCategoryName($map_to_category));
+    $categoryIdArray = array();
+
+    $categoryIdArray = getCategoryIdArrayByCategoryName($map_to_category);
+    if (count($categoryIdArray) < 1) {
+        echo 'category id array less than 1' . PHP_EOL;
+        exit(0);
+    }
+    array_shift($categoryIdArray);
+    array_shift($categoryIdArray);
 
     foreach ($category_product_collection as $_product) {
         $product = Mage::getModel('catalog/product')->load(
             $_product->getId()
         );
         echo 'product name: ' . $product->getName() . PHP_EOL;
-//        setProductCategoryIdsByCategoryNameArray($product, );
+        setProductCategoryIdsByCategoryIdArray($product, $categoryIdArray);
     }
-
-//    getNewCategoryName($map_to_category);
 
 }
 
