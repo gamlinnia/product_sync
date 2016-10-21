@@ -23,7 +23,6 @@ $new_category_mapping_table = array(
     'Laptop Backpack & Case' => 'Laptop Backpack & Case',
     'USB Air Humidifiers' => 'USB Hubs & Accessories',
     'USB LED Lights' => 'USB Hubs & Accessories',
-    'Anti-Static (ESD) Wrist Strap' => 'PC Tools & Accessories',
     'SSD & HDD Mounting Kit' => 'SSD & HDD Accessories',
     'SSD / HDD Tray' => 'SSD & HDD Accessories',
     'Hard Drive Docking Station' => 'Hard Drive Docking Stations & External Enclosures',
@@ -138,6 +137,7 @@ $new_category_mapping_table = array(
     'LED Light Bulbs' => 'Tool & Electrical Accessories',
 
     /* pre-prd沒看到的category */
+    'Anti-Static (ESD) Wrist Straps' => 'PC Tools & Accessories',
     'Fan Grills' => 'Fans & Accessories',
     'Fan Filters' => 'Fans & Accessories'
 );
