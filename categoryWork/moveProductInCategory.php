@@ -150,7 +150,13 @@ foreach ($new_category_mapping_table as $category_name_to_be_mapped => $map_to_c
 
     echo 'category product collection count: ' . $category_product_collection->count() . PHP_EOL;
 
+    $categoryIdArray = array();
+
     $categoryIdArray = getCategoryIdArrayByCategoryName($map_to_category);
+    if (count($categoryIdArray) < 1) {
+        echo 'category id array less than 1' . PHP_EOL;
+        exit(0);
+    }
     array_shift($categoryIdArray);
     array_shift($categoryIdArray);
 
