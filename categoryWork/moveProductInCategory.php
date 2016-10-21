@@ -23,7 +23,8 @@ $new_category_mapping_table = array(
     'Laptop Backpack & Case' => 'Laptop Backpack & Case',
     'USB Air Humidifiers' => 'USB Hubs & Accessories',
     'USB LED Lights' => 'USB Hubs & Accessories',
-    'Hard Drive Docking Station' => 'Hard Drive Docking Stations & External Enclosures',
+
+    'Hard Drive Docking Stations' => 'Hard Drive Docking Stations & External Enclosures',
     '8mm Computer Case Fan' => 'Fans & Accessories',
     '12mm Computer Case Fan' => 'Fans & Accessories',
     '14mm Computer Case Fan' => 'Fans & Accessories',
