@@ -23,7 +23,6 @@ $new_category_mapping_table = array(
     'Laptop Backpack & Case' => 'Laptop Backpack & Case',
     'USB Air Humidifiers' => 'USB Hubs & Accessories',
     'USB LED Lights' => 'USB Hubs & Accessories',
-    'Fan Filter' => 'Fans & Accessories',
     'Fan Grill' => 'Fans & Accessories',
     'Anti-Static (ESD) Wrist Strap' => 'PC Tools & Accessories',
     'SSD & HDD Mounting Kit' => 'SSD & HDD Accessories',
@@ -137,7 +136,9 @@ $new_category_mapping_table = array(
     'Solar Spot Light' => 'Tool & Electrical Accessories',
     'Gauges' => 'Tool & Electrical Accessories',
     'Flashlights' => 'Tool & Electrical Accessories',
-    'LED Light Bulbs' => 'Tool & Electrical Accessories'
+    'LED Light Bulbs' => 'Tool & Electrical Accessories',
+
+    'Fan Filters' => 'Fans & Accessories'
 );
 
 
