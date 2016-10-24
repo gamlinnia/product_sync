@@ -76,6 +76,9 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
     } else {
         echo 'create main category' . PHP_EOL;
         $mainCategoryId = createCategory($mainCategoryName, null);
+        $category = Mage::getModel('catalog/category')->load(
+            $mainCategoryId
+        );
     }
 
     echo 'main category is ' . $category->getName() . ' id is ' . $mainCategoryId . PHP_EOL;
