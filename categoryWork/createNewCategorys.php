@@ -104,6 +104,7 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
     $main_category_position++;
 }
 
+
 function isCategoryExist ($name) {
     $categoryCollection = Mage::getModel( 'catalog/category' )->getCollection()
         ->addAttributeToFilter('name', $name);
@@ -174,4 +175,69 @@ function moveCategory ($category_id, $parentId) {
         ->setLevel( count($pathArray) -1 )
         ->save();
     return true;
+}
+
+function listCategories() {
+    $cate = array();
+    $sub = array();
+    $categories = Mage::getModel('catalog/category')->getCollection();
+    foreach ($categories as $each) {
+        $id = $each->getEntityId();
+        $level = $each->getLevel();
+        $path = $each->getPath() . '/';
+        if($level > 2) {
+            $sub[$id] = $path;
+        }
+        // level 2 categories
+        else if ($level == 2) {
+            $cate[$id] = $path;
+        }
+    }
+    return array('level 2' => $cate, 'other' => $sub);
+}
+
+function reCalChildrenCount() {
+    $in = listCategories();
+    $cate = $in['level 2'];
+    $sub = $in['other'];
+
+    $result = array();
+    foreach ($cate as $id => $path) {
+        $result[$id] = 0;
+        foreach ($sub as $subId => $subPath) {
+            $pos = strpos($subPath, $path);
+            if ( $pos !== false && $pos === 0){
+                $result[$id]++;
+            }
+        }
+    }
+    foreach($result as $id => $count) {
+        $category = Mage::getModel('catalog/category')->load($id);
+        $childrenCountInDB = $category->getChildrenCount();
+        $newCount = $count;
+        if($newCount > $childrenCountInDB) {
+            $category->setChildrenCount($newCount)
+                     ->save();
+        }
+        //echo $category->getName() . PHP_EOL;
+        //echo "    Children Count in DB: " . $category->getChildrenCount() . PHP_EOL;
+        //echo "    Actual Children Count: " . $count . PHP_EOL;
+    }
+
+}
+
+
+function listCategoriesMoveToLevel2() {
+    $in = listCategories();
+    $cate = $in['level 2'];
+    $sub = $in['other'];
+    foreach($cate as $id => $path) {
+        echo "Level 2 Category: " . $id . PHP_EOL;
+        foreach ($sub as $subId => $subPath) {
+            $pos = strpos($subPath, '/' . $id . '/');
+            if($pos !== false && $pos !== 3) {
+                echo "    " . $subPath . PHP_EOL;
+            }
+        }
+    }
 }
