@@ -89,7 +89,6 @@ $new_category_mapping_table = array(
     'Digital Media Remotes' => 'TV Antennas & Accessories',
     'HDTV Antennas' => 'TV Antennas & Accessories',
     'TV Brackets' => 'TV Brackets',
-    'Mobile Hardware Accessories' => 'Cellphone & Tablet Mounts',
     'Stylus' => 'Cellphone & Tablet Mounts',
     'Bluetooth Headsets' => 'Cellphone & Tablet Mounts',
     'Bluetooth Speakers' => 'Cellphone & Tablet Mounts',
@@ -136,6 +135,7 @@ $new_category_mapping_table = array(
     'LED Light Bulbs' => 'Tool & Electrical Accessories',
 
     /* pre-prd沒看到的category */
+//    'Mobile Hardware Accessories' => 'Cellphone & Tablet Mounts', // Mobile Hardware Accessories 0
     'SSD & HDD Trays' => 'SSD & HDD Accessories',
     'SSD & HDD Mounting Kits' => 'SSD & HDD Accessories',
     'Anti-Static (ESD) Wrist Straps' => 'PC Tools & Accessories',
@@ -146,7 +146,7 @@ $new_category_mapping_table = array(
 
 foreach ($new_category_mapping_table as $category_name_to_be_mapped => $map_to_category) {
     $category = getCategoryByName($category_name_to_be_mapped);
-    if (!$category) {
+    if (!$category->getId()) {
         echo 'category name: ' . $category_name_to_be_mapped . ' map to nothing' . PHP_EOL;
         exit(0);
     }
