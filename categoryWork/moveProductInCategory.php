@@ -146,7 +146,7 @@ $new_category_mapping_table = array(
 
 foreach ($new_category_mapping_table as $category_name_to_be_mapped => $map_to_category) {
     $category = getCategoryByName($category_name_to_be_mapped);
-    if (!$category->getId()) {
+    if (empty($category)) {
         echo 'category name: ' . $category_name_to_be_mapped . ' map to nothing' . PHP_EOL;
         exit(0);
     }
