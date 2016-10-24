@@ -71,16 +71,6 @@ $new_category_mapping_table = array(
     'Network Antennas' => 'Network Antennas',
     'Keyboards' => 'Keyboards & Accessories',
     'Mouse' => 'Mice  & Accessories',
-    'Monitor Accessories' => array(
-        array(
-            'ne_subcategory' => 'Accessories - Monitors',
-            'move_to' => 'Monitor Mounts'
-        ),
-        array(
-            'ne_subcategory' => 'Accessories - Projectors',
-            'move_to' => 'Projector Mounts'
-        )
-    ),
     'Hard Drive Controllers & RAID Cards' => 'Hard Drive Controllers & RAID Cards',
     'Server Accessories' => 'Server Accessories',
     'RAID - Sub Systems' => 'RAID - Sub Systems',
@@ -104,6 +94,16 @@ $new_category_mapping_table = array(
     'Bluetooth Headsets' => 'Cellphone & Tablet Mounts',
     'Bluetooth Speakers' => 'Cellphone & Tablet Mounts',
     'Mounts & Holders' => 'Cellphone & Tablet Mounts',
+    'Monitor Accessories' => array(
+        array(
+            'ne_subcategory' => 'Accessories - Monitors',
+            'move_to' => 'Monitor Mounts'
+        ),
+        array(
+            'ne_subcategory' => 'Accessories - Projectors',
+            'move_to' => 'Projector Mounts'
+        )
+    ),
     'Headphones' => array(
         array(
             'ne_subcategory' => 'Headsets and Accessories',
@@ -152,6 +152,12 @@ foreach ($new_category_mapping_table as $category_name_to_be_mapped => $map_to_c
     }
     $category_product_collection = $category->getProductCollection();
 
+    echo 'category name: ' . $category_name_to_be_mapped . PHP_EOL;
+
+    if (is_array($map_to_category)) {
+        echo 'need to decide by ne-subcategory' . PHP_EOL;
+        continue;
+    }
     echo 'category product collection count: ' . $category_product_collection->count() . PHP_EOL;
 
     $categoryIdArray = array();
