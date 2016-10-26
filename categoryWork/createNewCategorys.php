@@ -12,7 +12,9 @@ $categorysAddList = array(
     'Headsets & Speakers' => array(
         'Headsets', 'Speakers'
     ),
-    'Case' => array(),
+    'Cases' => array(
+        'Case'
+    ),
     'Power Supply' => array(
         'Power Supplies'
     ),
