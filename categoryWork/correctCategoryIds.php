@@ -50,8 +50,11 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
 
             foreach ($diffList as $eachProductId) {
                 $product = Mage::getModel('catalog/product')->load($eachProductId);
-                echo 'Original Category Path:' . implode('/', $product->getCategortIds()) . PHP_EOL;
-                echo 'New Category Path: ' . implode('/', $categoryIdArray) . PHP_EOL;
+                echo 'Product ID: ' . $eachProductId . PHP_EOL;
+                echo 'Original Category ids:' . PHP_EOL;
+                var_dump($product->getCategoryIds());
+                echo 'New Category Path: ' . PHP_EOL;
+                var_dump($categoryIdArray);
             }
         }
     }
