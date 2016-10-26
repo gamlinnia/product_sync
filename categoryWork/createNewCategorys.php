@@ -153,7 +153,7 @@ function listCategories() {
     return array('level 2' => $cate, 'other' => $sub);
 }
 
-function reCalChildrenCount() {
+function correctChildrenCount() {
     $in = listCategories();
     $cate = $in['level 2'];
     $sub = $in['other'];
@@ -183,18 +183,16 @@ function reCalChildrenCount() {
 
 }
 
-
-function listCategoriesMoveToLevel2() {
-    $in = listCategories();
-    $cate = $in['level 2'];
-    $sub = $in['other'];
-    foreach($cate as $id => $path) {
-        echo "Level 2 Category: " . $id . PHP_EOL;
-        foreach ($sub as $subId => $subPath) {
-            $pos = strpos($subPath, '/' . $id . '/');
-            if($pos !== false && $pos !== 3) {
-                echo "    " . $subPath . PHP_EOL;
-            }
+function getProductCountInCategories($categorysAddList){
+    foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
+        $mainProductCount = getCategoryByName($mainCategoryName)->getProductCollection()->count();
+        $subProductCount = 0;
+        foreach($subCategoryArray as $each) {
+            $subProductCount += getCategoryByName($each)->getProductCollection()->count();
+        }
+        if ($mainProductCount != $subProductCount) {
+            echo "Main Category Name: " . $mainCategoryName . ", Count: " . $mainProductCount . PHP_EOL;
+            echo "Sub Category Total Count: " . $subProductCount . PHP_EOL;
         }
     }
 }
