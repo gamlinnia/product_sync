@@ -25,8 +25,8 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
             $subCategoryProductList = getProductListByCategoryName($eachSubCategory);
             $categoryIdArray = getCategoryIdArrayByCategoryName($eachSubCategory);
             foreach ($subCategoryProductList as $eachProductId) {
-                //$product = Mage::getModel('catalog/product')->load($eachProductId);
-                //setProductCategoryIdsByCategoryIdArray($product, $categoryIdArray);
+                $product = Mage::getModel('catalog/product')->load($eachProductId);
+                setProductCategoryIdsByCategoryIdArray($product, $categoryIdArray);
             }
         }
     } else {
