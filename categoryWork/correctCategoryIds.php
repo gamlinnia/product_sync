@@ -36,6 +36,7 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
             $subCategoryName = $subCategoryArray[0];
             $subCategoryProductList = getProductListByCategoryName($subCategoryName);
 
+            $diffList = array();
             if (count($mainCategoryProductList) > count($subCategoryProductList)) {
                 $diffList = array_diff($mainCategoryProductList, $subCategoryProductList);
                 echo "Main category count bigger than sub category." . PHP_EOL;
@@ -45,8 +46,8 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
             }
             $categoryIdArray = getCategoryIdArrayByCategoryName($subCategoryName);
 
-            //array_shift($categoryIdArray);
-            //array_shift($categoryIdArray);
+            array_shift($categoryIdArray);
+            array_shift($categoryIdArray);
 
             foreach ($diffList as $eachProductId) {
                 $product = Mage::getModel('catalog/product')->load($eachProductId);
