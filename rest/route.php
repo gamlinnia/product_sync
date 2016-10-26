@@ -98,6 +98,13 @@ $app->post('/api/syncWithNeIm', function () {
     echo json_encode($response);
 });
 
+$app->get('/api/getNeProductInfo', function () {
+    global $app;
+    $params = $app->request()->params();
+    $sku = $params['sku'];
+    echo file_get_contents('./productJson/' . $sku);
+});
+
 $app->post('/api/getProductInfosToSync', function () {
     global $input;
 
@@ -343,6 +350,8 @@ $app->post('/api/modifyReviewCommentFromLocal', function () {
     $result = modifyReviewCommentFromLocal($data);
     echo json_encode($result);
 });
+
+
 
 $app->get('/api/test', function () {
     echo json_encode(array('message' => 'test'));
