@@ -153,11 +153,6 @@ foreach ($new_category_mapping_table as $category_name_to_be_mapped => $map_to_c
     $category_product_collection = $category->getProductCollection();
 
     echo 'category name: ' . $category_name_to_be_mapped . PHP_EOL;
-
-    if (is_array($map_to_category)) {
-        echo 'need to decide by ne-subcategory' . PHP_EOL;
-        continue;
-    }
     echo 'category product collection count: ' . $category_product_collection->count() . PHP_EOL;
 
     $categoryIdArray = array();
@@ -174,9 +169,17 @@ foreach ($new_category_mapping_table as $category_name_to_be_mapped => $map_to_c
         $product = Mage::getModel('catalog/product')->load(
             $_product->getId()
         );
-        echo 'product name: ' . $product->getName() . PHP_EOL;
-        setProductCategoryIdsByCategoryIdArray($product, $categoryIdArray);
+
+        if (is_array($map_to_category)) {
+            echo 'need to decide by ne-subcategory' . PHP_EOL;
+            Zend_Debug::dump($product->getData());
+            die();
+        } else {
+            echo 'product name: ' . $product->getName() . PHP_EOL;
+            setProductCategoryIdsByCategoryIdArray($product, $categoryIdArray);
+        }
     }
+
 
 }
 
