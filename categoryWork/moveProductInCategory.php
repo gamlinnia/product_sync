@@ -157,27 +157,48 @@ foreach ($new_category_mapping_table as $category_name_to_be_mapped => $map_to_c
 
     $categoryIdArray = array();
 
-    $categoryIdArray = getCategoryIdArrayByCategoryName($map_to_category);
-    if (count($categoryIdArray) < 1) {
-        echo 'category id array less than 1' . PHP_EOL;
-        exit(0);
-    }
-    array_shift($categoryIdArray);
-    array_shift($categoryIdArray);
-
     foreach ($category_product_collection as $_product) {
         $product = Mage::getModel('catalog/product')->load(
             $_product->getId()
         );
 
         if (is_array($map_to_category)) {
-            echo 'need to decide by ne-subcategory' . PHP_EOL;
-            Zend_Debug::dump($product->getData());
-            die();
+            echo 'need to decide by subcategory' . PHP_EOL;
+            $ne_subcategory = $product->getSubcategory();
+
+            if (!$ne_subcategory) {
+                echo 'no subcategory value' . PHP_EOL;
+                Zend_Debug::dump($product->getData());
+                exit(0);
+            }
+
+            $moveToCategory = null;
+            foreach ($map_to_category as $mapObject) {
+                if ($mapObject['ne_subcategory'] == $ne_subcategory) {
+                    $moveToCategory = $mapObject['move_to'];
+                }
+            }
+
+            echo $ne_subcategory . ' move to cateogry: ' . $moveToCategory . PHP_EOL;
+
+            if (!$moveToCategory) {
+                Zend_Debug::dump($product->getData());
+                die();
+            }
+            $categoryIdArray = getCategoryIdArrayByCategoryName($moveToCategory);
         } else {
-            echo 'product name: ' . $product->getName() . PHP_EOL;
-            setProductCategoryIdsByCategoryIdArray($product, $categoryIdArray);
+            $categoryIdArray = getCategoryIdArrayByCategoryName($map_to_category);
         }
+
+        if (count($categoryIdArray) < 1) {
+            echo 'category id array less than 1' . PHP_EOL;
+            exit(0);
+        }
+        array_shift($categoryIdArray);
+        array_shift($categoryIdArray);
+
+        echo 'product name: ' . $product->getName() . PHP_EOL;
+        setProductCategoryIdsByCategoryIdArray($product, $categoryIdArray);
     }
 
 
