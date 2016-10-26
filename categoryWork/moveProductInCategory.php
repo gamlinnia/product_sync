@@ -178,7 +178,9 @@ foreach ($new_category_mapping_table as $category_name_to_be_mapped => $map_to_c
                     var_dump($restResponse);
                     exit(0);
                 }
-                $product->setSubcategory($restResponse['baseinfo']['SubcategoryName'])
+                Mage::getModel('catalog/product')->load(
+                    $product->getId()
+                )->setSubcategory($restResponse['baseinfo']['SubcategoryName'])
                     ->save();
             }
 
