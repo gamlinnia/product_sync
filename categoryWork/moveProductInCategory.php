@@ -172,8 +172,14 @@ foreach ($new_category_mapping_table as $category_name_to_be_mapped => $map_to_c
                 $sku = $product->getSku();
                 $restResponse = CallAPI('GET', 'http://192.168.4.15/rest/route.php/api/getNeProductInfo?sku=' . $sku);
 //                $restResponse = CallAPI('GET', 'http://rwdev.buyabs.corp/rest/route.php/api/getNeProductInfo?sku=17-182-010');
-                var_dump($restResponse['baseinfo']['SubcategoryName']);
-                exit(0);
+                $ne_subcategory = $restResponse['baseinfo']['SubcategoryName'];
+                if (!$ne_subcategory) {
+                    echo 'no subcategory value' . PHP_EOL;
+                    var_dump($restResponse);
+                    exit(0);
+                }
+                $product->setSubcategory($restResponse['baseinfo']['SubcategoryName'])
+                    ->save();
             }
 
             $moveToCategory = null;
