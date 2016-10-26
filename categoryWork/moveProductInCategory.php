@@ -117,13 +117,13 @@ $new_category_mapping_table = array(
             'move_to' => 'Cellphone & Tablet Mounts'
         )
     ),
-    'Battery & Chargers' => 'Battery & Chargers',
+//    'Battery & Chargers' => 'Battery & Chargers',
 //    'Bread Maker' => 'Bread Makers',
     'Deep Fryers' => 'Air Fryers',
-    'Fan' => 'Fans',
-    'Humidifier' => 'Humidifiers',
-    'Juicers & Extractors' => 'Juicers & Extractors',
-    'Kitchen Scales' => 'Kitchen Scales',
+//    'Fan' => 'Fans',
+//    'Humidifier' => 'Humidifiers',
+//    'Juicers & Extractors' => 'Juicers & Extractors',
+//    'Kitchen Scales' => 'Kitchen Scales',
     'Landscape Lighting' => 'Tool & Electrical Accessories',
     'Spot Lights' => 'Tool & Electrical Accessories',
     'Stud Finders' => 'Tool & Electrical Accessories',
