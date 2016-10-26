@@ -61,6 +61,7 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
     $main_category_position++;
 }
 
+correctChildrenCount($categorysAddList);
 
 function isCategoryExist ($name) {
     $categoryCollection = Mage::getModel( 'catalog/category' )->getCollection()
@@ -153,46 +154,49 @@ function listCategories() {
     return array('level 2' => $cate, 'other' => $sub);
 }
 
-function correctChildrenCount() {
-    $in = listCategories();
-    $cate = $in['level 2'];
-    $sub = $in['other'];
-
-    $result = array();
-    foreach ($cate as $id => $path) {
-        $result[$id] = 0;
-        foreach ($sub as $subId => $subPath) {
-            $pos = strpos($subPath, $path);
-            if ( $pos !== false && $pos === 0){
-                $result[$id]++;
-            }
-        }
-    }
-    foreach($result as $id => $count) {
-        $category = Mage::getModel('catalog/category')->load($id);
-        $childrenCountInDB = $category->getChildrenCount();
-        $newCount = $count;
-        if($newCount > $childrenCountInDB) {
-            $category->setChildrenCount($newCount)
-                     ->save();
-        }
-        //echo $category->getName() . PHP_EOL;
-        //echo "    Children Count in DB: " . $category->getChildrenCount() . PHP_EOL;
-        //echo "    Actual Children Count: " . $count . PHP_EOL;
-    }
-
-}
-
-function getProductCountInCategories($categorysAddList){
+function correctChildrenCount($categorysAddList) {
+//    $in = listCategories();
+//    $cate = $in['level 2'];
+//    $sub = $in['other'];
+//
+//    $result = array();
+//    foreach ($cate as $id => $path) {
+//        $result[$id] = 0;
+//        foreach ($sub as $subId => $subPath) {
+//            $pos = strpos($subPath, $path);
+//            if ( $pos !== false && $pos === 0){
+//                $result[$id]++;
+//            }
+//        }
+//    }
+//    foreach($result as $id => $count) {
+//        $category = Mage::getModel('catalog/category')->load($id);
+//        $childrenCountInDB = $category->getChildrenCount();
+//        $newCount = $count;
+//        if($newCount > $childrenCountInDB) {
+//            $category->setChildrenCount($newCount)
+//                     ->save();
+//        }
+//    }
     foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
-        $mainProductCount = getCategoryByName($mainCategoryName)->getProductCollection()->count();
-        $subProductCount = 0;
-        foreach($subCategoryArray as $each) {
-            $subProductCount += getCategoryByName($each)->getProductCollection()->count();
+        $mainCategory = getCategoryByName($mainCategoryName);
+        $mainCategoryChildrenCount = $mainCategory->getChildrenCount();
+        if ($mainCategoryChildrenCount != count($subCategoryArray)) {
+
+            echo "Main category name: " . $mainCategoryName . ", children count: " . $mainCategoryChildrenCount . PHP_EOL;
+            echo "    Children count in array: " . count($subCategoryArray) . PHP_EOL;
+            $mainCategory->setChildrenCount(count($subCategoryArray))
+                ->save();
         }
-        if ($mainProductCount != $subProductCount) {
-            echo "Main Category Name: " . $mainCategoryName . ", Count: " . $mainProductCount . PHP_EOL;
-            echo "Sub Category Total Count: " . $subProductCount . PHP_EOL;
+        foreach($subCategoryArray as $eachSub) {
+            $subCategory = getCategoryByName($eachSub);
+            $subCategoryChildrenCount = $subCategory->getChildrenCount();
+            if($subCategoryChildrenCount > 0) {
+                $subCategory->setChildrenCount(0)
+                    ->save();
+            }
+//       echo "Sub category name: " . $eachSub . ", children count: " . $subCategoryChildrenCount . PHP_EOL;
         }
     }
+
 }

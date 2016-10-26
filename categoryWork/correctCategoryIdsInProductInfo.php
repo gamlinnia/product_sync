@@ -64,27 +64,43 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
     }
 }
 
-    function isCategoryExist ($name) {
-        $categoryCollection = Mage::getModel( 'catalog/category' )->getCollection()
-            ->addAttributeToFilter('name', $name);
-        if ($categoryCollection->count() < 1) {
-            return false;
-        }
-//    echo 'category ' . $name . ' exists, level: ' . $categoryCollection->getFirstItem()->getLevel() . PHP_EOL;
-        return Mage::getModel( 'catalog/category' )->load(
-            $categoryCollection->getFirstItem()->getId()
-        );
-    }
+getProductCountInCategories($categorysAddList);
 
-    function getProductListByCategoryName($categoryName) {
-        if(empty($categoryName)) {
-            return null;
-        }
-        $productList = array();
-        $productCollection = getCategoryByName($categoryName)->getProductCollection();
-        foreach ( $productCollection as $_product) {
-//          $product = Mage::getModel('catalog/product')->load($_product->getId());
-            $productList [] = $_product->getId();
-        }
-        return $productList;
+function isCategoryExist ($name) {
+    $categoryCollection = Mage::getModel( 'catalog/category' )->getCollection()
+        ->addAttributeToFilter('name', $name);
+    if ($categoryCollection->count() < 1) {
+        return false;
     }
+//    echo 'category ' . $name . ' exists, level: ' . $categoryCollection->getFirstItem()->getLevel() . PHP_EOL;
+    return Mage::getModel( 'catalog/category' )->load(
+        $categoryCollection->getFirstItem()->getId()
+    );
+}
+
+function getProductListByCategoryName($categoryName) {
+    if(empty($categoryName)) {
+        return null;
+    }
+    $productList = array();
+    $productCollection = getCategoryByName($categoryName)->getProductCollection();
+    foreach ( $productCollection as $_product) {
+//          $product = Mage::getModel('catalog/product')->load($_product->getId());
+        $productList [] = $_product->getId();
+    }
+    return $productList;
+}
+
+function getProductCountInCategories($categorysAddList){
+    foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
+        $mainProductCount = getCategoryByName($mainCategoryName)->getProductCollection()->count();
+        $subProductCount = 0;
+        foreach($subCategoryArray as $each) {
+            $subProductCount += getCategoryByName($each)->getProductCollection()->count();
+        }
+        if ($mainProductCount != $subProductCount) {
+            echo "Main Category Name: " . $mainCategoryName . ", Count: " . $mainProductCount . PHP_EOL;
+            echo "Sub Category Total Count: " . $subProductCount . PHP_EOL;
+        }
+    }
+}
