@@ -29,7 +29,7 @@ $categorysAddList = array(
         'Monitor Mounts', 'Projector Mounts', 'Power Strips & Surge Protectors'
     ),
     'Electronics & Accessories' => array(
-        'Laptop Backpacks & Cases', 'Laptop AC Adapter', 'Cellphone & Tablet Mounts', 'Battery & Chargers'
+        'Laptop Backpacks & Cases', 'Laptop AC Adapter', 'Cellphone & Tablet Mounts', 'Batteries & Chargers'
     ),
     'Computer Components' => array(
         'Fans & Accessories', 'SSD & HDD Accessories', 'Coolers', 'Add-on Cards', 'Internal Card Readers and Hubs', 'HDD Enclosures',
@@ -45,14 +45,14 @@ $categorysAddList = array(
         'IP & Network Cameras', 'CCTV & Analog Cameras', 'Video Monitoring Kits'
     ),
     'Printer & Office Accessories' => array(
-        'Ink & Toner', 'Office Furniture', 'Office Electronics'
+        'Ink & Toner', 'Office Furniture & Accessories', 'Office Electronics'
     ),
     'Living Room & Other Appliances' => array(
-        'TV Antennas & Accessories', 'TV Brackets', 'Fans', 'Heaters', 'Humidifiers', 'Tool & Electrical Accessories'
+        'TV Antennas & Accessories', 'TV Brackets', 'Fans', 'Heaters', 'Humidifiers', 'Tools & Electrical Accessories'
     ),
     'Kitchen Appliances' => array(
         'Bread Makers', 'Induction Cooktops', 'Rice Cookers', 'Cutlery', 'Air Fryers', 'Ice Cream Makers', 'Juicers & Extractors',
-        'Kitchen Scales', 'Popcorn Poppers', 'Thermo Pots', 'Toaster Ovens', 'Ice Makers', 'Electric Kettles', 'Food Dehydrators',
+        'Kitchen Scales', 'Popcorn Poppers', 'Thermo Pots', 'Ovens', 'Ice Makers', 'Electric Kettles', 'Food Dehydrators',
         'Food Steamers', 'Pressure Cookers'
     )
 );

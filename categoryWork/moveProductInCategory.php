@@ -18,7 +18,6 @@ $new_category_mapping_table = array(
     'Gaming Keyboards' => 'Keyboards & Accessories',
     'Gaming Mouse / Mice' => 'Mice  & Accessories',
     'PC Tools' => 'PC Tools & Accessories',
-//    'Computer Case' => 'Case',
 //    'Power Supply' => 'Power Supplies',
 //    'Laptop Backpacks & Cases' => 'Laptop Backpack & Case',
     'USB Air Humidifiers' => 'USB Hubs & Accessories',
@@ -117,20 +116,23 @@ $new_category_mapping_table = array(
             'move_to' => 'Cellphone & Tablet Mounts'
         )
     ),
-//    'Battery & Chargers' => 'Battery & Chargers',
+//    'Batteries & Chargers' => 'Battery & Chargers',
 //    'Bread Maker' => 'Bread Makers',
     'Deep Fryers' => 'Air Fryers',
 //    'Fan' => 'Fans',
 //    'Humidifier' => 'Humidifiers',
 //    'Juicers & Extractors' => 'Juicers & Extractors',
 //    'Kitchen Scales' => 'Kitchen Scales',
-    'Spot Lights' => 'Tool & Electrical Accessories',
-    'Solar' => 'Tool & Electrical Accessories',
-    'Solar Landcape Lighting' => 'Tool & Electrical Accessories',
-    'Solar-Powered Spot Lights' => 'Tool & Electrical Accessories',
-    'Gauges' => 'Tool & Electrical Accessories',
-    'Flashlights' => 'Tool & Electrical Accessories',
-    'LED Light Bulbs' => 'Tool & Electrical Accessories',
+    'Spot Lights' => 'Tools & Electrical Accessories',
+    'Solar' => 'Tools & Electrical Accessories',
+    'Solar Landcape Lighting' => 'Tools & Electrical Accessories',
+    'Solar-Powered Spot Lights' => 'Tools & Electrical Accessories',
+    'Gauges' => 'Tools & Electrical Accessories',
+    'Flashlights' => 'Tools & Electrical Accessories',
+    'LED Light Bulbs' => 'Tools & Electrical Accessories',
+    'Portable Generators' => 'Tools & Electrical Accessories',
+    'Desk Accessories' => 'Office Furniture & Accessories',
+    'Staplers & Hole Punchers' => 'Office Furniture & Accessories',
 
     /* pre-prd沒看到的category */
 //    'Mobile Hardware Accessories' => 'Cellphone & Tablet Mounts', // Mobile Hardware Accessories 0
@@ -139,8 +141,9 @@ $new_category_mapping_table = array(
     'Anti-Static (ESD) Wrist Straps' => 'PC Tools & Accessories',
     'Fan Grills' => 'Fans & Accessories',
     'Fan Filters' => 'Fans & Accessories',
-    'Stud Finders' => 'Tool & Electrical Accessories',
-    'Landscape Lighting' => 'Tool & Electrical Accessories'
+    'Stud Finders' => 'Tools & Electrical Accessories',
+    'Computer Cases' => 'Case',
+    'Landscape Lighting' => 'Tools & Electrical Accessories'
 );
 
 
