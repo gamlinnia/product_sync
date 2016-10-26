@@ -147,11 +147,14 @@ $new_category_mapping_table = array(
 );
 
 
+$noMapCategorys = array();
+
 foreach ($new_category_mapping_table as $category_name_to_be_mapped => $map_to_category) {
     $category = getCategoryByName($category_name_to_be_mapped);
     if (empty($category)) {
         echo 'category name: ' . $category_name_to_be_mapped . ' map to nothing' . PHP_EOL;
-        exit(0);
+        $noMapCategorys[] = $category_name_to_be_mapped;
+        continue;
     }
     $category_product_collection = $category->getProductCollection();
 
@@ -216,8 +219,9 @@ foreach ($new_category_mapping_table as $category_name_to_be_mapped => $map_to_c
         setProductCategoryIdsByCategoryIdArray($product, $categoryIdArray);
     }
 
-
 }
+
+var_dump($noMapCategorys);
 
 function getNewCategoryName ($map_to_category, $ne_subcategory = null) {
     global $new_category_mapping_table;
