@@ -20,7 +20,7 @@ $new_category_mapping_table = array(
     'PC Tools' => 'PC Tools & Accessories',
 //    'Computer Case' => 'Case',
 //    'Power Supply' => 'Power Supplies',
-    'Laptop Backpack & Case' => 'Laptop Backpack & Case',
+    'Laptop Backpacks & Cases' => 'Laptop Backpack & Case',
     'USB Air Humidifiers' => 'USB Hubs & Accessories',
     'USB LED Lights' => 'USB Hubs & Accessories',
 
@@ -124,7 +124,6 @@ $new_category_mapping_table = array(
 //    'Humidifier' => 'Humidifiers',
 //    'Juicers & Extractors' => 'Juicers & Extractors',
 //    'Kitchen Scales' => 'Kitchen Scales',
-    'Landscape Lighting' => 'Tool & Electrical Accessories',
     'Spot Lights' => 'Tool & Electrical Accessories',
     'Stud Finders' => 'Tool & Electrical Accessories',
     'Solar' => 'Tool & Electrical Accessories',
@@ -140,7 +139,8 @@ $new_category_mapping_table = array(
     'SSD & HDD Mounting Kits' => 'SSD & HDD Accessories',
     'Anti-Static (ESD) Wrist Straps' => 'PC Tools & Accessories',
     'Fan Grills' => 'Fans & Accessories',
-    'Fan Filters' => 'Fans & Accessories'
+    'Fan Filters' => 'Fans & Accessories',
+    'Landscape Lighting' => 'Tool & Electrical Accessories'
 );
 
 

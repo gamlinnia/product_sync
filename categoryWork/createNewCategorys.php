@@ -27,7 +27,7 @@ $categorysAddList = array(
         'Monitor Mounts', 'Projector Mounts', 'Power Strips & Surge Protectors'
     ),
     'Electronics & Accessories' => array(
-        'Laptop Backpack & Case', 'Laptop AC Adapter', 'Cellphone & Tablet Mounts', 'Battery & Chargers'
+        'Laptop Backpacks & Cases', 'Laptop AC Adapter', 'Cellphone & Tablet Mounts', 'Battery & Chargers'
     ),
     'Computer Components' => array(
         'Fans & Accessories', 'SSD & HDD Accessories', 'Coolers', 'Add-on Cards', 'Internal Card Readers and Hubs', 'HDD Enclosures',
