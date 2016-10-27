@@ -7,19 +7,13 @@ $config = json_decode(file_get_contents('../config.json'), true);
 require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
 require_once '../functions.php';
 Mage::app('admin');
+
 require_once('data.php');
 
-$specifyCategory = '';
-
 foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
-    if (isset($specifyCategory) && !empty($specifyCategory)) {
-        if ($mainCategoryName != $specifyCategory) {
-            continue;
-        }
-    }
     if (empty($subCategoryArray)) {
         continue;
-    } else if (count($subCategoryArray) > 1) {
+    } else if (count($subCategoryArray) > 1) { // main category have more than one sub category
         echo 'Deal with main category: ' . $mainCategoryName . PHP_EOL;
         foreach ($subCategoryArray as $eachSubCategory) {
             $subCategoryProductList = getProductListByCategoryName($eachSubCategory);
@@ -31,34 +25,29 @@ foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
                 setProductCategoryIdsByCategoryIdArray($product, $categoryIdArray);
             }
         }
-    } else {
+    } else { // main category have only one sub category
         echo 'Deal with main category: ' . $mainCategoryName . PHP_EOL;
         if ($category = isCategoryExist($mainCategoryName)) {
             $mainCategoryProductList = getProductListByCategoryName($mainCategoryName);
             $subCategoryName = $subCategoryArray[0];
             $subCategoryProductList = getProductListByCategoryName($subCategoryName);
-
             $diffList = array();
-            if (count($mainCategoryProductList) > count($subCategoryProductList)) {
-                $diffList = array_diff($mainCategoryProductList, $subCategoryProductList);
-                echo "Main category count bigger than sub category." . PHP_EOL;
-            } else if (count($mainCategoryProductList) < count($subCategoryProductList)) {
-                echo "Sub category count bigger than main category." . PHP_EOL;
-                $diffList = array_diff($subCategoryProductList, $mainCategoryProductList);
-            }
-            $categoryIdArray = getCategoryIdArrayByCategoryName($subCategoryName);
+            $diff_1 = array_diff($mainCategoryProductList, $subCategoryProductList);
+            $diff_2 = array_diff($subCategoryProductList, $mainCategoryProductList);
+            $diffList = array_merge($diff_1, $diff_2);
 
+            $categoryIdArray = getCategoryIdArrayByCategoryName($subCategoryName);
             array_shift($categoryIdArray);
             array_shift($categoryIdArray);
 
             foreach ($diffList as $eachProductId) {
                 $product = Mage::getModel('catalog/product')->load($eachProductId);
-                setProductCategoryIdsByCategoryIdArray($product, $categoryIdArray);
 //                echo 'Product ID: ' . $eachProductId . PHP_EOL;
 //                echo 'Original Category ids:' . PHP_EOL;
 //                var_dump($product->getCategoryIds());
 //                echo 'New Category Path: ' . PHP_EOL;
 //                var_dump($categoryIdArray);
+                setProductCategoryIdsByCategoryIdArray($product, $categoryIdArray);
             }
         }
     }
