@@ -146,6 +146,10 @@ $new_category_mapping_table = array(
     'Landscape Lighting' => 'Tools & Electrical Accessories'
 );
 
+$new_category_mapping_table = array(
+    'Office Furniture' => 'Office Furniture & Accessories',
+
+);
 
 $noMapCategorys = array();
 
