@@ -147,8 +147,7 @@ $new_category_mapping_table = array(
 );
 
 $new_category_mapping_table = array(
-    'Office Furniture' => 'Office Furniture & Accessories',
-
+    'Tool & Electrical Accessories' => 'Tools & Electrical Accessories'
 );
 
 $noMapCategorys = array();
