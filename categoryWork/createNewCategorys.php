@@ -135,49 +135,7 @@ function moveCategory ($category_id, $parentId) {
     return true;
 }
 
-function listCategories() {
-    $cate = array();
-    $sub = array();
-    $categories = Mage::getModel('catalog/category')->getCollection();
-    foreach ($categories as $each) {
-        $id = $each->getEntityId();
-        $level = $each->getLevel();
-        $path = $each->getPath() . '/';
-        if($level > 2) {
-            $sub[$id] = $path;
-        }
-        // level 2 categories
-        else if ($level == 2) {
-            $cate[$id] = $path;
-        }
-    }
-    return array('level 2' => $cate, 'other' => $sub);
-}
-
 function correctChildrenCount($categorysAddList) {
-//    $in = listCategories();
-//    $cate = $in['level 2'];
-//    $sub = $in['other'];
-//
-//    $result = array();
-//    foreach ($cate as $id => $path) {
-//        $result[$id] = 0;
-//        foreach ($sub as $subId => $subPath) {
-//            $pos = strpos($subPath, $path);
-//            if ( $pos !== false && $pos === 0){
-//                $result[$id]++;
-//            }
-//        }
-//    }
-//    foreach($result as $id => $count) {
-//        $category = Mage::getModel('catalog/category')->load($id);
-//        $childrenCountInDB = $category->getChildrenCount();
-//        $newCount = $count;
-//        if($newCount > $childrenCountInDB) {
-//            $category->setChildrenCount($newCount)
-//                     ->save();
-//        }
-//    }
     foreach ($categorysAddList as $mainCategoryName => $subCategoryArray) {
         $mainCategory = getCategoryByName($mainCategoryName);
         $mainCategoryChildrenCount = $mainCategory->getChildrenCount();
