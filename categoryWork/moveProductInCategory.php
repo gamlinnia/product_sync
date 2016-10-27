@@ -147,7 +147,7 @@ $new_category_mapping_table = array(
 );
 
 $new_category_mapping_table = array(
-    'Tool & Electrical Accessories' => 'Tools & Electrical Accessories'
+    'Gaming Cases' => 'Case'
 );
 
 $noMapCategorys = array();
