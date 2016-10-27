@@ -147,7 +147,7 @@ $new_category_mapping_table = array(
 );
 
 $new_category_mapping_table = array(
-    'Gaming Cases' => 'Case'
+    'Power Strips & UPS' => 'Power Strips & Surge Protectors'
 );
 
 $noMapCategorys = array();
