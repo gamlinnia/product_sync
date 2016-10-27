@@ -147,7 +147,7 @@ $new_category_mapping_table = array(
 );
 
 $new_category_mapping_table = array(
-    'Tool & Electrical Accessories' => 'Tools & Electrical Accessories'
+    'Power Strips & UPS' => 'Power Strips & Surge Protectors'
 );
 
 $noMapCategorys = array();
