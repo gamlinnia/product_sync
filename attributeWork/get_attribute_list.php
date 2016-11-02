@@ -31,6 +31,11 @@ function getAttributeList() {
         $attribute = Mage::getModel('eav/entity_attribute')->load(
             $_attribute->getId()
         );
+
+        if ( !$attribute->getData('is_user_defined') ) {
+            continue;
+        }
+
         $type = $attribute->getFrontendInput();
         if(empty(trim($type))) {
             continue;
