@@ -27,7 +27,10 @@ function getAttributeList() {
     $attributes = Mage::getModel('eav/entity_attribute')->getCollection()
         ->addFieldToFilter('entity_type_id', 4);
     $result = [];
-    foreach ($attributes as $attribute) {
+    foreach ($attributes as $_attribute) {
+        $attribute = Mage::getModel('eav/entity_attribute')->load(
+            $_attribute->getId()
+        );
         $type = $attribute->getFrontendInput();
         if(empty(trim($type))) {
             continue;
