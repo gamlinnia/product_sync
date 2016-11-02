@@ -1,10 +1,12 @@
 <?php
 
-$config = json_decode(file_get_contents('config.json'), true);
-require_once '../' . $config['magentoDir'] . 'app/Mage.php';
-require_once 'functions.php';
-require_once 'lib/ganon.php';
-require_once 'lib/PHPExcel-1.8/Classes/PHPExcel.php';
+
+$config = json_decode(file_get_contents('../config.json'), true);
+require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
+require_once '../functions.php';
+
+require_once '../lib/ganon.php';
+require_once '../lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
 
 function getOptionsFromAttributeName($attribute_name){

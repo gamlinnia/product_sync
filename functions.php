@@ -39,6 +39,10 @@ function attributeNameAndId () {
 
 }
 
+function getAttributeByName () {
+
+}
+
 function getAttributeOptions ($nameOrId, $value) {
     /*$nameOrId = 'attributeName' or 'attributeId'*/
     switch ($nameOrId) {
