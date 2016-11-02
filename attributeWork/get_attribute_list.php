@@ -1,6 +1,6 @@
 <?php
 
-$config = json_decode(file_get_contents('config.json'), true);
+$config = json_decode(file_get_contents('../config.json'), true);
 require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
 require_once '../functions.php';
 require_once '../lib/ganon.php';
@@ -84,7 +84,7 @@ function main() {
                 $result = getAttributeList();
                 $filename = 'attribute_list.xls';
                 $sheetname = 'attribute';
-                $response = exportArrayToXlsx($result, array(
+                exportArrayToXlsx($result, array(
                     "filename" => $filename,
                     "title" => $sheetname
                 ));
