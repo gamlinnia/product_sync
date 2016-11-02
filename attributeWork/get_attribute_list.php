@@ -42,8 +42,13 @@ function getAttributeList() {
                 continue;
             }
         }
+
+        $attr_collection = Mage::getModel('eav/entity_attribute')->getCollection()
+        ->addFieldToFilter('frontend_label', $label);
+
         $result[] = array(
             'name' => $attribute_name,
+            'count' => $attr_collection->count(),
             'type' => $type,
             'label' => $label,
             'options' => $output_string
