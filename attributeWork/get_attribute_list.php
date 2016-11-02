@@ -24,7 +24,8 @@ function getAttributeDetailByAttributeName($attribute_name) {
 }
 
 function getAttributeList() {
-    $attributes = Mage::getResourceModel('catalog/product_attribute_collection')->getItems();
+    $attributes = Mage::getModel('eav/entity_attribute')->getCollection()
+        ->addFieldToFilter('entity_type_id', 4);
     $result = [];
     foreach ($attributes as $attribute) {
         $type = $attribute->getFrontendInput();
