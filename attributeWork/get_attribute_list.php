@@ -7,6 +7,13 @@ require_once '../lib/ganon.php';
 require_once '../lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
 
+$modeArray = array(
+    '1' => '1. export all result to excel',
+    '2' => '2. dump all result on screen',
+    '3' => '3. search specify attribute',
+    '4' => '4. get all attribute with the same label, assign all related products to new attribute'
+);
+
 function getOptionsFromAttributeName($attribute_name){
     $details = getAttributeOptions('attributeName', $attribute_name);
     //var_dump($options);
@@ -67,15 +74,10 @@ function getAttributeList() {
 }
 
 function main() {
-    $modeArray = array(
-        '1' => 'export all result to excel',
-        '2' => 'dump all result on screen',
-        '3' => 'search specify attribute'
-    );
-
+    global $modeArray;
     $mode = '';
     while (empty($mode)) {
-        echo "Please select mode [1. export all result to excel / 2. dump all result on screen / 3. search specify attribute]: ";
+        echo "Please select mode [" . implode(' / ', $modeArray) . ']:';
         $mode = trim(fgets(STDIN));
         if(array_key_exists($mode, $modeArray)) {
             if($mode == '3') {
@@ -113,6 +115,39 @@ function main() {
             main();
         }
     }
+
+    switch ($mode) {
+        case '4' :
+            $attr_label_to_search = promptMessageForInput('enter attribute label to search for duplicate attributes');
+            $attr_collection = getAttrCollectionByLabel($attr_label_to_search);
+            if ($attr_collection->count() < 1) {
+                echo 'found no attributes' . PHP_EOL;
+                return;
+            }
+            foreach ($attr_collection as $_attr) {
+                $attr = Mage::getModel('eav/entity_attribute')->load(
+                    $_attr->getId()
+                );
+                $new_attr_label = promptMessageForInput('enter new attr label to create');
+
+            }
+            break;
+    }
+
 }
 
 main();
+
+function getAttrCollectionByLabel ($label) {
+    echo '------------------------- get attr collection -------------------------' . PHP_EOL;
+    return Mage::getModel('eav/entity_attribute')->getCollection()->addFieldToFilter('frontend_label');
+}
+
+function promptMessageForInput ($message) {
+    $input = '';
+    while (empty($input)) {
+        echo $message . PHP_EOL;
+        $input = trim(fgets(STDIN));
+    }
+    return $input;
+}
