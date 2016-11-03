@@ -35,6 +35,7 @@ foreach ($fileList as $fileName => $data) {
 }
 
 if (!empty($duplicateFileName) && !empty($duplicateFileId)) {
+    echo "Exist duplicate file list" . PHP_EOL;
     $duplicateFileListCollection = Mage::getModel('downloadablefile/filelist')->getCollection()->addFieldToFilter('file', array('in' => $duplicateFileName));
 
     $keep = array();
@@ -88,4 +89,7 @@ if (!empty($duplicateFileName) && !empty($duplicateFileId)) {
         Mage::getModel('downloadablefile/filelist')->load($d_id)->delete();
         echo "=======================================================================" . PHP_EOL;
     }
+}
+else{
+    echo "No duplicate file list" . PHP_EOL;
 }
