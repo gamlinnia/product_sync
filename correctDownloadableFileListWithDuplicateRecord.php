@@ -57,11 +57,24 @@ foreach($delete as $d_each) {
         $k_file = $k_each['file'];
         if ( strtolower($k_file) == strtolower($d_file)) {
             echo "file list id change from " .  $d_id . " to " . $k_id . PHP_EOL;
-            $associatedProductCollection = Mage::getModel('downloadablefile/associatedproduct')->getCollection()->addfieldToFilter('file_list_id', $d_id);
+            $associatedProductCollection = Mage::getModel('downloadablefile/associatedproduct')
+                                                ->getCollection()
+                                                ->addFieldToFilter('file_list_id', $d_id);
             foreach ($associatedProductCollection as $each) {
-                var_dump($each->getData());
-                $each->setFileListId($k_id)
-                     ->save();
+                $existsCollection = Mage::getModel('downloadablefile/associatedproduct')
+                                        ->getCollection()
+                                        ->addFieldToFilter('file_list_id', $k_id)
+                                        ->addFieldToFilter('product_id', $each->getProductId())
+                                        ->addFieldToFilter('created_at', $each->getCreatedAt());
+                if($existsCollection->count() > 0) {
+                    //delete each
+                    var_dump($existsCollection->getFirstItem()->getData());
+                }
+                else {
+                    //$each->setFileListId($k_id)
+                    //    ->save();
+                    var_dump($each->getData());
+                }
             }
         }
     }
@@ -69,11 +82,8 @@ foreach($delete as $d_each) {
     echo "===========================Delete======================================" . PHP_EOL;
     $needToBeDelete = Mage::getModel('downloadablefile/filelist')->load($d_id);
     var_dump($needToBeDelete->getData());
-    Mage::getModel('downloadablefile/filelist')->load($d_id)->delete();
+    //Mage::getModel('downloadablefile/filelist')->load($d_id)->delete();
     echo "=======================================================================" . PHP_EOL;
-//    $needToBeDelete->delete();
-
-    //var_dump($needToBeDelete->getData());
 }
 
 //$associatedProductCollection = Mage::getModel('downloadablefile/associatedproduct')->getCollection();
