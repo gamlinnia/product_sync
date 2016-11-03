@@ -60,8 +60,8 @@ foreach($delete as $d_each) {
             $associatedProductCollection = Mage::getModel('downloadablefile/associatedproduct')->getCollection()->addfieldToFilter('file_list_id', $d_id);
             foreach ($associatedProductCollection as $each) {
                 var_dump($each->getData());
-//                $each->setFileListId($k_id)
-//                     ->save();
+                $each->setFileListId($k_id)
+                     ->save();
             }
         }
     }
@@ -69,6 +69,7 @@ foreach($delete as $d_each) {
     echo "===========================Delete======================================" . PHP_EOL;
     $needToBeDelete = Mage::getModel('downloadablefile/filelist')->load($d_id);
     var_dump($needToBeDelete->getData());
+    Mage::getModel('downloadablefile/filelist')->load($d_id)->delete();
     echo "=======================================================================" . PHP_EOL;
 //    $needToBeDelete->delete();
 
