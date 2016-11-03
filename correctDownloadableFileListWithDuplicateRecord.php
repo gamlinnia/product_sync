@@ -12,20 +12,19 @@ Mage::app('admin');
 
 $fileListCollection = Mage::getModel('downloadablefile/filelist')->getCollection();
 
-$result = array();
+$duplicate = array();
 foreach ($fileListCollection as $each) {
     $fileName = strtolower($each->getFile());
-    if (array_key_exists($fileName, $result)) {
-        $result[$fileName]['count']++;
+    if (array_key_exists($fileName, $duplicate)) {
+        $duplicate[$fileName]['count']++;
     }
     else {
-        $result[$fileName]['id'] = $each->getId();
-        $result[$fileName]['count'] = 1;
+        $duplicate[$fileName]['id'] = $each->getId();
+        $duplicate[$fileName]['count'] = 1;
     }
 }
 
-$duplicate = array();
-foreach ($result as $file => $data) {
+foreach ($duplicate as $file => $data) {
     if($data['count'] > 1) {
         $duplicateFileName[] = $file;
         $duplicateFileId[] = $data['id'];
@@ -45,12 +44,11 @@ foreach ($duplicateFileListCollection as $each) {
         $delete[] = $each->getData();
     }
 }
-//var_dump($delete);
+
 foreach($delete as $d_each) {
     //file_list_id
     $d_id = $d_each['id'];
     $d_file = $d_each['file'];
-    $newFileListId = 0;
     foreach($keep as $k_each){
         //file_list_id
         $k_id = $k_each['id'];
@@ -61,22 +59,22 @@ foreach($delete as $d_each) {
                                                 ->getCollection()
                                                 ->addFieldToFilter('file_list_id', $d_id);
             foreach ($associatedProductCollection as $each) {
+                var_dump($each->getData());
+                //check if the record already exist in associated product table
                 $existsCollection = Mage::getModel('downloadablefile/associatedproduct')
                                         ->getCollection()
                                         ->addFieldToFilter('file_list_id', $k_id)
                                         ->addFieldToFilter('product_id', $each->getProductId());
-//                                        ->addFieldToFilter('created_at', $each->getCreatedAt());
                 if($existsCollection->count() > 0) {
-                    //delete each
+                    //if exist same record, delete $each to avoid duplicate associated product record
                     echo "***Exist***" . PHP_EOL;
                     $each->delete();
-                    //var_dump($existsCollection->getFirstItem()->getData());
                 }
                 else {
+                    //if not exist, modify the delete_id to keep_id
                     echo "***Not Exist***" . PHP_EOL;
                     $each->setFileListId($k_id)
                         ->save();
-                    //var_dump($each->getData());
                 }
             }
         }
@@ -88,5 +86,3 @@ foreach($delete as $d_each) {
     Mage::getModel('downloadablefile/filelist')->load($d_id)->delete();
     echo "=======================================================================" . PHP_EOL;
 }
-
-//$associatedProductCollection = Mage::getModel('downloadablefile/associatedproduct')->getCollection();
