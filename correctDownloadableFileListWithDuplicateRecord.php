@@ -64,15 +64,17 @@ foreach($delete as $d_each) {
                 $existsCollection = Mage::getModel('downloadablefile/associatedproduct')
                                         ->getCollection()
                                         ->addFieldToFilter('file_list_id', $k_id)
-                                        ->addFieldToFilter('product_id', $each->getProductId())
-                                        ->addFieldToFilter('created_at', $each->getCreatedAt());
+                                        ->addFieldToFilter('product_id', $each->getProductId());
+//                                        ->addFieldToFilter('created_at', $each->getCreatedAt());
                 if($existsCollection->count() > 0) {
                     //delete each
+                    echo "***Exist***" . PHP_EOL;
                     var_dump($existsCollection->getFirstItem()->getData());
                 }
                 else {
                     //$each->setFileListId($k_id)
                     //    ->save();
+                    echo "***Not Exist***" . PHP_EOL;
                     var_dump($each->getData());
                 }
             }
