@@ -69,6 +69,7 @@ foreach($delete as $d_each) {
     echo "===========================Delete======================================" . PHP_EOL;
     $needToBeDelete = Mage::getModel('downloadablefile/filelist')->load($d_id);
     var_dump($needToBeDelete->getData());
+    echo "=======================================================================" . PHP_EOL;
 //    $needToBeDelete->delete();
 
     //var_dump($needToBeDelete->getData());
