@@ -129,9 +129,11 @@ function main() {
                 $attr = Mage::getModel('eav/entity_attribute')->load(
                     $_attr->getId()
                 );
-                Zend_Debug::dump($attr->getData('attribute_code'));
-                Zend_Debug::dump($attr->getData('frontend_label'));
-                Zend_Debug::dump($attr->getData('frontend_input'));
+                Zend_Debug::dump(array(
+                    $attr->getData('attribute_code'),
+                    $attr->getData('frontend_label'),
+                    $attr->getData('frontend_input')
+                ));
             }
             echo 'similar attr count: ' . $attr_collection->count() . PHP_EOL;
 
