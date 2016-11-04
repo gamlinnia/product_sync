@@ -2103,13 +2103,14 @@ function getCookieFromAws($channel, $channel_sku, $product_url){
 function createNewAttribute ($label, $frontend_input) {
 
     $collection = Mage::getModel('eav/entity_attribute')->getCollection()
-        ->addFieldToFilter('frontend_label', $label);
+        ->addFieldToFilter('frontend_label', $label)
+        ->addFieldToFilter('frontend_input', $frontend_input);
     if ($collection->count() > 0) {
         return $collection->getFirstItem()->getId();
     }
 
+    /* 'frontend_input' => 'backend_type' */
     $backend_type = array(
-        'frontend_input' => 'backend_type',
         'multiselect' => 'varchar',
         'boolean' => 'int',
         'select' => 'int',
@@ -2253,6 +2254,20 @@ function getAttributeOptions ($nameOrId, $value) {
     }
 
     return null;
+}
+
+function setAttributeOptions ($attr_id, $optionsArray) {
+    try {
+        $model = Mage::getModel('eav/entity_setup','core_setup');
+        $model->addAttributeOption(array(
+            'attribute_id' => $attr_id,
+            'value' => $optionsArray
+        ));
+    } catch (Exception $e) {
+        echo $e->getMessage() . PHP_EOL;
+        echo 'error in setAttributeOptions' . PHP_EOL;
+        exit(0);
+    }
 }
 
 function setAttributeValueToOptions ($product, $nameOrId, $attrCodeOrId, $valueToBeMapped, $debug) {

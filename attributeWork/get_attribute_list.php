@@ -134,7 +134,7 @@ function main() {
                 $options = getAttributeOptions('attributeId', $attr->getId());
                 if (isset($options['options'])) {
                     foreach ($options['options'] as $option) {
-                        $optionList[] = $option;
+                        $optionList[] = $option['label'];
                     }
                 }
 
@@ -146,19 +146,20 @@ function main() {
                     'options' => isset($options['options']) ? $options['options'] : null
                 ));
             }
-            echo 'similar attr count: ' . $attr_collection->count() . PHP_EOL;
+            echo 'similar attr count: ' . $attr_collection->count() . PHP_EOL . PHP_EOL;
 
-            $new_attr_label = promptMessageForInput('enter new attr label to create');
+            $new_attr_label = promptMessageForInput('enter new attr label to create', null, true);
+            if (empty($new_attr_label)) {
+                $new_attr_label = $keyword_to_search;
+                echo 'empty input, $new_attr_label: ' . $new_attr_label . PHP_EOL;
+            }
 
-            $new_attr_label = promptMessageForInput('enter frontend_input type to create', array(
-                'frontend_input','multiselect', 'boolean', 'select', 'text', 'textarea'
+            $frontend_input = promptMessageForInput('enter frontend_input type to create', array(
+                'multiselect', 'boolean', 'select', 'text', 'textarea'
             ));
-//            $new_attr_id = createNewAttribute($new_attr_label);
+            $new_attr_id = createNewAttribute($new_attr_label, $frontend_input);
 
-
-            var_dump($optionList);
-
-
+            echo 'option list: ' . implode(' / ', $optionList) . ' count: ' . count($optionList) . PHP_EOL . PHP_EOL;
 
 
             break;
@@ -168,19 +169,24 @@ function main() {
 
 main();
 
-function promptMessageForInput ($message, $acceptInput = null) {
+function promptMessageForInput ($message, $acceptInput = null, $acceptEmptyInput = false) {
     $input = '';
 
-    while (empty($input)) {
-        if (is_array($acceptInput) && count($acceptInput) > 0) {
-            echo $message . ' accept input: [' . implode('/', $acceptInput) . ']' . PHP_EOL;
-            while (!in_array($input, $acceptInput)) {
+    if ($acceptEmptyInput && !is_array($acceptInput)) {
+        $input = trim(fgets(STDIN));
+    } else {
+        while (empty($input)) {
+            if (is_array($acceptInput) && count($acceptInput) > 0) {
+                echo $message . ' accept input: [' . implode(' / ', $acceptInput) . ']' . PHP_EOL;
+                while (!in_array($input, $acceptInput)) {
+                    $input = trim(fgets(STDIN));
+                }
+            } else {
+                echo $message . PHP_EOL;
                 $input = trim(fgets(STDIN));
             }
-        } else {
-            echo $message . PHP_EOL;
-            $input = trim(fgets(STDIN));
         }
     }
+
     return $input;
 }
