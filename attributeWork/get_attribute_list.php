@@ -7,6 +7,13 @@ require_once '../lib/ganon.php';
 require_once '../lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
 
+$modeArray = array(
+    '1' => '1. export all result to excel',
+    '2' => '2. dump all result on screen',
+    '3' => '3. search specify attribute',
+    '4' => '4. get all attribute with the same label, assign all related products to new attribute'
+);
+
 function getOptionsFromAttributeName($attribute_name){
     $details = getAttributeOptions('attributeName', $attribute_name);
     //var_dump($options);
@@ -67,15 +74,10 @@ function getAttributeList() {
 }
 
 function main() {
-    $modeArray = array(
-        '1' => 'export all result to excel',
-        '2' => 'dump all result on screen',
-        '3' => 'search specify attribute'
-    );
-
+    global $modeArray;
     $mode = '';
     while (empty($mode)) {
-        echo "Please select mode [1. export all result to excel / 2. dump all result on screen / 3. search specify attribute]: ";
+        echo "Please select mode [" . implode(' / ', $modeArray) . ']:';
         $mode = trim(fgets(STDIN));
         if(array_key_exists($mode, $modeArray)) {
             if($mode == '3') {
@@ -113,6 +115,72 @@ function main() {
             main();
         }
     }
+
+    switch ($mode) {
+        case '4' :
+            $keyword_to_search = promptMessageForInput('enter keyword to search for related attributes');
+            $attr_collection = getAttributeCollection();
+            $attr_collection->addFieldToFilter('frontend_label', array('like' => '%' . $keyword_to_search . '%'));
+            if ($attr_collection->count() < 1) {
+                echo 'found no attributes' . PHP_EOL;
+                return;
+            }
+
+            $optionList = array();
+            foreach ($attr_collection as $_attr) {
+                $attr = Mage::getModel('eav/entity_attribute')->load(
+                    $_attr->getId()
+                );
+                $options = getAttributeOptions('attributeId', $attr->getId());
+                if (isset($options['options'])) {
+                    foreach ($options['options'] as $option) {
+                        $optionList[] = $option;
+                    }
+                }
+
+                Zend_Debug::dump(array(
+                    'id' => $attr->getId(),
+                    'attribute_code' => $attr->getData('attribute_code'),
+                    'frontend_label' => $attr->getData('frontend_label'),
+                    'frontend_input' => $attr->getData('frontend_input'),
+                    'options' => isset($options['options']) ? $options['options'] : null
+                ));
+            }
+            echo 'similar attr count: ' . $attr_collection->count() . PHP_EOL;
+
+            $new_attr_label = promptMessageForInput('enter new attr label to create');
+
+            $new_attr_label = promptMessageForInput('enter frontend_input type to create', array(
+                'frontend_input','multiselect', 'boolean', 'select', 'text', 'textarea'
+            ));
+//            $new_attr_id = createNewAttribute($new_attr_label);
+
+
+            var_dump($optionList);
+
+
+
+
+            break;
+    }
+
 }
 
 main();
+
+function promptMessageForInput ($message, $acceptInput = null) {
+    $input = '';
+
+    while (empty($input)) {
+        if (is_array($acceptInput) && count($acceptInput) > 0) {
+            echo $message . ' accept input: [' . implode('/', $acceptInput) . ']' . PHP_EOL;
+            while (!in_array($input, $acceptInput)) {
+                $input = trim(fgets(STDIN));
+            }
+        } else {
+            echo $message . PHP_EOL;
+            $input = trim(fgets(STDIN));
+        }
+    }
+    return $input;
+}

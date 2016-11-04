@@ -5,269 +5,6 @@ function isJson($string) {
     return (json_last_error() == JSON_ERROR_NONE);
 }
 
-function attributeSetNameAndId ($nameOrId, $value) {
-    /*$nameOrId = 'attributeSetName' or 'attributeSetId'*/
-    $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection') ->load();
-    foreach ($attributeSetCollection as $id => $attributeSet) {
-        $entityTypeId = $attributeSet->getEntityTypeId();
-        $name = $attributeSet->getAttributeSetName();
-        switch ($nameOrId) {
-            case 'attributeSetName' :
-                if ($name == $value) {
-                    return array(
-                        'name' => $name,
-                        'id' => $id,
-                        'entityTypeId' => $entityTypeId
-                    );
-                }
-                break;
-            case 'attributeSetId' :
-                if ((int)$id == (int)$value) {
-                    return array(
-                        'name' => $name,
-                        'id' => $id,
-                        'entityTypeId' => $entityTypeId
-                    );
-                }
-                break;
-        }
-    }
-    return null;
-}
-
-function attributeNameAndId () {
-
-}
-
-function getAttributeByName () {
-
-}
-
-function getAttributeOptions ($nameOrId, $value) {
-    /*$nameOrId = 'attributeName' or 'attributeId'*/
-    switch ($nameOrId) {
-        case 'attributeName' :
-            $attributeCode = $value;
-            $attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_product', $value);
-            break;
-        case 'attributeId' :
-            $attributeCode = Mage::getModel('eav/entity_attribute')->load($value)->getAttributeCode();
-            $attributeId = $value;
-            break;
-    }
-
-    if (isset($attributeCode)) {
-        $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', $attributeCode);
-        $attributeData = $attribute->getData();
-        $rs = array(
-            'attributeCode' => $attributeCode,
-            'attributeId' => $attributeId
-        );
-        if (isset($attributeData['frontend_input'])) {
-            $rs['frontend_input'] = $attributeData['frontend_input'];
-        }
-        if (isset($attributeData['backend_type'])) {
-            $rs['backend_type'] = $attributeData['backend_type'];
-        }
-        if ($attribute->usesSource()) {
-            $options = $attribute->getSource()->getAllOptions(false);
-            $rs['options'] = $options;
-        }
-        return $rs;
-    }
-
-    return null;
-}
-
-function setAttributeValueToOptions ($product, $nameOrId, $attrCodeOrId, $valueToBeMapped, $debug) {
-    /*$nameOrId = 'attributeName' or 'attributeId'*/
-    $optionsArray = getAttributeOptions($nameOrId, $attrCodeOrId);
-    if (!isset($optionsArray['frontend_input'])) {
-        return $valueToBeMapped;
-    }
-    switch ($optionsArray['frontend_input']) {
-        case 'select' :
-            $options = getAttributeOptions($nameOrId, $attrCodeOrId);
-            $valueToInput = null;
-            foreach ($options['options'] as $eachOption) {
-                if ($eachOption['label'] == $valueToBeMapped) {
-                    echo 'mapped label: ' . $valueToBeMapped . ' value: ' . $eachOption['value'];
-                    $valueToInput = $eachOption['value'];
-                    continue;
-                }
-            }
-            if (!$valueToInput) {
-                echo $valueToBeMapped . ' mapped to nothing';
-                var_dump($options);
-                die();
-            }
-            break;
-        default :
-            echo '******** no mapping TYPE ********' . PHP_EOL;
-            var_dump($optionsArray['frontend_input']);
-            die();
-    }
-    if (!$debug) {
-        if ($nameOrId == 'attributeName') {
-            $product->setData($attrCodeOrId, $valueToInput)
-                ->save();
-            echo 'attribute value saved.' . PHP_EOL;
-        } else {
-            echo 'code no finished yet.' . PHP_EOL;
-        }
-    }
-    return null;
-}
-
-function getAttributeValueFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMapped) {
-
-    /*$nameOrId = 'attributeName' or 'attributeId'*/
-    $optionsArray = getAttributeOptions($nameOrId, $attrCodeOrId);
-    if (!isset($optionsArray['frontend_input'])) {
-        return $valueToBeMapped;
-    }
-    switch ($optionsArray['frontend_input']) {
-        case 'select' :
-        case 'boolean' :
-            foreach ($optionsArray['options'] as $optionObject) {
-                if ((int)$optionObject['value'] == (int)$valueToBeMapped) {
-                    return $optionObject['label'];
-                }
-            }
-            break;
-        case 'multiselect' :
-            /*multiselect : a02030_headsets_connector,
-            "a02030_headsets_connector": "147,148,149,150"*/
-            file_put_contents('log.txt', $attrCodeOrId . ': ' . $valueToBeMapped . PHP_EOL, FILE_APPEND);
-            $valueToBeMappedArray = explode(',', $valueToBeMapped);
-            file_put_contents('log.txt', 'count($valueToBeMappedArray)' . ': ' . count($valueToBeMappedArray) . PHP_EOL, FILE_APPEND);
-            if (count($valueToBeMappedArray) < 2) {
-                foreach ($optionsArray['options'] as $optionObject) {
-                    if ((int)$optionObject['value'] == (int)$valueToBeMapped) {
-                        return $optionObject['label'];
-                    }
-                }
-            } else {
-                $mappedArray = array();
-                foreach ($optionsArray['options'] as $optionObject) {
-                    if (in_array((int)$optionObject['value'], $valueToBeMappedArray)) {
-                        file_put_contents('log.txt', 'mapped value' . ': ' . $optionObject['label'] . PHP_EOL, FILE_APPEND);
-                        $mappedArray[] = $optionObject['label'];
-                    }
-                }
-                return $mappedArray;
-            }
-            break;
-        case 'text' :
-        case 'textarea' :
-        case 'price' :
-        case 'weight' :
-        case 'media_image' :
-        case 'date' :
-            return $valueToBeMapped;
-            break;
-        default :
-            return $optionsArray['frontend_input'];
-            return '******** no mapping value ********';
-    }
-    return null;
-}
-
-function classifyProductAttributes ($productInfo) {
-    $keyWord = array(
-        'direct' => array(
-            "weight",
-            "length",
-            "price",
-            "status",
-            "visibility",
-            "enable_rma",
-            "is_salable",
-            "entity_type_id",
-            "has_options",
-            "upc_number",
-            "required_options",
-            "width",
-            "height",
-            "url_key",
-            "channelsinfo"
-        ),
-        'dontCare' => array(
-            "created_at",
-            "updated_at",
-            "image",
-            "small_image",
-            "thumbnail",
-            "url_path",
-            "stock_item",
-            "entity_id",
-            "is_returnable",
-            'category',
-            "is_in_stock",
-            "is_salable",
-            "tier_price_changed",
-            "group_price_changed",
-            "ne_product_specifications",
-            "ewra",
-            "msds_sheet",
-            "has_options",
-            "required_options"
-        )
-    );
-
-    $response = array(
-        'direct' => array(),
-        'dontCare' => array(),
-        'needToBeParsed' => array()
-    );
-
-    foreach ($productInfo as $attrKey => $attrValue) {
-        # dontCare class -> in pre-defined dontCare_keyWord array
-        if( preg_in_array($attrKey, $keyWord['dontCare']) ){
-            $response['dontCare'][$attrKey] = $attrValue;
-        }
-        else if (is_array($attrValue)) {
-            if (preg_in_array($attrKey, $keyWord['direct'])) {
-                $response['direct'][$attrKey] = $attrValue;
-            }
-        }
-        # direct class -> the value is not numeric or in pre-defined direct_keyWord array
-        else if ( isFloat($attrValue) || !is_numeric($attrValue) || preg_in_array($attrKey, $keyWord['direct'])){
-            /*determine the multiselect case 147,148,149,150*/
-            preg_match('/^([\d]+[,]{1})+[\d]+$/', $attrValue, $match);
-            if ($match) {
-                $response['needToBeParsed'][$attrKey] = $attrValue;
-            } else {
-                $response['direct'][$attrKey] = $attrValue;
-            }
-        }
-        # needToBeParsed -> others
-        else{
-            $response['needToBeParsed'][$attrKey] = $attrValue;
-        }
-    }
-
-    return $response;
-}
-
-function parseClassifiedProductAttributes ($classifiedProductInfo) {
-    $parsedProductInfo = array(
-        'direct' => $classifiedProductInfo['direct'],
-        'dontCare' => $classifiedProductInfo['dontCare']
-    );
-    foreach ($classifiedProductInfo['needToBeParsed'] as $attrKey => $attrValue) {
-        switch ($attrKey) {
-            case 'attribute_set_id' :
-                $attrIdName = attributeSetNameAndId('attributeSetId', $attrValue);
-                $parsedProductInfo['needToBeParsed'][$attrKey] = $attrIdName['name'];
-                break;
-            default :
-                $parsedProductInfo['needToBeParsed'][$attrKey] = getAttributeValueFromOptions('attributeName', $attrKey, $attrValue);
-        }
-    }
-    return $parsedProductInfo;
-}
-
 function getProductInfoFromMagento ($filterParam, $pageSize) {
     $response = array(
         'productsInfo' => array()
@@ -854,24 +591,6 @@ function getFileNameWithoutExtension ($fileNameWithExtension) {
         return $fileNameWithExtension;
     }
     return $match[0];
-}
-
-function getAttributeSetCollection () {
-
-    $entityType = Mage::getModel('catalog/product')->getResource()->getTypeId();
-    $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection')
-        ->setEntityTypeFilter($entityType);
-
-    $response = array();
-    foreach ($attributeSetCollection as $id => $attributeSet) {
-        $entityTypeId = $attributeSet->getEntityTypeId();
-        $name = $attributeSet->getAttributeSetName();
-        $response[] = array(
-            'id' => $entityTypeId,
-            'name' => $name
-        );
-    }
-    return $response;
 }
 
 function getDownloadableUrls ($valueToFilter, $filterType='entity_id') {
@@ -2377,20 +2096,355 @@ function getCookieFromAws($channel, $channel_sku, $product_url){
 
 }
 
-function moveAttributeToGroupInAttrbiuteSet($attributeName, $attributeSetName, $groupName){
-    $attributeId = Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $attributeName);
-    $attributeSetId = Mage::getModel('eav/entity_attribute_set')->load($attributeSetName, 'attribute_set_name')->getAttributeSetId();
+/*
+ * type: attribute
+ * */
 
-    $model=Mage::getModel('eav/entity_setup','core_setup');
-    $attributeGroupData=$model->getAttributeGroup('catalog_product', $attributeSetId, $groupName);
-    $groupId = $attributeGroupData["attribute_group_id"];
+function createNewAttribute ($label, $frontend_input) {
 
-    //remove attribute from attribute set
-    Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeId, $attributeSetId);
+    $collection = Mage::getModel('eav/entity_attribute')->getCollection()
+        ->addFieldToFilter('frontend_label', $label);
+    if ($collection->count() > 0) {
+        return $collection->getFirstItem()->getId();
+    }
 
-    //re-add attribute to specific group in same attribute set
-    $model->addAttributeToSet('catalog_product',$attributeSetId, $groupId, $attributeId);
+    $backend_type = array(
+        'frontend_input' => 'backend_type',
+        'multiselect' => 'varchar',
+        'boolean' => 'int',
+        'select' => 'int',
+        'text' => 'varchar',
+        'textarea' => 'text'
+    );
+
+    if (!isset($backend_type[$frontend_input])) {
+        echo 'error frontend_input in createNewAttribute' . PHP_EOL;
+        exit(0);
+    }
+
+    $attr_params = array(
+        'entity_type_id' => 4,
+        'attribute_code' => preg_replace('/[^\w.]/', '_', trim(strtolower($label)) ),
+        'backend_type' => $backend_type[$frontend_input],
+        'frontend_input' =>  $frontend_input,
+        'frontend_label' => $label,
+        'is_global' => 2,       // website
+        'is_user_defined' => 1,
+        'is_visible' => 1,
+        'is_visible_on_front' => 1,
+        'used_in_product_listing' => 1
+    );
+    $attr = Mage::getModel('eav/entity_attribute')
+        ->setData($attr_params)
+        ->save();
+    return $attr->getId();
 }
+
+function getAttributeCollection () {
+    return Mage::getModel('eav/entity_attribute')->getCollection()
+        ->addFieldToFilter('entity_type_id', 4);
+}
+
+function getAttributeSetCollection () {
+    return Mage::getModel('eav/entity_attribute_set')->getCollection()
+        ->addFieldToFilter('entity_type_id', 4);
+}
+
+function moveAttributeToGroupInAttributeSet ($attributeCode, $attributeSetName, $groupName, $removeFirst = false) {
+    /* $groupName = attribute set 裡面的資料夾 */
+    try {
+        $attributeId = Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $attributeCode);
+        $attributeSetId = Mage::getModel('eav/entity_attribute_set')->load($attributeSetName, 'attribute_set_name')->getAttributeSetId();
+
+        $model = Mage::getModel('eav/entity_setup','core_setup');
+        $attributeGroupData = $model->getAttributeGroup('catalog_product', $attributeSetId, $groupName);
+        $groupId = $attributeGroupData["attribute_group_id"];
+
+        if ($removeFirst) {
+            //remove attribute from attribute set
+            Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeId, $attributeSetId);
+        }
+
+        //re-add attribute to specific group in same attribute set
+        $model->addAttributeToSet('catalog_product',$attributeSetId, $groupId, $attributeId);
+    } catch (Exception $e) {
+        echo 'moveAttributeToGroupInAttrbiuteSet exception occur' . PHP_EOL;
+        return false;
+    }
+    return true;
+}
+
+function removeAttributeFromAttributeSet ($attributeCode, $attributeSetName) {
+    /* $groupName = attribute set 裡面的資料夾 */
+    try {
+        $attributeId = Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $attributeCode);
+        $attributeSetId = Mage::getModel('eav/entity_attribute_set')->load($attributeSetName, 'attribute_set_name')->getAttributeSetId();
+
+        //remove attribute from attribute set
+        Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeId, $attributeSetId);
+    } catch (Exception $e) {
+        echo 'removeAttributeFromAttributeSet exception occur' . PHP_EOL;
+        return false;
+    }
+    return true;
+}
+
+function attributeSetNameAndId ($nameOrId, $value) {
+    /*$nameOrId = 'attributeSetName' or 'attributeSetId'*/
+    $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection') ->load();
+    foreach ($attributeSetCollection as $id => $attributeSet) {
+        $entityTypeId = $attributeSet->getEntityTypeId();
+        $name = $attributeSet->getAttributeSetName();
+        switch ($nameOrId) {
+            case 'attributeSetName' :
+                if ($name == $value) {
+                    return array(
+                        'name' => $name,
+                        'id' => $id,
+                        'entityTypeId' => $entityTypeId
+                    );
+                }
+                break;
+            case 'attributeSetId' :
+                if ((int)$id == (int)$value) {
+                    return array(
+                        'name' => $name,
+                        'id' => $id,
+                        'entityTypeId' => $entityTypeId
+                    );
+                }
+                break;
+        }
+    }
+    return null;
+}
+
+function getAttributeOptions ($nameOrId, $value) {
+    /*$nameOrId = 'attributeName' or 'attributeId'*/
+    switch ($nameOrId) {
+        case 'attributeName' :
+            $attributeCode = $value;
+            $attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_product', $value);
+            break;
+        case 'attributeId' :
+            $attributeCode = Mage::getModel('eav/entity_attribute')->load($value)->getAttributeCode();
+            $attributeId = $value;
+            break;
+    }
+
+    if (isset($attributeCode)) {
+        $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', $attributeCode);
+        $attributeData = $attribute->getData();
+        $rs = array(
+            'attributeCode' => $attributeCode,
+            'attributeId' => $attributeId
+        );
+        if (isset($attributeData['frontend_input'])) {
+            $rs['frontend_input'] = $attributeData['frontend_input'];
+        }
+        if (isset($attributeData['backend_type'])) {
+            $rs['backend_type'] = $attributeData['backend_type'];
+        }
+        if ($attribute->usesSource()) {
+            $options = $attribute->getSource()->getAllOptions(false);
+            $rs['options'] = $options;
+        }
+        return $rs;
+    }
+
+    return null;
+}
+
+function setAttributeValueToOptions ($product, $nameOrId, $attrCodeOrId, $valueToBeMapped, $debug) {
+    /*$nameOrId = 'attributeName' or 'attributeId'*/
+    $optionsArray = getAttributeOptions($nameOrId, $attrCodeOrId);
+    if (!isset($optionsArray['frontend_input'])) {
+        return $valueToBeMapped;
+    }
+    switch ($optionsArray['frontend_input']) {
+        case 'select' :
+            $options = getAttributeOptions($nameOrId, $attrCodeOrId);
+            $valueToInput = null;
+            foreach ($options['options'] as $eachOption) {
+                if ($eachOption['label'] == $valueToBeMapped) {
+                    echo 'mapped label: ' . $valueToBeMapped . ' value: ' . $eachOption['value'];
+                    $valueToInput = $eachOption['value'];
+                    continue;
+                }
+            }
+            if (!$valueToInput) {
+                echo $valueToBeMapped . ' mapped to nothing';
+                var_dump($options);
+                die();
+            }
+            break;
+        default :
+            echo '******** no mapping TYPE ********' . PHP_EOL;
+            var_dump($optionsArray['frontend_input']);
+            die();
+    }
+    if (!$debug) {
+        if ($nameOrId == 'attributeName') {
+            $product->setData($attrCodeOrId, $valueToInput)
+                ->save();
+            echo 'attribute value saved.' . PHP_EOL;
+        } else {
+            echo 'code no finished yet.' . PHP_EOL;
+        }
+    }
+    return null;
+}
+
+function getAttributeValueFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMapped) {
+
+    /*$nameOrId = 'attributeName' or 'attributeId'*/
+    $optionsArray = getAttributeOptions($nameOrId, $attrCodeOrId);
+    if (!isset($optionsArray['frontend_input'])) {
+        return $valueToBeMapped;
+    }
+    switch ($optionsArray['frontend_input']) {
+        case 'select' :
+        case 'boolean' :
+            foreach ($optionsArray['options'] as $optionObject) {
+                if ((int)$optionObject['value'] == (int)$valueToBeMapped) {
+                    return $optionObject['label'];
+                }
+            }
+            break;
+        case 'multiselect' :
+            /*multiselect : a02030_headsets_connector,
+            "a02030_headsets_connector": "147,148,149,150"*/
+            file_put_contents('log.txt', $attrCodeOrId . ': ' . $valueToBeMapped . PHP_EOL, FILE_APPEND);
+            $valueToBeMappedArray = explode(',', $valueToBeMapped);
+            file_put_contents('log.txt', 'count($valueToBeMappedArray)' . ': ' . count($valueToBeMappedArray) . PHP_EOL, FILE_APPEND);
+            if (count($valueToBeMappedArray) < 2) {
+                foreach ($optionsArray['options'] as $optionObject) {
+                    if ((int)$optionObject['value'] == (int)$valueToBeMapped) {
+                        return $optionObject['label'];
+                    }
+                }
+            } else {
+                $mappedArray = array();
+                foreach ($optionsArray['options'] as $optionObject) {
+                    if (in_array((int)$optionObject['value'], $valueToBeMappedArray)) {
+                        file_put_contents('log.txt', 'mapped value' . ': ' . $optionObject['label'] . PHP_EOL, FILE_APPEND);
+                        $mappedArray[] = $optionObject['label'];
+                    }
+                }
+                return $mappedArray;
+            }
+            break;
+        case 'text' :
+        case 'textarea' :
+        case 'price' :
+        case 'weight' :
+        case 'media_image' :
+        case 'date' :
+            return $valueToBeMapped;
+            break;
+        default :
+            return $optionsArray['frontend_input'];
+            return '******** no mapping value ********';
+    }
+    return null;
+}
+
+function classifyProductAttributes ($productInfo) {
+    $keyWord = array(
+        'direct' => array(
+            "weight",
+            "length",
+            "price",
+            "status",
+            "visibility",
+            "enable_rma",
+            "is_salable",
+            "entity_type_id",
+            "has_options",
+            "upc_number",
+            "required_options",
+            "width",
+            "height",
+            "url_key",
+            "channelsinfo"
+        ),
+        'dontCare' => array(
+            "created_at",
+            "updated_at",
+            "image",
+            "small_image",
+            "thumbnail",
+            "url_path",
+            "stock_item",
+            "entity_id",
+            "is_returnable",
+            'category',
+            "is_in_stock",
+            "is_salable",
+            "tier_price_changed",
+            "group_price_changed",
+            "ne_product_specifications",
+            "ewra",
+            "msds_sheet",
+            "has_options",
+            "required_options"
+        )
+    );
+
+    $response = array(
+        'direct' => array(),
+        'dontCare' => array(),
+        'needToBeParsed' => array()
+    );
+
+    foreach ($productInfo as $attrKey => $attrValue) {
+        # dontCare class -> in pre-defined dontCare_keyWord array
+        if( preg_in_array($attrKey, $keyWord['dontCare']) ){
+            $response['dontCare'][$attrKey] = $attrValue;
+        }
+        else if (is_array($attrValue)) {
+            if (preg_in_array($attrKey, $keyWord['direct'])) {
+                $response['direct'][$attrKey] = $attrValue;
+            }
+        }
+        # direct class -> the value is not numeric or in pre-defined direct_keyWord array
+        else if ( isFloat($attrValue) || !is_numeric($attrValue) || preg_in_array($attrKey, $keyWord['direct'])){
+            /*determine the multiselect case 147,148,149,150*/
+            preg_match('/^([\d]+[,]{1})+[\d]+$/', $attrValue, $match);
+            if ($match) {
+                $response['needToBeParsed'][$attrKey] = $attrValue;
+            } else {
+                $response['direct'][$attrKey] = $attrValue;
+            }
+        }
+        # needToBeParsed -> others
+        else{
+            $response['needToBeParsed'][$attrKey] = $attrValue;
+        }
+    }
+
+    return $response;
+}
+
+function parseClassifiedProductAttributes ($classifiedProductInfo) {
+    $parsedProductInfo = array(
+        'direct' => $classifiedProductInfo['direct'],
+        'dontCare' => $classifiedProductInfo['dontCare']
+    );
+    foreach ($classifiedProductInfo['needToBeParsed'] as $attrKey => $attrValue) {
+        switch ($attrKey) {
+            case 'attribute_set_id' :
+                $attrIdName = attributeSetNameAndId('attributeSetId', $attrValue);
+                $parsedProductInfo['needToBeParsed'][$attrKey] = $attrIdName['name'];
+                break;
+            default :
+                $parsedProductInfo['needToBeParsed'][$attrKey] = getAttributeValueFromOptions('attributeName', $attrKey, $attrValue);
+        }
+    }
+    return $parsedProductInfo;
+}
+
+
 
 function existDifferentImages($jsonImageArray, $dbImageArray){
     /*
