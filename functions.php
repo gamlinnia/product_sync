@@ -2154,6 +2154,15 @@ function getAttributeSetCollection () {
         ->addFieldToFilter('entity_type_id', 4);
 }
 
+function compareAttributeOptionArray ($oldAttributeOptions, $optionList) {
+    $oldOptions = array();
+    foreach ($oldAttributeOptions as $old) {
+        $oldOptions[] = ucwords(trim($old['label']));
+    }
+    var_dump($oldOptions);
+    var_dump($optionList);
+}
+
 function moveAttributeToGroupInAttributeSet ($attributeCode, $attributeSetName, $groupName, $removeFirst = false) {
     /* $groupName = attribute set 裡面的資料夾 */
     try {

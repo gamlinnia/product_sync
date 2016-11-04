@@ -170,6 +170,8 @@ function main() {
 
             $oldAttributeOptions = getAttributeOptions('attributeId', $new_attr_id);
             var_dump($oldAttributeOptions);
+
+            $toAddArray = compareAttributeOptionArray($oldAttributeOptions['options'], $optionList);
 //            echo 'option list: ' . implode(' / ', $oldAttributeOptions) . ' count: ' . count($oldAttributeOptions) . PHP_EOL . PHP_EOL;
 
 //            setAttributeOptions($new_attr_id, $optionList);
