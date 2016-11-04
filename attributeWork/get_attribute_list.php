@@ -150,10 +150,10 @@ function main() {
 
             $new_attr_label = promptMessageForInput('enter new attr label to create');
 
-            $new_attr_label = promptMessageForInput('enter frontend_input type to create: ' .
-                implode('/', array('frontend_input','multiselect', 'boolean', 'select', 'text', 'textarea'))
-            );
-            $new_attr_id = createNewAttribute($new_attr_label);
+            $new_attr_label = promptMessageForInput('enter frontend_input type to create', array(
+                'frontend_input','multiselect', 'boolean', 'select', 'text', 'textarea'
+            ));
+//            $new_attr_id = createNewAttribute($new_attr_label);
 
 
             var_dump($optionList);
