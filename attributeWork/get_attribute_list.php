@@ -120,7 +120,7 @@ function main() {
         case '4' :
             $keyword_to_search = promptMessageForInput('enter keyword to search for related attributes');
             $attr_collection = getAttributeCollection();
-            $attr_collection->addFieldToFilter('frontend_label', $keyword_to_search);
+            $attr_collection->addFieldToFilter('frontend_label', array('like' => '%' . $keyword_to_search . '%'));
             if ($attr_collection->count() < 1) {
                 echo 'found no attributes' . PHP_EOL;
                 return;
@@ -131,6 +131,7 @@ function main() {
                 );
                 Zend_Debug::dump($attr->getData());
             }
+            echo 'similar attr count: ' . $attr_collection->count() . PHP_EOL;
 
             $new_attr_label = promptMessageForInput('enter new attr label to create');
             $new_attr_id = createNewAttribute($new_attr_label);
