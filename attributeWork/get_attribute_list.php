@@ -125,20 +125,28 @@ function main() {
                 echo 'found no attributes' . PHP_EOL;
                 return;
             }
+
+            $optionList = array();
             foreach ($attr_collection as $_attr) {
                 $attr = Mage::getModel('eav/entity_attribute')->load(
                     $_attr->getId()
                 );
                 $options = getAttributeOptions('attributeId', $attr->getId());
+                if (isset($options['options'])) {
+                    $optionList[] = $options['options'];
+                }
+
                 Zend_Debug::dump(array(
                     'id' => $attr->getId(),
                     'attribute_code' => $attr->getData('attribute_code'),
                     'frontend_label' => $attr->getData('frontend_label'),
                     'frontend_input' => $attr->getData('frontend_input'),
-                    'options' => isset($options['options']) ? $options['options'] : ''
+                    'options' => isset($options['options']) ? $options['options'] : null
                 ));
             }
             echo 'similar attr count: ' . $attr_collection->count() . PHP_EOL;
+
+            var_dump($optionList);
 
 
 
