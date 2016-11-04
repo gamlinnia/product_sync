@@ -118,8 +118,9 @@ function main() {
 
     switch ($mode) {
         case '4' :
-            $attr_label_to_search = promptMessageForInput('enter attribute label to search for duplicate attributes');
-            $attr_collection = getAttrCollectionByLabel($attr_label_to_search);
+            $keyword_to_search = promptMessageForInput('enter keyword to search for related attributes');
+            $attr_collection = getAttributeCollection();
+            $attr_collection->addFieldToFilter('frontend_label', $keyword_to_search);
             if ($attr_collection->count() < 1) {
                 echo 'found no attributes' . PHP_EOL;
                 return;
@@ -128,20 +129,18 @@ function main() {
                 $attr = Mage::getModel('eav/entity_attribute')->load(
                     $_attr->getId()
                 );
-                $new_attr_label = promptMessageForInput('enter new attr label to create');
-
+                Zend_Debug::dump($attr->getData());
             }
+
+            $new_attr_label = promptMessageForInput('enter new attr label to create');
+            $new_attr_id = createNewAttribute($new_attr_label);
+
             break;
     }
 
 }
 
 main();
-
-function getAttrCollectionByLabel ($label) {
-    echo '------------------------- get attr collection -------------------------' . PHP_EOL;
-    return Mage::getModel('eav/entity_attribute')->getCollection()->addFieldToFilter('frontend_label');
-}
 
 function promptMessageForInput ($message) {
     $input = '';

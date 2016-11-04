@@ -2100,14 +2100,46 @@ function getCookieFromAws($channel, $channel_sku, $product_url){
  * type: attribute
  * */
 
-function getAttributeSetCollection () {
+function createNewAttribute ($label) {
 
-    return Mage::getModel('eav/entity_attribute_set')->getCollection()
-        ->addFieldToFilter('entity_type_id', 4);
+    $collection = Mage::getModel('eav/entity_attribute')->getCollection()
+        ->addFieldToFilter('frontend_label', $label);
+    if ($collection->count() > 0) {
+        return $collection->getFirstItem()->getId();
+    }
 
+    /*
+     * 'backend_type' => 'frontend_input', 'text' => 'textarea', 'varchar' => 'text', 'int' => 'select', 'int' => 'boolean', "varchar" => "multiselect"
+     * */
+    $attr_params = array(
+        'entity_type_id' => 4,
+        'attribute_code' => preg_replace('/[^\w.]/', '_', trim(strtolower($label)) ),
+        'backend_type' => 'varchar',
+        'frontend_input' =>  'text',
+        'frontend_label' => $label,
+        'is_global' => 2,       // website
+        'is_user_defined' => 1,
+        'is_visible' => 1,
+        'is_visible_on_front' => 1,
+        'used_in_product_listing' => 1
+    );
+    $attr = Mage::getModel('eav/entity_attribute')
+        ->setData($attr_params)
+        ->save();
+    return $attr->getId();
 }
 
-function moveAttributeToGroupInAttrbiuteSet ($attributeCode, $attributeSetName, $groupName){
+function getAttributeCollection () {
+    return Mage::getModel('eav/entity_attribute')->getCollection()
+        ->addFieldToFilter('entity_type_id', 4);
+}
+
+function getAttributeSetCollection () {
+    return Mage::getModel('eav/entity_attribute_set')->getCollection()
+        ->addFieldToFilter('entity_type_id', 4);
+}
+
+function moveAttributeToGroupInAttributeSet ($attributeCode, $attributeSetName, $groupName, $removeFirst = false) {
     /* $groupName = attribute set 裡面的資料夾 */
     try {
         $attributeId = Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $attributeCode);
@@ -2117,13 +2149,30 @@ function moveAttributeToGroupInAttrbiuteSet ($attributeCode, $attributeSetName, 
         $attributeGroupData = $model->getAttributeGroup('catalog_product', $attributeSetId, $groupName);
         $groupId = $attributeGroupData["attribute_group_id"];
 
-        //remove attribute from attribute set
-        Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeId, $attributeSetId);
+        if ($removeFirst) {
+            //remove attribute from attribute set
+            Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeId, $attributeSetId);
+        }
 
         //re-add attribute to specific group in same attribute set
         $model->addAttributeToSet('catalog_product',$attributeSetId, $groupId, $attributeId);
     } catch (Exception $e) {
         echo 'moveAttributeToGroupInAttrbiuteSet exception occur' . PHP_EOL;
+        return false;
+    }
+    return true;
+}
+
+function removeAttributeFromAttributeSet ($attributeCode, $attributeSetName) {
+    /* $groupName = attribute set 裡面的資料夾 */
+    try {
+        $attributeId = Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $attributeCode);
+        $attributeSetId = Mage::getModel('eav/entity_attribute_set')->load($attributeSetName, 'attribute_set_name')->getAttributeSetId();
+
+        //remove attribute from attribute set
+        Mage::getModel('catalog/product_attribute_set_api')->attributeRemove($attributeId, $attributeSetId);
+    } catch (Exception $e) {
+        echo 'removeAttributeFromAttributeSet exception occur' . PHP_EOL;
         return false;
     }
     return true;
@@ -2855,33 +2904,4 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
         $productModel->save();
     }
 
-}
-
-function createNewAttribute ($label) {
-
-    $collection = Mage::getModel('eav/entity_attribute')->getCollection()
-        ->addFieldToFilter('frontend_label', $label);
-    if ($collection->count() > 0) {
-        return $collection->getFirstItem()->getId();
-    }
-
-    /*
-     * 'backend_type' => 'frontend_input', 'text' => 'textarea', 'varchar' => 'text', 'int' => 'select', 'int' => 'boolean', "varchar" => "multiselect"
-     * */
-    $attr_params = array(
-        'entity_type_id' => 4,
-        'attribute_code' => preg_replace('/[^\w.]/', '_', trim(strtolower($label)) ),
-        'backend_type' => 'varchar',
-        'frontend_input' =>  'text',
-        'frontend_label' => $label,
-        'is_global' => 2,       // website
-        'is_user_defined' => 1,
-        'is_visible' => 1,
-        'is_visible_on_front' => 1,
-        'used_in_product_listing' => 1
-    );
-    $attr = Mage::getModel('eav/entity_attribute')
-        ->setData($attr_params)
-        ->save();
-    return $attr->getId();
 }
