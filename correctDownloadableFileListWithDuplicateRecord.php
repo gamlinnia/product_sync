@@ -91,5 +91,5 @@ if (!empty($duplicateFileName) && !empty($duplicateFileId)) {
     }
 }
 else{
-    echo "No duplicate file list" . PHP_EOL;
+    echo "No duplicate file list to be delete" . PHP_EOL;
 }
