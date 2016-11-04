@@ -159,12 +159,20 @@ function main() {
             $frontend_input = promptMessageForInput('enter frontend_input type to create', array(
                 'multiselect', 'boolean', 'select', 'text', 'textarea'
             ));
-//            $new_attr_id = createNewAttribute($new_attr_label, $frontend_input);
-//            echo 'label: ' . $new_attr_label . ' created, id: ' . $new_attr_id . PHP_EOL;
+            $new_attr_id = createNewAttribute($new_attr_label, $frontend_input);
+            if (!$new_attr_id) {
+                echo 'no new attr id returned' . PHP_EOL;
+                exit(0);
+            }
+            echo 'label: ' . $new_attr_label . ' created, id: ' . $new_attr_id . PHP_EOL;
 
             echo 'option list: ' . implode(' / ', $optionList) . ' count: ' . count($optionList) . PHP_EOL . PHP_EOL;
 
-//            setAttributeOptions($new_attr_id, $optionList)
+            $oldAttributeOptions = getAttributeOptions('attributeId', $new_attr_id);
+            var_dump($oldAttributeOptions);
+//            echo 'option list: ' . implode(' / ', $oldAttributeOptions) . ' count: ' . count($oldAttributeOptions) . PHP_EOL . PHP_EOL;
+
+//            setAttributeOptions($new_attr_id, $optionList);
 
             break;
     }
@@ -182,7 +190,7 @@ function promptMessageForInput ($message, $acceptInput = null, $acceptEmptyInput
     } else {
         while (empty($input)) {
             if (is_array($acceptInput) && count($acceptInput) > 0) {
-                echo $message . ' accept input: [' . implode(' / ', $acceptInput) . ']' . PHP_EOL;
+                echo $message . ' accept input: [ ' . implode(' / ', $acceptInput) . ' ]' . PHP_EOL;
                 while (!in_array($input, $acceptInput)) {
                     $input = trim(fgets(STDIN));
                 }
