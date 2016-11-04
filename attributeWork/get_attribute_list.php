@@ -148,12 +148,18 @@ function main() {
             }
             echo 'similar attr count: ' . $attr_collection->count() . PHP_EOL;
 
+            $new_attr_label = promptMessageForInput('enter new attr label to create');
+
+            $new_attr_label = promptMessageForInput('enter frontend_input type to create: ' .
+                implode('/', array('frontend_input','multiselect', 'boolean', 'select', 'text', 'textarea'))
+            );
+            $new_attr_id = createNewAttribute($new_attr_label);
+
+
             var_dump($optionList);
 
 
 
-//            $new_attr_label = promptMessageForInput('enter new attr label to create');
-//            $new_attr_id = createNewAttribute($new_attr_label);
 
             break;
     }
@@ -162,11 +168,19 @@ function main() {
 
 main();
 
-function promptMessageForInput ($message) {
+function promptMessageForInput ($message, $acceptInput = null) {
     $input = '';
+
     while (empty($input)) {
-        echo $message . PHP_EOL;
-        $input = trim(fgets(STDIN));
+        if (is_array($acceptInput) && count($acceptInput) > 0) {
+            echo $message . ' accept input: ' . implode('/', $acceptInput)  . PHP_EOL;
+            while (!in_array($input, $acceptInput)) {
+                $input = trim(fgets(STDIN));
+            }
+        } else {
+            echo $message . PHP_EOL;
+            $input = trim(fgets(STDIN));
+        }
     }
     return $input;
 }

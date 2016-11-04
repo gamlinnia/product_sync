@@ -2100,7 +2100,7 @@ function getCookieFromAws($channel, $channel_sku, $product_url){
  * type: attribute
  * */
 
-function createNewAttribute ($label) {
+function createNewAttribute ($label, $frontend_input) {
 
     $collection = Mage::getModel('eav/entity_attribute')->getCollection()
         ->addFieldToFilter('frontend_label', $label);
@@ -2108,14 +2108,25 @@ function createNewAttribute ($label) {
         return $collection->getFirstItem()->getId();
     }
 
-    /*
-     * 'backend_type' => 'frontend_input', 'text' => 'textarea', 'varchar' => 'text', 'int' => 'select', 'int' => 'boolean', "varchar" => "multiselect"
-     * */
+    $backend_type = array(
+        'frontend_input' => 'backend_type',
+        'multiselect' => 'varchar',
+        'boolean' => 'int',
+        'select' => 'int',
+        'text' => 'varchar',
+        'textarea' => 'text'
+    );
+
+    if (!isset($backend_type[$frontend_input])) {
+        echo 'error frontend_input in createNewAttribute' . PHP_EOL;
+        exit(0);
+    }
+
     $attr_params = array(
         'entity_type_id' => 4,
         'attribute_code' => preg_replace('/[^\w.]/', '_', trim(strtolower($label)) ),
-        'backend_type' => 'varchar',
-        'frontend_input' =>  'text',
+        'backend_type' => $backend_type[$frontend_input],
+        'frontend_input' =>  $frontend_input,
         'frontend_label' => $label,
         'is_global' => 2,       // website
         'is_user_defined' => 1,
