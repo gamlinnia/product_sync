@@ -175,6 +175,7 @@ function promptMessageForInput ($message, $acceptInput = null, $acceptEmptyInput
     $input = '';
 
     if ($acceptEmptyInput && !is_array($acceptInput)) {
+        echo $message . PHP_EOL;
         $input = trim(fgets(STDIN));
     } else {
         while (empty($input)) {
