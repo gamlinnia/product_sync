@@ -129,13 +129,18 @@ function main() {
                 $attr = Mage::getModel('eav/entity_attribute')->load(
                     $_attr->getId()
                 );
+                $options = getAttributeOptions('attributeId', $attr->getId());
                 Zend_Debug::dump(array(
-                    $attr->getData('attribute_code'),
-                    $attr->getData('frontend_label'),
-                    $attr->getData('frontend_input')
+                    'id' => $attr->getId(),
+                    'attribute_code' => $attr->getData('attribute_code'),
+                    'frontend_label' => $attr->getData('frontend_label'),
+                    'frontend_input' => $attr->getData('frontend_input'),
+                    'options' => isset($options['options']) ? $options['options'] : ''
                 ));
             }
             echo 'similar attr count: ' . $attr_collection->count() . PHP_EOL;
+
+
 
 //            $new_attr_label = promptMessageForInput('enter new attr label to create');
 //            $new_attr_id = createNewAttribute($new_attr_label);

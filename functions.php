@@ -2208,14 +2208,6 @@ function attributeSetNameAndId ($nameOrId, $value) {
     return null;
 }
 
-function attributeNameAndId () {
-
-}
-
-function getAttributeByName () {
-
-}
-
 function getAttributeOptions ($nameOrId, $value) {
     /*$nameOrId = 'attributeName' or 'attributeId'*/
     switch ($nameOrId) {
