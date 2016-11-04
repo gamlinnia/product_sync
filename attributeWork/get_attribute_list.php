@@ -129,12 +129,12 @@ function main() {
                 $attr = Mage::getModel('eav/entity_attribute')->load(
                     $_attr->getId()
                 );
-                Zend_Debug::dump($attr->getData());
+                Zend_Debug::dump($attr->getData('frontend_label'));
             }
             echo 'similar attr count: ' . $attr_collection->count() . PHP_EOL;
 
-            $new_attr_label = promptMessageForInput('enter new attr label to create');
-            $new_attr_id = createNewAttribute($new_attr_label);
+//            $new_attr_label = promptMessageForInput('enter new attr label to create');
+//            $new_attr_id = createNewAttribute($new_attr_label);
 
             break;
     }
