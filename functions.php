@@ -2275,11 +2275,15 @@ function getAttributeOptions ($nameOrId, $value) {
 }
 
 function setAttributeOptions ($attr_id, $optionsArray) {
+    $tmpArray = array();
+    foreach ($optionsArray as $index => $option) {
+        $tmpArray['option' . $index][0] = $option;
+    }
     try {
         $setup = new Mage_Eav_Model_Entity_Setup('core_setup');
         $setup->addAttributeOption(array(
             'attribute_id' => $attr_id,
-            'value' => $optionsArray
+            'value' => $tmpArray
         ));
     } catch (Exception $e) {
         echo $e->getMessage() . PHP_EOL;
