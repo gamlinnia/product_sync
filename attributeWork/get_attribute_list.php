@@ -134,8 +134,8 @@ function main() {
                 $options = getAttributeOptions('attributeId', $attr->getId());
                 if (isset($options['options'])) {
                     foreach ($options['options'] as $option) {
-                        if (!in_array($option['label'], $optionList)) {
-                            $optionList[] = $option['label'];
+                        if (!in_array(ucwords($option['label']), $optionList)) {
+                            $optionList[] = ucwords($option['label']);
                         }
                     }
                 }
