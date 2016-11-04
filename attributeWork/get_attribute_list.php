@@ -133,7 +133,9 @@ function main() {
                 );
                 $options = getAttributeOptions('attributeId', $attr->getId());
                 if (isset($options['options'])) {
-                    $optionList[] = $options['options'];
+                    foreach ($options['options'] as $option) {
+                        $optionList[] = $option;
+                    }
                 }
 
                 Zend_Debug::dump(array(
