@@ -2276,8 +2276,8 @@ function getAttributeOptions ($nameOrId, $value) {
 
 function setAttributeOptions ($attr_id, $optionsArray) {
     try {
-        $model = Mage::getModel('eav/entity_setup','core_setup');
-        $model->addAttributeOption(array(
+        $setup = new Mage_Eav_Model_Entity_Setup('core_setup');
+        $setup->addAttributeOption(array(
             'attribute_id' => $attr_id,
             'value' => $optionsArray
         ));
