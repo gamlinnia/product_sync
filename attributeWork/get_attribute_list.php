@@ -157,10 +157,12 @@ function main() {
             $frontend_input = promptMessageForInput('enter frontend_input type to create', array(
                 'multiselect', 'boolean', 'select', 'text', 'textarea'
             ));
-            $new_attr_id = createNewAttribute($new_attr_label, $frontend_input);
+//            $new_attr_id = createNewAttribute($new_attr_label, $frontend_input);
+//            echo 'label: ' . $new_attr_label . ' created, id: ' . $new_attr_id . PHP_EOL;
 
             echo 'option list: ' . implode(' / ', $optionList) . ' count: ' . count($optionList) . PHP_EOL . PHP_EOL;
 
+//            setAttributeOptions($new_attr_id, $optionList)
 
             break;
     }

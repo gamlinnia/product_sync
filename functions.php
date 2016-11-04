@@ -2268,6 +2268,7 @@ function setAttributeOptions ($attr_id, $optionsArray) {
         echo 'error in setAttributeOptions' . PHP_EOL;
         exit(0);
     }
+    return true;
 }
 
 function setAttributeValueToOptions ($product, $nameOrId, $attrCodeOrId, $valueToBeMapped, $debug) {
