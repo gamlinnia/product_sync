@@ -2102,8 +2102,11 @@ function getCookieFromAws($channel, $channel_sku, $product_url){
 
 function createNewAttribute ($label, $frontend_input) {
 
+    $new_attribute_code = preg_replace('/[^\w.]/', '_', trim(strtolower($label)) );
+
     $collection = Mage::getModel('eav/entity_attribute')->getCollection()
         ->addFieldToFilter('frontend_label', $label)
+        ->addFieldToFilter('attribute_code', $new_attribute_code)
         ->addFieldToFilter('frontend_input', $frontend_input);
     if ($collection->count() > 0) {
         return $collection->getFirstItem()->getId();
@@ -2125,7 +2128,7 @@ function createNewAttribute ($label, $frontend_input) {
 
     $attr_params = array(
         'entity_type_id' => 4,
-        'attribute_code' => preg_replace('/[^\w.]/', '_', trim(strtolower($label)) ),
+        'attribute_code' => $new_attribute_code,
         'backend_type' => $backend_type[$frontend_input],
         'frontend_input' =>  $frontend_input,
         'frontend_label' => $label,
