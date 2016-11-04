@@ -2160,15 +2160,13 @@ function compareAttributeOptionArray ($oldAttributeOptions, $optionList) {
     foreach ($oldAttributeOptions as $old) {
         $oldOptions[] = ucwords(trim($old['label']));
     }
-    var_dump($oldOptions);
-    var_dump($optionList);
     foreach ($optionList as $new_opt) {
         $tmp = ucwords(trim($new_opt));
         if (!in_array($tmp, $oldOptions)) {
             $response[] = $tmp;
         }
     }
-    var_dump($response);
+    return $response;
 }
 
 function moveAttributeToGroupInAttributeSet ($attributeCode, $attributeSetName, $groupName, $removeFirst = false) {

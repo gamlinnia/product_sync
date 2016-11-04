@@ -60,7 +60,7 @@ function getAttributeList() {
         }
 
         $attr_collection = Mage::getModel('eav/entity_attribute')->getCollection()
-        ->addFieldToFilter('frontend_label', $label);
+            ->addFieldToFilter('frontend_label', $label);
 
         $result[] = array(
             'name' => $attribute_name,
@@ -165,16 +165,18 @@ function main() {
                 exit(0);
             }
             echo 'label: ' . $new_attr_label . ' created, id: ' . $new_attr_id . PHP_EOL;
-
             echo 'option list: ' . implode(' / ', $optionList) . ' count: ' . count($optionList) . PHP_EOL . PHP_EOL;
 
             $oldAttributeOptions = getAttributeOptions('attributeId', $new_attr_id);
-            var_dump($oldAttributeOptions);
+            Zend_Debug::dump($oldAttributeOptions);
 
             $toAddArray = compareAttributeOptionArray($oldAttributeOptions['options'], $optionList);
-//            echo 'option list: ' . implode(' / ', $oldAttributeOptions) . ' count: ' . count($oldAttributeOptions) . PHP_EOL . PHP_EOL;
+            echo 'to be added option list: ' . implode(' / ', $toAddArray) . ' count: ' . count($toAddArray) . PHP_EOL . PHP_EOL;
 
-//            setAttributeOptions($new_attr_id, $optionList);
+            $prompt = strtolower(promptMessageForInput('enter Y to set options: ' . implode(' / ', $toAddArray) ));
+            if ($prompt == 'y'|| $prompt == 'yes') {
+                setAttributeOptions($new_attr_id, $toAddArray);
+            }
 
             break;
     }
