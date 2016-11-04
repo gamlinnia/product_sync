@@ -2156,11 +2156,19 @@ function getAttributeSetCollection () {
 
 function compareAttributeOptionArray ($oldAttributeOptions, $optionList) {
     $oldOptions = array();
+    $response = array();
     foreach ($oldAttributeOptions as $old) {
         $oldOptions[] = ucwords(trim($old['label']));
     }
     var_dump($oldOptions);
     var_dump($optionList);
+    foreach ($optionList as $new_opt) {
+        $tmp = ucwords(trim($new_opt));
+        if (!in_array($tmp, $oldOptions)) {
+            $response[] = $tmp;
+        }
+    }
+    var_dump($response);
 }
 
 function moveAttributeToGroupInAttributeSet ($attributeCode, $attributeSetName, $groupName, $removeFirst = false) {
