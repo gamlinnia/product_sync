@@ -173,7 +173,7 @@ function promptMessageForInput ($message, $acceptInput = null) {
 
     while (empty($input)) {
         if (is_array($acceptInput) && count($acceptInput) > 0) {
-            echo $message . ' accept input: ' . implode('/', $acceptInput)  . PHP_EOL;
+            echo $message . ' accept input: [' . implode('/', $acceptInput) . ']' . PHP_EOL;
             while (!in_array($input, $acceptInput)) {
                 $input = trim(fgets(STDIN));
             }
