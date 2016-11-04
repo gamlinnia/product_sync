@@ -134,7 +134,9 @@ function main() {
                 $options = getAttributeOptions('attributeId', $attr->getId());
                 if (isset($options['options'])) {
                     foreach ($options['options'] as $option) {
-                        $optionList[] = $option['label'];
+                        if (!in_array($option['label'], $optionList)) {
+                            $optionList[] = $option['label'];
+                        }
                     }
                 }
 
