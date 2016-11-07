@@ -120,7 +120,12 @@ function main() {
         case '4' :
             $keyword_to_search = promptMessageForInput('enter keyword to search for related attributes');
             $attr_collection = getAttributeCollection();
-            $attr_collection->addFieldToFilter('frontend_label', array('like' => '%' . $keyword_to_search . '%'));
+            $attr_collection->addFieldToFilter('frontend_label', array(
+                array(
+                    'like' => '%' . $keyword_to_search . '%',
+                    'neq' => $keyword_to_search
+                )
+            ));
             if ($attr_collection->count() < 1) {
                 echo 'found no attributes' . PHP_EOL;
                 return;
