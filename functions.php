@@ -2102,7 +2102,7 @@ function getCookieFromAws($channel, $channel_sku, $product_url){
 
 function createNewAttribute ($label, $frontend_input) {
 
-    $new_attribute_code = preg_replace('/[^\w.]/', '_', trim(strtolower($label)) );
+    $new_attribute_code = generateAttributeCodeByLabel($label);
 
     $collection = Mage::getModel('eav/entity_attribute')->getCollection()
         ->addFieldToFilter('frontend_label', $label)
@@ -2385,6 +2385,10 @@ function getAttributeValueFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMappe
             return '******** no mapping value ********';
     }
     return null;
+}
+
+function generateAttributeCodeByLabel ($attr_label) {
+    return preg_replace('/[^\w.]/', '_', trim(strtolower($attr_label)) );
 }
 
 function classifyProductAttributes ($productInfo) {
