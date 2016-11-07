@@ -185,14 +185,17 @@ function main() {
             $new_attribute_code = $new_attr->getAttributeCode();
             $productCollection = Mage::getModel('catalog/product')->getCollection();
             foreach ($attr_collection as $_attr) {
+                $frontend_input = $_attr->getData('frontend_input');
                 foreach ($productCollection as $_product) {
                     $product = Mage::getModel('catalog/product')->load(
                         $_product->getId()
                     );
                     $old_attr_value = $product->getData($_attr->getData('attribute_code'));
                     if (!empty($old_attr_value)) {
-                        Zend_Debug::dump($product->getData());
-                        die();
+                        Zend_Debug::dump(array(
+                            'old attribute code' => $old_attr_value,
+                            'old attribute value' => $product->getData($old_attr_value)
+                        ));
                     }
                 }
             }
