@@ -2106,8 +2106,7 @@ function createNewAttribute ($label, $frontend_input) {
 
     $collection = Mage::getModel('eav/entity_attribute')->getCollection()
         ->addFieldToFilter('frontend_label', $label)
-        ->addFieldToFilter('attribute_code', $new_attribute_code)
-        ->addFieldToFilter('frontend_input', $frontend_input);
+        ->addFieldToFilter('attribute_code', $new_attribute_code);
     if ($collection->count() > 0) {
         return $collection->getFirstItem()->getId();
     }

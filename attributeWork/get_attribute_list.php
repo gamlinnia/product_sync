@@ -217,6 +217,7 @@ function main() {
                         die();
                     }
                 }
+                /* each attr loop for product done  */
             }
 
             break;
