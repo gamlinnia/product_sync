@@ -193,8 +193,10 @@ function main() {
                     $old_attr_value = $product->getData($_attr->getData('attribute_code'));
                     if (!empty($old_attr_value)) {
                         Zend_Debug::dump(array(
-                            'old attribute code' => $old_attr_value,
-                            'old attribute value' => $product->getData($old_attr_value)
+                            'sku' => $product->getSku(),
+                            'attribute_set_id' => $product->getAttributeSetId(),
+                            'old attribute code' => $_attr->getData('attribute_code'),
+                            'old attribute value' => $old_attr_value
                         ));
                     }
                 }
