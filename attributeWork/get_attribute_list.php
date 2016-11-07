@@ -164,6 +164,7 @@ function main() {
                 echo 'no new attr id returned' . PHP_EOL;
                 exit(0);
             }
+            $new_attr = Mage::getModel('eav/entity_attribute')->load($new_attr_id);
             echo 'label: ' . $new_attr_label . ' created, id: ' . $new_attr_id . PHP_EOL;
             echo 'option list: ' . implode(' / ', $optionList) . ' count: ' . count($optionList) . PHP_EOL . PHP_EOL;
 
@@ -173,9 +174,24 @@ function main() {
             $toAddArray = compareAttributeOptionArray($oldAttributeOptions['options'], $optionList);
             echo 'to be added option list: ' . implode(' / ', $toAddArray) . ' count: ' . count($toAddArray) . PHP_EOL . PHP_EOL;
 
-            $prompt = strtolower(promptMessageForInput('enter Y to set options: ' . implode(' / ', $toAddArray) ));
-            if ($prompt == 'y'|| $prompt == 'yes') {
-                setAttributeOptions($new_attr_id, $toAddArray);
+            if (count($toAddArray) > 0) {
+                $prompt = strtolower(promptMessageForInput('enter Y to set options: ' . implode(' / ', $toAddArray) ));
+                if ($prompt == 'y'|| $prompt == 'yes') {
+                    setAttributeOptions($new_attr_id, $toAddArray);
+                }
+            }
+
+            $new_attribute_code = $new_attr->getAttributeCode();
+            $productCollection = Mage::getModel('catalog/product')->getCollection();
+            foreach ($productCollection as $_product) {
+                $product = Mage::getModel('catalog/product')->load(
+                    $_product->getId()
+                );
+                $old_attr_value = $product->getData($new_attribute_code);
+                if (!empty($old_attr_value)) {
+                    Zend_Debug::dump($product->getData());
+                    die();
+                }
             }
 
             break;
