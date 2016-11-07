@@ -196,8 +196,25 @@ function main() {
                             'sku' => $product->getSku(),
                             'attribute_set_id' => $product->getAttributeSetId(),
                             'old attribute code' => $_attr->getData('attribute_code'),
-                            'old attribute value' => $old_attr_value
+                            'old attribute value' => $old_attr_value,
+                            'frontend_input' => $frontend_input
                         ));
+                        if (checkAttributeInProductAttributeSet($new_attribute_code, $product)) {
+                            echo 'new attribute exists in product' . PHP_EOL;
+                            /*                            $product->setData($new_attribute_code)
+                                                            ->save();*/
+                        } else {
+                            echo 'new attribute NOT exist in product' . PHP_EOL;
+                            $attribute_set_name = Mage::getModel('eav/entity_attribute_set')->load($product->getAttributeSetId())->getAttributeSetName();
+                            echo 'attribute set name = ' . $attribute_set_name . PHP_EOL;
+/*                            moveAttributeToGroupInAttributeSet(
+                                $new_attribute_code,
+                                $attribute_set_name,
+                                $groupName = $attribute_set_name
+                            );*/
+                        }
+
+                        die();
                     }
                 }
             }

@@ -2169,6 +2169,15 @@ function compareAttributeOptionArray ($oldAttributeOptions, $optionList) {
     return $response;
 }
 
+function checkAttributeInProductAttributeSet ($attributeCode, $product) {
+    $attributes = Mage::getModel('eav/config')->getEntityAttributeCodes(
+        Mage_Catalog_Model_Product::ENTITY,
+        $product
+    );
+
+    return in_array($attributeCode, $attributes);
+}
+
 function moveAttributeToGroupInAttributeSet ($attributeCode, $attributeSetName, $groupName, $removeFirst = false) {
     /* $groupName = attribute set 裡面的資料夾 */
     try {
