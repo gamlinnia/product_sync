@@ -184,14 +184,16 @@ function main() {
 
             $new_attribute_code = $new_attr->getAttributeCode();
             $productCollection = Mage::getModel('catalog/product')->getCollection();
-            foreach ($productCollection as $_product) {
-                $product = Mage::getModel('catalog/product')->load(
-                    $_product->getId()
-                );
-                $old_attr_value = $product->getData($new_attribute_code);
-                if (!empty($old_attr_value)) {
-                    Zend_Debug::dump($product->getData());
-                    die();
+            foreach ($attr_collection as $_attr) {
+                foreach ($productCollection as $_product) {
+                    $product = Mage::getModel('catalog/product')->load(
+                        $_product->getId()
+                    );
+                    $old_attr_value = $product->getData($_attr->getData('attribute_code'));
+                    if (!empty($old_attr_value)) {
+                        Zend_Debug::dump($product->getData());
+                        die();
+                    }
                 }
             }
 
