@@ -218,10 +218,12 @@ function main() {
                                 exit(0);
                             }
 
-                            setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
+                            if ( empty($product->getData($new_attribute_code)) ) {
+                                setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
+                            }
                         }
 
-                        die();
+//                        die();
                     }
                 }
                 /* each attr loop for product done  */
