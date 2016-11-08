@@ -2983,10 +2983,12 @@ function setProductValue ($product, $attribute_code, $frontend_input, $value_to_
             $optionsArray = $value_to_be_mapped;
         }
 
-        promptMessageForInput('sure to add new option?' . join(', ', $optionsArray), array('y', 'n'));
+        $prompt = promptMessageForInput('sure to add new option?' . join(', ', $optionsArray), array('y', 'n'));
 
-        setAttributeOptions($attr_id, $optionsArray);
-        $value = getAttributeValueIdFromOptions('attributeName', $attribute_code, $value_to_be_mapped);
+        if ($prompt == 'y') {
+            setAttributeOptions($attr_id, $optionsArray);
+            $value = getAttributeValueIdFromOptions('attributeName', $attribute_code, $value_to_be_mapped);
+        }
     }
 
     Zend_Debug::dump(array(
