@@ -140,11 +140,14 @@ function parseBackClassifiedProductAttributes ($parsedClassifiedProductInfo) {
 function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMapped) {
     /*$nameOrId = 'attributeName' or 'attributeId'*/
     $optionsArray = getAttributeOptions($nameOrId, $attrCodeOrId);
+
+    Zend_Debug::dump($optionsArray);
+
     switch ($optionsArray['frontend_input']) {
         case 'select' :
         case 'boolean' :
             foreach ($optionsArray['options'] as $optionObject) {
-                if ($optionObject['label'] == $valueToBeMapped) {
+                if (strtolower($optionObject['label']) == strtolower($valueToBeMapped)) {
                     return $optionObject['value'];
                 }
             }
@@ -159,14 +162,21 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
                 $valueToBeMappedArray = $valueToBeMapped;
             }
 
+            Zend_Debug::dump($valueToBeMappedArray);
+
             $mappedArray = array();
             foreach ($optionsArray['options'] as $optionObject) {
-                file_put_contents('multiselect.txt', 'check ' . $optionObject['label'] . 'with array ' . json_encode($valueToBeMappedArray) . PHP_EOL, FILE_APPEND);
-                if (in_array($optionObject['label'], $valueToBeMappedArray)) {
-                    file_put_contents('multiselect.txt', 'mapped value' . ': ' . $optionObject['label'] . PHP_EOL, FILE_APPEND);
+                $pregResponse = preg_grep( '/' . $optionObject['label'] . '/i' , $valueToBeMappedArray ) ;
+
+                if (count($pregResponse) > 0) {
                     $mappedArray[] = $optionObject['value'];
                 }
             }
+
+            if (count($mappedArray) < 1) {
+                return null;
+            }
+
             return join(',', $mappedArray);
             break;
         case 'text' :
@@ -2106,8 +2116,7 @@ function createNewAttribute ($label, $frontend_input) {
 
     $collection = Mage::getModel('eav/entity_attribute')->getCollection()
         ->addFieldToFilter('frontend_label', $label)
-        ->addFieldToFilter('attribute_code', $new_attribute_code)
-        ->addFieldToFilter('frontend_input', $frontend_input);
+        ->addFieldToFilter('attribute_code', $new_attribute_code);
     if ($collection->count() > 0) {
         return $collection->getFirstItem()->getId();
     }
@@ -2167,6 +2176,15 @@ function compareAttributeOptionArray ($oldAttributeOptions, $optionList) {
         }
     }
     return $response;
+}
+
+function checkAttributeInProductAttributeSet ($attributeCode, $product) {
+    $attributes = Mage::getModel('eav/config')->getEntityAttributeCodes(
+        Mage_Catalog_Model_Product::ENTITY,
+        $product
+    );
+
+    return in_array($attributeCode, $attributes);
 }
 
 function moveAttributeToGroupInAttributeSet ($attributeCode, $attributeSetName, $groupName, $removeFirst = false) {
@@ -2252,7 +2270,7 @@ function getAttributeOptions ($nameOrId, $value) {
     }
 
     if (isset($attributeCode)) {
-        $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', $attributeCode);
+        $attribute = Mage::getModel('eav/config')->getAttribute('catalog_product', $attributeCode);
         $attributeData = $attribute->getData();
         $rs = array(
             'attributeCode' => $attributeCode,
@@ -2949,4 +2967,67 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
         $productModel->save();
     }
 
+}
+
+
+function setProductValue ($product, $attribute_code, $frontend_input, $value_to_be_mapped) {
+    echo 'set product ' . $product->getSku() . ' with attribute code: ' . $attribute_code . ' with value: ' . $value_to_be_mapped . ' input type = ' . $frontend_input . PHP_EOL;
+
+    $value = getAttributeValueIdFromOptions('attributeName', $attribute_code, $value_to_be_mapped);
+    if (empty($value)) {
+        $attr_id = Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $attribute_code);
+
+        if (!is_array($value_to_be_mapped)) {
+            $optionsArray = explode(',', $value_to_be_mapped);
+        } else {
+            $optionsArray = $value_to_be_mapped;
+        }
+
+        $prompt = promptMessageForInput('sure to add new option: ' . join(', ', $optionsArray), array('y', 'n'));
+        if ($prompt == 'y') {
+            setAttributeOptions($attr_id, $optionsArray);
+            $value = getAttributeValueIdFromOptions('attributeName', $attribute_code, $value_to_be_mapped);
+        }
+    }
+
+    Zend_Debug::dump(array(
+        'to be mapped value' => $value_to_be_mapped,
+        'mapped' => $value
+    ));
+
+    $prompt = promptMessageForInput('sure to save new value');
+    if ($prompt == 'y') {
+        try {
+        $product->setData($attribute_code, $value)
+            ->save();
+        } catch (Exception $e) {
+            echo 'setProductValue save exception' . PHP_EOL;
+            exit(0);
+        }
+    }
+
+    return true;
+}
+
+function promptMessageForInput ($message, $acceptInput = null, $acceptEmptyInput = false) {
+    $input = '';
+
+    if ($acceptEmptyInput && !is_array($acceptInput)) {
+        echo $message . PHP_EOL;
+        $input = trim(fgets(STDIN));
+    } else {
+        while (empty($input)) {
+            if (is_array($acceptInput) && count($acceptInput) > 0) {
+                echo $message . ' accept input: [ ' . implode(' / ', $acceptInput) . ' ]' . PHP_EOL;
+                while (!in_array($input, $acceptInput)) {
+                    $input = trim(fgets(STDIN));
+                }
+            } else {
+                echo $message . PHP_EOL;
+                $input = trim(fgets(STDIN));
+            }
+        }
+    }
+
+    return $input;
 }

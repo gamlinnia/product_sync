@@ -157,10 +157,10 @@ function main() {
                 echo 'empty input, $new_attr_label: ' . $new_attr_label . PHP_EOL;
             }
 
-            $frontend_input = promptMessageForInput('enter frontend_input type to create', array(
+            $new_frontend_input = promptMessageForInput('enter frontend_input type to create', array(
                 'multiselect', 'boolean', 'select', 'text', 'textarea'
             ));
-            $new_attr_id = createNewAttribute($new_attr_label, $frontend_input);
+            $new_attr_id = createNewAttribute($new_attr_label, $new_frontend_input);
             if (!$new_attr_id) {
                 echo 'no new attr id returned' . PHP_EOL;
                 exit(0);
@@ -190,14 +190,41 @@ function main() {
                     $product = Mage::getModel('catalog/product')->load(
                         $_product->getId()
                     );
-                    $old_attr_value = $product->getData($_attr->getData('attribute_code'));
+                    $old_attr_value = getAttributeValueIdFromOptions(
+                        'attributeName',
+                        $_attr->getData('attribute_code'),
+                        $product->getData($_attr->getData('attribute_code'))
+                    );
                     if (!empty($old_attr_value)) {
                         Zend_Debug::dump(array(
-                            'old attribute code' => $old_attr_value,
-                            'old attribute value' => $product->getData($old_attr_value)
+                            'sku' => $product->getSku(),
+                            'attribute_set_id' => $product->getAttributeSetId(),
+                            'old attribute code' => $_attr->getData('attribute_code'),
+                            'old attribute value' => $old_attr_value,
+                            'frontend_input' => $frontend_input
                         ));
+                        if (checkAttributeInProductAttributeSet($new_attribute_code, $product)) {
+                            echo 'new attribute exists in product' . PHP_EOL;
+                            setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
+                        } else {
+                            echo 'new attribute NOT exist in product' . PHP_EOL;
+                            $attribute_set_name = Mage::getModel('eav/entity_attribute_set')->load($product->getAttributeSetId())->getAttributeSetName();
+                            echo 'attribute set name = ' . $attribute_set_name . PHP_EOL;
+                            if (!moveAttributeToGroupInAttributeSet(
+                                $new_attribute_code,
+                                $attribute_set_name,
+                                $groupName = $attribute_set_name
+                            )) {
+                                exit(0);
+                            }
+
+                            setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
+                        }
+
+                        die();
                     }
                 }
+                /* each attr loop for product done  */
             }
 
             break;
@@ -206,26 +233,3 @@ function main() {
 }
 
 main();
-
-function promptMessageForInput ($message, $acceptInput = null, $acceptEmptyInput = false) {
-    $input = '';
-
-    if ($acceptEmptyInput && !is_array($acceptInput)) {
-        echo $message . PHP_EOL;
-        $input = trim(fgets(STDIN));
-    } else {
-        while (empty($input)) {
-            if (is_array($acceptInput) && count($acceptInput) > 0) {
-                echo $message . ' accept input: [ ' . implode(' / ', $acceptInput) . ' ]' . PHP_EOL;
-                while (!in_array($input, $acceptInput)) {
-                    $input = trim(fgets(STDIN));
-                }
-            } else {
-                echo $message . PHP_EOL;
-                $input = trim(fgets(STDIN));
-            }
-        }
-    }
-
-    return $input;
-}
