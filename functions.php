@@ -2974,9 +2974,46 @@ function setProductValue ($product, $attribute_code, $frontend_input, $value_to_
     echo 'set product ' . $product->getSku() . ' with attribute code: ' . $attribute_code . ' with value: ' . $value_to_be_mapped . ' input type = ' . $frontend_input . PHP_EOL;
 
     $value = getAttributeValueIdFromOptions('attributeName', $attribute_code, $value_to_be_mapped);
+    if (empty($value)) {
+        $attr_id = Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $attribute_code);
+
+        if (!is_array($value_to_be_mapped)) {
+            $optionsArray = explode(',', $value_to_be_mapped);
+        } else {
+            $optionsArray = $value_to_be_mapped;
+        }
+
+        promptMessageForInput('sure to add new option?' . join(', ', $optionsArray), array('y', 'n'));
+
+        setAttributeOptions($attr_id, $optionsArray);
+        $value = getAttributeValueIdFromOptions('attributeName', $attribute_code, $value_to_be_mapped);
+    }
 
     Zend_Debug::dump(array(
         'to be mapped value' => $value_to_be_mapped,
         'mapped' => $value
     ));
+}
+
+function promptMessageForInput ($message, $acceptInput = null, $acceptEmptyInput = false) {
+    $input = '';
+
+    if ($acceptEmptyInput && !is_array($acceptInput)) {
+        echo $message . PHP_EOL;
+        $input = trim(fgets(STDIN));
+    } else {
+        while (empty($input)) {
+            if (is_array($acceptInput) && count($acceptInput) > 0) {
+                echo $message . ' accept input: [ ' . implode(' / ', $acceptInput) . ' ]' . PHP_EOL;
+                while (!in_array($input, $acceptInput)) {
+                    $input = trim(fgets(STDIN));
+                }
+            } else {
+                echo $message . PHP_EOL;
+                $input = trim(fgets(STDIN));
+            }
+        }
+    }
+
+    return $input;
 }

@@ -233,26 +233,3 @@ function main() {
 }
 
 main();
-
-function promptMessageForInput ($message, $acceptInput = null, $acceptEmptyInput = false) {
-    $input = '';
-
-    if ($acceptEmptyInput && !is_array($acceptInput)) {
-        echo $message . PHP_EOL;
-        $input = trim(fgets(STDIN));
-    } else {
-        while (empty($input)) {
-            if (is_array($acceptInput) && count($acceptInput) > 0) {
-                echo $message . ' accept input: [ ' . implode(' / ', $acceptInput) . ' ]' . PHP_EOL;
-                while (!in_array($input, $acceptInput)) {
-                    $input = trim(fgets(STDIN));
-                }
-            } else {
-                echo $message . PHP_EOL;
-                $input = trim(fgets(STDIN));
-            }
-        }
-    }
-
-    return $input;
-}
