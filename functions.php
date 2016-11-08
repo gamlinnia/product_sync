@@ -144,7 +144,7 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
         case 'select' :
         case 'boolean' :
             foreach ($optionsArray['options'] as $optionObject) {
-                if ($optionObject['label'] == $valueToBeMapped) {
+                if (strtolower($optionObject['label']) == strtolower($valueToBeMapped)) {
                     return $optionObject['value'];
                 }
             }
@@ -161,9 +161,9 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
 
             $mappedArray = array();
             foreach ($optionsArray['options'] as $optionObject) {
-                file_put_contents('multiselect.txt', 'check ' . $optionObject['label'] . 'with array ' . json_encode($valueToBeMappedArray) . PHP_EOL, FILE_APPEND);
-                if (in_array($optionObject['label'], $valueToBeMappedArray)) {
-                    file_put_contents('multiselect.txt', 'mapped value' . ': ' . $optionObject['label'] . PHP_EOL, FILE_APPEND);
+                 $pregResponse = preg_grep( '/' . $optionObject['label'] . '/i' , $valueToBeMappedArray ) ;
+
+                if (count($pregResponse) > 0) {
                     $mappedArray[] = $optionObject['value'];
                 }
             }
@@ -2957,4 +2957,19 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
         $productModel->save();
     }
 
+}
+
+
+function setProductValue ($product, $attribute_code, $frontend_input, $value_to_be_mapped) {
+    echo 'set product ' . $product->getSku() . ' with attribute code: ' . $attribute_code . ' with value: ' . $value_to_be_mapped . ' input type = ' . $frontend_input . PHP_EOL;
+    switch ($value_to_be_mapped) {
+        case 'multiselect' :
+            $value = getAttributeValueIdFromOptions('attributeName', $attribute_code, $value_to_be_mapped);
+            break;
+    }
+
+    Zend_Debug::dump(array(
+       'to be mapped value' => $value_to_be_mapped,
+        'mapped' => $value
+    ));
 }

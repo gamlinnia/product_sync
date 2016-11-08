@@ -157,10 +157,10 @@ function main() {
                 echo 'empty input, $new_attr_label: ' . $new_attr_label . PHP_EOL;
             }
 
-            $frontend_input = promptMessageForInput('enter frontend_input type to create', array(
+            $new_frontend_input = promptMessageForInput('enter frontend_input type to create', array(
                 'multiselect', 'boolean', 'select', 'text', 'textarea'
             ));
-            $new_attr_id = createNewAttribute($new_attr_label, $frontend_input);
+            $new_attr_id = createNewAttribute($new_attr_label, $new_frontend_input);
             if (!$new_attr_id) {
                 echo 'no new attr id returned' . PHP_EOL;
                 exit(0);
@@ -201,17 +201,20 @@ function main() {
                         ));
                         if (checkAttributeInProductAttributeSet($new_attribute_code, $product)) {
                             echo 'new attribute exists in product' . PHP_EOL;
-                            /*                            $product->setData($new_attribute_code)
-                                                            ->save();*/
+                            setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
                         } else {
                             echo 'new attribute NOT exist in product' . PHP_EOL;
                             $attribute_set_name = Mage::getModel('eav/entity_attribute_set')->load($product->getAttributeSetId())->getAttributeSetName();
                             echo 'attribute set name = ' . $attribute_set_name . PHP_EOL;
-/*                            moveAttributeToGroupInAttributeSet(
+                            if (!moveAttributeToGroupInAttributeSet(
                                 $new_attribute_code,
                                 $attribute_set_name,
                                 $groupName = $attribute_set_name
-                            );*/
+                            )) {
+                                exit(0);
+                            }
+
+                            setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
                         }
 
                         die();
