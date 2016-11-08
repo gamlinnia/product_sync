@@ -2270,7 +2270,7 @@ function getAttributeOptions ($nameOrId, $value) {
     }
 
     if (isset($attributeCode)) {
-        $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', $attributeCode);
+        $attribute = Mage::getModel('eav/config')->getAttribute('catalog_product', $attributeCode);
         $attributeData = $attribute->getData();
         $rs = array(
             'attributeCode' => $attributeCode,
