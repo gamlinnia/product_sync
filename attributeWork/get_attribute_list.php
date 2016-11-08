@@ -190,7 +190,11 @@ function main() {
                     $product = Mage::getModel('catalog/product')->load(
                         $_product->getId()
                     );
-                    $old_attr_value = $product->getData($_attr->getData('attribute_code'));
+                    $old_attr_value = getAttributeValueIdFromOptions(
+                        'attributeName',
+                        $_attr->getData('attribute_code'),
+                        $product->getData($_attr->getData('attribute_code'))
+                    );
                     if (!empty($old_attr_value)) {
                         Zend_Debug::dump(array(
                             'sku' => $product->getSku(),

@@ -140,6 +140,9 @@ function parseBackClassifiedProductAttributes ($parsedClassifiedProductInfo) {
 function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMapped) {
     /*$nameOrId = 'attributeName' or 'attributeId'*/
     $optionsArray = getAttributeOptions($nameOrId, $attrCodeOrId);
+
+    Zend_Debug::dump($optionsArray);
+
     switch ($optionsArray['frontend_input']) {
         case 'select' :
         case 'boolean' :
@@ -159,9 +162,11 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
                 $valueToBeMappedArray = $valueToBeMapped;
             }
 
+            Zend_Debug::dump($valueToBeMappedArray);
+
             $mappedArray = array();
             foreach ($optionsArray['options'] as $optionObject) {
-                 $pregResponse = preg_grep( '/' . $optionObject['label'] . '/i' , $valueToBeMappedArray ) ;
+                $pregResponse = preg_grep( '/' . $optionObject['label'] . '/i' , $valueToBeMappedArray ) ;
 
                 if (count($pregResponse) > 0) {
                     $mappedArray[] = $optionObject['value'];
@@ -2962,14 +2967,11 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
 
 function setProductValue ($product, $attribute_code, $frontend_input, $value_to_be_mapped) {
     echo 'set product ' . $product->getSku() . ' with attribute code: ' . $attribute_code . ' with value: ' . $value_to_be_mapped . ' input type = ' . $frontend_input . PHP_EOL;
-    switch ($value_to_be_mapped) {
-        case 'multiselect' :
-            $value = getAttributeValueIdFromOptions('attributeName', $attribute_code, $value_to_be_mapped);
-            break;
-    }
+
+    $value = getAttributeValueIdFromOptions('attributeName', $attribute_code, $value_to_be_mapped);
 
     Zend_Debug::dump(array(
-       'to be mapped value' => $value_to_be_mapped,
+        'to be mapped value' => $value_to_be_mapped,
         'mapped' => $value
     ));
 }
