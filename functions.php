@@ -2984,7 +2984,6 @@ function setProductValue ($product, $attribute_code, $frontend_input, $value_to_
         }
 
         $prompt = promptMessageForInput('sure to add new option: ' . join(', ', $optionsArray), array('y', 'n'));
-
         if ($prompt == 'y') {
             setAttributeOptions($attr_id, $optionsArray);
             $value = getAttributeValueIdFromOptions('attributeName', $attribute_code, $value_to_be_mapped);
@@ -2995,6 +2994,19 @@ function setProductValue ($product, $attribute_code, $frontend_input, $value_to_
         'to be mapped value' => $value_to_be_mapped,
         'mapped' => $value
     ));
+
+    $prompt = promptMessageForInput('sure to save new value');
+    if ($prompt == 'y') {
+        try {
+        $product->setData($attribute_code, $value)
+            ->save();
+        } catch (Exception $e) {
+            echo 'setProductValue save exception' . PHP_EOL;
+            exit(0);
+        }
+    }
+
+    return true;
 }
 
 function promptMessageForInput ($message, $acceptInput = null, $acceptEmptyInput = false) {
