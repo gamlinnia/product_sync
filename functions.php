@@ -172,6 +172,11 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
                     $mappedArray[] = $optionObject['value'];
                 }
             }
+
+            if (count($mappedArray) < 1) {
+                return null;
+            }
+
             return join(',', $mappedArray);
             break;
         case 'text' :
