@@ -2983,7 +2983,7 @@ function setProductValue ($product, $attribute_code, $frontend_input, $value_to_
             $optionsArray = $value_to_be_mapped;
         }
 
-        $prompt = promptMessageForInput('sure to add new option?' . join(', ', $optionsArray), array('y', 'n'));
+        $prompt = promptMessageForInput('sure to add new option: ' . join(', ', $optionsArray), array('y', 'n'));
 
         if ($prompt == 'y') {
             setAttributeOptions($attr_id, $optionsArray);
