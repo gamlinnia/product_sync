@@ -2993,6 +2993,7 @@ function setProductValue ($product, $attribute_code, $frontend_input, $value_to_
 
 //    $prompt = promptMessageForInput('sure to save new value');
 //    if ($prompt == 'y') {
+    echo 'saving product ...' . PHP_EOL;
     try {
         $product->setData($attribute_code, $value)
             ->save();
