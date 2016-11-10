@@ -224,8 +224,8 @@ function main() {
                         if ( empty($product->getData($new_attribute_code)) ) {
                             setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
                         }
-
                     }
+                    echo '-';
                 }
                 /* each attr loop for product done  */
                 $attrCount++;
