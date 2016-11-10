@@ -178,16 +178,13 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
             foreach ($valueToBeMappedArray as $eachToBeMapped) {
                 $pregResponse = preg_grep( '/^' . $eachToBeMapped . '$/i' ,  $newOptions) ;
 
-                if (count($pregResponse) > 0) {
-                    foreach ($pregResponse as $value => $label) {
-                        $mappedArray[] = $value;
-                    }
+                if (count($pregResponse) < 1) {
+                    return null;
                 }
-            }
 
-
-            if (count($mappedArray) < 1) {
-                return null;
+                foreach ($pregResponse as $value => $label) {
+                    $mappedArray[] = $value;
+                }
             }
 
             return join(',', $mappedArray);
@@ -2306,6 +2303,16 @@ function getAttributeOptions ($nameOrId, $value) {
 }
 
 function setAttributeOptions ($attr_id, $optionsArray) {
+    /* check if $optionsArray exists */
+    $oldAttributeOptions = getAttributeOptions('attributeId', $attr_id);
+    $toAddArray = compareAttributeOptionArray($oldAttributeOptions['options'], $optionsArray);
+
+    var_dump($oldAttributeOptions);
+    var_dump($optionsArray);
+    var_dump($toAddArray);
+    die();
+
+
     $tmpArray = array();
     foreach ($optionsArray as $index => $option) {
         $tmpArray['option' . $index][0] = $option;
@@ -2986,20 +2993,21 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
 function setProductValue ($product, $attribute_code, $frontend_input, $value_to_be_mapped) {
     echo 'set product ' . $product->getSku() . ' with attribute code: ' . $attribute_code . ' with value: ' . $value_to_be_mapped . ' input type = ' . $frontend_input . PHP_EOL;
 
-    $value = getAttributeValueIdFromOptions('attributeName', $attribute_code, $value_to_be_mapped);
+    if (!is_array($value_to_be_mapped)) {
+        $dividers = array('\/', '&', ',');
+        $optionsArray = preg_split("/(" . join('|', $dividers) . ")/", $value_to_be_mapped);
+    } else {
+        $optionsArray = $value_to_be_mapped;
+    }
+
+    $value = getAttributeValueIdFromOptions('attributeName', $attribute_code, $optionsArray);
     if (empty($value)) {
         $attr_id = Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $attribute_code);
-
-        if (!is_array($value_to_be_mapped)) {
-            $optionsArray = explode(',', $value_to_be_mapped);
-        } else {
-            $optionsArray = $value_to_be_mapped;
-        }
 
         $prompt = promptMessageForInput('sure to add new option: ' . join(', ', $optionsArray), array('y', 'n'));
         if ($prompt == 'y') {
             setAttributeOptions($attr_id, $optionsArray);
-            $value = getAttributeValueIdFromOptions('attributeName', $attribute_code, $value_to_be_mapped);
+            $value = getAttributeValueIdFromOptions('attributeName', $attribute_code, $optionsArray);
         }
     }
 
