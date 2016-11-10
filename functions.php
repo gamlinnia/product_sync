@@ -138,6 +138,8 @@ function parseBackClassifiedProductAttributes ($parsedClassifiedProductInfo) {
 }
 
 function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMapped) {
+    echo 'processing getAttributeValueIdFromOptions: ' . $nameOrId . ' ' . $attrCodeOrId . ' value: ' . json_encode($valueToBeMapped) . PHP_EOL;
+
     /*$nameOrId = 'attributeName' or 'attributeId'*/
     $optionsArray = getAttributeOptions($nameOrId, $attrCodeOrId);
 

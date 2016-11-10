@@ -187,6 +187,11 @@ function main() {
 
             $attrCount = 0;
             foreach ($attr_collection as $_attr) {
+                $attrCount++;
+                if ($attrCount < 9) {
+                    continue;
+                }
+
                 $frontend_input = $_attr->getData('frontend_input');
                 foreach ($productCollection as $_product) {
                     $product = Mage::getModel('catalog/product')->load(
@@ -228,7 +233,6 @@ function main() {
                     echo '-';
                 }
                 /* each attr loop for product done  */
-                $attrCount++;
                 echo 'looped attr: ' . $_attr->getAttributeCode() . ' index: ' . $attrCount . PHP_EOL;
                 sleep(3);
             }
