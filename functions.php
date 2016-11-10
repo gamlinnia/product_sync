@@ -2307,14 +2307,8 @@ function setAttributeOptions ($attr_id, $optionsArray) {
     $oldAttributeOptions = getAttributeOptions('attributeId', $attr_id);
     $toAddArray = compareAttributeOptionArray($oldAttributeOptions['options'], $optionsArray);
 
-    var_dump($oldAttributeOptions);
-    var_dump($optionsArray);
-    var_dump($toAddArray);
-    die();
-
-
     $tmpArray = array();
-    foreach ($optionsArray as $index => $option) {
+    foreach ($toAddArray as $index => $option) {
         $tmpArray['option' . $index][0] = $option;
     }
     try {
