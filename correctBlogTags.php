@@ -21,11 +21,11 @@ foreach($collection as $each) {
     $cat = $model->getCatId();
     var_dump($model->getTitle());
     if(empty($cat)) {
-        echo "1. News / 2. Editorial Reviews / 3. Blogs" . PHP_EOL;
+        echo "1. News / 2. Editorial Reviews / 3. Blogs: ";
         $cat_id = trim(fgets(STDIN));
         $cat = array($cat_id);
     }
     $model->setTags($new_tags)
-        ->setCats($cat)
-        ->save();
+          ->setCats($cat)
+          ->save();
 }
