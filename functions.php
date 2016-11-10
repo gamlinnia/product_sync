@@ -178,14 +178,13 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
             foreach ($valueToBeMappedArray as $eachToBeMapped) {
                 $pregResponse = preg_grep( '/^' . $eachToBeMapped . '$/i' ,  $newOptions) ;
 
-                var_dump($pregResponse);
-
                 if (count($pregResponse) > 0) {
-                    $mappedArray[] = $eachToBeMapped;
+                    foreach ($pregResponse as $value => $label) {
+                        $mappedArray[] = $value;
+                    }
                 }
             }
 
-            die();
 
             if (count($mappedArray) < 1) {
                 return null;
