@@ -155,19 +155,37 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
                        "a02030_headsets_connector": "147,148,149,150"*/
 
             if (!is_array($valueToBeMapped)) {
-                $valueToBeMappedArray = explode(',', $valueToBeMapped);
+
+                $dividers = array('\/', '&', ',');
+                $valueToBeMappedArray = preg_split("/(" . join('|', $dividers) . ")/", $valueToBeMapped);
+
+                $function_to_map = array('tirm', 'ucwords');
+                foreach ($function_to_map as $function) {
+                    $valueToBeMappedArray = array_map($function, $valueToBeMappedArray);
+                }
+
+                echo '$valueToBeMappedArray: ' . json_encode($valueToBeMappedArray) . PHP_EOL . PHP_EOL;
             } else {
                 $valueToBeMappedArray = $valueToBeMapped;
             }
 
-            $mappedArray = array();
+            $newOptions = array();
             foreach ($optionsArray['options'] as $optionObject) {
-                $pregResponse = preg_grep( '/' . $optionObject['label'] . '/i' , $valueToBeMappedArray ) ;
+                $newOptions[] = $optionObject['label'];
+            }
+
+            $mappedArray = array();
+            foreach ($valueToBeMappedArray as $eachToBeMapped) {
+                $pregResponse = preg_grep( '/' . $eachToBeMapped . '/i' ,  $newOptions) ;
+
+                var_dump($pregResponse);
 
                 if (count($pregResponse) > 0) {
-                    $mappedArray[] = $optionObject['value'];
+                    $mappedArray[] = $eachToBeMapped;
                 }
             }
+
+            die();
 
             if (count($mappedArray) < 1) {
                 return null;
