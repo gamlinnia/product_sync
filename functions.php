@@ -3007,6 +3007,8 @@ function setProductValue ($product, $attribute_code, $frontend_input, $value_to_
         if ($prompt == 'y') {
             setAttributeOptions($attr_id, $optionsArray);
             $value = getAttributeValueIdFromOptions('attributeName', $attribute_code, $optionsArray);
+        } else {
+            return false;
         }
     }
 
