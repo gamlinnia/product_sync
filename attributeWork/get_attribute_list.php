@@ -222,13 +222,12 @@ function main() {
                         /* set old value to new attribute */
                         if ( empty($product->getData($new_attribute_code)) ) {
                             setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
-                            promptMessageForInput('wait...', null, true);
                         }
 
                     }
                 }
                 /* each attr loop for product done  */
-                echo 'looped attr' . $_attr->getAttributeCode() . PHP_EOL;
+                echo 'looped attr: ' . $_attr->getAttributeCode() . PHP_EOL;
 
                 sleep(3);
             }
