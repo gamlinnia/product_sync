@@ -162,8 +162,6 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
                 $valueToBeMappedArray = $valueToBeMapped;
             }
 
-            Zend_Debug::dump($valueToBeMappedArray);
-
             $mappedArray = array();
             foreach ($optionsArray['options'] as $optionObject) {
                 $pregResponse = preg_grep( '/' . $optionObject['label'] . '/i' , $valueToBeMappedArray ) ;
@@ -2995,16 +2993,16 @@ function setProductValue ($product, $attribute_code, $frontend_input, $value_to_
         'mapped' => $value
     ));
 
-    $prompt = promptMessageForInput('sure to save new value');
-    if ($prompt == 'y') {
-        try {
+//    $prompt = promptMessageForInput('sure to save new value');
+//    if ($prompt == 'y') {
+    try {
         $product->setData($attribute_code, $value)
             ->save();
-        } catch (Exception $e) {
-            echo 'setProductValue save exception' . PHP_EOL;
-            exit(0);
-        }
+    } catch (Exception $e) {
+        echo 'setProductValue save exception' . PHP_EOL;
+        exit(0);
     }
+//    }
 
     return true;
 }

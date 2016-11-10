@@ -222,11 +222,11 @@ function main() {
                                 setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
                             }
                         }
-
-//                        die();
                     }
                 }
                 /* each attr loop for product done  */
+                echo 'looped attr' . $_attr->attribute_code() . PHP_EOL;
+                sleep(3);
             }
 
             break;
