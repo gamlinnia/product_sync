@@ -25,7 +25,7 @@ foreach($collection as $each) {
         $cat_id = trim(fgets(STDIN));
         $cat = array($cat_id);
     }
-    $model->setTags($tags)
+    $model->setTags($new_tags)
         ->setCats($cat)
         ->save();
 }
