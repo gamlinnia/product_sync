@@ -2423,6 +2423,60 @@ function getAttributeValueFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMappe
     return null;
 }
 
+function getAttributeLabelFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMapped) {
+
+    /*$nameOrId = 'attributeName' or 'attributeId'*/
+    $optionsArray = getAttributeOptions($nameOrId, $attrCodeOrId);
+    if (!isset($optionsArray['frontend_input'])) {
+        return $valueToBeMapped;
+    }
+    switch ($optionsArray['frontend_input']) {
+        case 'select' :
+        case 'boolean' :
+            foreach ($optionsArray['options'] as $optionObject) {
+                if ((int)$optionObject['value'] == (int)$valueToBeMapped) {
+                    return $optionObject['label'];
+                }
+            }
+            break;
+        case 'multiselect' :
+            /*multiselect : a02030_headsets_connector,
+            "a02030_headsets_connector": "147,148,149,150"*/
+            file_put_contents('log.txt', $attrCodeOrId . ': ' . $valueToBeMapped . PHP_EOL, FILE_APPEND);
+            $valueToBeMappedArray = explode(',', $valueToBeMapped);
+            file_put_contents('log.txt', 'count($valueToBeMappedArray)' . ': ' . count($valueToBeMappedArray) . PHP_EOL, FILE_APPEND);
+            if (count($valueToBeMappedArray) < 2) {
+                foreach ($optionsArray['options'] as $optionObject) {
+                    if ((int)$optionObject['value'] == (int)$valueToBeMapped) {
+                        return $optionObject['label'];
+                    }
+                }
+            } else {
+                $mappedArray = array();
+                foreach ($optionsArray['options'] as $optionObject) {
+                    if (in_array((int)$optionObject['value'], $valueToBeMappedArray)) {
+                        file_put_contents('log.txt', 'mapped value' . ': ' . $optionObject['label'] . PHP_EOL, FILE_APPEND);
+                        $mappedArray[] = trim($optionObject['label']);
+                    }
+                }
+                return $mappedArray;
+            }
+            break;
+        case 'text' :
+        case 'textarea' :
+        case 'price' :
+        case 'weight' :
+        case 'media_image' :
+        case 'date' :
+            return $valueToBeMapped;
+            break;
+        default :
+            return $optionsArray['frontend_input'];
+            return '******** no mapping value ********';
+    }
+    return null;
+}
+
 function generateAttributeCodeByLabel ($attr_label) {
     return preg_replace('/[^\w.]/', '_', trim(strtolower($attr_label)) );
 }

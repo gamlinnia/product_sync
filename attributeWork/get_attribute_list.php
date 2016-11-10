@@ -200,7 +200,7 @@ function main() {
                         $_product->getId()
                     );
                     if (!empty($product->getData($old_attr_code))) {
-                        $old_attr_value = getAttributeValueIdFromOptions(
+                        $old_attr_value = getAttributeLabelFromOptions(
                             'attributeName',
                             $old_attr_code,
                             $product->getData($old_attr_code)
