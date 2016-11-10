@@ -176,7 +176,7 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
 
             $mappedArray = array();
             foreach ($valueToBeMappedArray as $eachToBeMapped) {
-                $pregResponse = preg_grep( '/' . $eachToBeMapped . '/i' ,  $newOptions) ;
+                $pregResponse = preg_grep( '/^' . $eachToBeMapped . '$/i' ,  $newOptions) ;
 
                 var_dump($pregResponse);
 
