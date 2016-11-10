@@ -26,4 +26,3 @@ foreach($collection as $each) {
         ->setCats($cat)
         ->save();
 }
-
