@@ -2996,6 +2996,11 @@ function setProductValue ($product, $attribute_code, $frontend_input, $value_to_
     if (!is_array($value_to_be_mapped)) {
         $dividers = array('\/', '&', ',');
         $optionsArray = preg_split("/(" . join('|', $dividers) . ")/", $value_to_be_mapped);
+
+        $function_to_map = array('trim', 'ucwords');
+        foreach ($function_to_map as $function) {
+            $optionsArray = array_map($function, $optionsArray);
+        }
     } else {
         $optionsArray = $value_to_be_mapped;
     }
