@@ -12,9 +12,12 @@ $collection = Mage::getModel('blog/post')->getCollection();
 foreach($collection as $each) {
     $model = Mage::getModel('blog/post')->load($each->getId());
     $tags = $model->getTags();
-    $tags = explode(',', $tags);
-    $tags = array_map('trim', $tags);
-    $tags = implode(',', $tags);
+    $new_tags = explode(',', $tags);
+    $new_tags = array_map('trim', $new_tags);
+    $new_tags = implode(',', $new_tags);
+    if($tags == $new_tags) {
+        continue;
+    }
     $cat = $model->getCatId();
     var_dump($model->getTitle());
     if(empty($cat)) {
