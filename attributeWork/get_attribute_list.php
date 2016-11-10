@@ -206,7 +206,6 @@ function main() {
                         ));
                         if (checkAttributeInProductAttributeSet($new_attribute_code, $product)) {
                             echo 'new attribute exists in product' . PHP_EOL;
-                            setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
                         } else {
                             echo 'new attribute NOT exist in product' . PHP_EOL;
                             $attribute_set_name = Mage::getModel('eav/entity_attribute_set')->load($product->getAttributeSetId())->getAttributeSetName();
@@ -218,12 +217,14 @@ function main() {
                             )) {
                                 exit(0);
                             }
-
-                            if ( empty($product->getData($new_attribute_code)) ) {
-                                setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
-                                promptMessageForInput('wait...', null, true);
-                            }
                         }
+
+                        /* set old value to new attribute */
+                        if ( empty($product->getData($new_attribute_code)) ) {
+                            setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
+                            promptMessageForInput('wait...', null, true);
+                        }
+
                     }
                 }
                 /* each attr loop for product done  */
