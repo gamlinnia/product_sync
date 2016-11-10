@@ -171,7 +171,7 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
 
             $newOptions = array();
             foreach ($optionsArray['options'] as $optionObject) {
-                $newOptions[] = $optionObject['label'];
+                $newOptions[$optionObject['value']] = $optionObject['label'];
             }
 
             $mappedArray = array();
