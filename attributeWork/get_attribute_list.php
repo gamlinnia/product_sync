@@ -185,6 +185,7 @@ function main() {
             $new_attribute_code = $new_attr->getAttributeCode();
             $productCollection = Mage::getModel('catalog/product')->getCollection();
 
+            $attrCount = 0;
             foreach ($attr_collection as $_attr) {
                 $frontend_input = $_attr->getData('frontend_input');
                 foreach ($productCollection as $_product) {
@@ -227,8 +228,8 @@ function main() {
                     }
                 }
                 /* each attr loop for product done  */
-                echo 'looped attr: ' . $_attr->getAttributeCode() . PHP_EOL;
-
+                $attrCount++;
+                echo 'looped attr: ' . $_attr->getAttributeCode() . ' index: ' . $attrCount . PHP_EOL;
                 sleep(3);
             }
 
