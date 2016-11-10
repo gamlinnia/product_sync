@@ -159,7 +159,7 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
                 $dividers = array('\/', '&', ',');
                 $valueToBeMappedArray = preg_split("/(" . join('|', $dividers) . ")/", $valueToBeMapped);
 
-                $function_to_map = array('tirm', 'ucwords');
+                $function_to_map = array('trim', 'ucwords');
                 foreach ($function_to_map as $function) {
                     $valueToBeMappedArray = array_map($function, $valueToBeMappedArray);
                 }
