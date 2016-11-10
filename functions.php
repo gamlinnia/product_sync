@@ -143,6 +143,8 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
     /*$nameOrId = 'attributeName' or 'attributeId'*/
     $optionsArray = getAttributeOptions($nameOrId, $attrCodeOrId);
 
+    var_dump($optionsArray);
+
     switch ($optionsArray['frontend_input']) {
         case 'select' :
         case 'boolean' :

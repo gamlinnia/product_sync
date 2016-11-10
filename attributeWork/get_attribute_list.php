@@ -193,20 +193,22 @@ function main() {
                 }
 
                 $frontend_input = $_attr->getData('frontend_input');
+                $old_attr_code = $_attr->getData('attribute_code');
+
                 foreach ($productCollection as $_product) {
                     $product = Mage::getModel('catalog/product')->load(
                         $_product->getId()
                     );
                     $old_attr_value = getAttributeValueIdFromOptions(
                         'attributeName',
-                        $_attr->getData('attribute_code'),
-                        $product->getData($_attr->getData('attribute_code'))
+                        $old_attr_code,
+                        $product->getData($old_attr_code)
                     );
                     if (!empty($old_attr_value)) {
                         Zend_Debug::dump(array(
                             'sku' => $product->getSku(),
                             'attribute_set_id' => $product->getAttributeSetId(),
-                            'old attribute code' => $_attr->getData('attribute_code'),
+                            'old attribute code' => $old_attr_code,
                             'old attribute value' => $old_attr_value,
                             'frontend_input' => $frontend_input
                         ));
