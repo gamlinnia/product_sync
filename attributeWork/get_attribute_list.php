@@ -225,7 +225,7 @@ function main() {
                     }
                 }
                 /* each attr loop for product done  */
-                echo 'looped attr' . $_attr->attribute_code() . PHP_EOL;
+                echo 'looped attr' . $_attr->getAttributeCode() . PHP_EOL;
                 sleep(3);
             }
 
