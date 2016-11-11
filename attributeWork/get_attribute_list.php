@@ -188,9 +188,6 @@ function main() {
             $attrCount = 0;
             foreach ($attr_collection as $_attr) {
                 $attrCount++;
-                if ($attrCount < 9) {
-                    continue;
-                }
 
                 $frontend_input = $_attr->getData('frontend_input');
                 $old_attr_code = $_attr->getData('attribute_code');
