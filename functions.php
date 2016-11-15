@@ -3112,3 +3112,60 @@ function promptMessageForInput ($message, $acceptInput = null, $acceptEmptyInput
 
     return $input;
 }
+
+function getDownloadableFileList()
+{
+    $fileListCollection = Mage::getModel('downloadablefile/filelist')->getCollection();
+    $fileList = array();
+    foreach ($fileListCollection as $_file) {
+        $fileId = $_file->getId();
+        $fileName = $_file->getFile();
+//        echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL;
+//        echo "File Name: " . $fileName . PHP_EOL;
+        $fileList[$fileName] = array();
+        $associatedProductCollection = Mage::getModel('downloadablefile/associatedproduct')
+            ->getCollection()
+            ->addFieldToFilter('file_list_id', $fileId);
+        foreach ($associatedProductCollection as $_each) {
+            $productId = $_each->getProductId();
+            $productName = Mage::getModel('catalog/product')->load($productId)->getName();
+//            echo "Product Name: " . $productName . PHP_EOL;
+            $fileList[$fileName][] = $productName;
+        }
+//        echo "-------------------------------------------------------------------" . PHP_EOL;
+    }
+
+    return $fileList;
+}
+
+//multi dimension array difference function
+function arrayDiff($base, $addition) {
+    if(!is_array($base) || !is_array($addition)){
+        return false;
+    }
+    $result = array();
+
+    $base_keys = array_keys($base);
+    $addition_keys = array_keys($addition);
+
+    $add_keys = array_diff($addition_keys, $base_keys);
+
+    foreach($add_keys as $each) {
+        $result[$each] = $addition[$each];
+    }
+
+    foreach($base as $key => $val) {
+        if(is_array($val)) {
+            $temp = $this->arrayDiff($base[$key], $addition[$key]);
+            if(count($temp)) {
+                $result[$key] = $temp;
+            }
+        }
+        else {
+            if ($base[$key] != $addition[$key]) {
+                $result[$key] = $addition[$key];
+            }
+        }
+    }
+    return $result;
+}

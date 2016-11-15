@@ -351,7 +351,23 @@ $app->post('/api/modifyReviewCommentFromLocal', function () {
     echo json_encode($result);
 });
 
+$app->post('/api/syncDownloadableFileList', function() {
+    global $input;
+    global $app;
+    $headers = $app->request()->headers();
+    if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
+        echo json_encode(array(
+            'message' => 'auth error.'
+        ));
+        return;
+    }
 
+    $remoteFileList = $input;
+    $localFileList = getDownloadableFileList();
+    $localNeedToAdd = arrayDiff($remoteFileList, $localFileList);
+    $remoteNeedToAdd = arrayDiff($localFileList, $remoteFileList);
+    echo json_encode($remoteNeedToAdd);
+});
 
 $app->get('/api/test', function () {
     echo json_encode(array('message' => 'test'));
