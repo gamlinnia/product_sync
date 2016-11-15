@@ -41,4 +41,19 @@ $response = CallAPI(
     null
 );
 //response contain lost file in local
-var_dump(json_decode($response));
+/*
+ * {
+  "media_url": "http://rwdev.buyabs.corp/enterprise/public_html/media/",
+  "local_need_to_add": {
+    "downloadable/user_manuals/96-268-093_RHAF-15003_A_UM_0728_ol.pdf": [
+      "Rosewill RHAF-15003 - 1400W Oil-Less Low Fat Air Fryer - 3.3 Quart (3.2 L), Black"
+    ]
+  }
+}
+ */
+$data = json_decode($response, true);
+$remoteMediaUl = $data['media_url'];
+$localNeedToAdd = $data['local_need_to_add'];
+var_dump($remoteMediaUl);
+var_dump($localNeedToAdd);
+//getRemoreDownloadableFileAndSaveToLocal($localNeedToAdd, $remoteMediaUl);

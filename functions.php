@@ -3139,7 +3139,7 @@ function getDownloadableFileList()
 }
 
 //multi dimension array difference function
-function arrayRecursiveDiff($aArray1, $aArray2) {
+function arrayRecursiveDiff ($aArray1, $aArray2) {
     $aReturn = array();
 
     foreach ($aArray1 as $mKey => $mValue) {
@@ -3157,4 +3157,47 @@ function arrayRecursiveDiff($aArray1, $aArray2) {
         }
     }
     return $aReturn;
+}
+
+function getRemoreDownloadableFileAndSaveToLocal ($fileList, $remoteMediaUrl) {
+    //file list
+    //    array(739) {
+    //        ["downloadable/user_manuals/96-268-093_RHAF-15003_A_UM_0728_ol.pdf"]=>
+    //              array(1) {
+    //                  [0]=>
+    //                      string(81) "Rosewill RHAF-15003 - 1400W Oil-Less Low Fat Air Fryer - 3.3 Quart (3.2 L), Black"
+    //              }
+    //    }
+    $localMediaDir = Mage::getBaseDir('media');
+    foreach($fileList as $_file => $_productList) {
+        //process physical file
+        $file = file_get_contents($remoteMediaUrl . $_file);
+        file_put_contents($localMediaDir.$_file, $file);
+        //process file list table
+        preg_match('/\/([\w]+)\//', $_file, $match);
+        $type = $match[1];
+        $fileListModel = Mage::getModel('downloadablefile/filelist');
+        $data = array(
+            'file' => $_file,
+            'type' => $type,
+            'position' => 0
+        );
+        $fileListModel->setData($data)
+              ->save();
+        $fileListId = $fileListModel->getCollection()->addFieldToFilter('file', $_file)->getData()[0]['id'];
+        foreach( $_productList as $_productName) {
+            $collection = Mage::getModel('catalog/product')
+                ->getCollection()
+                ->addAttributeToSelect('name')
+                ->addFieldToFilter('name', $_productName);
+            $productId = $collection->getFirstItem()->getId();
+            $associatedProductModel = Mage::getModel('downloadablefile/associatedproduct');
+            $data = array(
+                'product_id' => $productId,
+                'file_list_id' => $fileListId
+            );
+            $associatedProductModel->setData($data)
+                                    ->save();
+        }
+    }
 }
