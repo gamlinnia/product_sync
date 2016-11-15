@@ -3156,7 +3156,7 @@ function arrayDiff($base, $addition) {
 
     foreach($base as $key => $val) {
         if(is_array($val)) {
-            $temp = $this->arrayDiff($base[$key], $addition[$key]);
+            $temp = arrayDiff($base[$key], $addition[$key]);
             if(count($temp)) {
                 $result[$key] = $temp;
             }
