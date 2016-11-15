@@ -3112,3 +3112,49 @@ function promptMessageForInput ($message, $acceptInput = null, $acceptEmptyInput
 
     return $input;
 }
+
+function getDownloadableFileList()
+{
+    $fileListCollection = Mage::getModel('downloadablefile/filelist')->getCollection();
+    $fileList = array();
+    foreach ($fileListCollection as $_file) {
+        $fileId = $_file->getId();
+        $fileName = $_file->getFile();
+//        echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL;
+//        echo "File Name: " . $fileName . PHP_EOL;
+        $fileList[$fileName] = array();
+        $associatedProductCollection = Mage::getModel('downloadablefile/associatedproduct')
+            ->getCollection()
+            ->addFieldToFilter('file_list_id', $fileId);
+        foreach ($associatedProductCollection as $_each) {
+            $productId = $_each->getProductId();
+            $productName = Mage::getModel('catalog/product')->load($productId)->getName();
+//            echo "Product Name: " . $productName . PHP_EOL;
+            $fileList[$fileName][] = $productName;
+        }
+//        echo "-------------------------------------------------------------------" . PHP_EOL;
+    }
+
+    return $fileList;
+}
+
+//multi dimension array difference function
+function arrayRecursiveDiff($aArray1, $aArray2) {
+    $aReturn = array();
+
+    foreach ($aArray1 as $mKey => $mValue) {
+        if (array_key_exists($mKey, $aArray2)) {
+            if (is_array($mValue)) {
+                $aRecursiveDiff = arrayRecursiveDiff($mValue, $aArray2[$mKey]);
+                if (count($aRecursiveDiff)) { $aReturn[$mKey] = $aRecursiveDiff; }
+            } else {
+                if ($mValue != $aArray2[$mKey]) {
+                    $aReturn[$mKey] = $mValue;
+                }
+            }
+        } else {
+            $aReturn[$mKey] = $mValue;
+        }
+    }
+    return $aReturn;
+}
