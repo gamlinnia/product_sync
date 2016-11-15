@@ -3140,20 +3140,17 @@ function getDownloadableFileList()
 
 //multi dimension array difference function
 function arrayDiff($base, $addition) {
-    if(!is_array($base) || !is_array($addition)){
-        return false;
-    }
     $result = array();
     $base_keys = array_keys($base);
     $addition_keys = array_keys($addition);
-    $add_keys = new_array_diff($addition_keys, $base_keys);
+    $add_keys = array_diff($addition_keys, $base_keys);
     foreach($add_keys as $each) {
         $result[$each] = $addition[$each];
     }
     foreach($base as $key => $val) {
         if(is_array($val)) {
             $temp = arrayDiff($base[$key], $addition[$key]);
-            if(count($temp) && $temp !== false) {
+            if(count($temp)) {
                 $result[$key] = $temp;
             }
         }
@@ -3166,13 +3163,22 @@ function arrayDiff($base, $addition) {
     return $result;
 }
 
-function new_array_diff($arraya, $arrayb) {
-    $diff = array();
-    $intersection = array_intersect($arraya, $arrayb);
-    foreach ($arraya as $keya => $valuea) {
-        if (!isset($intersection[$keya])) {
-            $diff[$keya] = $valuea;
+function arrayRecursiveDiff($aArray1, $aArray2) {
+    $aReturn = array();
+
+    foreach ($aArray1 as $mKey => $mValue) {
+        if (array_key_exists($mKey, $aArray2)) {
+            if (is_array($mValue)) {
+                $aRecursiveDiff = arrayRecursiveDiff($mValue, $aArray2[$mKey]);
+                if (count($aRecursiveDiff)) { $aReturn[$mKey] = $aRecursiveDiff; }
+            } else {
+                if ($mValue != $aArray2[$mKey]) {
+                    $aReturn[$mKey] = $mValue;
+                }
+            }
+        } else {
+            $aReturn[$mKey] = $mValue;
         }
     }
-    return $diff;
+    return $aReturn;
 }
