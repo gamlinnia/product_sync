@@ -373,11 +373,11 @@ $app->post('/api/syncDownloadableFileList', function() {
     //        ["downloadable/user_manuals/96-268-093_RHAF-15003_A_UM_0728_ol.pdf"]=>
     //              array(1) {
     //                  [0]=>
-    //                      string(81) "Rosewill RHAF-15003 - 1400W Oil-Less Low Fat Air Fryer - 3.3 Quart (3.2 L), Black"
+    //                      string(10) "11-147-259"
     //              }
     //    }
 
-//    getRemoreDownloadableFileAndSaveToLocal($localNeedToAdd, $remoteMediaUrl);
+//    getRemoteDownloadableFileAndSaveToLocal($localNeedToAdd, $remoteMediaUrl);
 
     $response = array(
         'media_url'=> Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),

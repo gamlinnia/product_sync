@@ -3128,9 +3128,9 @@ function getDownloadableFileList()
             ->addFieldToFilter('file_list_id', $fileId);
         foreach ($associatedProductCollection as $_each) {
             $productId = $_each->getProductId();
-            $productName = Mage::getModel('catalog/product')->load($productId)->getName();
+            $productSku = Mage::getModel('catalog/product')->load($productId)->getSku();
 //            echo "Product Name: " . $productName . PHP_EOL;
-            $fileList[$fileName][] = $productName;
+            $fileList[$fileName][] = $productSku;
         }
 //        echo "-------------------------------------------------------------------" . PHP_EOL;
     }
@@ -3159,17 +3159,17 @@ function arrayRecursiveDiff ($aArray1, $aArray2) {
     return $aReturn;
 }
 
-function getRemoreDownloadableFileAndSaveToLocal ($fileList, $remoteMediaUrl) {
+function getRemoteDownloadableFileAndSaveToLocal ($fileList, $remoteMediaUrl) {
     //file list
     //    array(739) {
     //        ["downloadable/user_manuals/96-268-093_RHAF-15003_A_UM_0728_ol.pdf"]=>
     //              array(1) {
     //                  [0]=>
-    //                      string(81) "Rosewill RHAF-15003 - 1400W Oil-Less Low Fat Air Fryer - 3.3 Quart (3.2 L), Black"
+    //                      string(10) "11-147-259"
     //              }
     //    }
     $localMediaDir = Mage::getBaseDir('media');
-    foreach($fileList as $_file => $_productList) {
+    foreach($fileList as $_file => $_productSkuList) {
         //process physical file
         $file = file_get_contents($remoteMediaUrl . $_file);
         file_put_contents($localMediaDir.$_file, $file);
@@ -3185,12 +3185,8 @@ function getRemoreDownloadableFileAndSaveToLocal ($fileList, $remoteMediaUrl) {
         $fileListModel->setData($data)
               ->save();
         $fileListId = $fileListModel->getCollection()->addFieldToFilter('file', $_file)->getData()[0]['id'];
-        foreach( $_productList as $_productName) {
-            $collection = Mage::getModel('catalog/product')
-                ->getCollection()
-                ->addAttributeToSelect('name')
-                ->addFieldToFilter('name', $_productName);
-            $productId = $collection->getFirstItem()->getId();
+        foreach( $_productSkuList as $_productSku) {
+            $productId = Mage::getModel('catalog/product')->getIdBySku($_productSku);
             $associatedProductModel = Mage::getModel('downloadablefile/associatedproduct');
             $data = array(
                 'product_id' => $productId,
