@@ -3148,7 +3148,7 @@ function arrayRecursiveDiff ($aArray1, $aArray2) {
                 $aRecursiveDiff = arrayRecursiveDiff($mValue, $aArray2[$mKey]);
                 if (count($aRecursiveDiff)) { $aReturn[$mKey] = $aRecursiveDiff; }
             } else {
-                if ($mValue != $aArray2[$mKey]) {
+                if (!in_array($mValue, $aArray2)) {
                     $aReturn[$mKey] = $mValue;
                 }
             }
@@ -3170,30 +3170,46 @@ function getRemoteDownloadableFileAndSaveToLocal ($fileList, $remoteMediaUrl) {
     //    }
     $localMediaDir = Mage::getBaseDir('media');
     foreach($fileList as $_file => $_productSkuList) {
-        //process physical file
-        $file = file_get_contents($remoteMediaUrl . $_file);
-        file_put_contents($localMediaDir.$_file, $file);
-        //process file list table
-        preg_match('/\/([\w]+)\//', $_file, $match);
-        $type = $match[1];
+        // check duplicate record in file list table
         $fileListModel = Mage::getModel('downloadablefile/filelist');
-        $data = array(
-            'file' => $_file,
-            'type' => $type,
-            'position' => 0
-        );
-        $fileListModel->setData($data)
-              ->save();
-        $fileListId = $fileListModel->getCollection()->addFieldToFilter('file', $_file)->getData()[0]['id'];
+        $collection = $fileListModel->getCollection()->addFieldToFilter('file', $_file);
+        if($collection->count() > 0) {
+            $fileListId = $collection->getData()[0]['id'];
+        }
+        else {
+            //get new file from remote server and create association
+            //process physical file
+            $file = file_get_contents($remoteMediaUrl . $_file);
+            file_put_contents($localMediaDir.$_file, $file);
+            //process file list table
+            preg_match('/\/([\w]+)\//', $_file, $match);
+            $type = $match[1];
+            $data = array(
+                'file' => $_file,
+                'type' => $type,
+                'position' => 0
+            );
+            $fileListModel->setData($data)
+                ->save();
+            $fileListId = $fileListModel->getCollection()->addFieldToFilter('file', $_file)->getData()[0]['id'];
+        }
+
         foreach( $_productSkuList as $_productSku) {
             $productId = Mage::getModel('catalog/product')->getIdBySku($_productSku);
             $associatedProductModel = Mage::getModel('downloadablefile/associatedproduct');
-            $data = array(
-                'product_id' => $productId,
-                'file_list_id' => $fileListId
-            );
-            $associatedProductModel->setData($data)
-                                    ->save();
+            $associatedProductCollection = $associatedProductModel->getCollection()
+                ->addFieldToFilter('file_list_id', $fileListId)
+                ->addFieldToFilter('product_id', $productId);
+            if($associatedProductCollection->count() < 1) { // create new file and associated records
+                $data = array(
+                    'product_id' => $productId,
+                    'file_list_id' => $fileListId
+                );
+                $associatedProductModel->setData($data)
+                    ->save();
+            }
+
         }
+
     }
 }
