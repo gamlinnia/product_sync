@@ -3144,20 +3144,16 @@ function arrayDiff($base, $addition) {
         return false;
     }
     $result = array();
-
     $base_keys = array_keys($base);
     $addition_keys = array_keys($addition);
-
     $add_keys = array_diff($addition_keys, $base_keys);
-
     foreach($add_keys as $each) {
         $result[$each] = $addition[$each];
     }
-
     foreach($base as $key => $val) {
         if(is_array($val)) {
             $temp = arrayDiff($base[$key], $addition[$key]);
-            if(count($temp)) {
+            if(count($temp) && $temp !== false) {
                 $result[$key] = $temp;
             }
         }
