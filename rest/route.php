@@ -361,11 +361,52 @@ $app->post('/api/syncDownloadableFileList', function() {
         ));
         return;
     }
-    $remoteFileList = $input;
+    $remoteMediaUrl = $input['media_url'];
+
+    $remoteFileList = $input['file_list'];
     $localFileList = getDownloadableFileList();
-    $localNeedToAdd = arrayRecursiveDiff($localFileList, $remoteFileList);
-    $remoteNeedToAdd = arrayRecursiveDiff($remoteFileList, $localFileList);
-    echo json_encode(array('local need to add' => $remoteNeedToAdd, 'remote need to add' => $localNeedToAdd));
+
+    $localNeedToAdd = arrayRecursiveDiff($remoteFileList, $localFileList);
+    $remoteNeedToAdd = arrayRecursiveDiff($localFileList, $remoteFileList);
+
+    $localMediaDir = Mage::getBaseDir('media');
+//    foreach($localNeedToAdd as $_file => $_productList) {
+//        //process physical file
+//        $file = file_get_contents($remoteMediaUrl . $_file);
+//        file_put_contents($localMediaDir.$_file, $file);
+//        //process file list table
+//        preg_match('/\/([\w]+)\//', $_file, $match);
+//        $type = $match[1];
+//        $fileListModel = Mage::getModel('downloadablefile/filelist');
+//        $data = array(
+//            'file' => $_file,
+//            'type' => $type,
+//            'position' => 0
+//        );
+//        $fileListModel->setData($data)
+//              ->save();
+//        $fileListId = $fileListModel->getCollection()->addFieldToFilter('file', $_file)->getData()[0]['id'];
+//        foreach( $_productList as $_productName) {
+//            $collection = Mage::getModel('catalog/product')
+//                ->getCollection()
+//                ->addAttributeToSelect('name')
+//                ->addFieldToFilter('name', $_productName);
+//            $productId = $collection->getFirstItem()->getId();
+//            $associatedProductModel = Mage::getModel('downloadablefile/associatedproduct');
+//            $data = array(
+//                'product_id' => $productId,
+//                'file_list_id' => $fileListId
+//            );
+//            $associatedProductModel->setData($data)
+//                                    ->save();
+//        }
+//    }
+
+    $response = array(
+        'media_url'=> Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
+        'local_need_to_add' => $remoteNeedToAdd
+    );
+    echo json_encode($response);
 });
 
 $app->get('/api/test', function () {

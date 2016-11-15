@@ -29,6 +29,10 @@ $remoteAPI = $remoteUrl . $remoteAPIName;
 //Call API
 $fileList = getDownloadableFileList();
 $header = array('Token: rosewill');
+$data = array(
+    'media_url' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
+    'file_list' => $fileList
+);
 $response = CallAPI(
     'POST',
     $remoteAPI,
