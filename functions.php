@@ -3139,30 +3139,6 @@ function getDownloadableFileList()
 }
 
 //multi dimension array difference function
-function arrayDiff($base, $addition) {
-    $result = array();
-    $base_keys = array_keys($base);
-    $addition_keys = array_keys($addition);
-    $add_keys = array_diff($addition_keys, $base_keys);
-    foreach($add_keys as $each) {
-        $result[$each] = $addition[$each];
-    }
-    foreach($base as $key => $val) {
-        if(is_array($val)) {
-            $temp = arrayDiff($base[$key], $addition[$key]);
-            if(count($temp)) {
-                $result[$key] = $temp;
-            }
-        }
-        else {
-            if ($base[$key] != $addition[$key]) {
-                $result[$key] = $addition[$key];
-            }
-        }
-    }
-    return $result;
-}
-
 function arrayRecursiveDiff($aArray1, $aArray2) {
     $aReturn = array();
 
