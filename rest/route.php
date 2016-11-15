@@ -363,10 +363,11 @@ $app->post('/api/syncDownloadableFileList', function() {
     }
 
     $remoteFileList = $input;
-    $localFileList = getDownloadableFileList();
-    $localNeedToAdd = arrayDiff($remoteFileList, $localFileList);
-    $remoteNeedToAdd = arrayDiff($localFileList, $remoteFileList);
-    echo json_encode($remoteNeedToAdd);
+    echo json_encode($input);
+//    $localFileList = getDownloadableFileList();
+//    $localNeedToAdd = arrayDiff($localFileList, $remoteFileList);
+//    $remoteNeedToAdd = arrayDiff($remoteFileList, $localFileList);
+//    echo json_encode($remoteNeedToAdd);
 });
 
 $app->get('/api/test', function () {
