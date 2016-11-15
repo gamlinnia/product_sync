@@ -3146,9 +3146,7 @@ function arrayDiff($base, $addition) {
     $result = array();
     $base_keys = array_keys($base);
     $addition_keys = array_keys($addition);
-    file_put_contents('arrayDiff.log', json_encode($base_keys), FILE_APPEND);
-    file_put_contents('arrayDiff.log', json_encode($addition_keys), FILE_APPEND);
-    $add_keys = array_diff($addition_keys, $base_keys);
+    $add_keys = new_array_diff($addition_keys, $base_keys);
     foreach($add_keys as $each) {
         $result[$each] = $addition[$each];
     }
@@ -3166,4 +3164,14 @@ function arrayDiff($base, $addition) {
         }
     }
     return $result;
+}
+
+function new_array_diff($arraya, $arrayb) {
+    $intersection = array_intersect($arraya, $arrayb);
+    foreach ($arraya as $keya => $valuea) {
+        if (!isset($intersection[$keya])) {
+            $diff[$keya] = $valuea;
+        }
+    }
+    return $diff;
 }
