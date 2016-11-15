@@ -3167,6 +3167,7 @@ function arrayDiff($base, $addition) {
 }
 
 function new_array_diff($arraya, $arrayb) {
+    $diff = array();
     $intersection = array_intersect($arraya, $arrayb);
     foreach ($arraya as $keya => $valuea) {
         if (!isset($intersection[$keya])) {
