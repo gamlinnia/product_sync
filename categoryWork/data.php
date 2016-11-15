@@ -29,7 +29,7 @@ $categorysAddList = array(
     'Networking' => array(
         'Wireless Accessories', 'Network Interface Cards', 'Network Switches', 'Modems', 'Wireless Adapters', 'Wireless Routers', 'Network Antennas'
     ),
-    'Server Systems & Components' => array(
+    'Server Components' => array(
         'Server Accessories', 'Server Chassis', 'RAID - Sub Systems'
     ),
     'Surveillance Cameras' => array(
