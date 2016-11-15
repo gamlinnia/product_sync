@@ -3175,6 +3175,7 @@ function getRemoteDownloadableFileAndSaveToLocal ($fileList, $remoteMediaUrl) {
         $collection = $fileListModel->getCollection()->addFieldToFilter('file', $_file);
         if($collection->count() > 0) {
             $fileListId = $collection->getData()[0]['id'];
+            // need compare local associated records with remote to determine which need to add and delete
         }
         else {
             //get new file from remote server and create association
@@ -3192,24 +3193,23 @@ function getRemoteDownloadableFileAndSaveToLocal ($fileList, $remoteMediaUrl) {
             $fileListModel->setData($data)
                 ->save();
             $fileListId = $fileListModel->getCollection()->addFieldToFilter('file', $_file)->getData()[0]['id'];
-        }
 
-        foreach( $_productSkuList as $_productSku) {
-            $productId = Mage::getModel('catalog/product')->getIdBySku($_productSku);
-            $associatedProductModel = Mage::getModel('downloadablefile/associatedproduct');
-            $associatedProductCollection = $associatedProductModel->getCollection()
-                ->addFieldToFilter('file_list_id', $fileListId)
-                ->addFieldToFilter('product_id', $productId);
-            if($associatedProductCollection->count() < 1) { // create new file and associated records
-                $data = array(
-                    'product_id' => $productId,
-                    'file_list_id' => $fileListId
-                );
-                $associatedProductModel->setData($data)
-                    ->save();
+            foreach( $_productSkuList as $_productSku) {
+                $productId = Mage::getModel('catalog/product')->getIdBySku($_productSku);
+                $associatedProductModel = Mage::getModel('downloadablefile/associatedproduct');
+                $associatedProductCollection = $associatedProductModel->getCollection()
+                    ->addFieldToFilter('file_list_id', $fileListId)
+                    ->addFieldToFilter('product_id', $productId);
+                if($associatedProductCollection->count() < 1) { // create new file and associated records
+                    $data = array(
+                        'product_id' => $productId,
+                        'file_list_id' => $fileListId
+                    );
+                    $associatedProductModel->setData($data)
+                        ->save();
+                }
+
             }
-
         }
-
     }
 }
