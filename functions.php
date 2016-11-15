@@ -3146,6 +3146,8 @@ function arrayDiff($base, $addition) {
     $result = array();
     $base_keys = array_keys($base);
     $addition_keys = array_keys($addition);
+    file_put_contents('arrayDiff.log', json_encode($base_keys), FILE_APPEND);
+    file_put_contents('arrayDiff.log', json_encode($addition_keys), FILE_APPEND);
     $add_keys = array_diff($addition_keys, $base_keys);
     foreach($add_keys as $each) {
         $result[$each] = $addition[$each];
