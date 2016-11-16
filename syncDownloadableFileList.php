@@ -51,8 +51,8 @@ $response = CallAPI(
   }
 }
  */
-$remoteMediaUl = $response['media_url'];
+$remoteMediaUrl = $response['media_url'];
 $localNeedToAdd = $response['local_need_to_add'];
-var_dump($remoteMediaUl);
+var_dump($remoteMediaUrl);
 var_dump($localNeedToAdd);
 //getRemoteDownloadableFileAndSaveToLocal($localNeedToAdd, $remoteMediaUl);

@@ -372,7 +372,8 @@ $app->post('/api/syncDownloadableFileList', function() {
 
     $response = array(
         'media_url'=> Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
-        'local_need_to_add' => $remoteNeedToAdd
+        'local_need_to_add' => $remoteNeedToAdd,
+        'remote_need_to_add' => $localNeedToAdd
     );
     echo json_encode($response);
 });
