@@ -142,8 +142,13 @@ foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
                                         $model->setData($eachAttrObject['code'], $value);
                                         break;
                                     default :
-                                        echo 'type problem, type: ' . $eachAttrObject['type'] . PHP_EOL;
-                                        die();
+                                        $ignoreCodeList = array('brand');
+                                        if (!in_array($eachAttrObject['code'], $ignoreCodeList)) {
+                                            echo $eachAttrObject['code'] . ' type problem, type: ' . $eachAttrObject['type'] . PHP_EOL;
+                                            die();
+                                        }
+                                        echo $eachAttrObject['code'] . ' type problem, type: ' . $eachAttrObject['type'] . PHP_EOL;
+                                        echo 'continue doing ...' . PHP_EOL;
                                 }
                             }
                         }
