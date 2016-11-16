@@ -3146,17 +3146,35 @@ function arrayRecursiveDiff ($aArray1, $aArray2) {
         if (array_key_exists($mKey, $aArray2)) {
             if (is_array($mValue)) {
                 $aRecursiveDiff = arrayRecursiveDiff($mValue, $aArray2[$mKey]);
-                if (count($aRecursiveDiff)) { $aReturn[$mKey] = $aRecursiveDiff; }
+                if (count($aRecursiveDiff)) {
+                    $aReturn[$mKey] = $aRecursiveDiff;
+                }
             } else {
                 if (!in_array($mValue, $aArray2)) {
                     $aReturn[$mKey] = $mValue;
                 }
             }
         } else {
-            $aReturn[$mKey] = $mValue;
+            if (!in_array($mValue, $aArray2)) {
+                $aReturn[$mKey] = $mValue;
+            }
         }
     }
     return $aReturn;
+}
+
+function getAssociatedProductByFileListId($fileListId) {
+    $result = array();
+    $associatedProductCollection = Mage::getModel('downloadablefile/associatedproduct')
+        ->getCollection()
+        ->addFieldToFilter('file_list_id', $fileListId);
+    foreach ($associatedProductCollection as $_each) {
+        $productId = $_each->getProductId();
+        $productSku = Mage::getModel('catalog/product')->load($productId)->getSku();
+//            echo "Product Name: " . $productName . PHP_EOL;
+        $result[] = $productSku;
+    }
+    return $result;
 }
 
 function getRemoteDownloadableFileAndSaveToLocal ($fileList, $remoteMediaUrl) {
@@ -3175,7 +3193,7 @@ function getRemoteDownloadableFileAndSaveToLocal ($fileList, $remoteMediaUrl) {
         $collection = $fileListModel->getCollection()->addFieldToFilter('file', $_file);
         if($collection->count() > 0) {
             $fileListId = $collection->getData()[0]['id'];
-            // need compare local associated records with remote to determine which need to add and delete
+            // need compare local associated records with remote to determine which need to add and delete in only aws environment
         }
         else {
             //get new file from remote server and create association
