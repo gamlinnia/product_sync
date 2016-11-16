@@ -3221,10 +3221,9 @@ function deleteLocalFileListRecords($fileList) {
     $localMediaDir = Mage::getBaseDir('media');
     foreach($fileList as $_file) {
         // check duplicate record in file list table
-        $fileListModel = Mage::getModel('downloadablefile/filelist');
-        $collection = $fileListModel->getCollection()->addFieldToFilter('file', $_file);
-        if($collection->count() > 0) {
-            $fileListId = $collection->getData()[0]['id'];
+        $fileListCollection = Mage::getModel('downloadablefile/filelist')->getCollection()->addFieldToFilter('file', $_file);
+        if($fileListCollection->count() > 0) {
+            $fileListId = $fileListCollection->getFirstItem()->getId();
             //delete associated product records
             $associatedProductCollection = Mage::getModel('downloadablefile/associatedproduct')
                 ->getCollection()
@@ -3234,7 +3233,7 @@ function deleteLocalFileListRecords($fileList) {
                     Mage::getModel('downloadablefile/associatedproduct')->load($each->getId())->delete();
                 }
             }
-            $fileListModel->load($fileListId)->delete();
+            Mage::getModel('downloadablefile/filelist')->load($fileListId)->delete();
             unlink($localMediaDir . '/' . $_file);
         }
     }
@@ -3244,23 +3243,25 @@ function addLocalAssociatedProductRecords($fileListWithAssociatedProduct) {
     foreach($fileListWithAssociatedProduct as $_file => $_productSkuList) {
         $fileListCollection = Mage::getModel('downloadablefile/filelist')->getCollection()->addFieldToFilter('file', $_file);
         $fileListId = $fileListCollection->getFirstItem()->getId();
-
-        //need compare with local associated records and determine add and delete
-        foreach ($_productSkuList as $_productSku) {
-            $productId = Mage::getModel('catalog/product')->getIdBySku($_productSku);
-            $associatedProductModel = Mage::getModel('downloadablefile/associatedproduct');
-            $associatedProductCollection = $associatedProductModel->getCollection()
-                ->addFieldToFilter('file_list_id', $fileListId)
-                ->addFieldToFilter('product_id', $productId);
-            if ($associatedProductCollection->count() < 1) { // create new file and associated records
-                $data = array(
-                    'product_id' => $productId,
-                    'file_list_id' => $fileListId
-                );
-                $associatedProductModel->setData($data)
-                    ->save();
+        if($fileListId) {
+            //need compare with local associated records and determine add and delete
+            foreach ($_productSkuList as $_productSku) {
+                $productId = Mage::getModel('catalog/product')->getIdBySku($_productSku);
+                if($productId) {
+                    $associatedProductModel = Mage::getModel('downloadablefile/associatedproduct');
+                    $associatedProductCollection = $associatedProductModel->getCollection()
+                        ->addFieldToFilter('file_list_id', $fileListId)
+                        ->addFieldToFilter('product_id', $productId);
+                    if ($associatedProductCollection->count() < 1) { // create new file and associated records
+                        $data = array(
+                            'product_id' => $productId,
+                            'file_list_id' => $fileListId
+                        );
+                        Mage::getModel('downloadablefile/associatedproduct')->setData($data)
+                            ->save();
+                    }
+                }
             }
-
         }
     }
 }
