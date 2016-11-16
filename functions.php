@@ -156,7 +156,7 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
         case 'select' :
         case 'boolean' :
             foreach ($optionsArray['options'] as $optionObject) {
-                if (strtolower($optionObject['label']) == strtolower($valueToBeMapped)) {
+                if (strtolower(trim($optionObject['label'])) == strtolower(trim($valueToBeMapped))) {
                     return $optionObject['value'];
                 }
             }
