@@ -366,14 +366,13 @@ $app->post('/api/syncDownloadableFileList', function() {
     $remoteFileList = $input['file_list'];
     $localFileList = getDownloadableFileList();
 
-    $localNeedToAdd = arrayRecursiveDiff($remoteFileList, $localFileList);
+    $remoteNeedToDelete = arrayRecursiveDiff($remoteFileList, $localFileList);
     $remoteNeedToAdd = arrayRecursiveDiff($localFileList, $remoteFileList);
-    getRemoteDownloadableFileAndSaveToLocal($localNeedToAdd, $remoteMediaUrl);
 
     $response = array(
         'media_url'=> Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
         'local_need_to_add' => $remoteNeedToAdd,
-        'remote_need_to_add' => $localNeedToAdd
+        'local_need_to_delete' => $remoteNeedToDelete
     );
     echo json_encode($response);
 });
@@ -392,13 +391,12 @@ $app->post('/api/syncDownloadableFileAssociatedProducts', function() {
     $remoteAssociatedProducts = $input['associated_products'];
     $localAssociatedProducts = getDownloadableFileAssociatedProduct();
 
-    $localNeedToAdd = arrayRecursiveDiff($remoteAssociatedProducts, $localAssociatedProducts);
+    $remoteNeedToDelete = arrayRecursiveDiff($remoteAssociatedProducts, $localAssociatedProducts);
     $remoteNeedToAdd = arrayRecursiveDiff($localAssociatedProducts, $remoteAssociatedProducts);
-    //getRemoteDownloadableFileAndSaveToLocal($localNeedToAdd, $remoteMediaUrl);
 
     $response = array(
         'local_need_to_add' => $remoteNeedToAdd,
-        'remote_need_to_add' => $localNeedToAdd
+        'local_need_to_delete' => $remoteNeedToDelete
     );
     echo json_encode($response);
 });

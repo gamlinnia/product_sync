@@ -37,7 +37,9 @@ if (isset($remoteUrl) && !empty($remoteUrl)) {
         $data,
         null
     );
+    var_dump($response);
     $localNeedToAdd = $response['local_need_to_add'];
-    var_dump($localNeedToAdd);
-//getRemoteDownloadableFileAndSaveToLocal($localNeedToAdd, $remoteMediaUl);
+    $localNeedToDelete = $response['local_need_to_delete'];
+    //addLocalAssociatedProductRecords($localNeedToAdd);
+    //deleteLocalAssociatedProductRecords($localNeedToDelete);
 }
