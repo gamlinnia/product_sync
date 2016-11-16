@@ -3194,7 +3194,7 @@ function getRemoteDownloadableFileAndSaveToLocal ($fileList, $remoteMediaUrl) {
             //get new file from remote server and create association
             //process physical file
             $file = file_get_contents($remoteMediaUrl . $_file);
-            file_put_contents($localMediaDir.$_file, $file);
+            file_put_contents($localMediaDir. '/' . $_file, $file);
             //process file list table
             preg_match('/\/([\w]+)\//', $_file, $match);
             $type = $match[1];
