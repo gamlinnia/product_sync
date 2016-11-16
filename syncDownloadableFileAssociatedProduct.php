@@ -40,6 +40,6 @@ if (isset($remoteUrl) && !empty($remoteUrl)) {
     var_dump($response);
     $localNeedToAdd = $response['local_need_to_add'];
     $localNeedToDelete = $response['local_need_to_delete'];
-    addLocalAssociatedProductRecords($localNeedToAdd);
-    deleteLocalAssociatedProductRecords($localNeedToDelete);
+    updateLocalAssociatedProductRecords($localNeedToAdd);
+    updateLocalAssociatedProductRecords($localNeedToDelete);
 }

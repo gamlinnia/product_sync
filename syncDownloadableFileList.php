@@ -42,6 +42,6 @@ if (isset($remoteUrl) && !empty($remoteUrl)) {
     $remoteMediaUrl = $response['media_url'];
     $localNeedToAdd = $response['local_need_to_add'];
     $localNeedToDelete = $response['local_need_to_delete'];
-    getRemoteDownloadableFileAndSaveToLocal($localNeedToAdd, $remoteMediaUrl);
-    deleteLocalFileListRecords($localNeedToDelete);
+    updateLocalFileList($localNeedToAdd, $remoteMediaUrl);
+    updateLocalFileList($localNeedToDelete);
 }
