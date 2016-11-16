@@ -389,7 +389,7 @@ $app->post('/api/syncDownloadableFileAssociatedProducts', function() {
         return;
     }
 
-    $remoteAssociatedProducts = $input['$associated_products'];
+    $remoteAssociatedProducts = $input['associated_products'];
     $localAssociatedProducts = getDownloadableFileAssociatedProduct();
 
     $localNeedToAdd = arrayRecursiveDiff($remoteAssociatedProducts, $localAssociatedProducts);
@@ -397,7 +397,8 @@ $app->post('/api/syncDownloadableFileAssociatedProducts', function() {
     //getRemoteDownloadableFileAndSaveToLocal($localNeedToAdd, $remoteMediaUrl);
 
     $response = array(
-        'local_need_to_add' => $remoteNeedToAdd
+        'local_need_to_add' => $remoteNeedToAdd,
+        'remote_need_to_add' => $localNeedToAdd
     );
     echo json_encode($response);
 });

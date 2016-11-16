@@ -20,26 +20,24 @@ switch ($parsedUrl['host']) {
     case 'www.rosewill.com' :
         $remoteUrl = $restUrls['dev'];
         break;
-    case 'rwdev.buyabs.corp' :
-        $remoteUrl = $restUrls['aws'];
-        break;
 }
-$remoteAPIName = 'syncDownloadableFileAssociatedProducts';
-$remoteAPI = $remoteUrl . $remoteAPIName;
+if (isset($remoteUrl) && !empty($remoteUrl)) {
+    $remoteAPIName = 'syncDownloadableFileAssociatedProducts';
+    $remoteAPIUrl = $remoteUrl . $remoteAPIName;
 //Call API
-$fileAssociatedProduct = getDownloadableFileAssociatedProduct();
-$header = array('Token: rosewill');
-$data = array(
-    'associated_products' => $fileAssociatedProduct
-);
-$response = CallAPI(
-    'POST',
-    $remoteAPI,
-    $header,
-    $data,
-    null
-);
-$localNeedToAdd = $response['local_need_to_add'];
-var_dump($remoteMediaUl);
-var_dump($localNeedToAdd);
+    $fileAssociatedProduct = getDownloadableFileAssociatedProduct();
+    $header = array('Token: rosewill');
+    $data = array(
+        'associated_products' => $fileAssociatedProduct
+    );
+    $response = CallAPI(
+        'POST',
+        $remoteAPIUrl,
+        $header,
+        $data,
+        null
+    );
+    $localNeedToAdd = $response['local_need_to_add'];
+    var_dump($localNeedToAdd);
 //getRemoteDownloadableFileAndSaveToLocal($localNeedToAdd, $remoteMediaUl);
+}
