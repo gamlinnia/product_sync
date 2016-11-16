@@ -368,16 +368,33 @@ $app->post('/api/syncDownloadableFileList', function() {
 
     $localNeedToAdd = arrayRecursiveDiff($remoteFileList, $localFileList);
     $remoteNeedToAdd = arrayRecursiveDiff($localFileList, $remoteFileList);
-    //file list
-    //    array(739) {
-    //        ["downloadable/user_manuals/96-268-093_RHAF-15003_A_UM_0728_ol.pdf"]=>
-    //              array(1) {
-    //                  [0]=>
-    //                      string(10) "11-147-259"
-    //              }
-    //    }
+    //getRemoteDownloadableFileAndSaveToLocal($localNeedToAdd, $remoteMediaUrl);
 
-//    getRemoteDownloadableFileAndSaveToLocal($localNeedToAdd, $remoteMediaUrl);
+    $response = array(
+        'media_url'=> Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
+        'local_need_to_add' => $remoteNeedToAdd
+    );
+    echo json_encode($response);
+});
+
+$app->post('/api/syncDownloadableFileAssociatedProduct', function() {
+    global $input;
+    global $app;
+    $headers = $app->request()->headers();
+    if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
+        echo json_encode(array(
+            'message' => 'auth error.'
+        ));
+        return;
+    }
+    $remoteMediaUrl = $input['media_url'];
+
+    $remoteFileList = $input['file_list'];
+    $localFileList = getDownloadableFileAssociatedProduct();
+
+    $localNeedToAdd = arrayRecursiveDiff($remoteFileList, $localFileList);
+    $remoteNeedToAdd = arrayRecursiveDiff($localFileList, $remoteFileList);
+    //getRemoteDownloadableFileAndSaveToLocal($localNeedToAdd, $remoteMediaUrl);
 
     $response = array(
         'media_url'=> Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),

@@ -37,7 +37,7 @@ $response = CallAPI(
     'POST',
     $remoteAPI,
     $header,
-    $fileList,
+    $data,
     null
 );
 //response contain lost file in local
@@ -51,9 +51,8 @@ $response = CallAPI(
   }
 }
  */
-$data = json_decode($response, true);
-$remoteMediaUl = $data['media_url'];
-$localNeedToAdd = $data['local_need_to_add'];
+$remoteMediaUl = $response['media_url'];
+$localNeedToAdd = $response['local_need_to_add'];
 var_dump($remoteMediaUl);
 var_dump($localNeedToAdd);
 //getRemoteDownloadableFileAndSaveToLocal($localNeedToAdd, $remoteMediaUl);

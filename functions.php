@@ -3117,11 +3117,21 @@ function getDownloadableFileList()
 {
     $fileListCollection = Mage::getModel('downloadablefile/filelist')->getCollection();
     $fileList = array();
+    foreach($fileListCollection as $_file) {
+        $fileName = $_file->getFile();
+        $fileNameList[] = $fileName;
+    }
+    return $fileList;
+}
+
+
+function getDownloadableFileAssociatedProduct()
+{
+    $fileListCollection = Mage::getModel('downloadablefile/filelist')->getCollection();
+    $fileList = array();
     foreach ($fileListCollection as $_file) {
         $fileId = $_file->getId();
         $fileName = $_file->getFile();
-//        echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL;
-//        echo "File Name: " . $fileName . PHP_EOL;
         $fileList[$fileName] = array();
         $associatedProductCollection = Mage::getModel('downloadablefile/associatedproduct')
             ->getCollection()
@@ -3129,15 +3139,12 @@ function getDownloadableFileList()
         foreach ($associatedProductCollection as $_each) {
             $productId = $_each->getProductId();
             $productSku = Mage::getModel('catalog/product')->load($productId)->getSku();
-//            echo "Product Name: " . $productName . PHP_EOL;
             $fileList[$fileName][] = $productSku;
         }
-//        echo "-------------------------------------------------------------------" . PHP_EOL;
     }
 
     return $fileList;
 }
-
 //multi dimension array difference function
 function arrayRecursiveDiff ($aArray1, $aArray2) {
     $aReturn = array();
