@@ -3119,7 +3119,7 @@ function getDownloadableFileList()
     $fileList = array();
     foreach($fileListCollection as $_file) {
         $fileName = $_file->getFile();
-        $fileNameList[] = $fileName;
+        $fileList[] = $fileName;
     }
     return $fileList;
 }
