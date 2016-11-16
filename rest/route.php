@@ -378,7 +378,7 @@ $app->post('/api/syncDownloadableFileList', function() {
     echo json_encode($response);
 });
 
-$app->post('/api/syncDownloadableFileAssociatedProduct', function() {
+$app->post('/api/syncDownloadableFileAssociatedProducts', function() {
     global $input;
     global $app;
     $headers = $app->request()->headers();
@@ -388,17 +388,15 @@ $app->post('/api/syncDownloadableFileAssociatedProduct', function() {
         ));
         return;
     }
-    $remoteMediaUrl = $input['media_url'];
 
-    $remoteFileList = $input['file_list'];
-    $localFileList = getDownloadableFileAssociatedProduct();
+    $remoteAssociatedProducts = $input['$associated_products'];
+    $localAssociatedProducts = getDownloadableFileAssociatedProduct();
 
-    $localNeedToAdd = arrayRecursiveDiff($remoteFileList, $localFileList);
-    $remoteNeedToAdd = arrayRecursiveDiff($localFileList, $remoteFileList);
+    $localNeedToAdd = arrayRecursiveDiff($remoteAssociatedProducts, $localAssociatedProducts);
+    $remoteNeedToAdd = arrayRecursiveDiff($localAssociatedProducts, $remoteAssociatedProducts);
     //getRemoteDownloadableFileAndSaveToLocal($localNeedToAdd, $remoteMediaUrl);
 
     $response = array(
-        'media_url'=> Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
         'local_need_to_add' => $remoteNeedToAdd
     );
     echo json_encode($response);

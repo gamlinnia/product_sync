@@ -24,14 +24,13 @@ switch ($parsedUrl['host']) {
         $remoteUrl = $restUrls['aws'];
         break;
 }
-$remoteAPIName = 'syncDownloadableFileAssociatedProduct';
+$remoteAPIName = 'syncDownloadableFileAssociatedProducts';
 $remoteAPI = $remoteUrl . $remoteAPIName;
 //Call API
 $fileAssociatedProduct = getDownloadableFileAssociatedProduct();
 $header = array('Token: rosewill');
 $data = array(
-    'media_url' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
-    'file_associated_product' => $fileAssociatedProduct
+    'associated_products' => $fileAssociatedProduct
 );
 $response = CallAPI(
     'POST',
@@ -40,8 +39,6 @@ $response = CallAPI(
     $data,
     null
 );
-
-$remoteMediaUl = $response['media_url'];
 $localNeedToAdd = $response['local_need_to_add'];
 var_dump($remoteMediaUl);
 var_dump($localNeedToAdd);

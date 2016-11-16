@@ -20,39 +20,26 @@ switch ($parsedUrl['host']) {
     case 'www.rosewill.com' :
         $remoteUrl = $restUrls['dev'];
         break;
-    case 'rwdev.buyabs.corp' :
-        $remoteUrl = $restUrls['aws'];
-        break;
 }
-$remoteAPIName = 'syncDownloadableFileList';
-$remoteAPI = $remoteUrl . $remoteAPIName;
-//Call API
-$fileList = getDownloadableFileList();
-$header = array('Token: rosewill');
-$data = array(
-    'media_url' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
-    'file_list' => $fileList
-);
-$response = CallAPI(
-    'POST',
-    $remoteAPI,
-    $header,
-    $data,
-    null
-);
-//response contain lost file in local
-/*
- * {
-  "media_url": "http://rwdev.buyabs.corp/enterprise/public_html/media/",
-  "local_need_to_add": {
-    "downloadable/user_manuals/96-268-093_RHAF-15003_A_UM_0728_ol.pdf": [
-      "11-147-259"
-    ]
-  }
+
+if (isset($remoteUrl) && !empty($remoteUrl)) {
+    $remoteAPIName = 'syncDownloadableFileList';
+    $remoteAPI = $remoteUrl . $remoteAPIName;
+    $fileList = getDownloadableFileList();
+    $header = array('Token: rosewill');
+    $data = array(
+        'media_url' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
+        'file_list' => $fileList
+    );
+    $response = CallAPI(
+        'POST',
+        $remoteAPI,
+        $header,
+        $data,
+        null
+    );
+    var_dump($response);
+    $remoteMediaUrl = $response['media_url'];
+    $localNeedToAdd = $response['local_need_to_add'];
+    getRemoteDownloadableFileAndSaveToLocal($localNeedToAdd, $remoteMediaUrl);
 }
- */
-$remoteMediaUrl = $response['media_url'];
-$localNeedToAdd = $response['local_need_to_add'];
-var_dump($remoteMediaUrl);
-var_dump($localNeedToAdd);
-getRemoteDownloadableFileAndSaveToLocal($localNeedToAdd, $remoteMediaUrl);
