@@ -142,7 +142,7 @@ foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
                                         $model->setData($eachAttrObject['code'], $value);
                                         break;
                                     default :
-                                        echo 'type problem, type: ' . $eachAttrObject['type'] . PHP_EOL;
+                                        echo $eachAttrObject['code'] . ' type problem, type: ' . $eachAttrObject['type'] . PHP_EOL;
                                         die();
                                 }
                             }
