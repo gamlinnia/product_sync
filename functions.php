@@ -3175,27 +3175,11 @@ function arrayRecursiveDiff ($aArray1, $aArray2) {
     return $aReturn;
 }
 
-function getAssociatedProductByFileListId($fileListId) {
-    $result = array();
-    $associatedProductCollection = Mage::getModel('downloadablefile/associatedproduct')
-        ->getCollection()
-        ->addFieldToFilter('file_list_id', $fileListId);
-    foreach ($associatedProductCollection as $_each) {
-        $productId = $_each->getProductId();
-        $productSku = Mage::getModel('catalog/product')->load($productId)->getSku();
-//            echo "Product Name: " . $productName . PHP_EOL;
-        $result[] = $productSku;
-    }
-    return $result;
-}
-
-function getRemoteDownloadableFileAndSaveToLocal ($fileList, $remoteMediaUrl) {
+function updateLocalFileList ($fileList, $remoteMediaUrl = null) {
     $localMediaDir = Mage::getBaseDir('media');
     foreach($fileList as $_file) {
-        // check duplicate record in file list table
-        $fileListModel = Mage::getModel('downloadablefile/filelist');
-        $collection = $fileListModel->getCollection()->addFieldToFilter('file', $_file);
-        if($collection->count() < 1) {
+        $fileListCollection = Mage::getModel('downloadablefile/filelist')->getCollection()->addFieldToFilter('file', $_file);
+        if($fileListCollection->count() < 1) {
             //get new file from remote server and create association
             //process physical file
             $file = file_get_contents($remoteMediaUrl . $_file);
@@ -3208,18 +3192,10 @@ function getRemoteDownloadableFileAndSaveToLocal ($fileList, $remoteMediaUrl) {
                 'type' => $type,
                 'position' => 0
             );
-            $fileListModel->setData($data)
+            Mage::getModel('downloadablefile/filelist')->setData($data)
                 ->save();
         }
-    }
-}
-
-function deleteLocalFileListRecords($fileList) {
-    $localMediaDir = Mage::getBaseDir('media');
-    foreach($fileList as $_file) {
-        // check duplicate record in file list table
-        $fileListCollection = Mage::getModel('downloadablefile/filelist')->getCollection()->addFieldToFilter('file', $_file);
-        if($fileListCollection->count() > 0) {
+        else {
             $fileListId = $fileListCollection->getFirstItem()->getId();
             //delete associated product records
             $associatedProductCollection = Mage::getModel('downloadablefile/associatedproduct')
@@ -3236,12 +3212,11 @@ function deleteLocalFileListRecords($fileList) {
     }
 }
 
-function addLocalAssociatedProductRecords($fileListWithAssociatedProduct) {
+function updateLocalAssociatedProductRecords($fileListWithAssociatedProduct) {
     foreach($fileListWithAssociatedProduct as $_file => $_productSkuList) {
         $fileListCollection = Mage::getModel('downloadablefile/filelist')->getCollection()->addFieldToFilter('file', $_file);
         $fileListId = $fileListCollection->getFirstItem()->getId();
         if($fileListId) {
-            //need compare with local associated records and determine add and delete
             foreach ($_productSkuList as $_productSku) {
                 $productId = Mage::getModel('catalog/product')->getIdBySku($_productSku);
                 if($productId) {
@@ -3257,26 +3232,11 @@ function addLocalAssociatedProductRecords($fileListWithAssociatedProduct) {
                         Mage::getModel('downloadablefile/associatedproduct')->setData($data)
                             ->save();
                     }
-                }
-            }
-        }
-    }
-}
-
-function deleteLocalAssociatedProductRecords($fileListWithAssociatedProduct) {
-    foreach($fileListWithAssociatedProduct as $_file => $_productSkuList) {
-        $fileListCollection = Mage::getModel('downloadablefile/filelist')->getCollection()->addFieldToFilter('file', $_file);
-        $fileListId = $fileListCollection->getFirstItem()->getId();
-
-        foreach ($_productSkuList as $_productSku) {
-            $productId = Mage::getModel('catalog/product')->getIdBySku($_productSku);
-            $associatedProductModel = Mage::getModel('downloadablefile/associatedproduct');
-            $associatedProductCollection = $associatedProductModel->getCollection()
-                ->addFieldToFilter('file_list_id', $fileListId)
-                ->addFieldToFilter('product_id', $productId);
-            if ($associatedProductCollection->count() > 0) {
-                foreach ($associatedProductCollection as $each) {
-                    Mage::getModel('downloadablefile/associatedproduct')->load($each->getId())->delete();
+                    else {
+                        foreach ($associatedProductCollection as $each) {
+                            Mage::getModel('downloadablefile/associatedproduct')->load($each->getId())->delete();
+                        }
+                    }
                 }
             }
         }
