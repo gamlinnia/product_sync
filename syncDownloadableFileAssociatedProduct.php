@@ -24,7 +24,7 @@ switch ($parsedUrl['host']) {
 if (isset($remoteUrl) && !empty($remoteUrl)) {
     $remoteAPIName = 'syncDownloadableFileAssociatedProducts';
     $remoteAPIUrl = $remoteUrl . $remoteAPIName;
-//Call API
+
     $fileAssociatedProduct = getDownloadableFileAssociatedProduct();
     $header = array('Token: rosewill');
     $data = array(
@@ -40,6 +40,6 @@ if (isset($remoteUrl) && !empty($remoteUrl)) {
     var_dump($response);
     $localNeedToAdd = $response['local_need_to_add'];
     $localNeedToDelete = $response['local_need_to_delete'];
-    //addLocalAssociatedProductRecords($localNeedToAdd);
-    //deleteLocalAssociatedProductRecords($localNeedToDelete);
+    addLocalAssociatedProductRecords($localNeedToAdd);
+    deleteLocalAssociatedProductRecords($localNeedToDelete);
 }
