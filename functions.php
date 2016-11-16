@@ -114,6 +114,9 @@ function parseBackClassifiedProductAttributes ($parsedClassifiedProductInfo) {
                 $parsedProductInfo[$attrKey] = $attrIdName['id'];
                 break;
             default :
+                if ($attrKey == 'brand') {
+                    die($attrValue);
+                }
                 $parsedProductInfo[$attrKey] = getAttributeValueIdFromOptions('attributeName', $attrKey, $attrValue);;
         }
     }
