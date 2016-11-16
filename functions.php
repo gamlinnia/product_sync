@@ -2010,11 +2010,16 @@ function sendMailWithDownloadUrl ($subject, $file_list, $recipient_array) {
     require_once 'class/EmailFactory.class.php';
     require_once 'rest/tools.php';
 
+    $smtp_host = Mage::getStoreConfig('smtppro/general/smtp_host');
+    if (!$smtp_host) {
+        $smtp_host = '210.208.105.59';
+    }
+
     /* SMTP server name, port, user/passwd */
-    $smtpInfo = array("host" => "118.163.91.154",
-//    $smtpInfo = array("host" => "127.0.0.1",
+    $smtpInfo = array("host" => $smtp_host,
         "port" => "25",
-        "auth" => false);
+        "auth" => false
+    );
     $emailFactory = EmailFactory::getEmailFactory($smtpInfo);
 
     $attachments = array();
