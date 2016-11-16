@@ -3185,24 +3185,12 @@ function getAssociatedProductByFileListId($fileListId) {
 }
 
 function getRemoteDownloadableFileAndSaveToLocal ($fileList, $remoteMediaUrl) {
-    //file list
-    //    array(739) {
-    //        ["downloadable/user_manuals/96-268-093_RHAF-15003_A_UM_0728_ol.pdf"]=>
-    //              array(1) {
-    //                  [0]=>
-    //                      string(10) "11-147-259"
-    //              }
-    //    }
     $localMediaDir = Mage::getBaseDir('media');
-    foreach($fileList as $_file => $_productSkuList) {
+    foreach($fileList as $_file) {
         // check duplicate record in file list table
         $fileListModel = Mage::getModel('downloadablefile/filelist');
         $collection = $fileListModel->getCollection()->addFieldToFilter('file', $_file);
-        if($collection->count() > 0) {
-            $fileListId = $collection->getData()[0]['id'];
-            // need compare local associated records with remote to determine which need to add and delete in only aws environment
-        }
-        else {
+        if($collection->count() < 1) {
             //get new file from remote server and create association
             //process physical file
             $file = file_get_contents($remoteMediaUrl . $_file);
@@ -3217,24 +3205,32 @@ function getRemoteDownloadableFileAndSaveToLocal ($fileList, $remoteMediaUrl) {
             );
             $fileListModel->setData($data)
                 ->save();
-            $fileListId = $fileListModel->getCollection()->addFieldToFilter('file', $_file)->getData()[0]['id'];
+        }
+    }
+}
 
-            foreach( $_productSkuList as $_productSku) {
-                $productId = Mage::getModel('catalog/product')->getIdBySku($_productSku);
-                $associatedProductModel = Mage::getModel('downloadablefile/associatedproduct');
-                $associatedProductCollection = $associatedProductModel->getCollection()
-                    ->addFieldToFilter('file_list_id', $fileListId)
-                    ->addFieldToFilter('product_id', $productId);
-                if($associatedProductCollection->count() < 1) { // create new file and associated records
-                    $data = array(
-                        'product_id' => $productId,
-                        'file_list_id' => $fileListId
-                    );
-                    $associatedProductModel->setData($data)
-                        ->save();
-                }
+function updateLocalAssociatedProductRecords($fileListWithAssociatedProduct) {
+    foreach($fileListWithAssociatedProduct as $_file => $_productSkuList) {
+        $fileListModel = Mage::getModel('downloadablefile/filelist');
+        $collection = $fileListModel->getCollection()->addFieldToFilter('file', $_file);
+        $fileListId = $collection->getData()[0]['id'];
 
+        //need compare with local associated records and determine add and delete
+        foreach ($_productSkuList as $_productSku) {
+            $productId = Mage::getModel('catalog/product')->getIdBySku($_productSku);
+            $associatedProductModel = Mage::getModel('downloadablefile/associatedproduct');
+            $associatedProductCollection = $associatedProductModel->getCollection()
+                ->addFieldToFilter('file_list_id', $fileListId)
+                ->addFieldToFilter('product_id', $productId);
+            if ($associatedProductCollection->count() < 1) { // create new file and associated records
+                $data = array(
+                    'product_id' => $productId,
+                    'file_list_id' => $fileListId
+                );
+                $associatedProductModel->setData($data)
+                    ->save();
             }
+
         }
     }
 }
