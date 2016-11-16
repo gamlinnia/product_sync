@@ -368,7 +368,7 @@ $app->post('/api/syncDownloadableFileList', function() {
 
     $localNeedToAdd = arrayRecursiveDiff($remoteFileList, $localFileList);
     $remoteNeedToAdd = arrayRecursiveDiff($localFileList, $remoteFileList);
-    //getRemoteDownloadableFileAndSaveToLocal($localNeedToAdd, $remoteMediaUrl);
+    getRemoteDownloadableFileAndSaveToLocal($localNeedToAdd, $remoteMediaUrl);
 
     $response = array(
         'media_url'=> Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
