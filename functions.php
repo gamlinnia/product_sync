@@ -114,14 +114,7 @@ function parseBackClassifiedProductAttributes ($parsedClassifiedProductInfo) {
                 $parsedProductInfo[$attrKey] = $attrIdName['id'];
                 break;
             default :
-                if ($attrKey == 'brand') {
-                    echo $attrValue;
-                }
                 $parsedProductInfo[$attrKey] = getAttributeValueIdFromOptions('attributeName', $attrKey, $attrValue);;
-                if ($attrKey == 'brand') {
-                    echo $parsedProductInfo[$attrKey];
-                    die();
-                }
         }
     }
     foreach ($parsedClassifiedProductInfo['direct'] as $attrKey => $attrValue) {
@@ -156,7 +149,7 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
         case 'select' :
         case 'boolean' :
             foreach ($optionsArray['options'] as $optionObject) {
-                if (strtolower($optionObject['label']) == strtolower($valueToBeMapped)) {
+                if (strtolower(trim($optionObject['label'])) == strtolower(trim($valueToBeMapped))) {
                     return $optionObject['value'];
                 }
             }
