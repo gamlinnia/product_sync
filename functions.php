@@ -3224,7 +3224,7 @@ function updateLocalAssociatedProductRecords($fileListWithAssociatedProduct) {
                     $associatedProductCollection = $associatedProductModel->getCollection()
                         ->addFieldToFilter('file_list_id', $fileListId)
                         ->addFieldToFilter('product_id', $productId);
-                    if ($associatedProductCollection->count() < 1) { // create new file and associated records
+                    if ($associatedProductCollection->count() < 1) { // if record not exist, then create new file and associated records
                         $data = array(
                             'product_id' => $productId,
                             'file_list_id' => $fileListId
@@ -3232,7 +3232,7 @@ function updateLocalAssociatedProductRecords($fileListWithAssociatedProduct) {
                         Mage::getModel('downloadablefile/associatedproduct')->setData($data)
                             ->save();
                     }
-                    else {
+                    else { //if records exist, then delete it
                         foreach ($associatedProductCollection as $each) {
                             Mage::getModel('downloadablefile/associatedproduct')->load($each->getId())->delete();
                         }

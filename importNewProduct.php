@@ -168,7 +168,7 @@ foreach ($mapTable as $bigProductInfoItem => $bigItemObject) {
 }
 
 /*透過 標準輸出 印出要詢問的內容*/
-fwrite(STDOUT, 'Are you sure to save this product information?');
+fwrite(STDOUT, 'Are you sure to save this product information? (Y/n)');
 /*抓取 標準輸入 的 內容*/
 $sureToAction = trim(fgets(STDIN));
 

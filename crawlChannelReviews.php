@@ -27,9 +27,6 @@ $productCollection->setOrder('entity_id', 'desc');
 /*channel review model*/
 $channelReviewModel = Mage::getModel('channelreviews/channelreviews');
 
-/*file list array*/
-$fileList = array();
-
 /*channels array*/
 $channels = array(
     'newegg' => 'http://www.newegg.com/Product/Product.aspx?Item=',
@@ -85,16 +82,16 @@ if ($debug) {
 $now = new DateTime(null, new DateTimeZone('UTC'));
 file_put_contents('crawlChannelReviews.log', "Process start at: " . $now->format('Y-m-d H:i:s') . PHP_EOL, FILE_APPEND);
 
+/*all channel in one excel */
+$arrayToExcel = array();
+
 /*foreach channel*/
-$response = array();
 foreach($channels as $channel => $url) {
 //    if ($debug) {
 //        if (!in_array($channel, $argv)) {
 //            continue;
 //        }
 //    }
-    /*each excel for each channel */
-    $arrayToExcel = array();
     /*foreach product*/
     foreach($productCollection as $eachProduct){
         $sku = $eachProduct->getSku();
@@ -182,26 +179,54 @@ foreach($channels as $channel => $url) {
             }
         }
     }
-
-    /*export all reviews with 1 or 2 rate to excel by channel*/
-    if(!empty($arrayToExcel)) {
-        file_put_contents('crawlChannelReviews.log', "Number of Records Need To Export To Excel: " . count($arrayToExcel));
-        $now = date('Y-m-d');
-        $fileName = 'bad_review/' . $channel . '_' . $now . '.xls';
-        $sheetName = 'Sheet 1';
-        /*push file into fileList*/
-        $fileList[] = $fileName;
-        exportArrayToXlsx($arrayToExcel, array(
-            "filename" => $fileName,
-            "title" => $sheetName
-        ));
-        $response = array_merge($response, $arrayToExcel);
-    }
-
 }
 
+/*process review in rosewill.com*/
+
+$rosewillReviewCollection = Mage::getModel('review/review')->getProductCollection()->addAttributeToSelect('model_number');
+$rosewillReviewCollection->getSelect()
+    ->joinLeft(array('rating' => 'rating_option_vote'),'rt.review_id = rating.review_id',array('rating' => 'rating.value'));
+$rosewillReviewCollection->getSelect()
+    ->joinLeft(array('customer' => 'customer_entity'),'rdt.customer_id = customer.entity_id',array('email'=> 'customer.email'));
+$rosewillReviewCollection->addFieldToFilter('rt.created_at', array('gt' => date("Y-m-d H:i:s", strtotime('-2 day'))));
+
+if ($rosewillReviewCollection->count() > 0) {
+    foreach ($rosewillReviewCollection as $each) {
+        $rating = $each->getRating();
+        if($rating > 2){
+            continue;
+        }
+        $excelData = [];
+        $excelData['item_number'] = $each->getSku();
+        $excelData['product_name'] = $each->getName();
+        $excelData['model_number'] = $each->getModelNumber();
+        $excelData['product_url'] = 'http://rwdev.buyabs.corp/enterprise/public_html/catalog/product/view/id/' . $each->getEntityId();
+        $excelData['rating'] = $each->getRating();
+        $excelData['subject'] = $each->getTitle();
+        $excelData['detail'] = str_replace("<br />", "\r\n", $each->getDetail());
+        $excelData['created_at'] = $each->getReviewCreatedAt();
+        $excelData['entity_id'] = $each->getEntityId();
+        $excelData['nickname'] = $each->getNickname();
+        $excelData['channel'] = 'Rosewill.com';
+
+        $arrayToExcel[] = $excelData;
+    }
+}
+
+/*file list array*/
+$fileList = array();
 /*export all reviews with 1 or 2 rate to excel by channel*/
-if(!empty($response)) {
+if(!empty($arrayToExcel)) {
+    file_put_contents('crawlChannelReviews.log', "Number of Records Need To Export To Excel: " . count($arrayToExcel));
+    $now = date('Y-m-d');
+    $fileName = 'bad_review'. DS . 'bad_review_' . $now . '.xls';
+    $sheetName = 'Sheet 1';
+    /*push file into fileList*/
+    $fileList[] = $fileName;
+    exportArrayToXlsx($arrayToExcel, array(
+        "filename" => $fileName,
+        "title" => $sheetName
+    ));
     /*send email notification*/
     sendMailWithDownloadUrl('Bad product review alert', $fileList, $recipient_array);
 } else {
