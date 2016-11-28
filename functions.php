@@ -3167,9 +3167,7 @@ function arrayRecursiveDiff ($aArray1, $aArray2) {
                 }
             }
         } else {
-            if (!in_array($mValue, $aArray2)) {
-                $aReturn[$mKey] = $mValue;
-            }
+            $aReturn[$mKey] = $mValue;
         }
     }
     return $aReturn;
