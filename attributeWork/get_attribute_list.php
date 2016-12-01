@@ -280,12 +280,16 @@ function main() {
                     $new_attribute_code = $_attr->getAttributeCode();
                     $productCollection = Mage::getModel('catalog/product')->getCollection();
 
+                    $options['options'] = array();
+
                     foreach ($productCollection as $_product) {
                         echo '-';
                         $product = Mage::getModel('catalog/product')->load($_product->getId());
                         if ( !empty( $textValue = $product->getData( $_attr->getAttributeCode() ) ) ) {
                             echo 'found data' . $textValue . PHP_EOL;
-                            $optionList['options'][] = $textValue;
+                            if ( !in_array($textValue, $options['options']) ) {
+                                $options['options'][] = $textValue;
+                            }
                         }
                     }
                 }
