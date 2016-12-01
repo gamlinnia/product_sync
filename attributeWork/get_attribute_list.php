@@ -284,6 +284,7 @@ function main() {
                         echo '-';
                         $product = Mage::getModel('catalog/product')->load($_product->getId());
                         if ( !empty( $textValue = $product->getData( $_attr->getAttributeCode() ) ) ) {
+                            echo 'found data' . $textValue . PHP_EOL;
                             $optionList['options'][] = $textValue;
                         }
                     }
