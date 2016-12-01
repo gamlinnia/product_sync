@@ -264,6 +264,7 @@ function main() {
                 return;
             }
 
+            $response = array();
             $optionList = array();
             foreach ($attr_collection as $_attr) {
                 $attr = Mage::getModel('eav/entity_attribute')->load(
@@ -294,7 +295,7 @@ function main() {
                     }
                 }
 
-                Zend_Debug::dump(array(
+                Zend_Debug::dump($response[] = array(
                     'id' => $attr->getId(),
                     'attribute_code' => $attr->getData('attribute_code'),
                     'frontend_label' => $attr->getData('frontend_label'),
@@ -303,6 +304,8 @@ function main() {
                 ));
             }
             echo 'similar attr count: ' . $attr_collection->count() . PHP_EOL . PHP_EOL;
+
+            Zend_Debug::dump($response);
 
             break;
     }
