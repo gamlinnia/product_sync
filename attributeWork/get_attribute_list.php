@@ -281,6 +281,7 @@ function main() {
                     $productCollection = Mage::getModel('catalog/product')->getCollection();
 
                     foreach ($productCollection as $_product) {
+                        echo '-';
                         $product = Mage::getModel('catalog/product')->load($_product->getId());
                         if ( !empty( $textValue = $product->getData( $_attr->getAttributeCode() ) ) ) {
                             $optionList['options'][] = $textValue;
