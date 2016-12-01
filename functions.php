@@ -3167,9 +3167,7 @@ function arrayRecursiveDiff ($aArray1, $aArray2) {
                 }
             }
         } else {
-            if (!in_array($mValue, $aArray2)) {
-                $aReturn[$mKey] = $mValue;
-            }
+            $aReturn[$mKey] = $mValue;
         }
     }
     return $aReturn;
@@ -3183,7 +3181,7 @@ function updateLocalFileList ($fileList, $remoteMediaUrl = null) {
             //get new file from remote server and create association
             //process physical file
             $file = file_get_contents($remoteMediaUrl . $_file);
-            file_put_contents($localMediaDir. '/' . $_file, $file);
+            file_put_contents($localMediaDir. DS . $_file, $file);
             //process file list table
             preg_match('/\/([\w]+)\//', $_file, $match);
             $type = $match[1];
@@ -3207,7 +3205,7 @@ function updateLocalFileList ($fileList, $remoteMediaUrl = null) {
                 }
             }
             Mage::getModel('downloadablefile/filelist')->load($fileListId)->delete();
-            unlink($localMediaDir . '/' . $_file);
+            unlink($localMediaDir . DS . $_file);
         }
     }
 }
@@ -3224,7 +3222,7 @@ function updateLocalAssociatedProductRecords($fileListWithAssociatedProduct) {
                     $associatedProductCollection = $associatedProductModel->getCollection()
                         ->addFieldToFilter('file_list_id', $fileListId)
                         ->addFieldToFilter('product_id', $productId);
-                    if ($associatedProductCollection->count() < 1) { // create new file and associated records
+                    if ($associatedProductCollection->count() < 1) { // if record not exist, then create new file and associated records
                         $data = array(
                             'product_id' => $productId,
                             'file_list_id' => $fileListId
@@ -3232,7 +3230,7 @@ function updateLocalAssociatedProductRecords($fileListWithAssociatedProduct) {
                         Mage::getModel('downloadablefile/associatedproduct')->setData($data)
                             ->save();
                     }
-                    else {
+                    else { //if records exist, then delete it
                         foreach ($associatedProductCollection as $each) {
                             Mage::getModel('downloadablefile/associatedproduct')->load($each->getId())->delete();
                         }
