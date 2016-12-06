@@ -267,41 +267,45 @@ function main() {
             $response = array();
             $optionList = array();
             foreach ($attr_collection as $_attr) {
+                $tmpArray = array();
                 $attr = Mage::getModel('eav/entity_attribute')->load(
                     $_attr->getId()
                 );
                 $options = getAttributeOptions('attributeId', $attr->getId());
                 if (isset($options['options'])) {
-                    foreach ($options['options'] as $option) {
-                        if (!in_array(ucwords($option['label']), $optionList)) {
-                            $optionList[] = ucwords($option['label']);
-                        }
-                    }
+                    $tmpArray = array(
+                        'id' => $attr->getId(),
+                        'attribute_code' => $attr->getData('attribute_code'),
+                        'frontend_label' => $attr->getData('frontend_label'),
+                        'frontend_input' => $attr->getData('frontend_input'),
+                        'options' => $options['options']
+                    );
                 } else {
                     $new_attribute_code = $_attr->getAttributeCode();
                     $productCollection = Mage::getModel('catalog/product')->getCollection();
-
-                    $options['options'] = array();
 
                     foreach ($productCollection as $_product) {
                         echo '-';
                         $product = Mage::getModel('catalog/product')->load($_product->getId());
                         if ( !empty( $textValue = $product->getData( $_attr->getAttributeCode() ) ) ) {
                             echo 'found data' . $textValue . PHP_EOL;
-                            if ( !in_array($textValue, $options['options']) ) {
-                                $options['options'][] = $textValue;
+                            if ( !in_array($textValue, $optionList) ) {
+                                $optionList[] = $textValue;
                             }
                         }
                     }
+
+                    $tmpArray = array(
+                        'id' => $attr->getId(),
+                        'attribute_code' => $attr->getData('attribute_code'),
+                        'frontend_label' => $attr->getData('frontend_label'),
+                        'frontend_input' => $attr->getData('frontend_input'),
+                        'options' => $optionList
+                    );
+                    Zend_Debug::dump($tmpArray);
                 }
 
-                Zend_Debug::dump($response[] = array(
-                    'id' => $attr->getId(),
-                    'attribute_code' => $attr->getData('attribute_code'),
-                    'frontend_label' => $attr->getData('frontend_label'),
-                    'frontend_input' => $attr->getData('frontend_input'),
-                    'options' => isset($options['options']) ? $options['options'] : null
-                ));
+                $response[] = $tmpArray;
             }
             echo 'similar attr count: ' . $attr_collection->count() . PHP_EOL . PHP_EOL;
 
