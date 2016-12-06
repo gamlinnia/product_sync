@@ -265,8 +265,8 @@ function main() {
             }
 
             $response = array();
-            $optionList = array();
             foreach ($attr_collection as $_attr) {
+                $optionList = array();
                 $tmpArray = array();
                 $attr = Mage::getModel('eav/entity_attribute')->load(
                     $_attr->getId()
