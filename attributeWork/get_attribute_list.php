@@ -300,7 +300,7 @@ function main() {
                         'attribute_code' => $attr->getData('attribute_code'),
                         'frontend_label' => $attr->getData('frontend_label'),
                         'frontend_input' => $attr->getData('frontend_input'),
-                        'options' => $optionList
+                        'options' => implode(', ', $optionList)
                     );
                     Zend_Debug::dump($tmpArray);
                 }
