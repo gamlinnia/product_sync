@@ -884,7 +884,16 @@ function linkVideoGalleryToProduct ($gallery_id, $valueToFilter, $filterType='en
     if (!$productId) {
         return false;
     }
-    $productVideos=Mage::getModel('productvideos/productvideos');
+    /*de-duplicate*/
+    $collection = Mage::getModel('productvideos/productvideos')
+        ->getCollection()
+        ->addFieldToFilter('product_id', $productId)
+        ->addFieldToFilter('videogallery_id', $gallery_id);
+
+    if($collection->count() > 0){
+        return false;
+    }
+    $productVideos = Mage::getModel('productvideos/productvideos');
     $productVideos->setProductId($productId);
     $productVideos->setVideogalleryId($gallery_id);
     $productVideos->save();
