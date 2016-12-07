@@ -284,8 +284,12 @@ function main() {
                     $new_attribute_code = $_attr->getAttributeCode();
                     $productCollection = Mage::getModel('catalog/product')->getCollection();
 
+                    $count = 0;
                     foreach ($productCollection as $_product) {
-                        echo '-';
+                        $count++;
+                        if ($count % 100 == 0) {
+                            echo $count . '.. ';
+                        }
                         $product = Mage::getModel('catalog/product')->load($_product->getId());
                         if ( !empty( $textValue = $product->getData( $_attr->getAttributeCode() ) ) ) {
                             echo 'found data' . $textValue . PHP_EOL;
