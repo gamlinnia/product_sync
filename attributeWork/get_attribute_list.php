@@ -93,157 +93,159 @@ function main() {
             $mode = '';
             echo "Error input, please select mode again" . PHP_EOL;
         }
+    }
 
+    if($mode == '1') {
+        $result = getAttributeList();
+        $filename = 'attribute_list.xls';
+        $sheetname = 'attribute';
+        exportArrayToXlsx($result, array(
+            "filename" => $filename,
+            "title" => $sheetname
+        ));
+    }
+    else if ($mode == '2') {
+        $result = getAttributeList();
+        var_dump($result);
+    }
+    else if ($mode == '3') {
+        if(getAttributeDetailByAttributeName($attribute_name)) {
+            var_dump(getAttributeDetailByAttributeName($attribute_name));
+        }
+        else {
+            main();
+        }
+    }
 
-        if($mode == '1') {
-            $result = getAttributeList();
-            $filename = 'attribute_list.xls';
-            $sheetname = 'attribute';
-            exportArrayToXlsx($result, array(
-                "filename" => $filename,
-                "title" => $sheetname
-            ));
-        }
-        else if ($mode == '2') {
-            $result = getAttributeList();
-            var_dump($result);
-        }
-        else if ($mode == '3') {
-            if(getAttributeDetailByAttributeName($attribute_name)) {
-                var_dump(getAttributeDetailByAttributeName($attribute_name));
+    switch ($mode) {
+        case '4' :
+            $keyword_to_search = promptMessageForInput('enter keyword to search for related attributes');
+            $attr_collection = getAttributeCollection();
+            $attr_collection->addFieldToFilter('frontend_label', array('like' => '%' . $keyword_to_search . '%'))
+                ->addFieldToFilter('attribute_code', array('neq' => generateAttributeCodeByLabel($keyword_to_search)));
+            if ($attr_collection->count() < 1) {
+                echo 'found no attributes' . PHP_EOL;
+                return;
             }
-            else {
-                main();
-            }
-        }
 
-        switch ($mode) {
-            case '4' :
-                $keyword_to_search = promptMessageForInput('enter keyword to search for related attributes');
-                $attr_collection = getAttributeCollection();
-                $attr_collection->addFieldToFilter('frontend_label', array('like' => '%' . $keyword_to_search . '%'))
-                    ->addFieldToFilter('attribute_code', array('neq' => generateAttributeCodeByLabel($keyword_to_search)));
-                if ($attr_collection->count() < 1) {
-                    echo 'found no attributes' . PHP_EOL;
-                    return;
-                }
-
-                $optionList = array();
-                foreach ($attr_collection as $_attr) {
-                    $attr = Mage::getModel('eav/entity_attribute')->load(
-                        $_attr->getId()
-                    );
-                    $options = getAttributeOptions('attributeId', $attr->getId());
-                    if (isset($options['options'])) {
-                        foreach ($options['options'] as $option) {
-                            if (!in_array(ucwords($option['label']), $optionList)) {
-                                $optionList[] = ucwords($option['label']);
-                            }
+            $optionList = array();
+            foreach ($attr_collection as $_attr) {
+                $attr = Mage::getModel('eav/entity_attribute')->load(
+                    $_attr->getId()
+                );
+                $options = getAttributeOptions('attributeId', $attr->getId());
+                if (isset($options['options'])) {
+                    foreach ($options['options'] as $option) {
+                        if (!in_array(ucwords($option['label']), $optionList)) {
+                            $optionList[] = ucwords($option['label']);
                         }
                     }
-
-                    Zend_Debug::dump(array(
-                        'id' => $attr->getId(),
-                        'attribute_code' => $attr->getData('attribute_code'),
-                        'frontend_label' => $attr->getData('frontend_label'),
-                        'frontend_input' => $attr->getData('frontend_input'),
-                        'options' => isset($options['options']) ? $options['options'] : null
-                    ));
-                }
-                echo 'similar attr count: ' . $attr_collection->count() . PHP_EOL . PHP_EOL;
-
-                $new_attr_label = promptMessageForInput('enter new attr label to create', null, true);
-                if (empty($new_attr_label)) {
-                    $new_attr_label = $keyword_to_search;
-                    echo 'empty input, $new_attr_label: ' . $new_attr_label . PHP_EOL;
                 }
 
-                $new_frontend_input = promptMessageForInput('enter frontend_input type to create', array(
-                    'multiselect', 'boolean', 'select', 'text', 'textarea'
+                Zend_Debug::dump(array(
+                    'id' => $attr->getId(),
+                    'attribute_code' => $attr->getData('attribute_code'),
+                    'frontend_label' => $attr->getData('frontend_label'),
+                    'frontend_input' => $attr->getData('frontend_input'),
+                    'options' => isset($options['options']) ? $options['options'] : null
                 ));
-                $new_attr_id = createNewAttribute($new_attr_label, $new_frontend_input);
-                if (!$new_attr_id) {
-                    echo 'no new attr id returned' . PHP_EOL;
-                    exit(0);
+            }
+            echo 'similar attr count: ' . $attr_collection->count() . PHP_EOL . PHP_EOL;
+
+            $new_attr_label = promptMessageForInput('enter new attr label to create', null, true);
+            if (empty($new_attr_label)) {
+                $new_attr_label = $keyword_to_search;
+                echo 'empty input, $new_attr_label: ' . $new_attr_label . PHP_EOL;
+            }
+
+            $new_frontend_input = promptMessageForInput('enter frontend_input type to create', array(
+                'multiselect', 'boolean', 'select', 'text', 'textarea'
+            ));
+            $new_attr_id = createNewAttribute($new_attr_label, $new_frontend_input);
+            if (!$new_attr_id) {
+                echo 'no new attr id returned' . PHP_EOL;
+                exit(0);
+            }
+            $new_attr = Mage::getModel('eav/entity_attribute')->load($new_attr_id);
+            echo 'label: ' . $new_attr_label . ' created, id: ' . $new_attr_id . PHP_EOL;
+            echo 'option list: ' . implode(' / ', $optionList) . ' count: ' . count($optionList) . PHP_EOL . PHP_EOL;
+
+            $oldAttributeOptions = getAttributeOptions('attributeId', $new_attr_id);
+            Zend_Debug::dump($oldAttributeOptions);
+
+            $toAddArray = compareAttributeOptionArray($oldAttributeOptions['options'], $optionList);
+            echo 'to be added option list: ' . implode(' / ', $toAddArray) . ' count: ' . count($toAddArray) . PHP_EOL . PHP_EOL;
+
+            if (count($toAddArray) > 0) {
+                $prompt = strtolower(promptMessageForInput('enter Y to set options: ' . implode(' / ', $toAddArray) ));
+                if ($prompt == 'y'|| $prompt == 'yes') {
+                    setAttributeOptions($new_attr_id, $toAddArray);
                 }
-                $new_attr = Mage::getModel('eav/entity_attribute')->load($new_attr_id);
-                echo 'label: ' . $new_attr_label . ' created, id: ' . $new_attr_id . PHP_EOL;
-                echo 'option list: ' . implode(' / ', $optionList) . ' count: ' . count($optionList) . PHP_EOL . PHP_EOL;
+            }
 
-                $oldAttributeOptions = getAttributeOptions('attributeId', $new_attr_id);
-                Zend_Debug::dump($oldAttributeOptions);
+            $new_attribute_code = $new_attr->getAttributeCode();
+            $productCollection = Mage::getModel('catalog/product')->getCollection();
 
-                $toAddArray = compareAttributeOptionArray($oldAttributeOptions['options'], $optionList);
-                echo 'to be added option list: ' . implode(' / ', $toAddArray) . ' count: ' . count($toAddArray) . PHP_EOL . PHP_EOL;
+            $attrCount = 0;
+            foreach ($attr_collection as $_attr) {
+                $attrCount++;
 
-                if (count($toAddArray) > 0) {
-                    $prompt = strtolower(promptMessageForInput('enter Y to set options: ' . implode(' / ', $toAddArray) ));
-                    if ($prompt == 'y'|| $prompt == 'yes') {
-                        setAttributeOptions($new_attr_id, $toAddArray);
-                    }
-                }
+                $frontend_input = $_attr->getData('frontend_input');
+                $old_attr_code = $_attr->getData('attribute_code');
 
-                $new_attribute_code = $new_attr->getAttributeCode();
-                $productCollection = Mage::getModel('catalog/product')->getCollection();
-
-                $attrCount = 0;
-                foreach ($attr_collection as $_attr) {
-                    $attrCount++;
-
-                    $frontend_input = $_attr->getData('frontend_input');
-                    $old_attr_code = $_attr->getData('attribute_code');
-
-                    foreach ($productCollection as $_product) {
-                        $product = Mage::getModel('catalog/product')->load(
-                            $_product->getId()
+                foreach ($productCollection as $_product) {
+                    $product = Mage::getModel('catalog/product')->load(
+                        $_product->getId()
+                    );
+                    if (!empty($product->getData($old_attr_code))) {
+                        $old_attr_value = getAttributeLabelFromOptions(
+                            'attributeName',
+                            $old_attr_code,
+                            $product->getData($old_attr_code)
                         );
-                        if (!empty($product->getData($old_attr_code))) {
-                            $old_attr_value = getAttributeLabelFromOptions(
-                                'attributeName',
-                                $old_attr_code,
-                                $product->getData($old_attr_code)
-                            );
-                        } else {
-                            $old_attr_value = null;
-                        }
-                        if (!empty($old_attr_value)) {
-                            Zend_Debug::dump(array(
-                                'sku' => $product->getSku(),
-                                'attribute_set_id' => $product->getAttributeSetId(),
-                                'old attribute code' => $old_attr_code,
-                                'old attribute value' => $old_attr_value,
-                                'frontend_input' => $frontend_input
-                            ));
-                            if (checkAttributeInProductAttributeSet($new_attribute_code, $product)) {
-                                echo 'new attribute exists in product' . PHP_EOL;
-                            } else {
-                                echo 'new attribute NOT exist in product' . PHP_EOL;
-                                $attribute_set_name = Mage::getModel('eav/entity_attribute_set')->load($product->getAttributeSetId())->getAttributeSetName();
-                                echo 'attribute set name = ' . $attribute_set_name . PHP_EOL;
-                                if (!moveAttributeToGroupInAttributeSet(
-                                    $new_attribute_code,
-                                    $attribute_set_name,
-                                    $groupName = $attribute_set_name
-                                )) {
-                                    exit(0);
-                                }
-                            }
-
-                            /* set old value to new attribute */
-                            if ( empty($product->getData($new_attribute_code)) ) {
-                                setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
-                            }
-                        }
-                        echo '-';
+                    } else {
+                        $old_attr_value = null;
                     }
-                    /* each attr loop for product done  */
-                    echo 'looped attr: ' . $_attr->getAttributeCode() . ' index: ' . $attrCount . PHP_EOL;
-                    sleep(3);
-                }
+                    if (!empty($old_attr_value)) {
+                        Zend_Debug::dump(array(
+                            'sku' => $product->getSku(),
+                            'attribute_set_id' => $product->getAttributeSetId(),
+                            'old attribute code' => $old_attr_code,
+                            'old attribute value' => $old_attr_value,
+                            'frontend_input' => $frontend_input
+                        ));
+                        if (checkAttributeInProductAttributeSet($new_attribute_code, $product)) {
+                            echo 'new attribute exists in product' . PHP_EOL;
+                        } else {
+                            echo 'new attribute NOT exist in product' . PHP_EOL;
+                            $attribute_set_name = Mage::getModel('eav/entity_attribute_set')->load($product->getAttributeSetId())->getAttributeSetName();
+                            echo 'attribute set name = ' . $attribute_set_name . PHP_EOL;
+                            if (!moveAttributeToGroupInAttributeSet(
+                                $new_attribute_code,
+                                $attribute_set_name,
+                                $groupName = $attribute_set_name
+                            )) {
+                                exit(0);
+                            }
+                        }
 
-                break;
-            case '5' :
-                /* search for attribute_code or attribute_label */
+                        /* set old value to new attribute */
+                        if ( empty($product->getData($new_attribute_code)) ) {
+                            setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
+                        }
+                    }
+                    echo '-';
+                }
+                /* each attr loop for product done  */
+                echo 'looped attr: ' . $_attr->getAttributeCode() . ' index: ' . $attrCount . PHP_EOL;
+                sleep(3);
+            }
+
+            break;
+        case '5' :
+            /* search for attribute_code or attribute_label */
+            $searchType = '';
+            while (empty($searchType)) {
                 $searchType = promptMessageForInput('search for attribute_code or attribute_label', array('code', 'label'));
 
 
@@ -291,9 +293,9 @@ function main() {
                                 echo $count . '.. ';
                             }
                             $product = Mage::getModel('catalog/product')->load($_product->getId());
-                            if ( !empty( $textValue = $product->getData( $_attr->getAttributeCode() ) ) ) {
+                            if (!empty($textValue = $product->getData($_attr->getAttributeCode()))) {
                                 echo 'found data' . $textValue . PHP_EOL;
-                                if ( !in_array($textValue, $optionList) ) {
+                                if (!in_array($textValue, $optionList)) {
                                     $optionList[] = $textValue;
                                 }
                             }
@@ -314,11 +316,11 @@ function main() {
                 echo 'similar attr count: ' . $attr_collection->count() . PHP_EOL . PHP_EOL;
 
                 Zend_Debug::dump($response);
-
-                break;
-        }
-        $mode = '';
+                $searchType = '';
+            }
+            break;
     }
+
 }
 
 main();
