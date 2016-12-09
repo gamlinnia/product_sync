@@ -14,6 +14,8 @@ echo '總共 '.$highestRow.' 列';
 for ($row = 0; $row <= $highestRow; $row++) {
     for ($column = 0; $column <= 12; $column++) {//看你有幾個欄位 此範例為 13 個位
         $val = $sheet->getCellByColumnAndRow($column, $row)->getValue();
-        echo $val . PHP_EOL;
+        if ( !empty($val) ) {
+            echo $val . PHP_EOL;
+        }
     }
 }
