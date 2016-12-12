@@ -516,7 +516,6 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
         if (!empty($imageObject['mediaType'])) {
             $url = $imageObject['url'];
             preg_match('/media\/catalog\/product(.+)/', $url, $match);
-            Mage::log($match, null, 'sync.log', true);
             if (isset($match[1])) {
                 preg_match('/[\d]+-[\d]+-[\d]+-[A-Za-z]?[\d]+/', $match[1], $oriSkuMatch);
                 $skuToSet = '';
@@ -527,7 +526,6 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
                     foreach ($productImages as $imageObj) {
                         if ($newMediaTypeToMatch==$imageObj['match']) {
                             $skuToSet = $imageObj['file'];
-                            Mage::log($skuToSet, null, 'sync_mainimage.log', true);
                         }
                     }
                 }
@@ -535,7 +533,6 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
                 if (in_array('image', $imageObject['mediaType'])) {
                     if (!empty($skuToSet)) {
                         $product->setImage($skuToSet);
-                        Mage::log('image normally set', null, 'sync_mainimage.log', true);
                     } else {
                         $product->setImage($match[1]);
                     }
@@ -560,8 +557,6 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
         }
 
         preg_match('/[\d]+-[\d]+-[\d]+-[A-Za-z]?[\d]+/', $imageObject['basename'], $fileName);
-        Mage::log('search for image file name by preg_match', null, 'sync_mainimage.log', true);
-        Mage::log($fileName[0], null, 'sync_mainimage.log', true);
 
         $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')
             ->getCollection()
@@ -570,8 +565,6 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
             ->join(array('gallery' => 'coreproductmediagallery/mediagallery'),'main_table.value_id = gallery.value_id',array('gallery.value'));
 
         if ((int)$mediagalleryCollection->count() == 1) {
-            Mage::log('edit label and position', null, 'sync_mainimage.log', true);
-            Mage::log($imageObject['label'], null, 'sync_mainimage.log', true);
             $mediagalleryCollection->getFirstItem()
                 ->setPosition($imageObject['position'])
                 ->setLabel($imageObject['label'])
