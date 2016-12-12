@@ -559,7 +559,7 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
 
         }
 
-        preg_match('/[0-9\-]{13}/', $imageObject['basename'], $fileName);
+        preg_match('/[\d]+-[\d]+-[\d]+-[A-Za-z]?[\d]+/', $imageObject['basename'], $fileName);
         Mage::log($fileName, null, 'sync.log', true);
 
         $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')
@@ -569,6 +569,8 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
             ->join(array('gallery' => 'coreproductmediagallery/mediagallery'),'main_table.value_id = gallery.value_id',array('gallery.value'));
 
         if ((int)$mediagalleryCollection->count() == 1) {
+            Mage::log('edit label and position', null, 'sync_mainimage.log', true);
+            Mage::log($imageObject['label'], null, 'sync_mainimage.log', true);
             $mediagalleryCollection->getFirstItem()
                 ->setPosition($imageObject['position'])
                 ->setLabel($imageObject['label'])
