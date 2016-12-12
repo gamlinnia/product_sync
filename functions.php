@@ -560,7 +560,8 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
         }
 
         preg_match('/[\d]+-[\d]+-[\d]+-[A-Za-z]?[\d]+/', $imageObject['basename'], $fileName);
-        Mage::log($fileName, null, 'sync.log', true);
+        Mage::log('search for image file name by preg_match', null, 'sync_mainimage.log', true);
+        Mage::log($fileName[0], null, 'sync_mainimage.log', true);
 
         $mediagalleryCollection = Mage::getModel('coreproductmediagallery/mediagalleryvalue')
             ->getCollection()
