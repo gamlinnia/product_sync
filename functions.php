@@ -527,6 +527,7 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
                     foreach ($productImages as $imageObj) {
                         if ($newMediaTypeToMatch==$imageObj['match']) {
                             $skuToSet = $imageObj['file'];
+                            Mage::log($skuToSet, null, 'sync_mainimage.log', true);
                         }
                     }
                 }
@@ -534,6 +535,7 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
                 if (in_array('image', $imageObject['mediaType'])) {
                     if (!empty($skuToSet)) {
                         $product->setImage($skuToSet);
+                        Mage::log('image normally set', null, 'sync_mainimage.log', true);
                     } else {
                         $product->setImage($match[1]);
                     }
