@@ -91,7 +91,6 @@ try{
         $localImages = getImagesUrlOfProduct($sku, 'sku');
 
         $imagesToBeUploadOrDelete = compareImageWithRemoteIncludeDelete($localImages, $imagesInfoArray);
-//        $imagesToBeUpload = compareImageWithRemote($localImages, $imagesInfoArray);
         echo 'sku: ' . $sku . 'processing images now' . PHP_EOL;
         var_dump($imagesToBeUploadOrDelete);
 

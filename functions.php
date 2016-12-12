@@ -491,20 +491,66 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
     }
 
     /* edit image, change priority and mediaType */
+    switch ($filterType) {
+        case 'entity_id' :
+            $product = Mage::getModel('catalog/product')->load($valueToFilter);
+            break;
+        case 'sku' :
+            $product = Mage::getModel('catalog/product')->load(
+                Mage::getModel('catalog/product')->getIdBySku($valueToFilter)
+            );
+            break;
+    }
+    $productImages = array();
+    foreach ($product->getMediaGalleryImages() as $image) {
+        preg_match('/[\d]+-[\d]+-[\d]+-[A-Za-z]?[\d]+/', $image->getFile(), $skuMatch);
+        if (isset($skuMatch[0])) {
+            $productImages[] = array(
+                'match' => $skuMatch[0],
+                'file' => $image->getFile()
+            );
+        }
+    }
+
     foreach ($imageObjectList['edit'] as $imageObject) {
         if (!empty($imageObject['mediaType'])) {
             $url = $imageObject['url'];
             preg_match('/media\/catalog\/product(.+)/', $url, $match);
             Mage::log($match, null, 'sync.log', true);
             if (isset($match[1])) {
+                preg_match('/[\d]+-[\d]+-[\d]+-[A-Za-z]?[\d]+/', $match[1], $oriSkuMatch);
+                $skuToSet = '';
+                if (isset($oriSkuMatch[0])) {
+                    $newMediaTypeToMatch = $oriSkuMatch[0];
+
+                    /* 比對產品圖片中是否有對應的檔名 */
+                    foreach ($productImages as $imageObj) {
+                        if ($newMediaTypeToMatch==$imageObj['match']) {
+                            $skuToSet = $imageObj['file'];
+                        }
+                    }
+                }
+
                 if (in_array('image', $imageObject['mediaType'])) {
-                    $product->setImage($match[1]);
+                    if (!empty($skuToSet)) {
+                        $product->setImage($skuToSet);
+                    } else {
+                        $product->setImage($match[1]);
+                    }
                 }
                 if (in_array('small_image', $imageObject['mediaType'])) {
-                    $product->setSmallImage($match[1]);
+                    if (!empty($skuToSet)) {
+                        $product->setSmallImage($skuToSet);
+                    } else {
+                        $product->setSmallImage($match[1]);
+                    }
                 }
                 if (in_array('thumbnail', $imageObject['mediaType'])) {
-                    $product->setThumbnail($match[1]);
+                    if (!empty($skuToSet)) {
+                        $product->setThumbnail($skuToSet);
+                    } else {
+                        $product->setThumbnail($match[1]);
+                    }
                 }
                 $product->save();
             }

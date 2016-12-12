@@ -19,3 +19,6 @@ for ($row = 0; $row <= $highestRow; $row++) {
         }
     }
 }
+
+
+sendMailWithDownloadUrl('Bad product review alert', $fileList, $recipient_array);
