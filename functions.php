@@ -372,6 +372,11 @@ function compareImageWithRemoteIncludeDelete ($localImages, $remoteImages) {
 
     foreach ($localImages as $local) {
         $match = false;
+
+        if ( strtolower(substr($local['basename'], 0, 2)) == 'cs' ) {
+            $response['delete'][] = $local;
+        }
+
         foreach ($remoteImages as $remote) {
             if (strtolower(substr($remote['basename'], 0, 2)) == 'cs' && strtolower(substr($local['basename'], 0, 2)) == strtolower(substr($remote['basename'], 0, 2))) {
                 $match = true;
