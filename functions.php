@@ -344,8 +344,8 @@ function compareImageWithRemoteIncludeDelete ($localImages, $remoteImages) {
                 break;
             } else {
 
-                    preg_match('/[0-9\-]{13}/', $remote['basename'], $remoteMatch);
-                    preg_match('/[0-9\-]{13}/', $local['basename'], $localMatch);
+                    preg_match('/[\d]{2}-[\d]{3}-[\d]{3}-[A-Za-z]?[\d]{2}/', $remote['basename'], $remoteMatch);
+                    preg_match('/[\d]{2}-[\d]{3}-[\d]{3}-[A-Za-z]?[\d]{2}/', $local['basename'], $localMatch);
                     if (isset($remoteMatch[0]) && isset($localMatch[0]) && $remoteMatch[0] == $localMatch[0]) {
 
                         if ( count($remote['mediaType']) > count($local['mediaType'])) {
