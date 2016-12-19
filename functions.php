@@ -494,7 +494,7 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
         if (isset($config['internalHost'])) {
             $imageObject['url'] = str_replace($imageObject['host'], $config['internalHost'], $imageObject['url']);
         }
-        uploadProductImageByNewModule($product, $imageObject['url'], $imageObject['position'], getFileNameWithoutExtension($imageObject['basename']), $imageObject['mediaType']);
+        uploadProductImageByNewModule($product, $imageObject['url'], $imageObject['position'], $imageObject['label'], $imageObject['mediaType']);
     }
 
     /* edit image, change priority and mediaType */
