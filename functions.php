@@ -343,26 +343,29 @@ function compareImageWithRemoteIncludeDelete ($localImages, $remoteImages) {
                 $match = true;
                 break;
             } else {
-                preg_match('/[0-9\-]{13}/', $remote['basename'], $remoteMatch);
-                preg_match('/[0-9\-]{13}/', $local['basename'], $localMatch);
-                if ($remoteMatch[0] == $localMatch[0]) {
+                if (strtolower(substr($local['basename'], 0, 2)) != 'cs') {
+                    preg_match('/[0-9\-]{13}/', $remote['basename'], $remoteMatch);
+                    preg_match('/[0-9\-]{13}/', $local['basename'], $localMatch);
+                    if ($remoteMatch[0] == $localMatch[0]) {
 
-                    if ( count($remote['mediaType']) > count($local['mediaType'])) {
-                        $edit = true;
-                    }
-                    if ($local['position'] != $remote['position']) {
-                        $edit = true;
-                    }
-                    if ($local['label'] != $remote['label']) {
-                        $edit = true;
-                    }
-                    if ($edit) {
-                        $response['edit'][] = $remote;
-                    }
+                        if ( count($remote['mediaType']) > count($local['mediaType'])) {
+                            $edit = true;
+                        }
+                        if ($local['position'] != $remote['position']) {
+                            $edit = true;
+                        }
+                        if ($local['label'] != $remote['label']) {
+                            $edit = true;
+                        }
+                        if ($edit) {
+                            $response['edit'][] = $remote;
+                        }
 
-                    $match = true;
-                    break;
+                        $match = true;
+                        break;
+                    }
                 }
+
             }
         }
         if (!$match) {
