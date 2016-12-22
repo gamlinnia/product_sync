@@ -1,24 +1,46 @@
 <?php
 
 $config = json_decode(file_get_contents('../config.json'), true);
+require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
 require_once '../functions.php';
 require_once '../lib/PHPExcel-1.8/Classes/PHPExcel.php';
+require_once '../lib/ganon.php';
+
+Mage::app('admin');
+require '../vendor/autoload.php';
+use JonnyW\PhantomJs\Client;
 
 
-$reader = PHPExcel_IOFactory::createReader('Excel2007'); // 讀取2007 excel 檔案
-$PHPExcel = $reader->load("ILM_department_name.xlsx"); // 檔案名稱 需已經上傳到主機上
-$sheet = $PHPExcel->getSheet(0); // 讀取第一個工作表(編號從 0 開始)
-$highestRow = $sheet->getHighestRow(); // 取得總列數
-echo '總共 '.$highestRow.' 列';
-// 一次讀取一列
+$reader = PHPExcel_IOFactory::createReader('Excel2007'); // ????2007 excel ???×
+$PHPExcel = $reader->load("ILM_department_name.xlsx"); // ???×?W?? ???w?g?W?????D?÷?W
+$sheet = $PHPExcel->getSheet(0); // ???????@???u§@??(?s??±q 0 ?}?l)
+$highestRow = $sheet->getHighestRow(); // ??±o?`?C??
+echo '?`?@ '.$highestRow.' ?C';
+// ?@???????@?C
+
+$tmpArray = array();
 for ($row = 0; $row <= $highestRow; $row++) {
-    for ($column = 0; $column <= 12; $column++) {//看你有幾個欄位 此範例為 13 個位
+    for ($column = 0; $column <= 12; $column++) {//??§A???X?????? ???d???° 13 ????
         $val = $sheet->getCellByColumnAndRow($column, $row)->getValue();
         if ( !empty($val) ) {
-            echo $val . PHP_EOL;
+            preg_match('/<department name="(.+)" code="(.+)" \/>/', $val, $match);
+            var_dump($match);
+            if (count($match) == 3) {
+                $tmpArray[$match[1]] = $match[2];
+            }
         }
     }
 }
 
+foreach ($tmpArray as $key => $value) {
+    $response[] = array('dept' => $key, 'code' => $value);
+}
 
-sendMailWithDownloadUrl('Bad product review alert', $fileList, $recipient_array);
+var_dump($response);
+exportArrayToXlsx($response, array(
+    "filename" => 'hr.xls',
+    "title" => 'main'
+));
+
+Mage::getModel('contactus/notify')->sendNotification('contactus_weekly_data_template', array('li.l.liu@newegg.com'), null, null, null, null, array(array('path'=>'/var/www/html/product_sync/hr/hr.xls', 'name'=>'hr.xls'))
+);
