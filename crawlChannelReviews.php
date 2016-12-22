@@ -188,7 +188,7 @@ $rosewillReviewCollection->getSelect()
     ->joinLeft(array('rating' => 'rating_option_vote'),'rt.review_id = rating.review_id',array('rating' => 'rating.value'));
 $rosewillReviewCollection->getSelect()
     ->joinLeft(array('customer' => 'customer_entity'),'rdt.customer_id = customer.entity_id',array('email'=> 'customer.email'));
-$rosewillReviewCollection->addFieldToFilter('rt.created_at', array('gt' => date("Y-m-d H:i:s", strtotime('-2 day'))));
+$rosewillReviewCollection->addFieldToFilter('rt.created_at', array('gt' => date("Y-m-d H:i:s", strtotime('-9 hours'))));
 
 if ($rosewillReviewCollection->count() > 0) {
     foreach ($rosewillReviewCollection as $each) {
