@@ -217,7 +217,7 @@ if ($rosewillReviewCollection->count() > 0) {
 $fileList = array();
 /*export all reviews with 1 or 2 rate to excel by channel*/
 if(!empty($arrayToExcel)) {
-    file_put_contents('crawlChannelReviews.log', "Number of Records Need To Export To Excel: " . count($arrayToExcel));
+    file_put_contents('crawlChannelReviews.log', "Number of Records Need To Export To Excel: " . count($arrayToExcel) . PHP_EOL, FILE_APPEND);
     $now = date('Y-m-d');
     $fileName = 'bad_review'. DS . 'bad_review_' . $now . '.xls';
     $sheetName = 'Sheet 1';
