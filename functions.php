@@ -344,26 +344,26 @@ function compareImageWithRemoteIncludeDelete ($localImages, $remoteImages) {
                 break;
             } else {
 
-                    preg_match('/[\d]{2}-[\d]{3}-[\d]{3}-[A-Za-z]?[\d]{2}/', $remote['basename'], $remoteMatch);
-                    preg_match('/[\d]{2}-[\d]{3}-[\d]{3}-[A-Za-z]?[\d]{2}/', $local['basename'], $localMatch);
-                    if (isset($remoteMatch[0]) && isset($localMatch[0]) && $remoteMatch[0] == $localMatch[0]) {
+                preg_match('/[\d]{2}-[\d]{3}-[\d]{3}-[A-Za-z]?[\d]{2}/', $remote['basename'], $remoteMatch);
+                preg_match('/[\d]{2}-[\d]{3}-[\d]{3}-[A-Za-z]?[\d]{2}/', $local['basename'], $localMatch);
+                if (isset($remoteMatch[0]) && isset($localMatch[0]) && $remoteMatch[0] == $localMatch[0]) {
 
-                        if ( count($remote['mediaType']) > count($local['mediaType'])) {
-                            $edit = true;
-                        }
-                        if ($local['position'] != $remote['position']) {
-                            $edit = true;
-                        }
-                        if ($local['label'] != $remote['label']) {
-                            $edit = true;
-                        }
-                        if ($edit) {
-                            $response['edit'][] = $remote;
-                        }
-
-                        $match = true;
-                        break;
+                    if ( count($remote['mediaType']) > count($local['mediaType'])) {
+                        $edit = true;
                     }
+                    if ($local['position'] != $remote['position']) {
+                        $edit = true;
+                    }
+                    if ($local['label'] != $remote['label']) {
+                        $edit = true;
+                    }
+                    if ($edit) {
+                        $response['edit'][] = $remote;
+                    }
+
+                    $match = true;
+                    break;
+                }
 
             }
         }
@@ -1647,18 +1647,20 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                         preg_match_all('/<\/b>(.+)<br \/>/', $subjectAndCreatedatAndNicknameStr, $matchCreatedat);
                         $created_at = trim($matchCreatedat[1][0]);
                     }
-                    //detail
-                    $detail = trim($element->parent->getChild(6)->getPlainText());
+                    if(!moreThanSpecificDays($created_at, 'now', 2)) {
+                        //detail
+                        $detail = trim($element->parent->getChild(6)->getPlainText());
 
-                    $data = array(
-                        'detail' => $detail,
-                        'nickname' => $nickname,
-                        'subject' => $subject,
-                        'created_at' => $created_at,
-                        'rating' => (string)$rating,
-                        'product_url' => $product_url
-                    );
-                    $response[] = $data;
+                        $data = array(
+                            'detail' => $detail,
+                            'nickname' => $nickname,
+                            'subject' => $subject,
+                            'created_at' => $created_at,
+                            'rating' => (string)$rating,
+                            'product_url' => $product_url
+                        );
+                        $response[] = $data;
+                    }
                 }
             }
             break;
@@ -1725,15 +1727,18 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             preg_match_all('/<span class="visuallyhidden">([^>^<]+) stars/', $content, $matchRating);
             if (!empty($matchNickname[1])) {
                 foreach ($matchNickname[1] as $index => $nickname) {
-                    $data = array(
-                        'nickname' => trim($nickname),
-                        'detail' => trim($matchReviewText[1][$index]),
-                        'created_at' => trim($matchPostDate[1][$index]),
-                        'subject' => trim($matchSubject[1][$index]),
-                        'rating' => trim($matchRating[1][$index]),       // first one is overall rating
-                        'product_url' => $product_url
-                    );
-                    $response[] = $data;
+                    $created_at = trim($matchPostDate[1][$index]);
+                    if(!moreThanSpecificDays($created_at, 'now', 2)) {
+                        $data = array(
+                            'nickname' => trim($nickname),
+                            'detail' => trim($matchReviewText[1][$index]),
+                            'created_at' => trim($matchPostDate[1][$index]),
+                            'subject' => trim($matchSubject[1][$index]),
+                            'rating' => trim($matchRating[1][$index]),       // first one is overall rating
+                            'product_url' => $product_url
+                        );
+                        $response[] = $data;
+                    }
                 }
             }
             echo json_encode($response) . PHP_EOL;
@@ -1812,16 +1817,17 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                 $nickname = trim($each['reviewer_name']);
                 $created_at = trim($each['date']);
                 $rating = trim($each['rating']);
-
-                $data = array(
-                    'detail' => $detail,
-                    'nickname' => $nickname,
-                    'subject' => $subject,
-                    'created_at' => $created_at,
-                    'rating' => $rating,
-                    'product_url' => $product_url
-                );
-                $response[] = $data;
+                if(!moreThanSpecificDays($created_at, 'now', 2)) {
+                    $data = array(
+                        'detail' => $detail,
+                        'nickname' => $nickname,
+                        'subject' => $subject,
+                        'created_at' => $created_at,
+                        'rating' => $rating,
+                        'product_url' => $product_url
+                    );
+                    $response[] = $data;
+                }
             }
 
             break;
@@ -1852,15 +1858,17 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             if(!empty($review_data)){
                 foreach($review_data as $each_review){
                     $date = new Zend_Date(strtotime(trim($each_review['published_date'])));
-                    $data = array(
-                        'detail' => trim($each_review['content']),
-                        'nickname' => htmlentities(trim($each_review['author']['screenName'])),
-                        'subject' => htmlentities(trim($each_review['summary'])),
-                        'created_at' => $date->get('MMM dd, yyyy'),
-                        'rating' => trim($each_review['attribute_rating'][0]['value']),
-                        'product_url' => $product_url
-                    );
-                    $response[] = $data;
+                    if(!morethanDays($date, 2)) {
+                        $data = array(
+                            'detail' => trim($each_review['content']),
+                            'nickname' => htmlentities(trim($each_review['author']['screenName'])),
+                            'subject' => htmlentities(trim($each_review['summary'])),
+                            'created_at' => $date->get('MMM dd, yyyy'),
+                            'rating' => trim($each_review['attribute_rating'][0]['value']),
+                            'product_url' => $product_url
+                        );
+                        $response[] = $data;
+                    }
                 }
             }
             echo json_encode($response) . PHP_EOL;
@@ -1891,17 +1899,21 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             preg_match_all('/<span class="BVRRValue BVRRReviewDate">[^>^<]+<meta itemprop="datePublished" content="([^\"]+)"\/><\/span>/', $content, $matchPostDate);
             preg_match_all('/<span itemprop="ratingValue" class="BVRRNumber BVRRRatingNumber">([^<>]+)<\/span>/', $content, $matchRating);
             preg_match_all('/<span itemprop="name" class="BVRRValue BVRRReviewTitle">([^<>]+)<\/span>/', $content, $matchSubject);
+
             if (!empty($matchNickname[1])) {
                 foreach ($matchNickname[1] as $index => $nickname) {
-                    $data = array(
-                        'nickname' => trim($nickname),
-                        'detail' => trim($matchReviewText[1][$index]),
-                        'created_at' => trim($matchPostDate[1][$index]),
-                        'subject' => trim($matchSubject[1][$index]),
-                        'rating' => trim($matchRating[1][$index +1]),       // first one is overall rating
-                        'product_url' => $product_url
-                    );
-                    $response[] = $data;
+                    $created_at = trim($matchPostDate[1][$index]);
+                    if(!moreThanSpecificDays($created_at, 'now', 2)) {
+                        $data = array(
+                            'nickname' => trim($nickname),
+                            'detail' => trim($matchReviewText[1][$index]),
+                            'created_at' => trim($matchPostDate[1][$index]),
+                            'subject' => trim($matchSubject[1][$index]),
+                            'rating' => trim($matchRating[1][$index + 1]),       // first one is overall rating
+                            'product_url' => $product_url
+                        );
+                        $response[] = $data;
+                    }
                 }
             }
             echo json_encode($response) . PHP_EOL;
@@ -1929,18 +1941,20 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             foreach ($html('#cm_cr-review_list > .a-section') as $index => $element) {
                 echo $index . PHP_EOL;
                 echo $element->getPlainText() . PHP_EOL;
-
-                preg_match('/(.+) out of/', $element->getChild(0)->getChild(0)->getPlainText(), $matchRating);
-                if (count($matchRating) == 2) {
-                    $rating = $matchRating[1];
-                    $response[] = array(
-                        'detail' => $element->getChild(3)->getPlainText(),
-                        'rating' => $rating,
-                        'subject' => $element->getChild(0)->lastChild()->getPlainText(),
-                        'created_at' => $element->getChild(1)->lastChild()->getPlainText(),
-                        'nickname' => $element->getChild(1)->getChild(0)->getPlainText(),
-                        'product_url' => $product_url
-                    );
+                $created_at = $element->getChild(1)->lastChild()->getPlainText();
+                if(!moreThanSpecificDays($created_at, 'now', 2)) {
+                    preg_match('/(.+) out of/', $element->getChild(0)->getChild(0)->getPlainText(), $matchRating);
+                    if (count($matchRating) == 2) {
+                        $rating = $matchRating[1];
+                        $response[] = array(
+                            'detail' => $element->getChild(3)->getPlainText(),
+                            'rating' => $rating,
+                            'subject' => $element->getChild(0)->lastChild()->getPlainText(),
+                            'created_at' => $element->getChild(1)->lastChild()->getPlainText(),
+                            'nickname' => $element->getChild(1)->getChild(0)->getPlainText(),
+                            'product_url' => $product_url
+                        );
+                    }
                 }
             }
             echo json_encode($response) . PHP_EOL;
@@ -1984,38 +1998,40 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             if(!empty($html)) {
                 foreach ($html('.grpReviews tr td .details') as $element) {
                     $nickname = $element->parent->parent->getChild(0)->getChild(0)->getChild(0)->getPlainText();
-                    $created = $element->parent->parent->getChild(0)->getChild(0)->getChild(1)->getPlainText();
-                    $ratingText = $element->parent->parent->getChild(1)->getChild(2)->getChild(0)->getPlainText();
-                    preg_match('/(\d).?\/.?\d/', $ratingText, $match);
-                    if (count($match) == 2) {
-                        $rating = $match[1];
-                    }
-                    if ($element->parent->parent->getChild(1)->getChild(2)->getChild(1)) {
-                        $subject = $element->parent->parent->getChild(1)->getChild(2)->getChild(1)->getPlainText();
-                    } else {
-                        $subject = null;
-                    }
-                    $detail = trim($element->getPlainText());
-                    /*remove string before "Pros: " and add <br /> in front of "Crons:" and "Other Thoughts:"*/
-                    $detail =  substr($detail, strpos($detail, 'Pros:'), strlen($detail));
-                    $detail = str_replace('Cons:', '<br /><br />Cons:', $detail);
-                    $detail = str_replace('Other Thoughts:', '<br /><br />Other Thoughts:', $detail);
-                    $detail = trim($detail);
+                    $created_at = $element->parent->parent->getChild(0)->getChild(0)->getChild(1)->getPlainText();
+                    if(!moreThanSpecificDays($created_at, 'now', 2)){
+                        $ratingText = $element->parent->parent->getChild(1)->getChild(2)->getChild(0)->getPlainText();
+                        preg_match('/(\d).?\/.?\d/', $ratingText, $match);
+                        if (count($match) == 2) {
+                            $rating = $match[1];
+                        }
+                        if ($element->parent->parent->getChild(1)->getChild(2)->getChild(1)) {
+                            $subject = $element->parent->parent->getChild(1)->getChild(2)->getChild(1)->getPlainText();
+                        } else {
+                            $subject = null;
+                        }
+                        $detail = trim($element->getPlainText());
+                        /*remove string before "Pros: " and add <br /> in front of "Crons:" and "Other Thoughts:"*/
+                        $detail =  substr($detail, strpos($detail, 'Pros:'), strlen($detail));
+                        $detail = str_replace('Cons:', '<br /><br />Cons:', $detail);
+                        $detail = str_replace('Other Thoughts:', '<br /><br />Other Thoughts:', $detail);
+                        $detail = trim($detail);
 
-                    if(stripos($detail, 'Manufacturer Response:') !== false){
-                        continue;
-                    }
+                        if(stripos($detail, 'Manufacturer Response:') !== false){
+                            continue;
+                        }
 
-                    $data = array(
-                        'detail' => $detail,
-                        'nickname' => htmlentities($nickname),
-                        'subject' => htmlentities($subject),
-                        'created_at' => $created,
-                        'rating' => $rating,
-                        'product_url' => $product_url
-                    );
+                        $data = array(
+                            'detail' => $detail,
+                            'nickname' => htmlentities($nickname),
+                            'subject' => htmlentities($subject),
+                            'created_at' => $created_at,
+                            'rating' => $rating,
+                            'product_url' => $product_url
+                        );
 //                    var_dump($data);
-                    $response[] = $data;
+                        $response[] = $data;
+                    }
                 }
             }
             else {
