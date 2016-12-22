@@ -343,26 +343,28 @@ function compareImageWithRemoteIncludeDelete ($localImages, $remoteImages) {
                 $match = true;
                 break;
             } else {
-                preg_match('/[0-9\-]{13}/', $remote['basename'], $remoteMatch);
-                preg_match('/[0-9\-]{13}/', $local['basename'], $localMatch);
-                if ($remoteMatch[0] == $localMatch[0]) {
 
-                    if ( count($remote['mediaType']) > count($local['mediaType'])) {
-                        $edit = true;
-                    }
-                    if ($local['position'] != $remote['position']) {
-                        $edit = true;
-                    }
-                    if ($local['label'] != $remote['label']) {
-                        $edit = true;
-                    }
-                    if ($edit) {
-                        $response['edit'][] = $remote;
+                    preg_match('/[\d]{2}-[\d]{3}-[\d]{3}-[A-Za-z]?[\d]{2}/', $remote['basename'], $remoteMatch);
+                    preg_match('/[\d]{2}-[\d]{3}-[\d]{3}-[A-Za-z]?[\d]{2}/', $local['basename'], $localMatch);
+                    if (isset($remoteMatch[0]) && isset($localMatch[0]) && $remoteMatch[0] == $localMatch[0]) {
+
+                        if ( count($remote['mediaType']) > count($local['mediaType'])) {
+                            $edit = true;
+                        }
+                        if ($local['position'] != $remote['position']) {
+                            $edit = true;
+                        }
+                        if ($local['label'] != $remote['label']) {
+                            $edit = true;
+                        }
+                        if ($edit) {
+                            $response['edit'][] = $remote;
+                        }
+
+                        $match = true;
+                        break;
                     }
 
-                    $match = true;
-                    break;
-                }
             }
         }
         if (!$match) {
@@ -372,6 +374,11 @@ function compareImageWithRemoteIncludeDelete ($localImages, $remoteImages) {
 
     foreach ($localImages as $local) {
         $match = false;
+
+        if ( strtolower(substr($local['basename'], 0, 2)) == 'cs' ) {
+            $response['delete'][] = $local;
+        }
+
         foreach ($remoteImages as $remote) {
             if (strtolower(substr($remote['basename'], 0, 2)) == 'cs' && strtolower(substr($local['basename'], 0, 2)) == strtolower(substr($remote['basename'], 0, 2))) {
                 $match = true;
@@ -487,7 +494,7 @@ function uploadAndDeleteImagesWithPositionAndLabel ($imageObjectList, $valueToFi
         if (isset($config['internalHost'])) {
             $imageObject['url'] = str_replace($imageObject['host'], $config['internalHost'], $imageObject['url']);
         }
-        uploadProductImageByNewModule($product, $imageObject['url'], $imageObject['position'], getFileNameWithoutExtension($imageObject['basename']), $imageObject['mediaType']);
+        uploadProductImageByNewModule($product, $imageObject['url'], $imageObject['position'], $imageObject['label'], $imageObject['mediaType']);
     }
 
     /* edit image, change priority and mediaType */
