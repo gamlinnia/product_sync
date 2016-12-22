@@ -80,7 +80,7 @@ if ($debug) {
 
 /*log starting time*/
 $now = new DateTime(null, new DateTimeZone('UTC'));
-file_put_contents('crawlChannelReviews.log', "Process start at: " . $now->format('Y-m-d H:i:s') . PHP_EOL, FILE_APPEND);
+file_put_contents('crawlChannelReviews.log', "Process start at: " . $now->format('Y-m-d H:i:s'));
 
 /*all channel in one excel */
 $arrayToExcel = array();
