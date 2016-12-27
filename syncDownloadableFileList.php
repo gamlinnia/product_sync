@@ -27,21 +27,28 @@ if (isset($remoteUrl) && !empty($remoteUrl)) {
     $remoteAPI = $remoteUrl . $remoteAPIName;
     $fileList = getDownloadableFileList();
     $header = array('Token: rosewill');
-    $data = array(
-        'media_url' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
-        'file_list' => $fileList
-    );
+//    $data = array(
+//        'media_url' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
+//        'file_list' => $fileList
+//    );
     $response = CallAPI(
-        'POST',
+        'GET',
         $remoteAPI,
         $header,
-        $data,
+        null,
         null
     );
-    var_dump($response);
+//    var_dump($response);
     $remoteMediaUrl = $response['media_url'];
-    $localNeedToAdd = $response['local_need_to_add'];
-    $localNeedToDelete = $response['local_need_to_delete'];
+
+    $remoteFileList = $response['data'];
+    $localFileList = getDownloadableFileList();
+
+    $localNeedToAdd = arrayRecursiveDiff($remoteFileList, $localFileList);
+    $localNeedToDelete = arrayRecursiveDiff($localFileList, $remoteFileList);
+
+//    $localNeedToAdd = $response['local_need_to_add'];
+//    $localNeedToDelete = $response['local_need_to_delete'];
     updateLocalFileList($localNeedToAdd, $remoteMediaUrl);
     updateLocalFileList($localNeedToDelete);
 }

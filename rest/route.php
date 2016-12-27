@@ -351,8 +351,7 @@ $app->post('/api/modifyReviewCommentFromLocal', function () {
     echo json_encode($result);
 });
 
-$app->post('/api/syncDownloadableFileList', function() {
-    global $input;
+$app->get('/api/syncDownloadableFileList', function() {
     global $app;
     $headers = $app->request()->headers();
     if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
@@ -361,24 +360,28 @@ $app->post('/api/syncDownloadableFileList', function() {
         ));
         return;
     }
-    $remoteMediaUrl = $input['media_url'];
+//    $remoteMediaUrl = $input['media_url'];
 
-    $remoteFileList = $input['file_list'];
+//    $remoteFileList = $input['file_list'];
+//    $localFileList = getDownloadableFileList();
+//
+//    $remoteNeedToDelete = arrayRecursiveDiff($remoteFileList, $localFileList);
+//    $remoteNeedToAdd = arrayRecursiveDiff($localFileList, $remoteFileList);
+//
+//    $response = array(
+//        'media_url'=> Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
+//        'local_need_to_add' => $remoteNeedToAdd,
+//        'local_need_to_delete' => $remoteNeedToDelete
+//    );
     $localFileList = getDownloadableFileList();
-
-    $remoteNeedToDelete = arrayRecursiveDiff($remoteFileList, $localFileList);
-    $remoteNeedToAdd = arrayRecursiveDiff($localFileList, $remoteFileList);
-
     $response = array(
         'media_url'=> Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
-        'local_need_to_add' => $remoteNeedToAdd,
-        'local_need_to_delete' => $remoteNeedToDelete
+        'data' => $localFileList,
     );
     echo json_encode($response);
 });
 
-$app->post('/api/syncDownloadableFileAssociatedProducts', function() {
-    global $input;
+$app->get('/api/syncDownloadableFileAssociatedProducts', function() {
     global $app;
     $headers = $app->request()->headers();
     if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
@@ -388,15 +391,19 @@ $app->post('/api/syncDownloadableFileAssociatedProducts', function() {
         return;
     }
 
-    $remoteAssociatedProducts = $input['associated_products'];
+//    $remoteAssociatedProducts = $input['associated_products'];
+//    $localAssociatedProducts = getDownloadableFileAssociatedProduct();
+//
+//    $remoteNeedToDelete = arrayRecursiveDiff($remoteAssociatedProducts, $localAssociatedProducts);
+//    $remoteNeedToAdd = arrayRecursiveDiff($localAssociatedProducts, $remoteAssociatedProducts);
+//
+//    $response = array(
+//        'local_need_to_add' => $remoteNeedToAdd,
+//        'local_need_to_delete' => $remoteNeedToDelete
+//    );
     $localAssociatedProducts = getDownloadableFileAssociatedProduct();
-
-    $remoteNeedToDelete = arrayRecursiveDiff($remoteAssociatedProducts, $localAssociatedProducts);
-    $remoteNeedToAdd = arrayRecursiveDiff($localAssociatedProducts, $remoteAssociatedProducts);
-
     $response = array(
-        'local_need_to_add' => $remoteNeedToAdd,
-        'local_need_to_delete' => $remoteNeedToDelete
+        'data' => $localAssociatedProducts
     );
     echo json_encode($response);
 });

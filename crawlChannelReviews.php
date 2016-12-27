@@ -181,7 +181,7 @@ foreach($channels as $channel => $url) {
     }
 }
 
-/*process review in rosewill.com*/
+/*process review which already in database, so need separate with others channel list above*/
 
 $rosewillReviewCollection = Mage::getModel('review/review')->getProductCollection()->addAttributeToSelect('model_number');
 $rosewillReviewCollection->getSelect()

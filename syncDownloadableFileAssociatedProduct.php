@@ -27,19 +27,25 @@ if (isset($remoteUrl) && !empty($remoteUrl)) {
 
     $fileAssociatedProduct = getDownloadableFileAssociatedProduct();
     $header = array('Token: rosewill');
-    $data = array(
-        'associated_products' => $fileAssociatedProduct
-    );
+//    $data = array(
+//        'associated_products' => $fileAssociatedProduct
+//    );
     $response = CallAPI(
-        'POST',
+        'GET',
         $remoteAPIUrl,
         $header,
-        $data,
+        null,
         null
     );
-    var_dump($response);
-    $localNeedToAdd = $response['local_need_to_add'];
-    $localNeedToDelete = $response['local_need_to_delete'];
+//    var_dump($response);
+//    $localNeedToAdd = $response['local_need_to_add'];
+//    $localNeedToDelete = $response['local_need_to_delete'];
+    $remoteAssociatedProducts = $response['data'];
+    $localAssociatedProducts = getDownloadableFileAssociatedProduct();
+
+    $localNeedToAdd = arrayRecursiveDiff($remoteAssociatedProducts, $localAssociatedProducts);
+    $localNeedToDelete = arrayRecursiveDiff($localAssociatedProducts, $remoteAssociatedProducts);
+
     updateLocalAssociatedProductRecords($localNeedToAdd);
     updateLocalAssociatedProductRecords($localNeedToDelete);
 }
