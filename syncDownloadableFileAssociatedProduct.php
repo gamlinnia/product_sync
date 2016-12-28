@@ -24,12 +24,7 @@ switch ($parsedUrl['host']) {
 if (isset($remoteUrl) && !empty($remoteUrl)) {
     $remoteAPIName = 'syncDownloadableFileAssociatedProducts';
     $remoteAPIUrl = $remoteUrl . $remoteAPIName;
-
-    $fileAssociatedProduct = getDownloadableFileAssociatedProduct();
     $header = array('Token: rosewill');
-//    $data = array(
-//        'associated_products' => $fileAssociatedProduct
-//    );
     $response = CallAPI(
         'GET',
         $remoteAPIUrl,
@@ -38,8 +33,7 @@ if (isset($remoteUrl) && !empty($remoteUrl)) {
         null
     );
 //    var_dump($response);
-//    $localNeedToAdd = $response['local_need_to_add'];
-//    $localNeedToDelete = $response['local_need_to_delete'];
+
     $remoteAssociatedProducts = $response['data'];
     $localAssociatedProducts = getDownloadableFileAssociatedProduct();
 

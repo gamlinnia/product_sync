@@ -25,12 +25,7 @@ switch ($parsedUrl['host']) {
 if (isset($remoteUrl) && !empty($remoteUrl)) {
     $remoteAPIName = 'syncDownloadableFileList';
     $remoteAPI = $remoteUrl . $remoteAPIName;
-    $fileList = getDownloadableFileList();
     $header = array('Token: rosewill');
-//    $data = array(
-//        'media_url' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
-//        'file_list' => $fileList
-//    );
     $response = CallAPI(
         'GET',
         $remoteAPI,

@@ -360,19 +360,7 @@ $app->get('/api/syncDownloadableFileList', function() {
         ));
         return;
     }
-//    $remoteMediaUrl = $input['media_url'];
 
-//    $remoteFileList = $input['file_list'];
-//    $localFileList = getDownloadableFileList();
-//
-//    $remoteNeedToDelete = arrayRecursiveDiff($remoteFileList, $localFileList);
-//    $remoteNeedToAdd = arrayRecursiveDiff($localFileList, $remoteFileList);
-//
-//    $response = array(
-//        'media_url'=> Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
-//        'local_need_to_add' => $remoteNeedToAdd,
-//        'local_need_to_delete' => $remoteNeedToDelete
-//    );
     $localFileList = getDownloadableFileList();
     $response = array(
         'media_url'=> Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA),
@@ -391,16 +379,6 @@ $app->get('/api/syncDownloadableFileAssociatedProducts', function() {
         return;
     }
 
-//    $remoteAssociatedProducts = $input['associated_products'];
-//    $localAssociatedProducts = getDownloadableFileAssociatedProduct();
-//
-//    $remoteNeedToDelete = arrayRecursiveDiff($remoteAssociatedProducts, $localAssociatedProducts);
-//    $remoteNeedToAdd = arrayRecursiveDiff($localAssociatedProducts, $remoteAssociatedProducts);
-//
-//    $response = array(
-//        'local_need_to_add' => $remoteNeedToAdd,
-//        'local_need_to_delete' => $remoteNeedToDelete
-//    );
     $localAssociatedProducts = getDownloadableFileAssociatedProduct();
     $response = array(
         'data' => $localAssociatedProducts
