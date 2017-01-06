@@ -79,7 +79,7 @@ if ($debug) {
 }
 
 /*log starting time*/
-$now = new DateTime(null, new DateTimeZone('UTC'));
+$now = new DateTime(null, new DateTimeZone('Asia/Taipei'));
 file_put_contents('crawlChannelReviews.log', "Process start at: " . $now->format('Y-m-d H:i:s'));
 
 /*all channel in one excel */
@@ -235,5 +235,5 @@ if(!empty($arrayToExcel)) {
 }
 
 /*log ending time*/
-$now = new DateTime(null, new DateTimeZone('UTC'));
+$now = new DateTime(null, new DateTimeZone('Asia/Taipei'));
 file_put_contents('crawlChannelReviews.log', "Process end at: " . $now->format('Y-m-d H:i:s') . PHP_EOL, FILE_APPEND);
