@@ -206,6 +206,8 @@ function main() {
             $new_attribute_code = $new_attr->getAttributeCode();
 
             //exclude the attribute just created
+            $attr_collection = getAttributeCollection();
+            $attr_collection->addFieldToFilter('frontend_label', array('like' => '%' . $keyword_to_search . '%'));
             $attr_collection->addFieldToFilter('attribute_code', array('neq' => generateAttributeCodeByLabel($new_attr_label)));
 
             //add attribute to attribute set
@@ -216,7 +218,7 @@ function main() {
                 foreach ($attributesInAttributeSet as $eachAttrInSet) {
                     foreach($attr_collection as $eachAttr) {
                         if ($eachAttrInSet['code'] == $eachAttr->getData('attribute_code')) {
-                            echo $eachAttrInSet['code'] . 'exist in ' . $attributeSetName . PHP_EOL;
+                            echo $eachAttrInSet['code'] . ' exist in ' . $attributeSetName . PHP_EOL;
                             $prompt = promptMessageForInput('move ' .  $new_attribute_code . ' to ' . $attributeSetName . '?(Y/n)');
                             if($prompt == 'y') {
                                 $moveResult = moveAttributeToGroupInAttributeSet(
