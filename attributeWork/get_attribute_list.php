@@ -182,8 +182,9 @@ function main() {
                     setAttributeOptions($new_attr_id, $toAddArray);
                 }
                 elseif ($prompt == 'm') {
-                    $prompt = promptMessageForInput('enter the string of options(separate by "/")');
+                    $prompt = promptMessageForInput('enter the string of all options(separate by "/")');
                     $newOptionsArray = explode('/', $prompt);
+                    $newOptionsArray = array_map('trim', $newOptionsArray);
                     Zend_Debug::dump($newOptionsArray);
                     $prompt = strtolower(promptMessageForInput('sure to add these new options above ?(Y/n)'));
                     if($prompt =='y') {
@@ -192,8 +193,9 @@ function main() {
                 }
             }
             else {
-                $prompt = promptMessageForInput('enter the string of options(separate by "/")');
+                $prompt = promptMessageForInput('enter the string of all options(separate by "/")');
                 $newOptionsArray = explode('/', $prompt);
+                $newOptionsArray = array_map('trim', $newOptionsArray);
                 Zend_Debug::dump($newOptionsArray);
                 $prompt = strtolower(promptMessageForInput('sure to add these new options above ?(Y/n)'));
                 if($prompt =='y') {
@@ -204,6 +206,8 @@ function main() {
             $new_attribute_code = $new_attr->getAttributeCode();
             $productCollection = Mage::getModel('catalog/product')->getCollection();
 
+            //exclude the attribute just created
+            $attr_collection->addFieldToFilter('attribute_code', array('neq' => generateAttributeCodeByLabel($new_attr_label)));
             $attrCount = 0;
             foreach ($attr_collection as $_attr) {
                 $attrCount++;
@@ -215,6 +219,29 @@ function main() {
                     $product = Mage::getModel('catalog/product')->load(
                         $_product->getId()
                     );
+
+//                    Zend_Debug::dump(array(
+//                        'sku' => $product->getSku(),
+//                        'attribute_set_id' => $product->getAttributeSetId(),
+//                        'old attribute code' => $old_attr_code,
+//                        'old attribute value' => $old_attr_value,
+//                        'frontend_input' => $frontend_input
+//                    ));
+                    if (checkAttributeInProductAttributeSet($new_attribute_code, $product)) {
+                        echo 'new attribute exists in product' . PHP_EOL;
+                    } else {
+                        echo 'new attribute NOT exist in product' . PHP_EOL;
+                        $attribute_set_name = Mage::getModel('eav/entity_attribute_set')->load($product->getAttributeSetId())->getAttributeSetName();
+                        echo 'attribute set name = ' . $attribute_set_name . PHP_EOL;
+                        if (!moveAttributeToGroupInAttributeSet(
+                            $new_attribute_code,
+                            $attribute_set_name,
+                            $groupName = $attribute_set_name
+                        )) {
+                            echo 'move attribute to specify group in attribute set fail' . PHP_EOL;;
+                            exit(0);
+                        }
+                    }
                     if (!empty($product->getData($old_attr_code))) {
                         $old_attr_value = getAttributeLabelFromOptions(
                             'attributeName',
@@ -224,30 +251,8 @@ function main() {
                     } else {
                         $old_attr_value = null;
                     }
-                    if (!empty($old_attr_value)) {
-                        Zend_Debug::dump(array(
-                            'sku' => $product->getSku(),
-                            'attribute_set_id' => $product->getAttributeSetId(),
-                            'old attribute code' => $old_attr_code,
-                            'old attribute value' => $old_attr_value,
-                            'frontend_input' => $frontend_input
-                        ));
-                        if (checkAttributeInProductAttributeSet($new_attribute_code, $product)) {
-                            echo 'new attribute exists in product' . PHP_EOL;
-                        } else {
-                            echo 'new attribute NOT exist in product' . PHP_EOL;
-                            $attribute_set_name = Mage::getModel('eav/entity_attribute_set')->load($product->getAttributeSetId())->getAttributeSetName();
-                            echo 'attribute set name = ' . $attribute_set_name . PHP_EOL;
-                            if (!moveAttributeToGroupInAttributeSet(
-                                $new_attribute_code,
-                                $attribute_set_name,
-                                $groupName = $attribute_set_name
-                            )) {
-                                echo 'move attribute to specify group in attribute set fail' . PHP_EOL;;
-                                exit(0);
-                            }
-                        }
 
+                    if (!empty($old_attr_value)) {
                         /* set old value to new attribute */
                         if ( empty($product->getData($new_attribute_code)) ) {
                             setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
@@ -258,6 +263,10 @@ function main() {
                 /* each attr loop for product done  */
                 echo PHP_EOL;
                 echo 'looped attr: ' . $_attr->getAttributeCode() . ' index: ' . $attrCount . PHP_EOL;
+                $prompt = strtolower(promptMessageForInput('delete ' . $old_attr_code . ' (Y/n) ?'));
+                if($prompt == 'y') {
+                    Mage::getModel('eav/entity_attribute')->load($_attr->getId())->delete();
+                }
                 sleep(3);
             }
 
