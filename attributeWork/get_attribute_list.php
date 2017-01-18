@@ -286,6 +286,7 @@ function main() {
                     if (!empty($old_attr_value)) {
                         /* set old value to new attribute */
                         if ( empty($product->getData($new_attribute_code)) ) {
+                            echo 'old_attr_value' . $old_attr_value . PHP_EOL;
                             setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
                         }
                     }

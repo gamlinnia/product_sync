@@ -3125,7 +3125,7 @@ function uploadProductImageByNewModule ($productModel, $imgUrl, $position, $labe
 
 
 function setProductValue ($product, $attribute_code, $frontend_input, $value_to_be_mapped) {
-    echo 'set product ' . $product->getSku() . ' with attribute code: ' . $attribute_code . ' with value: ' . $value_to_be_mapped . ' input type = ' . $frontend_input . PHP_EOL;
+    echo PHP_EOL . 'set product ' . $product->getSku() . ' with attribute code: ' . $attribute_code . ' with value: ' . $value_to_be_mapped . ' input type = ' . $frontend_input . PHP_EOL;
 
     if (!is_array($value_to_be_mapped)) {
         $dividers = array('\/', '&', ',');
@@ -3138,7 +3138,7 @@ function setProductValue ($product, $attribute_code, $frontend_input, $value_to_
     } else {
         $optionsArray = $value_to_be_mapped;
     }
-
+    var_dump($optionsArray);
     $value = getAttributeValueIdFromOptions('attributeName', $attribute_code, $optionsArray);
     if (empty($value)) {
         $attr_id = Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $attribute_code);
