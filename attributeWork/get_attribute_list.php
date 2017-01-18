@@ -235,10 +235,17 @@ function main() {
 
             $new_attribute_code = $new_attr->getAttributeCode();
 
-            //exclude the attribute just created
             $attr_collection = getAttributeCollection();
-            $attr_collection->addFieldToFilter('frontend_label', $keyword_to_search);
-            $attr_collection->addFieldToFilter('attribute_code', array('neq' => generateAttributeCodeByLabel($new_attr_label)));
+            //exclude the attribute just created
+            switch ($searchType) {
+                case 'code' :
+                    $attr_collection->addFieldToFilter('attribute_code', array('like' => '%' . $keyword_to_search . '%'));
+                    break;
+                case 'label' :
+                    $attr_collection->addFieldToFilter('frontend_label', $keyword_to_search);
+                    $attr_collection->addFieldToFilter('attribute_code', array('neq' => generateAttributeCodeByLabel($new_attr_label)));
+                    break;
+            }
 
             //search all attribute set collection
             // add attribute to specify group in specify attribute set
