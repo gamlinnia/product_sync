@@ -149,7 +149,7 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
         case 'select' :
         case 'boolean' :
             foreach ($optionsArray['options'] as $optionObject) {
-                echo 'getAttributeValueIdFromOptions - ' . strtolower(trim($optionObject['label'])) . ' : ' . strtolower(trim($valueToBeMapped)) . PHP_EOL;
+                echo 'getAttributeValueIdFromOptions - ' . strtolower(trim($optionObject['label'])) . ' : ' . strtolower(trim($valueToBeMapped[0])) . PHP_EOL;
                 if (strtolower(trim($optionObject['label'])) == strtolower(trim($valueToBeMapped))) {
                     return $optionObject['value'];
                 }
