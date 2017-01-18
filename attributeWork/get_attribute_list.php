@@ -152,10 +152,17 @@ function main() {
             }
             echo 'similar attr count: ' . $attr_collection->count() . PHP_EOL . PHP_EOL;
 
-            $new_attr_label = promptMessageForInput('enter new attr label to create', null, true);
+            $new_attr_label = promptMessageForInput('enter new attr label to create or empty to delete above found attributes', null, true);
             if (empty($new_attr_label)) {
                 $new_attr_label = $keyword_to_search;
                 echo 'empty input, $new_attr_label: ' . $new_attr_label . PHP_EOL;
+                foreach($attr_collection as $_attr) {
+                    $prompt = promptMessageForInput('sure to delete attribute: ' . $attr->getData('attribute_code') . ' (Y/n)?');
+                    if($prompt == 'y') {
+                        Mage::getModel('eav/entity_attribute')->load($_attr->getId())->delete();
+                    }
+                }
+                exit(0);
             }
 
             $new_frontend_input = promptMessageForInput('enter frontend_input type to create', array(
