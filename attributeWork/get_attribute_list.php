@@ -191,7 +191,7 @@ function main() {
 //            Zend_Debug::dump($oldAttributeOptions);
 
             $toAddArray = compareAttributeOptionArray($oldAttributeOptions['options'], $optionList);
-            echo 'to be added option list: ' . implode(' / ', $toAddArray) . ' count: ' . count($toAddArray) . PHP_EOL . PHP_EOL;
+            echo 'to be added option list: ' . implode(' , ', $toAddArray) . ' count: ' . count($toAddArray) . PHP_EOL . PHP_EOL;
 
             if (count($toAddArray) > 0) {
                 $prompt = strtolower(promptMessageForInput('add below options ?(Y/n) or modify these options(M/m): ' . implode(' , ', $toAddArray) ));
@@ -211,7 +211,7 @@ function main() {
             }
             else {
                 $prompt = promptMessageForInput('enter the string of all options(separate by ",")');
-                $newOptionsArray = explode('/', $prompt);
+                $newOptionsArray = explode(',', $prompt);
                 $newOptionsArray = array_map('trim', $newOptionsArray);
 //                Zend_Debug::dump($newOptionsArray);
                 $prompt = strtolower(promptMessageForInput('sure to add these new options above ?(Y/n)'));
