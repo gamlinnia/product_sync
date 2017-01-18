@@ -204,14 +204,40 @@ function main() {
             }
 
             $new_attribute_code = $new_attr->getAttributeCode();
-            $productCollection = Mage::getModel('catalog/product')->getCollection();
 
             //exclude the attribute just created
             $attr_collection->addFieldToFilter('attribute_code', array('neq' => generateAttributeCodeByLabel($new_attr_label)));
+
+            //add attribute to attribute set
+            $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection');
+            foreach($attributeSetCollection as $eachSet) {
+                $attributesInAttributeSet = Mage::getModel('catalog/product_attribute_api')->items($eachSet->getId());
+                $attributeSetName = $eachSet->getAttributeSetName();
+                foreach ($attributesInAttributeSet as $eachAttrInSet) {
+                    foreach($attr_collection as $eachAttr) {
+                        if ($eachAttrInSet['code'] == $eachAttr->getData('attribute_code')) {
+                            echo $eachAttrInSet['code'] . 'exist in ' . $attributeSetName . PHP_EOL;
+                            $prompt = promptMessageForInput('move ' .  $new_attribute_code . ' to ' . $attributeSetName . '?(Y/n)');
+                            if($prompt == 'y') {
+                                $moveResult = moveAttributeToGroupInAttributeSet(
+                                    $new_attribute_code,
+                                    $attributeSetName,
+                                    $groupName = $attributeSetName);
+                                if (!$moveResult) {
+                                    echo 'move attribute to specify group in attribute set fail' . PHP_EOL;;
+                                    exit(0);
+                                }
+                                echo "Move new attribute to group in attribute set success !!" . PHP_EOL;
+                            }
+                        }
+                    }
+                }
+            }
+
             $attrCount = 0;
+            $productCollection = Mage::getModel('catalog/product')->getCollection();
             foreach ($attr_collection as $_attr) {
                 $attrCount++;
-
                 $frontend_input = $_attr->getData('frontend_input');
                 $old_attr_code = $_attr->getData('attribute_code');
 
@@ -227,23 +253,12 @@ function main() {
 //                        'old attribute value' => $old_attr_value,
 //                        'frontend_input' => $frontend_input
 //                    ));
-                    if (checkAttributeInProductAttributeSet($new_attribute_code, $product)) {
-                        echo 'new attribute exists in product' . PHP_EOL;
-                    } else {
-                        echo 'new attribute NOT exist in product' . PHP_EOL;
-                        $attribute_set_name = Mage::getModel('eav/entity_attribute_set')->load($product->getAttributeSetId())->getAttributeSetName();
-                        echo 'attribute set name = ' . $attribute_set_name . PHP_EOL;
-                        $moveResult = moveAttributeToGroupInAttributeSet(
-                            $new_attribute_code,
-                            $attribute_set_name,
-                            $groupName = $attribute_set_name);
-                        if (!$moveResult) {
-                            echo 'move attribute to specify group in attribute set fail' . PHP_EOL;;
-                            exit(0);
-                        }
-                        echo "Move new attrbiute to group in attribute set success !!" . PHP_EOL;
-                    }
                     if (!empty($product->getData($old_attr_code))) {
+                        if (!checkAttributeInProductAttributeSet($new_attribute_code, $product)) {
+                            echo 'new attribute NOT exist in product' . PHP_EOL;
+                            $attribute_set_name = Mage::getModel('eav/entity_attribute_set')->load($product->getAttributeSetId())->getAttributeSetName();
+                            echo 'attribute set name = ' . $attribute_set_name . PHP_EOL;
+                        }
                         $old_attr_value = getAttributeLabelFromOptions(
                             'attributeName',
                             $old_attr_code,
