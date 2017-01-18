@@ -210,7 +210,7 @@ function main() {
                 }
             }
             else {
-                $prompt = promptMessageForInput('enter the string of all options(separate by "/")');
+                $prompt = promptMessageForInput('enter the string of all options(separate by ",")');
                 $newOptionsArray = explode('/', $prompt);
                 $newOptionsArray = array_map('trim', $newOptionsArray);
 //                Zend_Debug::dump($newOptionsArray);
