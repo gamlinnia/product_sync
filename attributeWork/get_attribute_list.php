@@ -248,6 +248,8 @@ function main() {
                 echo PHP_EOL;
             }
 
+            echo "Start scan attributes of products." . PHP_EOL;
+
             $attrCount = 0;
             $productCollection = Mage::getModel('catalog/product')->getCollection();
             foreach ($attr_collection as $_attr) {
