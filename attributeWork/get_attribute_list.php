@@ -191,6 +191,15 @@ function main() {
                     }
                 }
             }
+            else {
+                $prompt = promptMessageForInput('enter the string of options(separate by "/")');
+                $newOptionsArray = explode('/', $prompt);
+                Zend_Debug::dump($newOptionsArray);
+                $prompt = strtolower(promptMessageForInput('sure to add these new options above ?(Y/n)'));
+                if($prompt =='y') {
+                    setAttributeOptions($new_attr_id, $newOptionsArray);
+                }
+            }
 
             $new_attribute_code = $new_attr->getAttributeCode();
             $productCollection = Mage::getModel('catalog/product')->getCollection();
@@ -247,6 +256,7 @@ function main() {
                     echo '-';
                 }
                 /* each attr loop for product done  */
+                echo PHP_EOL;
                 echo 'looped attr: ' . $_attr->getAttributeCode() . ' index: ' . $attrCount . PHP_EOL;
                 sleep(3);
             }
