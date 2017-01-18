@@ -287,8 +287,8 @@ function main() {
                         /* set old value to new attribute */
                         if ( empty($product->getData($new_attribute_code)) ) {
                             echo 'old_attr_value: ' . $old_attr_value . PHP_EOL;
-                            if(!in_array($old_attr_value, $newOptionsArray)){
-                                var_dump($newOptionsArray);
+                            if(!in_array($old_attr_value, $oldAttributeOptions['options'])){
+                                var_dump($oldAttributeOptions['options']);
                                 $prompt = promptMessageForInput('enter attribute label above: ');
                                 setProductValue($product, $new_attribute_code, $new_frontend_input, trim($prompt));
                             }
