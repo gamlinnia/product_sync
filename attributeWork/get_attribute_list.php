@@ -121,7 +121,7 @@ function main() {
         case '4' :
             $keyword_to_search = promptMessageForInput('enter keyword to search for related attributes');
             $attr_collection = getAttributeCollection();
-            $attr_collection->addFieldToFilter('frontend_label', array('like' => '%' . $keyword_to_search . '%'))
+            $attr_collection->addFieldToFilter('frontend_label', $keyword_to_search)
                 ->addFieldToFilter('attribute_code', array('neq' => generateAttributeCodeByLabel($keyword_to_search)));
             if ($attr_collection->count() < 1) {
                 echo 'found no attributes' . PHP_EOL;
@@ -214,7 +214,7 @@ function main() {
 
             //exclude the attribute just created
             $attr_collection = getAttributeCollection();
-            $attr_collection->addFieldToFilter('frontend_label', array('like' => '%' . $keyword_to_search . '%'));
+            $attr_collection->addFieldToFilter('frontend_label', $keyword_to_search);
             $attr_collection->addFieldToFilter('attribute_code', array('neq' => generateAttributeCodeByLabel($new_attr_label)));
 
             //search all attribute set collection
