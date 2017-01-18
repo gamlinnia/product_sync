@@ -233,14 +233,15 @@ function main() {
                         echo 'new attribute NOT exist in product' . PHP_EOL;
                         $attribute_set_name = Mage::getModel('eav/entity_attribute_set')->load($product->getAttributeSetId())->getAttributeSetName();
                         echo 'attribute set name = ' . $attribute_set_name . PHP_EOL;
-                        if (!moveAttributeToGroupInAttributeSet(
+                        $moveResult = moveAttributeToGroupInAttributeSet(
                             $new_attribute_code,
                             $attribute_set_name,
-                            $groupName = $attribute_set_name
-                        )) {
+                            $groupName = $attribute_set_name);
+                        if (!$moveResult) {
                             echo 'move attribute to specify group in attribute set fail' . PHP_EOL;;
                             exit(0);
                         }
+                        echo "Move new attrbiute to group in attribute set success !!" . PHP_EOL;
                     }
                     if (!empty($product->getData($old_attr_code))) {
                         $old_attr_value = getAttributeLabelFromOptions(
