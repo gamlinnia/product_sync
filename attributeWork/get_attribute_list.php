@@ -178,7 +178,7 @@ function main() {
             echo 'option list: ' . implode(' / ', $optionList) . ' count: ' . count($optionList) . PHP_EOL . PHP_EOL;
 
             $oldAttributeOptions = getAttributeOptions('attributeId', $new_attr_id);
-            Zend_Debug::dump($oldAttributeOptions);
+//            Zend_Debug::dump($oldAttributeOptions);
 
             $toAddArray = compareAttributeOptionArray($oldAttributeOptions['options'], $optionList);
             echo 'to be added option list: ' . implode(' / ', $toAddArray) . ' count: ' . count($toAddArray) . PHP_EOL . PHP_EOL;
@@ -192,7 +192,7 @@ function main() {
                     $prompt = promptMessageForInput('enter the string of all options(separate by "/")');
                     $newOptionsArray = explode('/', $prompt);
                     $newOptionsArray = array_map('trim', $newOptionsArray);
-                    Zend_Debug::dump($newOptionsArray);
+//                    Zend_Debug::dump($newOptionsArray);
                     $prompt = strtolower(promptMessageForInput('sure to add these new options above ?(Y/n)'));
                     if($prompt =='y') {
                         setAttributeOptions($new_attr_id, $newOptionsArray);
@@ -203,7 +203,7 @@ function main() {
                 $prompt = promptMessageForInput('enter the string of all options(separate by "/")');
                 $newOptionsArray = explode('/', $prompt);
                 $newOptionsArray = array_map('trim', $newOptionsArray);
-                Zend_Debug::dump($newOptionsArray);
+//                Zend_Debug::dump($newOptionsArray);
                 $prompt = strtolower(promptMessageForInput('sure to add these new options above ?(Y/n)'));
                 if($prompt =='y') {
                     setAttributeOptions($new_attr_id, $newOptionsArray);
@@ -220,6 +220,8 @@ function main() {
                     $promptOptionArray[] = $each['label'];
                 }
             }
+            echo "prompt option array" . PHP_EOL;
+            var_dump($promptOptionArray);
 
             $new_attribute_code = $new_attr->getAttributeCode();
 
