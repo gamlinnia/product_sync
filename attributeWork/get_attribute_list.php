@@ -177,9 +177,18 @@ function main() {
             echo 'to be added option list: ' . implode(' / ', $toAddArray) . ' count: ' . count($toAddArray) . PHP_EOL . PHP_EOL;
 
             if (count($toAddArray) > 0) {
-                $prompt = strtolower(promptMessageForInput('enter Y to set options: ' . implode(' / ', $toAddArray) ));
+                $prompt = strtolower(promptMessageForInput('enter Y to set options or M to modify: ' . implode(' / ', $toAddArray) ));
                 if ($prompt == 'y'|| $prompt == 'yes') {
                     setAttributeOptions($new_attr_id, $toAddArray);
+                }
+                elseif ($prompt == 'm') {
+                    $prompt = promptMessageForInput('enter the string of options(separate by "/")');
+                    $newOptionsArray = explode('/', $prompt);
+                    Zend_Debug::dump($newOptionsArray);
+                    $prompt = strtolower(promptMessageForInput('sure to add these new options above ?(Y/n)'));
+                    if($prompt =='y') {
+                        setAttributeOptions($new_attr_id, $newOptionsArray);
+                    }
                 }
             }
 
@@ -225,6 +234,7 @@ function main() {
                                 $attribute_set_name,
                                 $groupName = $attribute_set_name
                             )) {
+                                echo 'move attribute to specify group in attribute set fail' . PHP_EOL;;
                                 exit(0);
                             }
                         }
