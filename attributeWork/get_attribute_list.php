@@ -184,7 +184,7 @@ function main() {
             echo 'to be added option list: ' . implode(' / ', $toAddArray) . ' count: ' . count($toAddArray) . PHP_EOL . PHP_EOL;
 
             if (count($toAddArray) > 0) {
-                $prompt = strtolower(promptMessageForInput('set these options ?(Y/n) or modify these options(M/m)' . implode(' / ', $toAddArray) ));
+                $prompt = strtolower(promptMessageForInput('set these options ?(Y/n) or modify these options(M/m): ' . implode(' / ', $toAddArray) ));
                 if ($prompt == 'y'|| $prompt == 'yes') {
                     setAttributeOptions($new_attr_id, $toAddArray);
                 }
@@ -208,6 +208,14 @@ function main() {
                 if($prompt =='y') {
                     setAttributeOptions($new_attr_id, $newOptionsArray);
                 }
+            }
+
+            //set promptOptionArray to use
+            if(!empty($newOptionsArray)){
+                $promptOptionArray = $newOptionsArray;
+            }
+            else{
+                $promptOptionArray = $oldAttributeOptions['options'];
             }
 
             $new_attribute_code = $new_attr->getAttributeCode();
@@ -287,7 +295,7 @@ function main() {
                         /* set old value to new attribute */
                         if ( empty($product->getData($new_attribute_code)) ) {
                             echo PHP_EOL . 'old_attr_value: ' . $old_attr_value . PHP_EOL;
-                            if(!in_array($old_attr_value, $oldAttributeOptions['options'])){
+                            if(!in_array($old_attr_value, $promptOptionArray)){
                                 var_dump($oldAttributeOptions['options']);
                                 $prompt = promptMessageForInput('enter attribute label above or leave empty to skip this step: ');
                                 if(!empty($prompt)) {
