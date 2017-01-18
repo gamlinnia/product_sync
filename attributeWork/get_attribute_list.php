@@ -184,7 +184,7 @@ function main() {
             echo 'to be added option list: ' . implode(' / ', $toAddArray) . ' count: ' . count($toAddArray) . PHP_EOL . PHP_EOL;
 
             if (count($toAddArray) > 0) {
-                $prompt = strtolower(promptMessageForInput('enter Y to set options or M to modify: ' . implode(' / ', $toAddArray) ));
+                $prompt = strtolower(promptMessageForInput('enter Y to set options or M to modify ' . implode(' / ', $toAddArray) ));
                 if ($prompt == 'y'|| $prompt == 'yes') {
                     setAttributeOptions($new_attr_id, $toAddArray);
                 }
@@ -286,7 +286,12 @@ function main() {
                     if (!empty($old_attr_value)) {
                         /* set old value to new attribute */
                         if ( empty($product->getData($new_attribute_code)) ) {
-                            echo 'old_attr_value' . $old_attr_value . PHP_EOL;
+                            echo 'old_attr_value: ' . $old_attr_value . PHP_EOL;
+                            if(!in_array($old_attr_value, $newOptionsArray)){
+                                var_dump($newOptionsArray);
+                                $prompt = promptMessageForInput('enter attribute label above: ');
+                                setProductValue($product, $new_attribute_code, $new_frontend_input, trim($prompt));
+                            }
                             setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
                         }
                     }
