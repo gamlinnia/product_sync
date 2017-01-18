@@ -184,7 +184,7 @@ function main() {
             echo 'to be added option list: ' . implode(' / ', $toAddArray) . ' count: ' . count($toAddArray) . PHP_EOL . PHP_EOL;
 
             if (count($toAddArray) > 0) {
-                $prompt = strtolower(promptMessageForInput('set these options ?(Y/n) or modify these options(M/m): ' . implode(' / ', $toAddArray) ));
+                $prompt = strtolower(promptMessageForInput('add below options ?(Y/n) or modify these options(M/m): ' . implode(' / ', $toAddArray) ));
                 if ($prompt == 'y'|| $prompt == 'yes') {
                     setAttributeOptions($new_attr_id, $toAddArray);
                 }
@@ -211,11 +211,14 @@ function main() {
             }
 
             //set promptOptionArray to use
+            $promptOptionArray = array();
             if(!empty($newOptionsArray)){
                 $promptOptionArray = $newOptionsArray;
             }
             else{
-                $promptOptionArray = $oldAttributeOptions['options'];
+                foreach($oldAttributeOptions['options'] as $each){
+                    $promptOptionArray[] = $each['label'];
+                }
             }
 
             $new_attribute_code = $new_attr->getAttributeCode();
