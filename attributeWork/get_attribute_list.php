@@ -210,7 +210,9 @@ function main() {
             $attr_collection->addFieldToFilter('frontend_label', array('like' => '%' . $keyword_to_search . '%'));
             $attr_collection->addFieldToFilter('attribute_code', array('neq' => generateAttributeCodeByLabel($new_attr_label)));
 
-            //add attribute to attribute set
+            //search all attribute set collection
+            // add attribute to specify group in specify attribute set
+            // which are match to the attributes found by input above
             $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection');
             foreach($attributeSetCollection as $eachSet) {
                 $attributesInAttributeSet = Mage::getModel('catalog/product_attribute_api')->items($eachSet->getId());
@@ -233,6 +235,7 @@ function main() {
                             }
                         }
                     }
+                    echo '.';
                 }
             }
 
@@ -248,13 +251,6 @@ function main() {
                         $_product->getId()
                     );
 
-//                    Zend_Debug::dump(array(
-//                        'sku' => $product->getSku(),
-//                        'attribute_set_id' => $product->getAttributeSetId(),
-//                        'old attribute code' => $old_attr_code,
-//                        'old attribute value' => $old_attr_value,
-//                        'frontend_input' => $frontend_input
-//                    ));
                     if (!empty($product->getData($old_attr_code))) {
                         if (!checkAttributeInProductAttributeSet($new_attribute_code, $product)) {
                             echo 'new attribute NOT exist in product' . PHP_EOL;
@@ -269,7 +265,13 @@ function main() {
                     } else {
                         $old_attr_value = null;
                     }
-
+//                    Zend_Debug::dump(array(
+//                        'sku' => $product->getSku(),
+//                        'attribute_set_id' => $product->getAttributeSetId(),
+//                        'old attribute code' => $old_attr_code,
+//                        'old attribute value' => $old_attr_value,
+//                        'frontend_input' => $frontend_input
+//                    ));
                     if (!empty($old_attr_value)) {
                         /* set old value to new attribute */
                         if ( empty($product->getData($new_attribute_code)) ) {
