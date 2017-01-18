@@ -119,10 +119,20 @@ function main() {
 
     switch ($mode) {
         case '4' :
+            $searchType = promptMessageForInput('search for attribute_code or attribute_label', array('code(like search)', 'label(non-like search)'));
             $keyword_to_search = promptMessageForInput('enter keyword to search for related attributes');
             $attr_collection = getAttributeCollection();
-            $attr_collection->addFieldToFilter('frontend_label', $keyword_to_search)
-                ->addFieldToFilter('attribute_code', array('neq' => generateAttributeCodeByLabel($keyword_to_search)));
+
+            switch ($searchType) {
+                case 'code' :
+                    $attr_collection->addFieldToFilter('attribute_code', array('like' => '%' . $keyword_to_search . '%'));
+                    break;
+                case 'label' :
+                    $attr_collection->addFieldToFilter('frontend_label', $keyword_to_search)
+                        ->addFieldToFilter('attribute_code', array('neq' => generateAttributeCodeByLabel($keyword_to_search)));
+                    break;
+            }
+
             if ($attr_collection->count() < 1) {
                 echo 'found no attributes' . PHP_EOL;
                 return;
