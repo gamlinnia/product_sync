@@ -217,6 +217,7 @@ function main() {
             foreach($attributeSetCollection as $eachSet) {
                 $attributesInAttributeSet = Mage::getModel('catalog/product_attribute_api')->items($eachSet->getId());
                 $attributeSetName = $eachSet->getAttributeSetName();
+                echo 'attribute set: ' . $attributeSetName . PHP_EOL;
                 foreach ($attributesInAttributeSet as $eachAttrInSet) {
                     foreach($attr_collection as $eachAttr) {
                         if ($eachAttrInSet['code'] == $eachAttr->getData('attribute_code')) {
@@ -237,6 +238,7 @@ function main() {
                     }
                     echo '.';
                 }
+                echo PHP_EOL;
             }
 
             $attrCount = 0;
