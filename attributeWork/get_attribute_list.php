@@ -232,13 +232,15 @@ function main() {
                 }
             }
             else {
-                $prompt = promptMessageForInput('enter the string of all options(separate by "|")');
-                $newOptionsArray = explode('|', $prompt);
-                $newOptionsArray = array_map('trim', $newOptionsArray);
-//                Zend_Debug::dump($newOptionsArray);
-                $prompt = strtolower(promptMessageForInput('sure to add these new options above ?(Y/n)'));
-                if($prompt =='y') {
-                    setAttributeOptions($new_attr_id, $newOptionsArray);
+                $prompt = strtolower(promptMessageForInput('enter the string of all options(separate by "|") or N/n to skip'));
+                if ($prompt != 'n') {
+                    $newOptionsArray = explode('|', $prompt);
+                    $newOptionsArray = array_map('trim', $newOptionsArray);
+    //                Zend_Debug::dump($newOptionsArray);
+                    $prompt = strtolower(promptMessageForInput('sure to add these new options above ?(Y/n)'));
+                    if ($prompt == 'y') {
+                        setAttributeOptions($new_attr_id, $newOptionsArray);
+                    }
                 }
             }
 
