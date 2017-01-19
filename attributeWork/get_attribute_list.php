@@ -287,7 +287,7 @@ function main() {
                     if (!empty($old_attr_value)) {
                         /* set old value to new attribute */
                         if ( empty($product->getData($new_attribute_code)) ) {
-                            echo PHP_EOL . 'old_attr_value: ' . $old_attr_value . PHP_EOL;
+                            echo PHP_EOL . $old_attr_code . ' : old_attr_value: ' . $old_attr_value . PHP_EOL;
                             if(!in_array($old_attr_value, $promptOptionArray)){
                                 var_dump($promptOptionArray);
                                 $prompt = promptMessageForInput('enter attribute label above or leave empty to skip this step: ', null, true);
