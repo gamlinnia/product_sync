@@ -335,9 +335,9 @@ function main() {
                                         setProductValue($product, $new_attribute_code, $new_frontend_input, $mappingTable[$old_attr_value]);
                                     }
                                 }
-//                                else {
-//                                    setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
-//                                }
+                                else {
+                                    setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
+                                }
                             }
                         }
                     }
