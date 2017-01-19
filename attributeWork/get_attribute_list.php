@@ -200,7 +200,7 @@ function main() {
                 }
                 elseif ($prompt == 'm') {
                     $prompt = promptMessageForInput('enter the string of all options(separate by "|")');
-                    $newOptionsArray = explode(',', $prompt);
+                    $newOptionsArray = explode('|', $prompt);
                     $newOptionsArray = array_map('trim', $newOptionsArray);
 //                    Zend_Debug::dump($newOptionsArray);
                     $prompt = strtolower(promptMessageForInput('sure to add these new options above ?(Y/n)'));
@@ -211,7 +211,7 @@ function main() {
             }
             else {
                 $prompt = promptMessageForInput('enter the string of all options(separate by "|")');
-                $newOptionsArray = explode(',', $prompt);
+                $newOptionsArray = explode('|', $prompt);
                 $newOptionsArray = array_map('trim', $newOptionsArray);
 //                Zend_Debug::dump($newOptionsArray);
                 $prompt = strtolower(promptMessageForInput('sure to add these new options above ?(Y/n)'));
