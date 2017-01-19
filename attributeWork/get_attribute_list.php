@@ -140,6 +140,14 @@ function main() {
                         ->addFieldToFilter('attribute_code', array('neq' => generateAttributeCodeByLabel($keyword_to_search)));
                     break;
             }
+            $prompt = promptMessageForInput('add ignore list ?(Y/n)');
+            if($prompt == 'y') {
+                $ignoreList = promptMessageForInput('input attribute name list separate by ","');
+                $ignoreList = explode(',', $ignoreList);
+                if(!empty($ignoreList)) {
+                    $attr_collection->addFieldToFilter('attribute_code', array('nin' => $ignoreList));
+                }
+            }
 
             if ($attr_collection->count() < 1) {
                 echo 'found no attributes' . PHP_EOL;
@@ -232,6 +240,7 @@ function main() {
 
             $new_attribute_code = $new_attr->getAttributeCode();
 
+            //get new attribute collection
             $attr_collection = getAttributeCollection();
             //exclude the attribute just created
             switch ($searchType) {
@@ -242,6 +251,10 @@ function main() {
                     $attr_collection->addFieldToFilter('frontend_label', $keyword_to_search);
                     $attr_collection->addFieldToFilter('attribute_code', array('neq' => generateAttributeCodeByLabel($new_attr_label)));
                     break;
+            }
+
+            if(!empty($ignoreList)) {
+                $attr_collection->addFieldToFilter('attribute_code', array('nin' => $ignoreList));
             }
 
             checkAllAttributeSetToSetAttributeGroup($new_attribute_code, $attr_collection);
@@ -287,7 +300,7 @@ function main() {
                             echo PHP_EOL . '"' . $old_attr_code . '" : old_attr_value: ' . $old_attr_value . PHP_EOL;
                             $promptOptionArray = getOptionsFromAttributeName($new_attribute_code);
                             $promptOptionArray = explode(',', $promptOptionArray);
-                            if(in_array($old_attr_value, $promptOptionArray)){
+                            if(in_array(strtolower($old_attr_value), array_map('strtolower', $promptOptionArray))){
                                 setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
                             }
                             elseif($mappingTable[$old_attr_value]) {
@@ -295,7 +308,7 @@ function main() {
                             }
                             else {
                                 var_dump($promptOptionArray);
-                                echo PHP_EOL . '"' . $old_attr_value . '"" need to mapping to one of above values' . PHP_EOL;
+                                echo PHP_EOL . '"' . $old_attr_value . '" need to mapping to one of above values' . PHP_EOL;
                                 $prompt = promptMessageForInput('create a mapping table?(Y/n)');
                                 if($prompt == 'y') {
                                     $prompt = promptMessageForInput('old_attribute_value');
