@@ -1200,7 +1200,7 @@ function getAttributeValueFromOptionsForExport ($nameOrId, $attrCodeOrId, $value
                 /*multiselect : a02030_headsets_connector,
                 "a02030_headsets_connector": "147,148,149,150"*/
                 file_put_contents('log.txt', $attrCodeOrId . ': ' . $valueToBeMapped . PHP_EOL, FILE_APPEND);
-                $valueToBeMappedArray = explode(',', $valueToBeMapped);
+//                $valueToBeMappedArray = explode(',', $valueToBeMapped);
                 $valueToBeMappedArray = explode(',', $valueToBeMapped);
                 file_put_contents('log.txt', 'count($valueToBeMappedArray)' . ': ' . count($valueToBeMappedArray) . PHP_EOL, FILE_APPEND);
                 if (count($valueToBeMappedArray) < 2) {

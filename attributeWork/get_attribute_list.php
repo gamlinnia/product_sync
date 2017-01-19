@@ -33,7 +33,7 @@ function getOptionsFromAttributeName($attribute_name){
         //var_dump($each);
         $options_string[] = $each['label'];
     }
-    return implode(",", $options_string);
+    return implode("|", $options_string);
 }
 
 function getAttributeDetailByAttributeName($attribute_name) {
@@ -313,7 +313,7 @@ function main() {
                         if ( empty($product->getData($new_attribute_code)) ) {
                             echo PHP_EOL . '"' . $old_attr_code . '" : old_attr_value: ' . $old_attr_value . PHP_EOL;
                             $promptOptionArray = getOptionsFromAttributeName($new_attribute_code);
-                            $promptOptionArray = explode(',', $promptOptionArray);
+                            $promptOptionArray = explode('|', $promptOptionArray);
                             if(in_array(strtolower($old_attr_value), array_map('strtolower', $promptOptionArray))){
                                 setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
                             }
