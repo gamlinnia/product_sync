@@ -131,7 +131,7 @@ function main() {
 
     switch ($mode) {
         case '4' :
-            $searchType = promptMessageForInput('search for attribute_code(like search) or attribute_label(non-like search)', array('code', 'label'));
+            $searchType = promptMessageForInput('search for attribute_code or attribute_label', array('code', 'label'));
             $keyword_to_search = promptMessageForInput('enter keyword to search for related attributes');
             $attr_collection = getAttributeCollection();
 
@@ -140,7 +140,7 @@ function main() {
                     $attr_collection->addFieldToFilter('attribute_code', array('like' => '%' . $keyword_to_search . '%'));
                     break;
                 case 'label' :
-                    $attr_collection->addFieldToFilter('frontend_label', $keyword_to_search);
+                    $attr_collection->addFieldToFilter('frontend_label', array('like' => '%' . $keyword_to_search . '%'));
                     $attr_collection   ->addFieldToFilter('attribute_code', array('neq' => generateAttributeCodeByLabel($keyword_to_search)));
                     break;
             }
@@ -264,7 +264,7 @@ function main() {
                     $attr_collection->addFieldToFilter('attribute_code', array('like' => '%' . $keyword_to_search . '%'));
                     break;
                 case 'label' :
-                    $attr_collection->addFieldToFilter('frontend_label', $keyword_to_search);
+                    $attr_collection->addFieldToFilter('frontend_label', array('like' => '%' . $keyword_to_search . '%'));
                     $attr_collection->addFieldToFilter('attribute_code', array('neq' => generateAttributeCodeByLabel($new_attr_label)));
                     break;
             }
@@ -325,7 +325,7 @@ function main() {
                             else {
                                 var_dump($promptOptionArray);
                                 echo PHP_EOL . '"' . $old_attr_value . '" need to mapping to one of above values' . PHP_EOL;
-                                $prompt = promptMessageForInput('create a mapping table?(Y/n)');
+                                $prompt = strtolower(promptMessageForInput('create a mapping table?(Y/n)'));
                                 if($prompt == 'y') {
                                     $prompt = promptMessageForInput('old_attribute_value');
                                     $temp1 = $prompt;
