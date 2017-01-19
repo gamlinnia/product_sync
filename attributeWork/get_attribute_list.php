@@ -7,8 +7,6 @@ require_once '../lib/ganon.php';
 require_once '../lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
 
-$mappingTable = array();
-
 $modeArray = array(
     '1' => '1. export all result to excel',
     '2' => '2. dump all result on screen',
@@ -87,7 +85,6 @@ function getAttributeList() {
 
 function main() {
     global $modeArray;
-    global $mappingTable;
     $mode = '';
     while (empty($mode)) {
         echo "Please select mode [" . implode(' / ', $modeArray) . ']:';
@@ -277,6 +274,7 @@ function main() {
 
             echo "Start scan attributes of products." . PHP_EOL;
 
+            $mappingTable = getMappingTable();
             $attrCount = 0;
             $productCollection = Mage::getModel('catalog/product')->getCollection();
             foreach ($attr_collection as $_attr) {
