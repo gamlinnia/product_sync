@@ -220,6 +220,8 @@ function main() {
                 }
             }
 
+            var_dump($newOptionsArray);
+
             $new_attribute_code = $new_attr->getAttributeCode();
 
             $attr_collection = getAttributeCollection();
@@ -276,6 +278,7 @@ function main() {
                         if ( empty($product->getData($new_attribute_code)) ) {
                             echo PHP_EOL . $old_attr_code . ' : old_attr_value: ' . $old_attr_value . PHP_EOL;
                             $promptOptionArray = getOptionsFromAttributeName($new_attribute_code);
+                            $promptOptionArray = explode(',', $promptOptionArray);
                             if(!in_array($old_attr_value, $promptOptionArray)){
                                 var_dump($promptOptionArray);
                                 $prompt = promptMessageForInput('enter attribute label above or leave empty to skip this step: ', null, true);
