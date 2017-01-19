@@ -220,19 +220,6 @@ function main() {
                 }
             }
 
-            //set promptOptionArray to use
-            $promptOptionArray = array();
-            if(!empty($newOptionsArray)){
-                $promptOptionArray = $newOptionsArray;
-            }
-            else{
-                foreach($oldAttributeOptions['options'] as $each){
-                    $promptOptionArray[] = $each['label'];
-                }
-            }
-            echo "prompt option array" . PHP_EOL;
-            var_dump($promptOptionArray);
-
             $new_attribute_code = $new_attr->getAttributeCode();
 
             $attr_collection = getAttributeCollection();
@@ -288,6 +275,7 @@ function main() {
                         /* set old value to new attribute */
                         if ( empty($product->getData($new_attribute_code)) ) {
                             echo PHP_EOL . $old_attr_code . ' : old_attr_value: ' . $old_attr_value . PHP_EOL;
+                            $promptOptionArray = getOptionsFromAttributeName($new_attribute_code);
                             if(!in_array($old_attr_value, $promptOptionArray)){
                                 var_dump($promptOptionArray);
                                 $prompt = promptMessageForInput('enter attribute label above or leave empty to skip this step: ', null, true);
