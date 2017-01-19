@@ -194,12 +194,12 @@ function main() {
             echo 'to be added option list: ' . implode(' , ', $toAddArray) . ' count: ' . count($toAddArray) . PHP_EOL . PHP_EOL;
 
             if (count($toAddArray) > 0) {
-                $prompt = strtolower(promptMessageForInput('add below options ?(Y/n) or modify these options(M/m): ' . implode(' , ', $toAddArray) ));
+                $prompt = strtolower(promptMessageForInput('add below options ?(Y/n) or modify these options(M/m): ' . implode(' | ', $toAddArray) ));
                 if ($prompt == 'y'|| $prompt == 'yes') {
                     setAttributeOptions($new_attr_id, $toAddArray);
                 }
                 elseif ($prompt == 'm') {
-                    $prompt = promptMessageForInput('enter the string of all options(separate by ",")');
+                    $prompt = promptMessageForInput('enter the string of all options(separate by "|")');
                     $newOptionsArray = explode(',', $prompt);
                     $newOptionsArray = array_map('trim', $newOptionsArray);
 //                    Zend_Debug::dump($newOptionsArray);
@@ -210,7 +210,7 @@ function main() {
                 }
             }
             else {
-                $prompt = promptMessageForInput('enter the string of all options(separate by ",")');
+                $prompt = promptMessageForInput('enter the string of all options(separate by "|")');
                 $newOptionsArray = explode(',', $prompt);
                 $newOptionsArray = array_map('trim', $newOptionsArray);
 //                Zend_Debug::dump($newOptionsArray);
