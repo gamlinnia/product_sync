@@ -7,7 +7,7 @@ require_once '../lib/ganon.php';
 require_once '../lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
 
-$mappingTable = json_decode(file_get_contents('mappingTable.json'), true);
+$mappingTable = array();
 
 $modeArray = array(
     '1' => '1. export all result to excel',
@@ -17,9 +17,13 @@ $modeArray = array(
     '5' => '5. get all attribute with label or attribute code, list all options or text values.'
 );
 
-function writeToMappingTable($mappingTable) {
+function setMappingTable($mappingTable) {
     $mappingTable = json_encode($mappingTable);
     file_put_contents('mappingTable.json', $mappingTable);
+}
+
+function getMappingTable() {
+    return json_decode(file_get_contents('mappingTable.json'), true);
 }
 
 function getOptionsFromAttributeName($attribute_name){
@@ -136,17 +140,9 @@ function main() {
                     $attr_collection->addFieldToFilter('attribute_code', array('like' => '%' . $keyword_to_search . '%'));
                     break;
                 case 'label' :
-                    $attr_collection->addFieldToFilter('frontend_label', $keyword_to_search)
-                        ->addFieldToFilter('attribute_code', array('neq' => generateAttributeCodeByLabel($keyword_to_search)));
+                    $attr_collection->addFieldToFilter('frontend_label', $keyword_to_search);
+                    $attr_collection   ->addFieldToFilter('attribute_code', array('neq' => generateAttributeCodeByLabel($keyword_to_search)));
                     break;
-            }
-            $prompt = promptMessageForInput('add ignore list ?(Y/n)');
-            if($prompt == 'y') {
-                $ignoreList = promptMessageForInput('input attribute name list separate by ","');
-                $ignoreList = explode(',', $ignoreList);
-                if(!empty($ignoreList)) {
-                    $attr_collection->addFieldToFilter('attribute_code', array('nin' => $ignoreList));
-                }
             }
 
             if ($attr_collection->count() < 1) {
@@ -177,6 +173,16 @@ function main() {
                 ));
             }
             echo 'similar attr count: ' . $attr_collection->count() . PHP_EOL . PHP_EOL;
+
+            //add ignore list to attribute collection
+            $prompt = promptMessageForInput('add ignore list ?(Y/n)');
+            if($prompt == 'y') {
+                $ignoreList = promptMessageForInput('input attribute name list separate by ","');
+                $ignoreList = explode(',', $ignoreList);
+                if(!empty($ignoreList)) {
+                    $attr_collection->addFieldToFilter('attribute_code', array('nin' => $ignoreList));
+                }
+            }
 
             $new_attr_label = promptMessageForInput('enter new attr label to create or empty to delete above found attributes', null, true);
             if (empty($new_attr_label)) {
@@ -316,11 +322,14 @@ function main() {
                                     $prompt = promptMessageForInput('new_attribute_value');
                                     $temp2 = $prompt;
                                     $mappingTable[$temp1] = $temp2;
-                                    writeToMappingTable($mappingTable);
+                                    setMappingTable($mappingTable);
+                                    if($mappingTable[$old_attr_value]) {
+                                        setProductValue($product, $new_attribute_code, $new_frontend_input, $mappingTable[$old_attr_value]);
+                                    }
                                 }
-                                if($mappingTable[$old_attr_value]) {
-                                    setProductValue($product, $new_attribute_code, $new_frontend_input, $mappingTable[$old_attr_value]);
-                                }
+//                                else {
+//                                    setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
+//                                }
                             }
                         }
                     }
