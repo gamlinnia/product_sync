@@ -247,66 +247,7 @@ function main() {
                     break;
             }
 
-            //search all attribute set collection
-            // add attribute to specify group in specify attribute set
-            // which are match to the attributes found by input above
-            $attributeSetCollection = Mage::getResourceModel('eav/entity_attribute_set_collection');
-            foreach($attributeSetCollection as $eachSet) {
-                $attributesInAttributeSet = Mage::getModel('catalog/product_attribute_api')->items($eachSet->getId());
-                $attributeSetName = $eachSet->getAttributeSetName();
-                $attributes = array();
-                foreach($attributesInAttributeSet as $each) {
-                    $attributes[] = $each['code'];
-                }
-
-                foreach($attr_collection as $eachAttr) {
-                    //check the new attribute code exist in attribute set or not
-                    if(in_array($new_attribute_code, $attributes)){
-                        continue;
-                    }
-                    $attributeName = $eachAttr->getData('attribute_code');
-                    if(in_array($attributeName, $attributes)) {
-                        echo $attributeName . ' exist in ' . $attributeSetName . PHP_EOL;
-                        $prompt = promptMessageForInput('move ' .  $new_attribute_code . ' to ' . $attributeSetName . '?(Y/n)');
-                        if($prompt == 'y') {
-                            $moveResult = moveAttributeToGroupInAttributeSet(
-                                $new_attribute_code,
-                                $attributeSetName,
-                                $groupName = $attributeSetName);
-                            if (!$moveResult) {
-                                echo 'move attribute to specify group in attribute set fail' . PHP_EOL;;
-                                exit(0);
-                            }
-                            echo "Move new attribute to group in attribute set success !!" . PHP_EOL;
-                        }
-                    }
-                    echo '.';
-                }
-                echo PHP_EOL;
-//                $attributesInAttributeSet = Mage::getModel('catalog/product_attribute_api')->items($eachSet->getId());
-//                $attributeSetName = $eachSet->getAttributeSetName();
-//                echo 'attribute set: ' . $attributeSetName . PHP_EOL;
-//                foreach ($attributesInAttributeSet as $eachAttrInSet) {
-//                    foreach($attr_collection as $eachAttr) {
-//                        if ($eachAttrInSet['code'] == $eachAttr->getData('attribute_code')) {
-//                            echo $eachAttrInSet['code'] . ' exist in ' . $attributeSetName . PHP_EOL;
-//                            //check the new attribute code exist in attribute set or not
-//
-//                            $prompt = promptMessageForInput('move ' .  $new_attribute_code . ' to ' . $attributeSetName . '?(Y/n)');
-//                            if($prompt == 'y') {
-//                                $moveResult = moveAttributeToGroupInAttributeSet(
-//                                    $new_attribute_code,
-//                                    $attributeSetName,
-//                                    $groupName = $attributeSetName);
-//                                if (!$moveResult) {
-//                                    echo 'move attribute to specify group in attribute set fail' . PHP_EOL;;
-//                                    exit(0);
-//                                }
-//                                echo "Move new attribute to group in attribute set success !!" . PHP_EOL;
-//                            }
-//                        }
-//                    }
-            }
+            checkAllAttributeSetToSetAttributeGroup($new_attribute_code, $attr_collection);
 
             echo "Start scan attributes of products." . PHP_EOL;
 
@@ -349,7 +290,7 @@ function main() {
                             echo PHP_EOL . 'old_attr_value: ' . $old_attr_value . PHP_EOL;
                             if(!in_array($old_attr_value, $promptOptionArray)){
                                 var_dump($promptOptionArray);
-                                $prompt = promptMessageForInput('enter attribute label above or leave empty to skip this step: ');
+                                $prompt = promptMessageForInput('enter attribute label above or leave empty to skip this step: ', null, true);
                                 if(!empty($prompt)) {
                                     setProductValue($product, $new_attribute_code, $new_frontend_input, trim($prompt));
                                 }
