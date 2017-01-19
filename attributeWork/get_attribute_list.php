@@ -210,7 +210,7 @@ function main() {
             echo 'option list: ' . implode(' / ', $optionList) . ' count: ' . count($optionList) . PHP_EOL . PHP_EOL;
 
             $oldAttributeOptions = getAttributeOptions('attributeId', $new_attr_id);
-//            Zend_Debug::dump($oldAttributeOptions);
+            Zend_Debug::dump($oldAttributeOptions);
 
             $toAddArray = compareAttributeOptionArray($oldAttributeOptions['options'], $optionList);
             echo 'to be added option list: ' . implode(' , ', $toAddArray) . ' count: ' . count($toAddArray) . PHP_EOL . PHP_EOL;
@@ -242,7 +242,12 @@ function main() {
                 }
             }
 
-            var_dump($newOptionsArray);
+            if(!empty($newOptionsArray)) {
+                var_dump($newOptionsArray);
+            }
+            else {
+                var_dump($toAddArray);
+            }
 
             $new_attribute_code = $new_attr->getAttributeCode();
 
