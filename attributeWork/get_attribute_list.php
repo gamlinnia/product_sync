@@ -7,6 +7,8 @@ require_once '../lib/ganon.php';
 require_once '../lib/PHPExcel-1.8/Classes/PHPExcel.php';
 Mage::app('admin');
 
+$mappingTable = json_decode(file_get_contents('mappingTable.json'), true);
+
 $modeArray = array(
     '1' => '1. export all result to excel',
     '2' => '2. dump all result on screen',
@@ -14,6 +16,11 @@ $modeArray = array(
     '4' => '4. get all attribute with the same label, assign all related products to new attribute',
     '5' => '5. get all attribute with label or attribute code, list all options or text values.'
 );
+
+function writeToMappingTable($mappingTable) {
+    $mappingTable = json_encode($mappingTable);
+    file_put_contents('mappingTable.json', $mappingTable);
+}
 
 function getOptionsFromAttributeName($attribute_name){
     $details = getAttributeOptions('attributeName', $attribute_name);
@@ -76,6 +83,7 @@ function getAttributeList() {
 
 function main() {
     global $modeArray;
+    global $mappingTable;
     $mode = '';
     while (empty($mode)) {
         echo "Please select mode [" . implode(' / ', $modeArray) . ']:';
@@ -279,18 +287,25 @@ function main() {
                             echo PHP_EOL . $old_attr_code . ' : old_attr_value: ' . $old_attr_value . PHP_EOL;
                             $promptOptionArray = getOptionsFromAttributeName($new_attribute_code);
                             $promptOptionArray = explode(',', $promptOptionArray);
-                            if(!in_array($old_attr_value, $promptOptionArray)){
-                                var_dump($promptOptionArray);
-                                $prompt = promptMessageForInput($old_attr_value . ' need to mapping to one of above values or leave empty to skip this step: ', null, true);
-                                if(!empty($prompt)) {
-                                    setProductValue($product, $new_attribute_code, $new_frontend_input, trim($prompt));
-                                }
-                                else {
-                                    setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
-                                }
+                            if(in_array($old_attr_value, $promptOptionArray)){
+                                setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
+                            }
+                            elseif($mappingTable[$old_attr_value]) {
+                                setProductValue($product, $new_attribute_code, $new_frontend_input, $mappingTable[$old_attr_value]);
                             }
                             else {
-                                setProductValue($product, $new_attribute_code, $new_frontend_input, $old_attr_value);
+                                var_dump($promptOptionArray);
+                                echo PHP_EOL . $old_attr_value . ' need to mapping to one of above values' . PHP_EOL;
+                                $prompt = promptMessageForInput('create a mapping table?(Y/n');
+                                if($prompt == 'y') {
+                                    $prompt = promptMessageForInput('old_attribute_value');
+                                    $temp1 = $prompt;
+                                    $prompt = promptMessageForInput('new_attribute_value');
+                                    $temp2 = $prompt;
+                                    $mappingTable[$temp1] = $temp2;
+                                    writeToMappingTable($mappingTable);
+                                }
+                                setProductValue($product, $new_attribute_code, $new_frontend_input, $mappingTable[$old_attr_value]);
                             }
                         }
                     }
