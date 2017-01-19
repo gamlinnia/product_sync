@@ -281,7 +281,7 @@ function main() {
                             $promptOptionArray = explode(',', $promptOptionArray);
                             if(!in_array($old_attr_value, $promptOptionArray)){
                                 var_dump($promptOptionArray);
-                                $prompt = promptMessageForInput('enter attribute label above or leave empty to skip this step: ', null, true);
+                                $prompt = promptMessageForInput($old_attr_value . ' need to mapping to one of above values or leave empty to skip this step: ', null, true);
                                 if(!empty($prompt)) {
                                     setProductValue($product, $new_attribute_code, $new_frontend_input, trim($prompt));
                                 }
