@@ -245,8 +245,11 @@ function main() {
             if(!empty($newOptionsArray)) {
                 var_dump($newOptionsArray);
             }
-            else {
+            elseif(!empty($toAddArray)) {
                 var_dump($toAddArray);
+            }
+            else {
+                var_dump($oldAttributeOptions['options']);
             }
 
             $new_attribute_code = $new_attr->getAttributeCode();
