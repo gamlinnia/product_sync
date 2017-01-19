@@ -162,7 +162,7 @@ function getAttributeValueIdFromOptions ($nameOrId, $attrCodeOrId, $valueToBeMap
             if (!is_array($valueToBeMapped)) {
 
 //                $dividers = array('\/', '&', ',');
-                $dividers = array('\|');
+                $dividers = array('\|', ',');
                 $valueToBeMappedArray = preg_split("/(" . join('|', $dividers) . ")/", $valueToBeMapped);
 
                 $function_to_map = array('trim', 'ucwords');
@@ -3172,7 +3172,7 @@ function setProductValue ($product, $attribute_code, $frontend_input, $value_to_
 
     if (!is_array($value_to_be_mapped)) {
 //        $dividers = array('\/', '&', ',');
-        $dividers = array('\|');
+        $dividers = array('\|', ',');
         $optionsArray = preg_split("/(" . join('|', $dividers) . ")/", $value_to_be_mapped);
 
         $function_to_map = array('trim', 'ucwords');
