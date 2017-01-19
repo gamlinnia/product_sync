@@ -284,7 +284,7 @@ function main() {
                     if (!empty($old_attr_value)) {
                         /* set old value to new attribute */
                         if ( empty($product->getData($new_attribute_code)) ) {
-                            echo PHP_EOL . $old_attr_code . ' : old_attr_value: ' . $old_attr_value . PHP_EOL;
+                            echo PHP_EOL . '"' . $old_attr_code . '" : old_attr_value: ' . $old_attr_value . PHP_EOL;
                             $promptOptionArray = getOptionsFromAttributeName($new_attribute_code);
                             $promptOptionArray = explode(',', $promptOptionArray);
                             if(in_array($old_attr_value, $promptOptionArray)){
@@ -295,8 +295,8 @@ function main() {
                             }
                             else {
                                 var_dump($promptOptionArray);
-                                echo PHP_EOL . $old_attr_value . ' need to mapping to one of above values' . PHP_EOL;
-                                $prompt = promptMessageForInput('create a mapping table?(Y/n');
+                                echo PHP_EOL . '"' . $old_attr_value . '"" need to mapping to one of above values' . PHP_EOL;
+                                $prompt = promptMessageForInput('create a mapping table?(Y/n)');
                                 if($prompt == 'y') {
                                     $prompt = promptMessageForInput('old_attribute_value');
                                     $temp1 = $prompt;
@@ -305,7 +305,9 @@ function main() {
                                     $mappingTable[$temp1] = $temp2;
                                     writeToMappingTable($mappingTable);
                                 }
-                                setProductValue($product, $new_attribute_code, $new_frontend_input, $mappingTable[$old_attr_value]);
+                                if($mappingTable[$old_attr_value]) {
+                                    setProductValue($product, $new_attribute_code, $new_frontend_input, $mappingTable[$old_attr_value]);
+                                }
                             }
                         }
                     }
