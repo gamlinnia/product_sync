@@ -177,6 +177,15 @@ function main() {
                 $ignoreList = promptMessageForInput('input attribute name list separate by ","');
                 $ignoreList = explode(',', $ignoreList);
                 if(!empty($ignoreList)) {
+
+                    switch ($searchType) {
+                        case 'code' :
+                            $attr_collection->addFieldToFilter('attribute_code', array('like' => '%' . $keyword_to_search . '%'));
+                            break;
+                        case 'label' :
+                            $attr_collection->addFieldToFilter('frontend_label', array('like' => '%' . $keyword_to_search . '%'));
+                            break;
+                    }
                     $attr_collection->addFieldToFilter('attribute_code', array('nin' => $ignoreList));
                 }
             }
