@@ -12,7 +12,8 @@ $modeArray = array(
     '2' => '2. dump all result on screen',
     '3' => '3. search specify attribute',
     '4' => '4. get all attribute with the same label, assign all related products to new attribute',
-    '5' => '5. get all attribute with label or attribute code, list all options or text values.'
+    '5' => '5. get all attribute with label or attribute code, list all options or text values.',
+    '6' => '6. To delete filtered attributes.'
 );
 
 function setMappingTable($mappingTable) {
