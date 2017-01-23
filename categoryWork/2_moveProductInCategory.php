@@ -133,7 +133,6 @@ $new_category_mapping_table = array(
     'Portable Generators' => 'Tools & Electrical Accessories',
     'Desk Accessories' => 'Office Furniture & Accessories',
     'Staplers & Hole Punchers' => 'Office Furniture & Accessories',
-
     /* pre-prd沒看到的category */
 //    'Mobile Hardware Accessories' => 'Cellphone & Tablet Mounts', // Mobile Hardware Accessories 0
     'SSD & HDD Trays' => 'SSD & HDD Accessories',
@@ -143,7 +142,8 @@ $new_category_mapping_table = array(
     'Fan Filters' => 'Fans & Accessories',
     'Stud Finders' => 'Tools & Electrical Accessories',
     'Computer Cases' => 'Case',
-    'Landscape Lighting' => 'Tools & Electrical Accessories'
+    'Landscape Lighting' => 'Tools & Electrical Accessories',
+    'Induction Cooktops' => 'Induction Cooktops',
 );
 
 $new_category_mapping_table = array(
