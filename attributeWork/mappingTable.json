@@ -1,2 +1,24 @@
-{"Screened Shielded Twist Pairing (SSTP)":"Twisted Pair (S\/STP)","Twist Pair (STP)":"Twisted Pair (STP)","5.8 Quart (5.5 L)":"5.8 Quarts (5.5 L)","5L":"5.0 L"}
-
+{
+  "Screened Shielded Twist Pairing (SSTP)": "Twisted Pair (S\/STP)",
+  "Twist Pair (STP)": "Twisted Pair (STP)",
+  "5.8 Quart (5.5 L)": "5.8 Quarts (5.5 L)",
+  "5L": "5.0 L",
+  "120V": "120 V",
+  "115 \/ 230 V": "115 - 230 V",
+  "IEEE 802.11ac \/ n \/ a 5 GHz": "IEEE 802.11ac\/n\/a 5 GHz",
+  "AC1200 High Gain": "AC1200",
+  "150 Mbps": "Up To 150Mbps",
+  "300 Mbps": "Up To 300Mbps",
+  "Teflon Nano Bearing": "Teflon Nano",
+  "M - F": "M-F",
+  "Bluetooth Wireless": "Wireless",
+  "RF Wireless": "Wireless",
+  "Brown Cherry MX": "Brown, Cherry MX",
+  "Red Cherry MX": "Red, Cherry MX",
+  "Blue Cherry MX": "Blue, Cherry MX",
+  "Black Cherry MX": "Black, Cherry MX",
+  "Blue Mechanical": "Blue, Mechanical",
+  "Black Mechanical": "Blue, Mechanical",
+  "Brown Mechanical": "Brown, Mechanical",
+  "Red Mechanical": "Blue, Mechanical"
+}
