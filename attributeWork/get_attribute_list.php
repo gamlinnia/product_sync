@@ -172,7 +172,7 @@ function main() {
             echo 'similar attr count: ' . $attr_collection->count() . PHP_EOL . PHP_EOL;
 
             //add ignore list to attribute collection
-            $prompt = promptMessageForInput('add ignore list ?(Y/n)', array('y', 'n', 'Y', 'N'));
+            $prompt = promptMessageForInput('add ignore list ?(Y/n)');
             if($prompt == 'y') {
                 $ignoreList = promptMessageForInput('input attribute name list separate by ","');
                 $ignoreList = explode(',', $ignoreList);
@@ -196,7 +196,7 @@ function main() {
                 $new_attr_label = $keyword_to_search;
                 echo 'empty input, $new_attr_label: ' . $new_attr_label . PHP_EOL;
                 foreach($attr_collection as $_attr) {
-                    $prompt = promptMessageForInput('sure to delete attribute: ' . $attr->getData('attribute_code') . ' (Y/n)?', array('y', 'n', 'Y', 'N'));
+                    $prompt = promptMessageForInput('sure to delete attribute: ' . $attr->getData('attribute_code') . ' (Y/n)?');
                     if($prompt == 'y') {
                         Mage::getModel('eav/entity_attribute')->load($_attr->getId())->delete();
                     }
@@ -223,7 +223,7 @@ function main() {
             echo 'to be added option list: ' . implode(' , ', $toAddArray) . ' count: ' . count($toAddArray) . PHP_EOL . PHP_EOL;
 
             if (count($toAddArray) > 0) {
-                $prompt = strtolower(promptMessageForInput('add below options ?(Y/n) or modify these options(M/m): ' . implode(' | ', $toAddArray) , array('y', 'n', 'Y', 'N', 'M', 'm')));
+                $prompt = strtolower(promptMessageForInput('add below options ?(Y/n) or modify these options(M/m): ' . implode(' | ', $toAddArray) ));
                 if ($prompt == 'y'|| $prompt == 'yes') {
                     setAttributeOptions($new_attr_id, $toAddArray);
                 }
@@ -232,7 +232,7 @@ function main() {
                     $newOptionsArray = explode('|', $prompt);
                     $newOptionsArray = array_map('trim', $newOptionsArray);
 //                    Zend_Debug::dump($newOptionsArray);
-                    $prompt = strtolower(promptMessageForInput('sure to add these new options above ?(Y/n)', array('y', 'n', 'Y', 'N')));
+                    $prompt = strtolower(promptMessageForInput('sure to add these new options above ?(Y/n)'));
                     if($prompt =='y') {
                         setAttributeOptions($new_attr_id, $newOptionsArray);
                     }
@@ -244,7 +244,7 @@ function main() {
                     $newOptionsArray = explode('|', $prompt);
                     $newOptionsArray = array_map('trim', $newOptionsArray);
     //                Zend_Debug::dump($newOptionsArray);
-                    $prompt = strtolower(promptMessageForInput('sure to add these new options above ?(Y/n)', array('y', 'n', 'Y', 'N')));
+                    $prompt = strtolower(promptMessageForInput('sure to add these new options above ?(Y/n)'));
                     if ($prompt == 'y') {
                         setAttributeOptions($new_attr_id, $newOptionsArray);
                     }
@@ -333,7 +333,7 @@ function main() {
                             else {
                                 var_dump($promptOptionArray);
                                 echo PHP_EOL . '"' . $old_attr_value . '" need to mapping to one of above values' . PHP_EOL;
-                                $prompt = strtolower(promptMessageForInput('create a mapping table?(Y/n)', array('y', 'n', 'Y', 'N')));
+                                $prompt = strtolower(promptMessageForInput('create a mapping table?(Y/n)'));
                                 if($prompt == 'y') {
                                     $prompt = promptMessageForInput('old_attribute_value');
                                     $temp1 = $prompt;
@@ -356,7 +356,7 @@ function main() {
                 /* each attr loop for product done  */
                 echo PHP_EOL;
                 echo 'looped attr: ' . $_attr->getAttributeCode() . ' index: ' . $attrCount . PHP_EOL;
-                $prompt = strtolower(promptMessageForInput('delete ' . $old_attr_code . ' (Y/n) ?', array('y', 'n', 'Y', 'N')));
+                $prompt = strtolower(promptMessageForInput('delete ' . $old_attr_code . ' (Y/n) ?'));
                 if($prompt == 'y') {
                     Mage::getModel('eav/entity_attribute')->load($_attr->getId())->delete();
                 }
