@@ -178,6 +178,7 @@ function main() {
                 $ignoreList = explode(',', $ignoreList);
                 if(!empty($ignoreList)) {
 
+                    $attr_collection = getAttributeCollection();
                     switch ($searchType) {
                         case 'code' :
                             $attr_collection->addFieldToFilter('attribute_code', array('like' => '%' . $keyword_to_search . '%'));
