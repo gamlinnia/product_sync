@@ -2307,7 +2307,7 @@ function checkAllAttributeSetToSetAttributeGroup($new_attribute_code, $attr_coll
             $attributeName = $eachAttr->getData('attribute_code');
             if(in_array($attributeName, $attributes)) {
                 echo $attributeName . ' exist in ' . $attributeSetName . PHP_EOL;
-                $prompt = promptMessageForInput('move ' .  $new_attribute_code . ' to ' . $attributeSetName . '?(Y/n)');
+                $prompt = promptMessageForInput('move ' .  $new_attribute_code . ' to ' . $attributeSetName . '?(Y/n)', array('y', 'Y', 'n', 'N'));
                 if($prompt == 'y') {
                     $moveResult = moveAttributeToGroupInAttributeSet(
                         $new_attribute_code,
