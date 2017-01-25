@@ -12,7 +12,8 @@ $modeArray = array(
     '2' => '2. dump all result on screen',
     '3' => '3. search specify attribute',
     '4' => '4. get all attribute with the same label, assign all related products to new attribute',
-    '5' => '5. get all attribute with label or attribute code, list all options or text values.'
+    '5' => '5. get all attribute with label or attribute code, list all options or text values.',
+    '6' => '6. To delete filtered attributes.'
 );
 
 function setMappingTable($mappingTable) {
@@ -440,6 +441,83 @@ function main() {
                 Zend_Debug::dump($response);
                 $searchType = '';
             }
+            break;
+        case '6' :
+            /* search for attribute_code or attribute_label */
+            $searchType = '';
+
+            $searchType = promptMessageForInput('search for attribute_code or attribute_label', array('code', 'label'));
+
+            $keyword_to_search = promptMessageForInput('enter keyword to search for related attributes to delete');
+            $attr_collection = getAttributeCollection();
+
+            switch ($searchType) {
+                case 'code' :
+                    $attr_collection->addFieldToFilter('attribute_code', array('like' => '%' . $keyword_to_search . '%'));
+                    break;
+                case 'label' :
+                    $attr_collection->addFieldToFilter('frontend_label', array('like' => '%' . $keyword_to_search . '%'));
+                    break;
+            }
+
+            if ($attr_collection->count() < 1) {
+                echo 'found no attributes' . PHP_EOL;
+                return;
+            }
+
+            $response = array();
+            foreach ($attr_collection as $_attr) {
+                $optionList = array();
+                $tmpArray = array();
+                $attr = Mage::getModel('eav/entity_attribute')->load(
+                    $_attr->getId()
+                );
+                $options = getAttributeOptions('attributeId', $attr->getId());
+                if (isset($options['options'])) {
+                    $tmpArray = array(
+                        'id' => $attr->getId(),
+                        'attribute_code' => $attr->getData('attribute_code'),
+                        'frontend_label' => $attr->getData('frontend_label'),
+                        'frontend_input' => $attr->getData('frontend_input'),
+                        'options' => $options['options']
+                    );
+                } else {
+                    $new_attribute_code = $_attr->getAttributeCode();
+                    $productCollection = Mage::getModel('catalog/product')->getCollection();
+
+                    $count = 0;
+                    foreach ($productCollection as $_product) {
+                        $count++;
+                        if ($count % 100 == 0) {
+                            echo $count . '.. ';
+                        }
+                        $product = Mage::getModel('catalog/product')->load($_product->getId());
+                        if (!empty($textValue = $product->getData($_attr->getAttributeCode()))) {
+                            echo 'found data' . $textValue . PHP_EOL;
+                            if (!in_array($textValue, $optionList)) {
+                                $optionList[] = $textValue;
+                            }
+                        }
+                    }
+
+                    $tmpArray = array(
+                        'id' => $attr->getId(),
+                        'attribute_code' => $attr->getData('attribute_code'),
+                        'frontend_label' => $attr->getData('frontend_label'),
+                        'frontend_input' => $attr->getData('frontend_input'),
+                        'options' => implode(', ', $optionList)
+                    );
+                    Zend_Debug::dump($tmpArray);
+                }
+
+                $deletePrompt = promptMessageForInput('sure to delete above attribute?', array('Y', 'n'));
+                if (strtolower($deletePrompt) == 'y') {
+                    echo 'attribute: ' . $attr->getData('frontend_label') . ' is about to delete.' . PHP_EOL;
+                    $_attr->delete();
+                }
+
+            }
+
             break;
     }
 
