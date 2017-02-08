@@ -23,14 +23,13 @@ $categorysAddList = array(
         'Laptop Backpacks & Cases', 'Laptop AC Adapter', 'Cellphone & Tablet Mounts', 'Batteries & Chargers'
     ),
     'Computer Components' => array(
-        'Fans & Accessories', 'SSD & HDD Accessories', 'Coolers', 'Add-on Cards', 'Internal Card Readers and Hubs', 'HDD Enclosures',
-        'Hard Drive Controllers & RAID Cards'
+        'Fans & Accessories', 'SSD & HDD Accessories', 'Coolers', 'Add-on Cards', 'Internal Card Readers and Hubs', 'HDD Enclosures'
     ),
     'Networking' => array(
         'Wireless Accessories', 'Network Interface Cards', 'Network Switches', 'Modems', 'Wireless Adapters', 'Wireless Routers', 'Network Antennas'
     ),
     'Server Components' => array(
-        'Server Accessories', 'Server Chassis', 'RAID - Sub Systems'
+        'Server Accessories', 'Server Chassis', 'RAID - Sub Systems', 'Hard Drive Controllers & RAID Cards'
     ),
     'Surveillance Cameras' => array(
         'IP & Network Cameras', 'CCTV & Analog Cameras', 'Video Monitoring Kits'
