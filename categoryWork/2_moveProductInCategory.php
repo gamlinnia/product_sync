@@ -29,7 +29,7 @@ $new_category_mapping_table = array(
     '140mm Computer Case Fans' => 'Fans & Accessories',
     'PCI Slot Case Fans' => 'Fans & Accessories',
     'CPU Cooling Fans' => 'Coolers',
-//    'Add On Card' => 'Add-on Cards',
+    'Add-on Cards' => 'Add-on Cards',
 //    'Card Reader' => 'Card Readers',                         // may be 'Internal Card Readers and Hubs'
     'External Hard Drive Enclosures' => 'Hard Drive Docking Stations & External Enclosures',     // HDD Enclosures
     'USB Hubs' => 'USB Hubs & Accessories',                   // Internal Card Readers and Hubs
@@ -71,7 +71,7 @@ $new_category_mapping_table = array(
 //    'Keyboards' => 'Keyboards & Accessories',
     'Mouse' => 'Mice  & Accessories',
 //    'Hard Drive Controllers & RAID Cards' => 'Hard Drive Controllers & RAID Cards',
-//    'Server Accessories' => 'Server Accessories',
+    'Server Accessories' => 'Server Accessories',
 //    'RAID - Sub Systems' => 'RAID - Sub Systems',
 //    'IP & Network Cameras' => 'IP & Network Cameras',
 //    'CCTV & Analog Cameras' => 'CCTV & Analog Cameras',
@@ -144,11 +144,13 @@ $new_category_mapping_table = array(
     'Computer Cases' => 'Case',
     'Landscape Lighting' => 'Tools & Electrical Accessories',
     'Induction Cooktops' => 'Induction Cooktops',
+    'Pressure Cookers' => 'Pressure Cookers',
+    'Lightning Cables' => 'Cables'
 );
 
-$new_category_mapping_table = array(
-    'Gaming Cases' => 'Case'
-);
+//$new_category_mapping_table = array(
+//    'Gaming Cases' => 'Case'
+//);
 
 $noMapCategorys = array();
 
