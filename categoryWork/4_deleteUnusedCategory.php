@@ -1,10 +1,14 @@
 <?php
 ini_set('memory_limit', '512M');
 
-$config = json_decode(file_get_contents('config.json'), true);
-require_once '../' . $config['magentoDir'] . 'app/Mage.php';
-require_once 'functions.php';
-/* if use admin, then websiteId will get 0 */
+/*get config setting*/
+if (!file_exists('../config.json')) {
+    echo 'config.json is not exist.';
+}
+
+$config = json_decode(file_get_contents('../config.json'), true);
+require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
+require_once '../functions.php';
 Mage::app('admin');
 
 
