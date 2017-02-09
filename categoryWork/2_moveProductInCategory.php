@@ -222,6 +222,7 @@ foreach ($new_category_mapping_table as $category_name_to_be_mapped => $map_to_c
 
         echo 'product name: ' . $product->getName() . PHP_EOL;
         setProductCategoryIdsByCategoryIdArray($product, $categoryIdArray);
+        sleep(rand(1,3));
     }
 
 }
