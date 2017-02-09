@@ -390,4 +390,34 @@ $app->get('/api/test', function () {
     echo json_encode(array('message' => 'test'));
 });
 
+$app->post('/api/postReviewJsonToLocal', function() {
+    global $input;
+    global $app;
+    $headers = $app->request()->headers();
+    if (!isset($headers['Token']) || $headers['Token'] != 'rosewill') {
+        echo json_encode(array(
+            'message' => 'auth error.'
+        ));
+        return;
+    }
+
+    /* save review json to local files in dev environment. */
+    $dir = '../reviewWork/';
+    if ($headers['Host'] == 'rwdev.buyabs.corp') {
+        if (!file_exists($dir)) {
+            if (!mkdir($dir, 0777, true)) {
+                echo 'Error creating Directory.' . PHP_EOL;
+                return;
+            }
+        }
+        $file = $dir . 'result.json';
+        file_put_contents($file, $input);
+        chmod($file, 0777);
+    }
+
+    echo json_encode(array(
+        'message' => 'Success'
+    ));
+});
+
 $app->run();
