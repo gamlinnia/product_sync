@@ -11,9 +11,7 @@ require_once '../../' . $config['magentoDir'] . 'app/Mage.php';
 require_once '../functions.php';
 Mage::app('admin');
 
-
-
-$categoryIdToDelete = array(4, 7, 8, 49);
+$categoryIdToDelete = array(4, 7, 8, 49, 148);
 
 $categoryCollection = Mage::getModel('catalog/category')->getCollection();
 
