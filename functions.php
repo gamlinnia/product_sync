@@ -1962,12 +1962,40 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             echo json_encode($response) . PHP_EOL;
             break;
         case 'newegg' :
+            /*new version for newegg review*/
+//            $file = 'reviewWork/result.json';
+//            $reviewData = file_get_contents($file);
+//            $reviewData = json_decode($reviewData, true);
+//            if($reviewData[count] == 0){
+//                echo "Empty data from 10.16.197.90...." . PHP_EOL;
+//                break;
+//            }
+//            $inputData = $reviewData['data'][$sku];
+//            foreach ($inputData as $each) {
+//                $detail = '';
+//                if($each['pros']) {
+//                    $detail .= 'Pros: ' . $each['pros'];
+//                }
+//                if($each['cons']) {
+//                    $detail .= '<br/><br/>Cons: ' . $each['cons'];
+//                }
+//                if($each['comments']) {
+//                    $detail .= '<br/><br/>Comments: ' . $each['comments'];
+//                }
+//
+//                $data = array(
+//                    'detail' => $detail,
+//                    'nickname' => $each['nickname'],
+//                    'subject' => $each['title'],
+//                    'created_at' => $each['reviewdate'],
+//                    'rating' => $each['rating'],
+//                    'product_url' => 'http://www.newegg.com/Product/Product.aspx?Item=' . $sku
+//                );
+//                $response[] = $data;
+//            }
+            /* old version: crawl through url*/
             $product_url = 'http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=' . $review_limit;
             $review_url  = 'http://content.newegg.com/Common/Ajax/ProductReview2016.aspx?' .
-//                         . 'action=Biz.Product.ProductReview.switchReviewTabCallBack&callback=Biz.Product.ProductReview.switchReviewTabCallBack&&'
-//                         . 'Item='. $sku.'&review=0&SummaryType=0&Pagesize='. $review_limit .'&PurchaseMark=false&SelectedRating=-1&'
-//                         . 'VideoOnlyMark=false&VendorMark=false&IsFeedbackTab=true&ItemGroupId=0&Type=Newegg&ItemOnlyMark=true&'
-//                             . 'chkItemOnlyMark=on&Keywords=(keywords)&SortField=0&DisplaySpecificReview=0'
                 http_build_query(array(
                     'action' => 'Biz.Product.ProductReview.switchReviewTabCallBack',
                     'callback' => 'Biz.Product.ProductReview.switchReviewTabCallBack',
@@ -1988,7 +2016,6 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                     'SortField' => 0,
                     'DisplaySpecificReview' => 0
                 ));
-//            $html = file_get_dom($review_url);
             $html = file_get_contents($review_url);
             $html = preg_replace('/\\\u[\d]{3}[\w]{1}/', '', $html);
             preg_match('/{.+}/', $html, $match);
@@ -2013,7 +2040,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                             $subject = null;
                         }
                         $detail = trim($element->getPlainText());
-                        /*remove string before "Pros: " and add <br /> in front of "Crons:" and "Other Thoughts:"*/
+                        //remove string before "Pros: " and add <br /> in front of "Crons:" and "Other Thoughts:"
                         $detail =  substr($detail, strpos($detail, 'Pros:'), strlen($detail));
                         $detail = str_replace('Cons:', '<br /><br />Cons:', $detail);
                         $detail = str_replace('Other Thoughts:', '<br /><br />Other Thoughts:', $detail);
@@ -2031,7 +2058,7 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
                             'rating' => $rating,
                             'product_url' => $product_url
                         );
-//                    var_dump($data);
+                        //var_dump($data);
                         $response[] = $data;
                     }
                 }

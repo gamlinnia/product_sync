@@ -293,6 +293,7 @@ function importProductImageByImageFileName ($productId, $imageFileInfoArray) {
                 echo 'position: ' . (int)$eachFileInfo['Priority'] * 10 . ' label: ' . $pathInfo['filename'] . PHP_EOL;
             } else {
                 echo 'only have cs image to upload' . PHP_EOL;
+                return false;
             }
         }
     }

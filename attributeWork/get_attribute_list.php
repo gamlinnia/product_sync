@@ -334,6 +334,7 @@ function main() {
                             else {
                                 var_dump($promptOptionArray);
                                 echo PHP_EOL . '"' . $old_attr_value . '" need to mapping to one of above values' . PHP_EOL;
+                                echo 'sku: ' . $product->getSku() . PHP_EOL;
                                 $prompt = strtolower(promptMessageForInput('create a mapping table?(Y/n)', array('y', 'Y', 'n', 'N')));
                                 if($prompt == 'y') {
                                     $prompt = promptMessageForInput('old_attribute_value');
@@ -444,8 +445,6 @@ function main() {
             break;
         case '6' :
             /* search for attribute_code or attribute_label */
-            $searchType = '';
-
             $searchType = promptMessageForInput('search for attribute_code or attribute_label', array('code', 'label'));
 
             $keyword_to_search = promptMessageForInput('enter keyword to search for related attributes to delete');
@@ -524,3 +523,5 @@ function main() {
 }
 
 main();
+
+
