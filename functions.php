@@ -1963,109 +1963,109 @@ function getLatestChannelsProductReviews ($channel, $sku, $channelsinfo) {
             break;
         case 'newegg' :
             /*new version for newegg review*/
-//            $file = 'reviewWork/result.json';
-//            $reviewData = file_get_contents($file);
-//            $reviewData = json_decode($reviewData, true);
-//            if($reviewData[count] == 0){
-//                echo "Empty data from 10.16.197.90...." . PHP_EOL;
-//                break;
-//            }
-//            $inputData = $reviewData['data'][$sku];
-//            foreach ($inputData as $each) {
-//                $detail = '';
-//                if($each['pros']) {
-//                    $detail .= 'Pros: ' . $each['pros'];
-//                }
-//                if($each['cons']) {
-//                    $detail .= '<br/><br/>Cons: ' . $each['cons'];
-//                }
-//                if($each['comments']) {
-//                    $detail .= '<br/><br/>Comments: ' . $each['comments'];
-//                }
-//
-//                $data = array(
-//                    'detail' => $detail,
-//                    'nickname' => $each['nickname'],
-//                    'subject' => $each['title'],
-//                    'created_at' => $each['reviewdate'],
-//                    'rating' => $each['rating'],
-//                    'product_url' => 'http://www.newegg.com/Product/Product.aspx?Item=' . $sku
-//                );
-//                $response[] = $data;
-//            }
-            /* old version: crawl through url*/
-            $product_url = 'http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=' . $review_limit;
-            $review_url  = 'http://content.newegg.com/Common/Ajax/ProductReview2016.aspx?' .
-                http_build_query(array(
-                    'action' => 'Biz.Product.ProductReview.switchReviewTabCallBack',
-                    'callback' => 'Biz.Product.ProductReview.switchReviewTabCallBack',
-                    'Item' => $sku,
-                    'review' => 0,
-                    'SummaryType' => 0,
-                    'Pagesize' => $review_limit,
-                    'PurchaseMark' => false,
-                    'SelectedRating' => -1,
-                    'VideoOnlyMark' => false,
-                    'VendorMark' => false,
-                    'IsFeedbackTab' => true,
-                    'ItemGroupId' => 0,
-                    'Type' => 'Newegg',
-                    'ItemOnlyMark' => true,
-                    'chkItemOnlyMark' => 'on',
-                    'Keywords' => '(keywords)',
-                    'SortField' => 0,
-                    'DisplaySpecificReview' => 0
-                ));
-            $html = file_get_contents($review_url);
-            $html = preg_replace('/\\\u[\d]{3}[\w]{1}/', '', $html);
-            preg_match('/{.+}/', $html, $match);
-
-            $data = $match[0];
-            $data = json_decode(trim($data), true);
-            $review_list = $data['ReviewList'];
-            $html = str_get_dom($review_list);
-            if(!empty($html)) {
-                foreach ($html('.grpReviews tr td .details') as $element) {
-                    $nickname = $element->parent->parent->getChild(0)->getChild(0)->getChild(0)->getPlainText();
-                    $created_at = $element->parent->parent->getChild(0)->getChild(0)->getChild(1)->getPlainText();
-                    if(!moreThanSpecificDays($created_at, 'now', 2)){
-                        $ratingText = $element->parent->parent->getChild(1)->getChild(2)->getChild(0)->getPlainText();
-                        preg_match('/(\d).?\/.?\d/', $ratingText, $match);
-                        if (count($match) == 2) {
-                            $rating = $match[1];
-                        }
-                        if ($element->parent->parent->getChild(1)->getChild(2)->getChild(1)) {
-                            $subject = $element->parent->parent->getChild(1)->getChild(2)->getChild(1)->getPlainText();
-                        } else {
-                            $subject = null;
-                        }
-                        $detail = trim($element->getPlainText());
-                        //remove string before "Pros: " and add <br /> in front of "Crons:" and "Other Thoughts:"
-                        $detail =  substr($detail, strpos($detail, 'Pros:'), strlen($detail));
-                        $detail = str_replace('Cons:', '<br /><br />Cons:', $detail);
-                        $detail = str_replace('Other Thoughts:', '<br /><br />Other Thoughts:', $detail);
-                        $detail = trim($detail);
-
-                        if(stripos($detail, 'Manufacturer Response:') !== false){
-                            continue;
-                        }
-
-                        $data = array(
-                            'detail' => $detail,
-                            'nickname' => htmlentities($nickname),
-                            'subject' => htmlentities($subject),
-                            'created_at' => $created_at,
-                            'rating' => $rating,
-                            'product_url' => $product_url
-                        );
-                        //var_dump($data);
-                        $response[] = $data;
-                    }
+            $file = 'reviewWork/result.json';
+            $reviewData = file_get_contents($file);
+            $reviewData = json_decode($reviewData, true);
+            if($reviewData[count] == 0){
+                echo "Empty data from 10.16.197.90...." . PHP_EOL;
+                break;
+            }
+            $inputData = $reviewData['data'][$sku];
+            foreach ($inputData as $each) {
+                $detail = '';
+                if($each['pros']) {
+                    $detail .= 'Pros: ' . $each['pros'];
                 }
+                if($each['cons']) {
+                    $detail .= '<br/><br/>Cons: ' . $each['cons'];
+                }
+                if($each['comments']) {
+                    $detail .= '<br/><br/>Comments: ' . $each['comments'];
+                }
+
+                $data = array(
+                    'detail' => $detail,
+                    'nickname' => $each['nickname'],
+                    'subject' => $each['title'],
+                    'created_at' => $each['reviewdate'],
+                    'rating' => $each['rating'],
+                    'product_url' => 'http://www.newegg.com/Product/Product.aspx?Item=' . $sku
+                );
+                $response[] = $data;
             }
-            else {
-                echo "Empty html...." . PHP_EOL;
-            }
+            /* old version: crawl through url*/
+//            $product_url = 'http://www.newegg.com/Product/Product.aspx?Item=' . $sku . '&Pagesize=' . $review_limit;
+//            $review_url  = 'http://content.newegg.com/Common/Ajax/ProductReview2016.aspx?' .
+//                http_build_query(array(
+//                    'action' => 'Biz.Product.ProductReview.switchReviewTabCallBack',
+//                    'callback' => 'Biz.Product.ProductReview.switchReviewTabCallBack',
+//                    'Item' => $sku,
+//                    'review' => 0,
+//                    'SummaryType' => 0,
+//                    'Pagesize' => $review_limit,
+//                    'PurchaseMark' => false,
+//                    'SelectedRating' => -1,
+//                    'VideoOnlyMark' => false,
+//                    'VendorMark' => false,
+//                    'IsFeedbackTab' => true,
+//                    'ItemGroupId' => 0,
+//                    'Type' => 'Newegg',
+//                    'ItemOnlyMark' => true,
+//                    'chkItemOnlyMark' => 'on',
+//                    'Keywords' => '(keywords)',
+//                    'SortField' => 0,
+//                    'DisplaySpecificReview' => 0
+//                ));
+//            $html = file_get_contents($review_url);
+//            $html = preg_replace('/\\\u[\d]{3}[\w]{1}/', '', $html);
+//            preg_match('/{.+}/', $html, $match);
+//
+//            $data = $match[0];
+//            $data = json_decode(trim($data), true);
+//            $review_list = $data['ReviewList'];
+//            $html = str_get_dom($review_list);
+//            if(!empty($html)) {
+//                foreach ($html('.grpReviews tr td .details') as $element) {
+//                    $nickname = $element->parent->parent->getChild(0)->getChild(0)->getChild(0)->getPlainText();
+//                    $created_at = $element->parent->parent->getChild(0)->getChild(0)->getChild(1)->getPlainText();
+//                    if(!moreThanSpecificDays($created_at, 'now', 2)){
+//                        $ratingText = $element->parent->parent->getChild(1)->getChild(2)->getChild(0)->getPlainText();
+//                        preg_match('/(\d).?\/.?\d/', $ratingText, $match);
+//                        if (count($match) == 2) {
+//                            $rating = $match[1];
+//                        }
+//                        if ($element->parent->parent->getChild(1)->getChild(2)->getChild(1)) {
+//                            $subject = $element->parent->parent->getChild(1)->getChild(2)->getChild(1)->getPlainText();
+//                        } else {
+//                            $subject = null;
+//                        }
+//                        $detail = trim($element->getPlainText());
+//                        //remove string before "Pros: " and add <br /> in front of "Crons:" and "Other Thoughts:"
+//                        $detail =  substr($detail, strpos($detail, 'Pros:'), strlen($detail));
+//                        $detail = str_replace('Cons:', '<br /><br />Cons:', $detail);
+//                        $detail = str_replace('Other Thoughts:', '<br /><br />Other Thoughts:', $detail);
+//                        $detail = trim($detail);
+//
+//                        if(stripos($detail, 'Manufacturer Response:') !== false){
+//                            continue;
+//                        }
+//
+//                        $data = array(
+//                            'detail' => $detail,
+//                            'nickname' => htmlentities($nickname),
+//                            'subject' => htmlentities($subject),
+//                            'created_at' => $created_at,
+//                            'rating' => $rating,
+//                            'product_url' => $product_url
+//                        );
+//                        //var_dump($data);
+//                        $response[] = $data;
+//                    }
+//                }
+//            }
+//            else {
+//                echo "Empty html...." . PHP_EOL;
+//            }
             break;
     }
     return $response;
